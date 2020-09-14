@@ -3,8 +3,10 @@ package com.cloud.course.dao.daoImpl;
 import com.cloud.course.dao.CourseDao;
 import com.cloud.course.entity.Course;
 import com.cloud.course.entity.CourseInfo;
+import com.cloud.course.entity.CoursePic;
 import com.cloud.course.repository.CourseBulletinRepository;
 import com.cloud.course.repository.CourseInfoRepository;
+import com.cloud.course.repository.CoursePicRepository;
 import com.cloud.course.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,6 +22,9 @@ public class CourseDaoImpl implements CourseDao {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private CoursePicRepository coursePicRepository;
 
     @Autowired
     private CourseBulletinRepository courseBulletinRepository;
@@ -41,6 +46,11 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void save(Course course){
         courseRepository.save(course);
+        String pic = course.getPic();
+        String id = course.getId();
+        CoursePic coursePic = new CoursePic(id,pic);
+        System.out.println();
+        coursePicRepository.save(coursePic);
     }
 
     @Override

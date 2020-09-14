@@ -3,19 +3,16 @@ package com.cloud.course.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "courseBulletin")
+
 @Data
+@Document(collection = "coursePic")
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseBulletin {
+public class CoursePic {
     @Id
     private String id;
-    private String bulletin;
-    private Date publish_date;
+    private String pic;
 }

@@ -1,9 +1,9 @@
 package com.cloud.course.repository;
 
 import com.cloud.course.entity.CourseInfo;
+import com.cloud.course.entity.CoursePic;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface CourseInfoRepository extends MongoRepository<CourseInfo,String> {
+public interface CoursePicRepository extends MongoRepository<CoursePic,String> {
 
-    void deleteById(String id);
 }

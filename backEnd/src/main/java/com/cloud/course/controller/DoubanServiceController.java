@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.Double.parseDouble;
-import static java.lang.Integer.parseInt;
-
 @CrossOrigin(origins = "*")
 @RestController
 public class DoubanServiceController {
@@ -39,6 +36,7 @@ public class DoubanServiceController {
 
     @PostMapping(path = "/course/addCourse")
     public void addCourse(@RequestBody JSONObject object) {
+        System.out.println("course added");
         courseService.addcourse(object);
     }
 }

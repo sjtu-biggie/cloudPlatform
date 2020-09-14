@@ -15,8 +15,8 @@ public class Course {
     @Id
     @Column(name = "ID")
     private String id;
-    @Column(name = "TEACHER")
-    private String teacher;
+    @Column(name = "USER_ID")
+    private String user_id;
     @Column(name = "COURSE_NAME")
     private String course_name;
     @Column(name = "START_DATE")

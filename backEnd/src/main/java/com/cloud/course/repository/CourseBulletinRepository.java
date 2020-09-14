@@ -1,8 +1,9 @@
 package com.cloud.course.repository;
 
-import com.cloud.course.entity.Course;
-import org.springframework.data.repository.CrudRepository;
+import com.cloud.course.entity.CourseBulletin;
+import com.cloud.course.entity.CoursePic;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface CourseBulletinRepository extends CrudRepository<Course,String> {
+public interface CourseBulletinRepository extends MongoRepository<CourseBulletin,String> {
 
 }

@@ -18,6 +18,8 @@ target/
 *.zip
 *.tar.gz
 *.rar
+
+target/
 .idea
 *.lst
 

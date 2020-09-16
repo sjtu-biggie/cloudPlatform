@@ -48,6 +48,7 @@ const menus = [
     icon: 'desktop',
     key: '/home/display',
     subs: [
+      {key: '/home/homework/overall', title: '总览', icon: ''},
       {key: '/home/display/carousel', title: '已交', icon: ''},
       {key: '/home/display/collapse', title: '未交', icon: ''},
       {key: '/home/display/list', title: '已截止', icon: ''},

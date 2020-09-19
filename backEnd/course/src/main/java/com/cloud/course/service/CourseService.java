@@ -22,4 +22,6 @@ public interface CourseService {
     List<CourseBulletin> getBulletin(String id);
 
     void addBulletin(JSONObject object);
+
+    void deleteBulletin(String id, String publish_date);
 }

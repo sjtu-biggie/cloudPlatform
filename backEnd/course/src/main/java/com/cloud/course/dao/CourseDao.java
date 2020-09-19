@@ -7,6 +7,7 @@ import com.cloud.course.entity.CourseBulletin;
 import com.cloud.course.entity.CourseInfo;
 import com.cloud.course.entity.CoursePic;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CourseDao {
@@ -21,4 +22,10 @@ public interface CourseDao {
     List<CourseBulletin> getBulletin(String id);
 
     void savePic(CoursePic coursePic);
+
+    void saveBulletin(CourseBulletin courseBulletin);
+
+    CourseBulletin getBulletin(String id, Date publish_date);
+
+    void deleteBulletin(CourseBulletin courseBulletin);
 }

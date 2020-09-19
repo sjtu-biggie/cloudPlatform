@@ -11,6 +11,7 @@ import com.cloud.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Id;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -72,6 +73,30 @@ public class CourseServiceImpl implements CourseService {
     }
     @Override
     public void addBulletin(JSONObject object){
-
+        String id = object.getString("courseId");
+        String bulletin = object.getString("bulletin");
+        Date publish_date = new Date();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String _publish_date = object.getString("publishDate");
+        try {
+            publish_date = sdf.parse(_publish_date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CourseBulletin courseBulletin=new CourseBulletin(id,bulletin,publish_date);
+        courseDao.saveBulletin(courseBulletin);
+    }
+    @Override
+    public void deleteBulletin(String id, String publish_date){
+        Date _publish_date = new Date();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            _publish_date = sdf.parse(publish_date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(_publish_date);
+        CourseBulletin courseBulletin = courseDao.getBulletin(id,_publish_date);
+        courseDao.deleteBulletin(courseBulletin);
     }
 }

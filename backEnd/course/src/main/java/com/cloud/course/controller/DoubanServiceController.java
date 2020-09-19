@@ -30,10 +30,18 @@ public class DoubanServiceController {
     }
 
     @GetMapping(path = "/course/getBulletin")
-    public List<CourseBulletin> getBulletin(@RequestParam("userId") String id) {
+    public List<CourseBulletin> getBulletin(@RequestParam("courseId") String id) {
         return courseService.getBulletin(id);
     }
-    @PostMapping(path = "/course/getBulletin")
+
+    @PostMapping(path = "/course/deleteBulletin")
+    public void deleteBulletin(@RequestBody Map<String, String> params) {
+        System.out.println("bulletin delete");
+        String id = params.get("courseId");
+        String publish_date = params.get("publishDate");
+        courseService.deleteBulletin(id,publish_date);
+    }
+    @PostMapping(path = "/course/addBulletin")
     public void addBulletin(@RequestBody JSONObject object) {
         System.out.println("bulletin added");
         courseService.addBulletin(object);

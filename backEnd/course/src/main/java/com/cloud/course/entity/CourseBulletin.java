@@ -17,5 +17,5 @@ public class CourseBulletin {
     @Id
     private String id;
     private String bulletin;
-    private Date publish_date;
+    private Date publishDate;
 }

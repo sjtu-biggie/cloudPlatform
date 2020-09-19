@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -74,5 +75,19 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void savePic(CoursePic coursePic){
         coursePicRepository.save(coursePic);
+    }
+
+    @Override
+    public void saveBulletin(CourseBulletin courseBulletin){
+        courseBulletinRepository.save(courseBulletin);
+    }
+
+    @Override
+    public  CourseBulletin getBulletin(String id, Date publish_date){
+        return courseBulletinRepository.findByIdAndPublishDate(id,publish_date);
+    }
+    @Override
+    public void deleteBulletin(CourseBulletin courseBulletin){
+        courseBulletinRepository.delete(courseBulletin);
     }
 }

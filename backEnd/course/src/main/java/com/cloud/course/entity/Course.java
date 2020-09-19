@@ -24,7 +24,5 @@ public class Course {
     @Column(name = "END_DATE")
     private Date end_date;
 
-    @Transient
-    @Column(name = "PIC")
-    private String pic;
+
 }

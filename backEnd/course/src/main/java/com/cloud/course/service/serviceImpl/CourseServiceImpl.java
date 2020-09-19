@@ -2,9 +2,11 @@ package com.cloud.course.service.serviceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cloud.course.dao.CourseDao;
+import com.cloud.course.dto.WholeCourse;
 import com.cloud.course.entity.Course;
 import com.cloud.course.entity.CourseBulletin;
 import com.cloud.course.entity.CourseInfo;
+import com.cloud.course.entity.CoursePic;
 import com.cloud.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,12 +25,12 @@ public class CourseServiceImpl implements CourseService {
     private CourseDao courseDao;
 
     @Override
-    public Course getCourseById(String id){
+    public WholeCourse getCourseById(String id){
 
         return courseDao.getCourseById(id);
     }
     @Override
-    public List<Course> getCoursesByTeacher(String id){
+    public List<WholeCourse> getCoursesByTeacher(String id){
         return courseDao.getCoursesByTeacher(id);
     }
     @Override
@@ -56,9 +58,20 @@ public class CourseServiceImpl implements CourseService {
         String introduction = object.getString("introduction");
         String syllabus = object.getString("syllabus");
         String textbook = object.getString("textbook");
-        Course course = new Course(courseId,userId,name,start_date,end_date,pic);
+        Course course = new Course(courseId,userId,name,start_date,end_date);
+        CoursePic coursePic = new CoursePic(courseId,pic);
         CourseInfo courseInfo = new CourseInfo(courseId,introduction,syllabus,textbook);
         courseDao.save(course);
         courseDao.saveInfo(courseInfo);
+        courseDao.savePic(coursePic);
+    }
+
+    @Override
+    public List<CourseBulletin> getBulletin(String id){
+        return courseDao.getBulletin(id);
+    }
+    @Override
+    public void addBulletin(JSONObject object){
+
     }
 }

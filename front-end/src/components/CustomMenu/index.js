@@ -8,7 +8,7 @@ class CustomMenu extends React.Component {
   state = {
     openKeys: [],
     selectedKeys: []
-  }
+  };
 
   componentDidMount() {
     // 防止页面刷新侧边栏又初始化了
@@ -19,13 +19,13 @@ class CustomMenu extends React.Component {
       case 2 :  //一级目录
         this.setState({
           selectedKeys: [pathname]
-        })
+        });
         break;
       case 5 : //三级目录，要展开两个subMenu
         this.setState({
           selectedKeys: [pathname],
           openKeys: [rank.slice(0, 3).join('/'), rank.slice(0, 4).join('/')]
-        })
+        });
         break;
       default :
         this.setState({
@@ -50,7 +50,7 @@ class CustomMenu extends React.Component {
     if (openKeys.length === 0 || openKeys.length === 1) {
       this.setState({
         openKeys
-      })
+      });
       return
     }
 

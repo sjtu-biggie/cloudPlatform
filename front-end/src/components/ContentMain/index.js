@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter, Switch, Redirect } from 'react-router-dom'
 import LoadableComponent from '../../utils/LoadableComponent'
 import PrivateRoute from '../PrivateRoute'
+import CoursePageDemo from "../../routes/Course/coursepage";
 
 const Home = LoadableComponent(()=>import('../../routes/Home/index'))  //参数一定要是函数，否则不会懒加载，只会代码拆分
 
@@ -25,7 +26,7 @@ const CollapseDemo = LoadableComponent(()=>import('../../routes/Display/Collapse
 const ListDemo = LoadableComponent(()=>import('../../routes/Display/ListDemo/index'))
 const TableDemo = LoadableComponent(()=>import('../../routes/Display/TableDemo/index'))
 const TabsDemo = LoadableComponent(()=>import('../../routes/Display/TabsDemo/index'))
-
+const CourseDemo = LoadableComponent(()=>import('../../routes/Course/index'))
 //反馈组件Demo
 const SpinDemo = LoadableComponent(()=>import('../../routes/Feedback/SpinDemo/index'))
 const ModalDemo = LoadableComponent(()=>import('../../routes/Feedback/ModalDemo/index'))
@@ -84,6 +85,10 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/other/springText' component={SpringText}/>
 
           <PrivateRoute exact path='/home/about' component={About}/>
+          <PrivateRoute exact path='/home/course/overall' component={CourseDemo}/>
+          <PrivateRoute exact path='/home/course/ongoing' component={CourseDemo}/>
+          <PrivateRoute exact path='/home/course/end' component={CourseDemo}/>
+          <PrivateRoute exact path='/home/course/class*' component={CoursePageDemo}/>
 
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
 

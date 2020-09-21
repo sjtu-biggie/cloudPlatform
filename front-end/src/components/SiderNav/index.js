@@ -10,6 +10,51 @@ const menus = [
   {
     title: '课程',
     icon: 'laptop',
+    key: '/home/course',
+    subs: [
+      {key: '/home/course/overall', title: '所有课程', icon: '',},
+      {key: '/home/course/ongoing', title: '正在进行', icon: '',},
+      {key: '/home/course/end', title: '已结束', icon: '',},
+    ]
+  },
+  {
+    title: '错题',
+    icon: 'info-circle-o',
+    key: '/home/about'
+  },
+  {
+    title: '作业',
+    icon: 'desktop',
+    key: '/home/homework',
+    subs: [
+      {key: '/home/homework/overall', title: '总览', icon: ''},
+      {key: '/home/display/carousel', title: '已交', icon: ''},
+      {key: '/home/display/collapse', title: '未交', icon: ''},
+      {key: '/home/display/list', title: '已截止', icon: ''},
+      {key: '/home/display/table', title: '未截止', icon: ''},
+      /*{key: '/home/display/tabs', title: '标签页', icon: '',},*/
+    ]
+  },
+  {
+    title: '管理',
+    icon: 'info-circle-o',
+    key: '/home/manage'
+  },
+  {
+    title: '展示组件',
+    icon: 'desktop',
+    key: '/home/display',
+    subs: [
+      {key: '/home/display/carousel', title: '走马灯', icon: ''},
+      {key: '/home/display/collapse', title: '下拉组件', icon: ''},
+      {key: '/home/display/list', title: '列表', icon: ''},
+      {key: '/home/display/table', title: '表格', icon: ''},
+      /*{key: '/home/display/tabs', title: '标签页', icon: '',},*/
+    ]
+  },
+  {
+    title: '按钮',
+    icon: 'laptop',
     key: '/home/general',
     subs: [
       {key: '/home/general/button', title: '正在进行', icon: '',},
@@ -26,7 +71,9 @@ const menus = [
       {key: '/home/navigation/steps', title: '步骤条', icon: ''},
     ]
   },
+
   {
+
     title: '输入组件',
     icon: 'edit',
     key: '/home/entry',
@@ -42,18 +89,7 @@ const menus = [
       },
       {key: '/home/entry/upload', title: '上传', icon: ''},
     ]
-  },
-  {
-    title: '作业',
-    icon: 'desktop',
-    key: '/home/display',
-    subs: [
-      {key: '/home/display/carousel', title: '已交', icon: ''},
-      {key: '/home/display/collapse', title: '未交', icon: ''},
-      {key: '/home/display/list', title: '已截止', icon: ''},
-      {key: '/home/display/table', title: '未截止', icon: ''},
-      /*{key: '/home/display/tabs', title: '标签页', icon: '',},*/
-    ]
+
   },
   {
     title: '反馈组件',
@@ -78,12 +114,9 @@ const menus = [
       {key:'/home/other/404',title:'404',icon:''},
       {key:'/home/other/springText',title:'弹性文字',icon:''},
     ]
-  },
-  {
-    title: '错题',
-    icon: 'info-circle-o',
-    key: '/home/mistakes'
+
   }
+
 ]
 
 

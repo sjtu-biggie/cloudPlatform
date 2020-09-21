@@ -16,7 +16,7 @@ const menus = [
       {key: '/home/general/icon', title: '已结束', icon: '',},
     ]
   },
-  /*{
+  {
     title: '导航组件',
     icon: 'bars',
     key: '/home/navigation',
@@ -25,8 +25,8 @@ const menus = [
       {key: '/home/navigation/menu', title: '导航菜单', icon: ''},
       {key: '/home/navigation/steps', title: '步骤条', icon: ''},
     ]
-  },*/
- /* {
+  },
+  {
     title: '输入组件',
     icon: 'edit',
     key: '/home/entry',
@@ -42,7 +42,7 @@ const menus = [
       },
       {key: '/home/entry/upload', title: '上传', icon: ''},
     ]
-  },*/
+  },
   {
     title: '作业',
     icon: 'desktop',
@@ -55,7 +55,7 @@ const menus = [
       /*{key: '/home/display/tabs', title: '标签页', icon: '',},*/
     ]
   },
-  /*{
+  {
     title: '反馈组件',
     icon: 'message',
     key: '/home/feedback',
@@ -64,8 +64,8 @@ const menus = [
       {key: '/home/feedback/notification', title: '通知提醒框', icon: ''},
       {key: '/home/feedback/spin', title: '加载中', icon: '',}
     ]
-  },*/
-  /*{
+  },
+  {
     title: '其它',
     icon: 'bulb',
     key: '/home/other',
@@ -78,11 +78,11 @@ const menus = [
       {key:'/home/other/404',title:'404',icon:''},
       {key:'/home/other/springText',title:'弹性文字',icon:''},
     ]
-  },*/
+  },
   {
     title: '错题',
     icon: 'info-circle-o',
-    key: '/home/about'
+    key: '/home/mistakes'
   }
 ]
 

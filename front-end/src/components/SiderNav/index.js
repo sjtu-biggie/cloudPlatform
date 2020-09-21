@@ -10,10 +10,11 @@ const menus = [
   {
     title: '课程',
     icon: 'laptop',
-    key: '/home/general',
+    key: '/home/course',
     subs: [
-      {key: '/home/general/button', title: '正在进行', icon: '',},
-      {key: '/home/general/icon', title: '已结束', icon: '',},
+      {key: '/home/course/overall', title: '所有课程', icon: '',},
+      {key: '/home/course/ongoing', title: '正在进行', icon: '',},
+      {key: '/home/course/end', title: '已结束', icon: '',},
     ]
   },
   {
@@ -44,6 +45,15 @@ const menus = [
       {key: '/home/display/list', title: '列表', icon: ''},
       {key: '/home/display/table', title: '表格', icon: ''},
       /*{key: '/home/display/tabs', title: '标签页', icon: '',},*/
+    ]
+  },
+  {
+    title: '按钮',
+    icon: 'laptop',
+    key: '/home/general',
+    subs: [
+      {key: '/home/general/button', title: '正在进行', icon: '',},
+      {key: '/home/general/icon', title: '已结束', icon: '',},
     ]
   },
   {

@@ -5,8 +5,7 @@ import {
     Button,
     Radio,
     List,
-    Switch,
-    Avatar,
+
     BackTop,
     Anchor,
     Affix,
@@ -20,64 +19,7 @@ import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
 
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-];
-const menu1 = (
-    <Menu>
-        <Menu.SubMenu title="所有">
-            <Menu.Item onClick={() => {
-            }}>语文</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>数学</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>英语</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>物理</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>化学</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>生物</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>历史</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>地理</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>政治</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>体育</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>心理</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="文科类">
-            <Menu.Item onClick={() => {
-            }}>语文</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>英语</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>历史</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>地理</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>政治</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="理科类">
-            <Menu.Item onClick={() => {
-            }}>数学</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>物理</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>化学</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>生物</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.Item>其它</Menu.Item>
-    </Menu>
-);
+
 const menu2 = (
     <Menu>
         <Menu.SubMenu title="一年级">
@@ -116,6 +58,7 @@ for (let i = 0; i < 23; i++) {
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         nickname: "陈小红",
         id:1,
+
         introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分"
     })
 }
@@ -126,7 +69,7 @@ const IconText = ({type, text}) => (
   </span>
 );
 
-class CourseDemo extends React.Component {
+class CoursePageDemo extends React.Component {
     state = {
         type: 0,
         size: 'default',
@@ -134,6 +77,7 @@ class CourseDemo extends React.Component {
         data2: [],
         loading: false,
         loadingMore: false,
+        course_name:"八年级数学"
     };
 
     componentDidMount() {
@@ -185,26 +129,7 @@ class CourseDemo extends React.Component {
         return (
             <div>
                 <CustomBreadcrumb
-                    arr={['课程', this.state.type === 0 ? "所有课程" : this.state.type === 1 ? "正在进行" : "已结束"]}/>
-                <Card bordered={false} style={{marginBottom: 10}} id="howUse">
-
-                    <Form layout='horizontal' style={{width: '70%', float: 'left'}} onSubmit={this.handleSubmit}>
-                        <Form.Item label='搜索'>
-                            {
-                                (
-                                    <Input/>
-                                )
-                            }
-                        </Form.Item>
-                    </Form>
-                    <Dropdown overlay={menu1} trigger={['click']} style={{marginTop: '30px'}}>
-                        <Button style={{width: "10%", marginLeft: '30px'}}>学科 <Icon type="down"/></Button>
-                    </Dropdown>
-                    <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
-                        <Button style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
-                            type="down"/></Button>
-                    </Dropdown>
-                </Card>
+                    arr={['课程', this.state.course_name]}/>
 
                 <Card bordered={false} title='课程列表' style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={data3}
@@ -278,4 +203,4 @@ const styles = {
     }
 }
 
-export default CourseDemo
+export default CoursePageDemo

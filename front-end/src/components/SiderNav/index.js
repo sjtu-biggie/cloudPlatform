@@ -36,6 +36,11 @@ const menus = [
     ]
   },
   {
+    title: '管理',
+    icon: 'info-circle-o',
+    key: '/home/manage'
+  },
+  {
     title: '展示组件',
     icon: 'desktop',
     key: '/home/display',

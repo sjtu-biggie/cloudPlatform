@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter, Switch, Redirect } from 'react-router-dom'
 import LoadableComponent from '../../utils/LoadableComponent'
 import PrivateRoute from '../PrivateRoute'
+import CoursePageDemo from "../../routes/Course/coursepage";
 
 const Home = LoadableComponent(()=>import('../../routes/Home/index'))  //参数一定要是函数，否则不会懒加载，只会代码拆分
 
@@ -84,6 +85,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/course/overall' component={CourseDemo}/>
           <PrivateRoute exact path='/home/course/ongoing' component={CourseDemo}/>
           <PrivateRoute exact path='/home/course/end' component={CourseDemo}/>
+          <PrivateRoute exact path='/home/course/class*' component={CoursePageDemo}/>
 
           <Redirect exact from='/' to='/home'/>
         </Switch>

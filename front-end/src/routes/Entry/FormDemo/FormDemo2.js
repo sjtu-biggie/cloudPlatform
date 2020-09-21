@@ -115,16 +115,16 @@ class Step2 extends React.Component{
       if (!err){
         this.setState({
           loading:true
-        })
+        });
        setTimeout(()=>{
          this.setState({
            loading:false
-         })
+         });
          this.props.stepFormStore.setCurrent(2)
        },2000)
       }
     })
-  }
+  };
   render(){
     const {getFieldDecorator} = this.props.form
     return (

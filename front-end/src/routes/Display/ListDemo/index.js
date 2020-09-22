@@ -49,14 +49,14 @@ class ListDemo extends React.Component {
   getData2 = () => {
     this.setState({
       loadingMore: true
-    })
+    });
     axios.get('https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo').then(res => {
       this.setState({
         data2: this.state.data2.concat(res.data.results),
         loadingMore: false
       })
     })
-  }
+  };
 
   render() {
     const {size, bordered, loading, data2, loadingMore} = this.state

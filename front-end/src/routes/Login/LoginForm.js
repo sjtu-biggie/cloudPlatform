@@ -109,9 +109,10 @@ class LoginForm extends React.Component {
     const {focusItem, code} = this.state
     return (
       <div className={this.props.className}>
-        <h3 className='title'>云作业平台</h3>
-        <h4 className='title'>登录</h4>
-        <Form onSubmit={this.loginSubmit}>
+        <img width={240} height={120} alt="logo"
+             src={require('../../pic/title.png')}
+             style={{}}/>
+        <Form onSubmit={this.loginSubmit} style={{marginTop:'45px'}}>
           <Form.Item help={getFieldError('username') &&
           <PromptBox info={getFieldError('username')} width={calculateWidth(getFieldError('username'))}/>}>
             {getFieldDecorator('username', {

@@ -104,6 +104,18 @@ const menu2 = (
             <Menu.Item>六年级上</Menu.Item>
             <Menu.Item>六年级下</Menu.Item>
         </Menu.SubMenu>
+        <Menu.SubMenu title="七年级">
+            <Menu.Item>七年级上</Menu.Item>
+            <Menu.Item>七年级下</Menu.Item>
+        </Menu.SubMenu>
+        <Menu.SubMenu title="八年级">
+            <Menu.Item>八年级上</Menu.Item>
+            <Menu.Item>八年级下</Menu.Item>
+        </Menu.SubMenu>
+        <Menu.SubMenu title="九年级">
+            <Menu.Item>九年级上</Menu.Item>
+            <Menu.Item>九年级下</Menu.Item>
+        </Menu.SubMenu>
     </Menu>
 );
 const data3 = [];

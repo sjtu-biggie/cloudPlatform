@@ -102,7 +102,7 @@ class Mistakes extends React.Component {
                 <Menu.Item key="21">六年级下</Menu.Item>
                 </SubMenu>
                 <SubMenu title="七年级">
-                <Menu.Item key="22">七年级上</Menu.Item>
+                <Menu.Item ke y="22">七年级上</Menu.Item>
                 <Menu.Item key="23">七年级下</Menu.Item>
                 </SubMenu>
                 <SubMenu title="八年级">

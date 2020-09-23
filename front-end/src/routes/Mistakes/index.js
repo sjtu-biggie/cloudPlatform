@@ -11,13 +11,17 @@ const data = [
     'Man charged over missing wedding girl.',
     'Los Angeles battles huge wildfires.',
 ];
-const data3 = []
+const data3 = [];
+for (let i = 0; i < 23; i++) {
     data3.push({
-        title: `数学`,
+        id:1,
+        title: `数学${i}`,
         avatar: '../../assets/img/mistakes.png',
-        description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+        description: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
+        contexts:[["证明："],[<br/>],["∵∠PAD=∠PDA"],[<br/>],["∴AP=PD"],[<br/>],["∴PB=PC"],[<br/>],["∴得证"],],
+/*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*/
     })
+}
 const IconText = ({ type, text }) => (
     <span>
     <Icon type={type} style={{ marginRight: 8 }} />
@@ -148,14 +152,18 @@ class Mistakes extends React.Component {
                           renderItem={item=>{
                               return (
                                   <List.Item
-                                      actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
-                                      extra={<img width={272} alt="logo" src="../../assets/img/mistakes.png" />}>
-                                      <List.Item.Meta
+                                      /*actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}*/
+                                      extra={<img /*width={275}*/ alt="logo" src={require("../../assets/img/mistakes.png" )}/>}>
+                                      {/*<List.Item.Meta
                                           avatar={<Avatar src={item.avatar} />}
                                           title={<a>{item.title}</a>}
-                                          description={item.description}
-                                      />
-                                      {item.content}
+                                          description={item.description}>*/}
+                                          <row>
+                                      <a style={{fontSize:'20px',fontWeight:'bold',display:'block'}} href={"/home/mistakes/class="+item.id}>{item.title}</a>
+                                      <p style={{marginTop:'10px'}}>{item.description}</p>
+                                      <p style={{marginTop:'10px'}}>{item.contexts}</p>
+                                          </row>
+                                      {/*{item.content}*/}
                                   </List.Item>
                               )
                           }}

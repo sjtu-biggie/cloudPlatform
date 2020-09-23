@@ -20,7 +20,7 @@ const menus = [
   {
     title: '错题',
     icon: 'info-circle-o',
-    key: '/home/about'
+    key: '/home/mistakes'
   },
   {
     title: '作业',

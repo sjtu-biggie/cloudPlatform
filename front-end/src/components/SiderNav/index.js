@@ -125,7 +125,7 @@ class SiderNav extends React.Component {
 
     return (
       <div style={{height: '100vh',overflowY:'scroll'}}>
-        <div style={styles.logo}></div>
+        <div style={styles.logo}><p style={{margin:'10px 0',fontSize:'20px',fontWeight:'bold',color:'navajowhite'}}>学易 · 云作业平台</p></div>
         <CustomMenu menus={menus}/>
       </div>
     )
@@ -135,7 +135,7 @@ class SiderNav extends React.Component {
 const styles = {
   logo: {
     height: '32px',
-    background: 'rgba(255, 255, 255, .2)',
+
     margin: '16px'
   }
 }

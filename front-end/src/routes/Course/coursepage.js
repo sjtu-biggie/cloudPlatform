@@ -1,4 +1,5 @@
 import React from 'react'
+import './courseCss.css'
 import {
     Card,
     Spin,
@@ -13,7 +14,7 @@ import {
     Form,
     Input,
     Menu,
-    Dropdown, Row, Col, Collapse, Avatar
+    Dropdown, Row, Col, Collapse, Avatar, Pagination
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
@@ -60,9 +61,10 @@ const deadCourse = {
     }
 };
 const bulletin = [];
-for (let i = 0; i < 23; i++) {
+//TODO:add pagination support
+for (let i = 0; i < 10; i++) {
     bulletin.push({
-        title:'重要通知'+i+'号',
+        title: '重要通知' + i + '号',
         bulletin: `值得注意的是，这五大创新技术，包括了全新的“4680”型电池，号称能量密度提高五倍，动力输出提高 6 倍，续航里程可提高 16%。
 　　马斯克称，新电池已经开始在一家工厂生产，将需要一年时间达到 10 千兆瓦时的产能。
 　　另外，早在今年 4 月，马斯克就表示，今年的电池日活动是“特斯拉历史上最让人兴奋的日子之一”，预计将于 2020 年投产一种新型电池，这种电池能够驱动特斯拉汽车行驶百万英里，是普通电池包寿命的2-3 倍。
@@ -84,7 +86,7 @@ class CoursePageDemo extends React.Component {
         loading: false,
         loadingMore: false,
         course: deadCourse,
-        bulletins:bulletin,
+        bulletins: bulletin,
     };
 
     componentDidMount() {
@@ -155,7 +157,7 @@ class CoursePageDemo extends React.Component {
                             }}>授课教师 : {this.state.course.nickname}</p>
                             <img alt="logo"
                                  src={require('../../pic/defaultAvatar.png')}
-                                 style={{height: '200px', weight: '160px'}}/>
+                                 style={{height: '190px', weight: '160px'}}/>
                         </Card>
                     </Col>
                     <Col span={18}>
@@ -223,14 +225,36 @@ class CoursePageDemo extends React.Component {
     };
     bulletinRender = () => {
         return (
-            <Collapse defaultActiveKey={['1']}>{this.state.bulletins.map((value, index) => {
-                return (<Collapse.Panel header={value.title} key={index}>
-                <p>{value.bulletin}</p>
-                    <p>{value.publish_date}</p>
-                </Collapse.Panel>)
-            })}</Collapse>);
-    };
+            <div>
+                <Collapse style={{marginBottom: "10px"}}
+                          defaultActiveKey={['1']}>{this.state.bulletins.map((value, index) => {
+                    return (<Collapse.Panel header={value.title} key={index}>
+                        <p>{value.bulletin}</p>
+                        <p>{value.publish_date}</p>
+                    </Collapse.Panel>)
+                })}</Collapse>
+                <Pagination defaultCurrent={1} total={50}/>
+            </div>);
 
+    };
+    examRender = () => {
+        return null;
+    };
+    rankRender = () => {
+        return (
+            <div>
+                <Card bordered={false} style={{marginBottom: 10}} id='gradeCard'>
+                    <Row>
+                        <Col span={4} offset={11}>
+                        <Button onClick={() => {
+                        }} style={{marginTop: '200px'}} type="primary" size="large" block>查看排名</Button>
+                        </Col>
+                        </Row>
+                </Card>
+
+            </div>
+        );
+    };
     typeRender = () => {
         switch (this.state.type) {
             case 1:
@@ -239,8 +263,10 @@ class CoursePageDemo extends React.Component {
                 return this.bulletinRender();
             case 3:
                 return this.homeworkRender();
+            case 4:
+                return this.examRender();
             default:
-                return "penis";
+                return this.rankRender();
         }
 
 

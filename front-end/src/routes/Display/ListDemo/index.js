@@ -67,7 +67,7 @@ class ListDemo extends React.Component {
           <Spin style={loadingMore?{}:{display:'none'}}/>
           <Button style={!loadingMore?{}:{display:'none'}} onClick={() => this.getData2()}>加载更多</Button>
       </div>
-    )
+    );
     return (
       <div>
         <CustomBreadcrumb arr={['作业', '已截止']}/>

@@ -34,12 +34,12 @@ class ListDemo extends React.Component {
     data2: [],
     loading: false,
     loadingMore: false,
-  }
+  };
 
   componentDidMount() {
     this.setState({
       loading: true,
-    })
+    });
     this.getData2();
     this.setState({
       loading: false

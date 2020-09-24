@@ -13,33 +13,64 @@ import {
     Form,
     Input,
     Menu,
-    Dropdown, Row, Col
+    Dropdown, Row, Col, Collapse, Avatar
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
 
 
-const data3 = [];
-for (let i = 0; i < 23; i++) {
-    data3.push({
-        course_name: `七年级数学 ${i}`,
-        pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        start_date: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-        end_date: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        nickname: "陈小红",
-        id: 1,
-
-        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分"
-    })
-}
 const IconText = ({type, text}) => (
     <span>
     <Icon type={type} style={{marginRight: 8}}/>
         {text}
   </span>
 );
+const deadCourse = {
+    course_name: `七年级数学`,
+    pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    start_date: '1999-10-12',
+    end_date: '2020-10-10',
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    nickname: "陈小红",
+    id: 1,
+    textbook: "人教版七年级数学上册",
+    introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
+    syllabus: {
+        chapter1: {
+            title: "一百以内算术",
+            content: [
+                "加法",
+                "减法", "乘法", "除法"
+            ]
+        },
+        chapter2: {
+            title: "微积分",
+            content: [
+                "微分",
+                "积分", "偏微分"
+            ]
+        },
+        chapter3: {
+            title: "数学史",
+            content: [
+                "时间简史"
+            ]
+        }
+    }
+};
+const bulletin = [];
+for (let i = 0; i < 23; i++) {
+    bulletin.push({
+        title:'重要通知'+i+'号',
+        bulletin: `值得注意的是，这五大创新技术，包括了全新的“4680”型电池，号称能量密度提高五倍，动力输出提高 6 倍，续航里程可提高 16%。
+　　马斯克称，新电池已经开始在一家工厂生产，将需要一年时间达到 10 千兆瓦时的产能。
+　　另外，早在今年 4 月，马斯克就表示，今年的电池日活动是“特斯拉历史上最让人兴奋的日子之一”，预计将于 2020 年投产一种新型电池，这种电池能够驱动特斯拉汽车行驶百万英里，是普通电池包寿命的2-3 倍。
+　　据悉，这种电池是一种锂离子电池，是宁德时代与特斯拉合作生产的，可以使电动汽车持续行驶 100 万英里。马斯克曾在推特上表示，他将会在“电池技术日”活动上详细介绍一项百万英里电池项目。
+　　但是，直到此次电池日活动结束，投资者高度期待的“百万英里电池”依然不见踪影。特斯拉股价也由上涨5% 转为下跌近7%。`,
+        publish_date: '1999-10-12',
+    })
+}
 
 class CoursePageDemo extends React.Component {
     state = {
@@ -52,7 +83,8 @@ class CoursePageDemo extends React.Component {
         data2: [],
         loading: false,
         loadingMore: false,
-        course_name: "八年级数学"
+        course: deadCourse,
+        bulletins:bulletin,
     };
 
     componentDidMount() {
@@ -90,14 +122,113 @@ class CoursePageDemo extends React.Component {
             })
         })
     };
-    syllabusRender = () => {
+    homeworkRender = () => {
 
     };
     mainRender = () => {
+        return (
+            <div>
+                <Card bordered={false} style={{marginBottom: 10}} id="howUse">
+                    <Row style={{height: "200px"}}>
+                        <Col span={18}>
+                            <p style={{
+                                fontSize: '20px',
+                                fontWeight: 'bold',
+                                display: 'block'
+                            }}>课程名 : {this.state.course.course_name}</p>
+                            <p style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</p>
+                            <p style={{height: '10px'}}>开始时间：{this.state.course.start_date} 结束时间：{this.state.course.end_date}</p>
+                        </Col>
+                        <Col span={6}>
+                        </Col>
+                    </Row>
 
+                </Card>
+
+                <Row style={{}}>
+                    <Col span={5}>
+                        <Card bordered={false} style={{marginBottom: 10, height: "300px"}} id="howUse">
+                            <p style={{
+                                fontSize: '20px',
+                                fontWeight: 'bold',
+                                display: 'block'
+                            }}>授课教师 : {this.state.course.nickname}</p>
+                            <img alt="logo"
+                                 src={require('../../pic/defaultAvatar.png')}
+                                 style={{height: '200px', weight: '160px'}}/>
+                        </Card>
+                    </Col>
+                    <Col span={18}>
+                        <Card bordered={false} style={{marginBottom: 10, height: "300px", marginLeft: 10}} id="howUse">
+                            <p style={{
+                                fontSize: '20px',
+                                fontWeight: 'bold',
+                                display: 'block'
+                            }}>老师有话说 ：</p>
+                            <p>
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
+                            </p>
+                        </Card>
+                    </Col>
+                </Row>
+                <Card bordered={false} style={{marginBottom: 10}} id="howUse">
+                    <p style={{
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        display: 'block'
+                    }}>课程大纲 :</p>
+                    {this._renderSyllabus()}
+                </Card>
+
+
+            </div>
+
+        )
+    };
+    _renderSyllabus = () => {
+        let i = 1;
+        let chapterList = [];
+        while (1) {
+            let str = 'this.state.course.syllabus.chapter' + i;
+            let contents = eval(str);
+            if (contents === undefined || contents === null) break;
+            else {
+                console.log(i);
+            }
+            chapterList.push(contents);
+            ++i;
+        }
+        return (
+            <Collapse defaultActiveKey={['1']}>{chapterList.map((value, index) => {
+                return (<Collapse.Panel header={value.title} key={index}>
+                    <List
+                        bordered
+                        dataSource={value.content}
+                        renderItem={item => (
+                            <List.Item>
+                                {item}
+                            </List.Item>
+                        )}
+                    /></Collapse.Panel>)
+            })}</Collapse>);
     };
     bulletinRender = () => {
-
+        return (
+            <Collapse defaultActiveKey={['1']}>{this.state.bulletins.map((value, index) => {
+                return (<Collapse.Panel header={value.title} key={index}>
+                <p>{value.bulletin}</p>
+                    <p>{value.publish_date}</p>
+                </Collapse.Panel>)
+            })}</Collapse>);
     };
 
     typeRender = () => {
@@ -105,9 +236,9 @@ class CoursePageDemo extends React.Component {
             case 1:
                 return this.mainRender();
             case 2:
-                return this.syllabusRender();
-            case 3:
                 return this.bulletinRender();
+            case 3:
+                return this.homeworkRender();
             default:
                 return "penis";
         }
@@ -128,31 +259,38 @@ class CoursePageDemo extends React.Component {
         return (
             <div>
                 <CustomBreadcrumb
-                    arr={['课程', this.state.course_name]}/>
+                    arr={['课程', this.state.course.course_name]}/>
                 <Card bordered={false} style={{marginBottom: '10px'}}>
                     <Menu mode="horizontal">
                         <Menu.Item onClick={() => {
                             this.setState({type: 1})
                         }}>主页</Menu.Item>
-                        <Menu.Item onClick={() => {
+                        <Menu.Item key="bulletin" onClick={() => {
                             this.setState({type: 2})
-                        }}><Icon type="share-alt"/>大纲</Menu.Item>
-                        <Menu.Item key="bulletin"><Icon type="appstore"/>公告</Menu.Item>
-                        <Menu.SubMenu key='app' title={<span><Icon type='setting'/><span>作业</span></span>}>
+                        }}><Icon type="appstore"/>公告</Menu.Item>
+                        <Menu.SubMenu key='app' onClick={() => {
+                            this.setState({type: 3})
+                        }} title={<span><Icon type='setting'/><span>作业</span></span>}>
                             <Menu.Item>总览</Menu.Item>
                             <Menu.Item>已提交</Menu.Item>
                             <Menu.Item>未提交</Menu.Item>
                             <Menu.Item>已截止</Menu.Item>
                             <Menu.Item>未截止</Menu.Item>
                         </Menu.SubMenu>
-                        <Menu.SubMenu key='exam' title={<span><Icon type='bar-chart'/><span>考试</span></span>}>
+                        <Menu.SubMenu key='exam' onClick={() => {
+                            this.setState({type: 4})
+                        }} title={<span><Icon type='bar-chart'/><span>考试</span></span>}>
                             <Menu.Item>总览</Menu.Item>
                             <Menu.Item>进行中</Menu.Item>
                             <Menu.Item>已截止</Menu.Item>
                             <Menu.Item>已批改</Menu.Item>
                         </Menu.SubMenu>
-                        <Menu.Item key="rank"><Icon type="appstore"/>排名</Menu.Item>
-                        <Menu.Item key="set" disabled><Icon type="setting"/>设置</Menu.Item>
+                        <Menu.Item onClick={() => {
+                            this.setState({type: 5})
+                        }} key="rank"><Icon type="appstore"/>排名</Menu.Item>
+                        <Menu.Item onClick={() => {
+                            this.setState({type: 6})
+                        }} key="set" disabled><Icon type="setting"/>设置</Menu.Item>
                     </Menu>
                 </Card>
                 {this.typeRender()}

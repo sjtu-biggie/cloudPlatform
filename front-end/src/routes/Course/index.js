@@ -123,8 +123,8 @@ for (let i = 0; i < 23; i++) {
     data3.push({
         course_name: `七年级数学 ${i}`,
         pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        start_date: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-        end_date: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+        start_date: '1999-10-12',
+        end_date: '2020-10-10',
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         nickname: "陈小红",
         id:1,
@@ -225,20 +225,21 @@ class CourseDemo extends React.Component {
                           style={styles.listStyle}
                           renderItem={item => {
                               return (
-                                  <List.Item
+                                  <List.Item style={{height:"210px"}}
                                       extra={<img width={272} height={190} alt="logo"
                                                   src={require('../../pic/math1.png')}
                                                   style={{border: '4px solid grey'}}/>}>
                                       <Row>
                                           <Col span={5}>
                                               <p>教师 ：{item.nickname}</p>
-                                              <img width={80} height={100} alt="logo"
+                                              <img width={90} height={120} alt="logo"
                                                    src={require('../../pic/defaultAvatar.png')}
                                                    style={{}}/>
                                           </Col>
                                           <Col span={19}>
                                               <a style={{fontSize:'20px',fontWeight:'bold',display:'block'}} href={"/home/course/class="+item.id}>{item.course_name}</a>
-                                              <p style={{marginTop:'10px'}}>{item.introduction}</p>
+                                              <p style={{marginTop:'10px',height:'90px'}}>{item.introduction}</p>
+                                              <p style={{height:'10px'}}>开始时间：{item.start_date} 结束时间：{item.end_date}</p>
                                           </Col>
                                       </Row>
                                   </List.Item>
@@ -288,6 +289,6 @@ const styles = {
         right: 50,
         with: 170
     }
-}
+};
 
 export default CourseDemo

@@ -1,12 +1,13 @@
 import React from 'react'
 import './courseCss.css'
+import Shuffle from 'shufflejs'
+import 'animate.css'
 import {
     Card,
     Spin,
     Button,
     Radio,
     List,
-
     BackTop,
     Anchor,
     Affix,
@@ -14,7 +15,7 @@ import {
     Form,
     Input,
     Menu,
-    Dropdown, Row, Col, Collapse, Avatar, Pagination
+    Dropdown, Row, Col, Collapse, Avatar, Pagination, Steps
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
@@ -73,9 +74,22 @@ for (let i = 0; i < 10; i++) {
         publish_date: '1999-10-12',
     })
 }
-
+const steps = [
+    {
+        title: 'First',
+        content: 'First-content',
+    },
+    {
+        title: 'Second',
+        content: 'Second-content',
+    },
+    {
+        title: 'Last',
+        content: 'Last-content',
+    }];
 class CoursePageDemo extends React.Component {
     state = {
+        step:0,
         //type indicate which content to render
         //parameter is detailed content of one type
         type: 1,
@@ -160,12 +174,13 @@ class CoursePageDemo extends React.Component {
                                  style={{height: '190px', weight: '160px'}}/>
                         </Card>
                     </Col>
-                    <Col span={18}>
+                    <Col span={19}>
                         <Card bordered={false} style={{marginBottom: 10, height: "300px", marginLeft: 10}} id="howUse">
                             <p style={{
                                 fontSize: '20px',
                                 fontWeight: 'bold',
-                                display: 'block'
+                                display: 'block',
+                                paddingRight:'50px'
                             }}>老师有话说 ：</p>
                             <p>
                                 这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
@@ -245,9 +260,20 @@ class CoursePageDemo extends React.Component {
             <div>
                 <Card bordered={false} style={{marginBottom: 10}} id='gradeCard'>
                     <Row>
-                        <Col span={4} offset={11}>
-                        <Button onClick={() => {
-                        }} style={{marginTop: '200px'}} type="primary" size="large" block>查看排名</Button>
+                        <Col span={10} offset={6}>
+
+                                <Steps current={this.state.step} style={{marginTop:'200px',fontWeight:'bold'}} size="large">
+                                    <Steps.Step title="提交作业"  onClick={()=>{
+                                        this.setState({step:0})
+                                    }}description="排名更准确"/>
+                                    <Steps.Step title="查看排名" onClick={()=>{
+                                        this.setState({step:1})
+                                    }} description="胜败乃兵家常事" />
+                                    <Steps.Step title="排名分析"  onClick={()=>{
+                                        this.setState({step:2})
+                                    }}description="知己知彼"/>
+                                </Steps>
+
                         </Col>
                         </Row>
                 </Card>
@@ -255,6 +281,8 @@ class CoursePageDemo extends React.Component {
             </div>
         );
     };
+
+
     typeRender = () => {
         switch (this.state.type) {
             case 1:

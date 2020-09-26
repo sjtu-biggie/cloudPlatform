@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class CourseInfo {
     @Id
     private String id;
+    private String detail;
     private String introduction;
     private String syllabus;
     private String textbook;

@@ -27,6 +27,8 @@ const ListDemo = LoadableComponent(()=>import('../../routes/Display/ListDemo/ind
 const TableDemo = LoadableComponent(()=>import('../../routes/Display/TableDemo/index'))
 const TabsDemo = LoadableComponent(()=>import('../../routes/Display/TabsDemo/index'))
 const CourseDemo = LoadableComponent(()=>import('../../routes/Course/index'))
+const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index'))
+
 //反馈组件Demo
 const SpinDemo = LoadableComponent(()=>import('../../routes/Feedback/SpinDemo/index'))
 const ModalDemo = LoadableComponent(()=>import('../../routes/Feedback/ModalDemo/index'))
@@ -94,6 +96,12 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/course/ongoing' component={CourseDemo}/>
           <PrivateRoute exact path='/home/course/end' component={CourseDemo}/>
           <PrivateRoute exact path='/home/course/class*' component={CoursePageDemo}/>
+      
+          <PrivateRoute exact path='/home/homework/overall' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/submitted' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/uncommitted' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/closed' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/notclosed' component={HomeworkDemo}/>
 
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
 

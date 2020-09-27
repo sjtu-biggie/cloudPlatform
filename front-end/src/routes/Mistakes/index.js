@@ -1,16 +1,28 @@
 import React from 'react'
-import {Card, Spin, Button, Radio, List, Switch, Avatar, Menu,BackTop, Input,Anchor,Form, Affix, Icon, Dropdown} from 'antd'
+import {Card, Spin, Button, Radio, List, Switch, Avatar, Menu,BackTop, Input,Anchor,Form, Affix, Icon, Dropdown, Row, Col} from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb'
 import TypingCard from '../../components/TypingCard'
+import { Chart, Axis, Geom, Tooltip, Coord, Label, Legend, G2 } from 'bizcharts'
+import { View } from '@antv/data-set'
 
 const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
+    {date: '9/1', value: '3%'},
+    {date: '9/2', value: '4%'},
+    {date: '9/3', value: '3.5%'},
+    {date: '9/4', value: '5%'},
+    {date: '9/5', value: '4.9%'},
+    {date: '9/6', value: '5%'},
+    {date: '9/7', value: '6%'},
+    {date: '9/8', value: '3%'},
+    {date: '9/9', value: '4%'}
 ];
+
+const cols = {
+    'value': {min: 0},
+    'date': {range: [0, 1]}
+}
+
 const data3 = [];
 for (let i = 0; i < 23; i++) {
     data3.push({
@@ -19,6 +31,7 @@ for (let i = 0; i < 23; i++) {
         avatar: '../../assets/img/mistakes.png',
         description: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
         contexts:[["证明："],[<br/>],["∵∠PAD=∠PDA"],[<br/>],["∴AP=PD"],[<br/>],["∴PB=PC"],[<br/>],["∴得证"],],
+        time: `2020/9/27`,
 /*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*/
     })
 }
@@ -127,6 +140,7 @@ class Mistakes extends React.Component {
         return (
             <div>
                 <CustomBreadcrumb arr={['错题']}/>
+
                 <Card bordered={false} style={{marginBottom: 10}} id="howUse">
                             <Form layout='horizontal' style={{width: '70%',float:'left'}} onSubmit={this.handleSubmit}>
                                 <Form.Item label='搜索' >
@@ -144,10 +158,20 @@ class Mistakes extends React.Component {
                                 <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
                             </Dropdown>
                 </Card>
+                <Card title='错误率' bordered={false} className='card-item'>
+                <Chart height={400} data={data} scale={cols} forceFit>
+                    <Axis name="date"/>
+                    <Axis name="value"/>
+                    <Tooltip crosshairs={{type: 'y'}}/>
+                    <Geom type="line" position="date*value" size={2}/>
+                    <Geom type='point' position="date*value" size={4} shape={'circle'}
+                          style={{stroke: '#fff', lineWidth: 1}}/>
+                </Chart>
+            </Card>
                 <Card bordered={false} title='题目' style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={data3}
                           itemLayout='vertical'
-                          pagination={{pageSize: 5}}
+                          pagination={{pageSize: 2}}
                           style={styles.listStyle}
                           renderItem={item=>{
                               return (
@@ -159,7 +183,8 @@ class Mistakes extends React.Component {
                                           title={<a>{item.title}</a>}
                                           description={item.description}>*/}
                                           <row>
-                                      <a style={{fontSize:'20px',fontWeight:'bold',display:'block'}} href={"/home/mistakes/class="+item.id}>{item.title}</a>
+                                      <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>
+                                              <p style={{fontSize:'5px',fontWeight:'bold',display:'block'}}>{item.time}</p>
                                       <p style={{marginTop:'10px'}}>{item.description}</p>
                                       <p style={{marginTop:'10px'}}>{item.contexts}</p>
                                           </row>

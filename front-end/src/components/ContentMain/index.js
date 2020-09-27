@@ -47,6 +47,9 @@ const About = LoadableComponent(()=>import('../../routes/About/index'))
 //错题
 const Mistakes = LoadableComponent(()=>import('../../routes/Mistakes/index'))
 
+//通知
+const Notification = LoadableComponent(()=>import('../../routes/Notification/index'))
+
 @withRouter
 class ContentMain extends React.Component {
   render () {
@@ -54,6 +57,8 @@ class ContentMain extends React.Component {
       <div style={{padding: 16, position: 'relative'}}>
         <Switch>
           <PrivateRoute exact path='/home' component={Home}/>
+
+          <PrivateRoute exact path='/notification' component={Notification}/>
 
           <PrivateRoute exact path='/home/general/button' component={ButtonDemo}/>
           <PrivateRoute exact path='/home/general/icon' component={IconDemo}/>

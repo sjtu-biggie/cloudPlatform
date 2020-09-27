@@ -26,8 +26,7 @@ const CollapseDemo = LoadableComponent(()=>import('../../routes/Display/Collapse
 const ListDemo = LoadableComponent(()=>import('../../routes/Display/ListDemo/index'))
 const TableDemo = LoadableComponent(()=>import('../../routes/Display/TableDemo/index'))
 const TabsDemo = LoadableComponent(()=>import('../../routes/Display/TabsDemo/index'))
-const CourseDemo = LoadableComponent(()=>import('../../routes/Course/index'))
-const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index'))
+
 
 //反馈组件Demo
 const SpinDemo = LoadableComponent(()=>import('../../routes/Feedback/SpinDemo/index'))
@@ -52,6 +51,13 @@ const Mistakes = LoadableComponent(()=>import('../../routes/Mistakes/index'))
 //通知
 const Notification = LoadableComponent(()=>import('../../routes/Notification/index'))
 
+
+//课程
+const CourseDemo = LoadableComponent(()=>import('../../routes/Course/index'))
+const AddCourseDemo = LoadableComponent(()=>import('../../routes/Course/addCoursePage'))
+
+//作业
+const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index'))
 @withRouter
 class ContentMain extends React.Component {
   render () {
@@ -96,7 +102,8 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/course/ongoing' component={CourseDemo}/>
           <PrivateRoute exact path='/home/course/end' component={CourseDemo}/>
           <PrivateRoute exact path='/home/course/class*' component={CoursePageDemo}/>
-      
+          <PrivateRoute exact path='/home/course/addCourse' component={AddCourseDemo}/>
+
           <PrivateRoute exact path='/home/homework/overall' component={HomeworkDemo}/>
           <PrivateRoute exact path='/home/homework/submitted' component={HomeworkDemo}/>
           <PrivateRoute exact path='/home/homework/uncommitted' component={HomeworkDemo}/>

@@ -121,14 +121,14 @@ const menu2 = (
 const data3 = [];
 for (let i = 0; i < 23; i++) {
     data3.push({
-
+        role: 'teacher',
         course_name: `七年级数学 ${i}`,
         pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         start_date: '1999-10-12',
         end_date: '2020-10-10',
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         nickname: "陈小红",
-        id:1,
+        id: 1,
         introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分"
     })
 }
@@ -141,7 +141,7 @@ const IconText = ({type, text}) => (
 
 class CourseDemo extends React.Component {
     state = {
-        courses:data3,
+        courses: data3,
         type: 0,
         size: 'default',
         bordered: true,
@@ -151,7 +151,7 @@ class CourseDemo extends React.Component {
     };
 
     componentDidMount() {
-
+        //TODO:get role from local storage
         this.setState({
             loading: true,
         });
@@ -185,10 +185,11 @@ class CourseDemo extends React.Component {
             })
         })
     };
-    handleSubmit=(e)=>{
+    handleSubmit = (e) => {
         e.preventDefault();
         console.log(123);
     };
+
     render() {
         const {loadingMore} = this.state
         const loadMore = (
@@ -204,6 +205,7 @@ class CourseDemo extends React.Component {
             <div>
                 <CustomBreadcrumb
                     arr={['课程', this.state.type === 0 ? "所有课程" : this.state.type === 1 ? "正在进行" : "已结束"]}/>
+
                 <Card bordered={false} style={{marginBottom: 10}} id="howUse">
 
                     <Form layout='horizontal' style={{width: '70%', float: 'left'}} onSubmit={this.handleSubmit}>
@@ -223,18 +225,29 @@ class CourseDemo extends React.Component {
                             type="down"/></Button>
                     </Dropdown>
                 </Card>
+                {
+                    this.state.role === 'student' ? null :
+                        <Card bordered={false} style={{marginBottom: 10,height:'90px'}} id="howUse">
+                            <Row/>
+                                <Button style={{float:'left'}} type="primary" icon="up-circle-o" size='large' onClick={()=>{
+                                    this.props.history.push('/home/course/addCourse');
+                                }}>创建一门新的课程</Button>
 
+                                <Button style={{float:'left',marginLeft:'20px'}} type="danger" icon="down-circle-o" size='large'>删除一门已有课程</Button>
+                            <p style={{float:'left',color:'grey',marginLeft:'40px',height:'90px'}}>各位老师，若要修改具体课程内容，请从下方进入课程主页!</p>
+                        </Card>
+                }
                 <Card bordered={false} title='课程列表' style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={this.state.courses}
                           itemLayout='vertical'
-                          pagination={{pageSize: 5}}
+                          pagination={{pageSize: 3}}
                           style={styles.listStyle}
                           renderItem={item => {
                               return (
-                                  <List.Item style={{height:"210px"}}
-                                      extra={<img width={272} height={190} alt="logo"
-                                                  src={require('../../pic/math1.png')}
-                                                  style={{border: '4px solid grey'}}/>}>
+                                  <List.Item style={{height: "210px"}}
+                                             extra={<img width={272} height={190} alt="logo"
+                                                         src={require('../../pic/math1.png')}
+                                                         style={{border: '4px solid grey'}}/>}>
                                       <Row>
                                           <Col span={5}>
                                               <p>教师 ：{item.nickname}</p>
@@ -243,9 +256,10 @@ class CourseDemo extends React.Component {
                                                    style={{}}/>
                                           </Col>
                                           <Col span={19}>
-                                              <a style={{fontSize:'20px',fontWeight:'bold',display:'block'}} href={"/home/course/class="+item.id}>{item.course_name}</a>
-                                              <p style={{marginTop:'10px',height:'90px'}}>{item.introduction}</p>
-                                              <p style={{height:'10px'}}>开始时间：{item.start_date} 结束时间：{item.end_date}</p>
+                                              <a style={{fontSize: '20px', fontWeight: 'bold', display: 'block'}}
+                                                 href={"/home/course/class=" + item.id}>{item.course_name}</a>
+                                              <p style={{marginTop: '10px', height: '90px'}}>{item.introduction}</p>
+                                              <p style={{height: '10px'}}>开始时间：{item.start_date} 结束时间：{item.end_date}</p>
                                           </Col>
                                       </Row>
                                   </List.Item>

@@ -121,6 +121,7 @@ const menu2 = (
 const data3 = [];
 for (let i = 0; i < 23; i++) {
     data3.push({
+
         course_name: `七年级数学 ${i}`,
         pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         start_date: '1999-10-12',
@@ -140,6 +141,7 @@ const IconText = ({type, text}) => (
 
 class CourseDemo extends React.Component {
     state = {
+        courses:data3,
         type: 0,
         size: 'default',
         bordered: true,
@@ -183,7 +185,10 @@ class CourseDemo extends React.Component {
             })
         })
     };
-
+    handleSubmit=(e)=>{
+        e.preventDefault();
+        console.log(123);
+    };
     render() {
         const {loadingMore} = this.state
         const loadMore = (
@@ -194,6 +199,7 @@ class CourseDemo extends React.Component {
                 <Button style={!loadingMore ? {} : {display: 'none'}} onClick={() => this.getData2()}>加载更多</Button>
             </div>
         );
+
         return (
             <div>
                 <CustomBreadcrumb
@@ -219,7 +225,7 @@ class CourseDemo extends React.Component {
                 </Card>
 
                 <Card bordered={false} title='课程列表' style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={data3}
+                    <List dataSource={this.state.courses}
                           itemLayout='vertical'
                           pagination={{pageSize: 5}}
                           style={styles.listStyle}

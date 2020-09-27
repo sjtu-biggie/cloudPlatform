@@ -56,9 +56,21 @@ const deadCourse = {
         chapter3: {
             title: "数学史",
             content: [
-                "时间简史"
+                "时间简史",
+                "二战史",
+                "线性代数史"
             ]
-        }
+        },
+        chapter4: {
+            title: "提高篇",
+            content: [
+                "矩阵",
+                "行列式",
+                "特征向量",
+                "正交矩阵",
+                "正定矩阵"
+            ]
+        },
     }
 };
 const bulletin = [];

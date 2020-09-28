@@ -35,28 +35,6 @@ const deadCourse = {
     nickname: "陈小红",
     id: 1,
     introduction: "9/29的数学作业已发布，截止到第二天早上",
-    syllabus: {
-        chapter1: {
-            title: "一百以内算术",
-            content: [
-                "加法",
-                "减法", "乘法", "除法"
-            ]
-        },
-        chapter2: {
-            title: "微积分",
-            content: [
-                "微分",
-                "积分", "偏微分"
-            ]
-        },
-        chapter3: {
-            title: "数学史",
-            content: [
-                "时间简史"
-            ]
-        }
-    }
 };
 const bulletin = [];
 //TODO:add pagination support
@@ -104,7 +82,7 @@ class NotificationPage extends React.Component {
                                 fontWeight: 'bold',
                                 display: 'block'
                             }}>【通知】{this.state.course.course_name}作业</p>
-                            <a  href={"/home/homework"} style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</a>
+                            <a  href={"/home/homework/overall"} style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</a>
                         </Col>
 
                     </Row>

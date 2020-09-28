@@ -22,6 +22,19 @@ for (let i = 0; i < 23; i++) {
         /!*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*!/
     })
 }*/
+
+const data3 = [];
+for (let i = 0; i < 23; i++) {
+    data3.push({
+        id:1,
+        title: `【通知】七年级数学作业`,
+        avatar: '../../pic/math1.png',
+        description: '9/29的作业已发布，截止到第二天早上',
+        time: `2020/9/27`,
+        /*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*/
+    })
+}
+
 const IconText = ({ type, text }) => (
     <span>
     <Icon type={type} style={{ marginRight: 8 }} />
@@ -36,6 +49,7 @@ class Notification extends React.Component {
         data2: [],
         loading: false,
         loadingMore: false,
+        read:false,
     }
 
     componentDidMount() {
@@ -144,7 +158,7 @@ class Notification extends React.Component {
                         <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
                     </Dropdown>
                 </Card>
-                <Card bordered={false} title='通知' style={{marginBottom: 10}} id='remoteLoading'>
+                {/*<Card bordered={false} title='通知' style={{marginBottom: 10}} id='remoteLoading'>
                     <List loading={loading}
                           dataSource={data2}
                           loadMore={loadMore}
@@ -159,6 +173,32 @@ class Notification extends React.Component {
                                   />
                               </List.Item>
                           )}
+                    />
+                </Card>*/}
+
+                <Card bordered={false} title='通知' style={{marginBottom: 15}} id='verticalStyle'>
+                    <List dataSource={data3}
+                          /*itemLayout='vertical'*/
+                          pagination={{pageSize: 10}}
+                          style={styles.listStyle}
+                          renderItem={item=>{
+                              return (
+                                  <List.Item  actions={this.state.read===false?[<p>未读</p>]:[<p>已读</p>]}
+                                      /*actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}*/
+                                       >
+                                      <List.Item.Meta
+                                          avatar={<Avatar src={require("../../pic/math1.png")} />}
+                                          title={<a onClick={()=>{this.state.setState({read:true})}} href={"/home/notification/page"}>{item.title}</a>}
+                                          description={item.description}>
+                                      <row>
+                                          <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>
+                                          <p style={{fontSize:'5px',fontWeight:'bold',display:'block'}}>{item.time}</p>
+                                          <p style={{marginTop:'10px'}}>{item.description}</p>
+                                      </row>
+                                      </List.Item.Meta>
+                                  </List.Item>
+                              )
+                          }}
                     />
                 </Card>
 

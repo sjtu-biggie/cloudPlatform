@@ -76,7 +76,7 @@ class HeaderBar extends React.Component {
         <div style={{lineHeight: '64px', float: 'right'}}>
           <ul className='header-ul'>
             <li><Icon type={icon} onClick={this.screenfullToggle}/></li>
-            <li onClick={() => this.setState({count: 0})}>
+            <li onClick={() => {this.setState({count: 0}),this.props.history.push('/home/notification')}}>
               <Badge count={appStore.isLogin ? count : 0} overflowCount={99} style={{marginRight: -17}}>
                 <Icon type="notification"/>
               </Badge>

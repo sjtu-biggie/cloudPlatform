@@ -18,11 +18,6 @@ class SiderNav extends React.Component {
                     key: '/home'
                 },
                 {
-                    title: '通知',
-                    icon: 'notification',
-                    key: '/home/notification'
-                },
-                {
                     title: '课程',
                     icon: 'laptop',
                     key: '/home/course',

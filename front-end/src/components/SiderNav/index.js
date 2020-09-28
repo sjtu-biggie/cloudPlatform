@@ -57,7 +57,12 @@ class SiderNav extends React.Component {
                     } : {
                         title: '管理',
                         icon: 'info-circle-o',
-                        key: '/home/manage'
+                        key: '/home/manage',
+                    subs:[
+                        {key: '/home/manage/choosecourse', title: '课程管理', icon: ''},
+                        {key: '/home/manage/managestudent', title: '学生管理', icon: ''},
+                    ]
+
                     },
                 {
                     title: '展示组件',

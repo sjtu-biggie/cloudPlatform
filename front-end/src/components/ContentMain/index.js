@@ -4,6 +4,7 @@ import LoadableComponent from '../../utils/LoadableComponent'
 import PrivateRoute from '../PrivateRoute'
 import CoursePageDemo from "../../routes/Course/coursepage"
 import NotificationPage from "../../routes/Notification/notificationpage"
+import ChooseCourse from "../../routes/Manage";
 
 const Home = LoadableComponent(()=>import('../../routes/Home/index'))  //参数一定要是函数，否则不会懒加载，只会代码拆分
 
@@ -60,6 +61,13 @@ const AddCourseDemo = LoadableComponent(()=>import('../../routes/Course/addCours
 
 //作业
 const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index'))
+
+
+//管理
+  const Choosecourse=LoadableComponent(()=>import('../../routes/Manage/index'))
+const Managecourse=LoadableComponent(()=>import('../../routes/Manage/courseset'))
+const ManageStudent=LoadableComponent(()=>import('../../routes/Manage/change'))
+
 @withRouter
 class ContentMain extends React.Component {
   render () {
@@ -115,6 +123,10 @@ class ContentMain extends React.Component {
 
           <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
+
+          <PrivateRoute exact path='/home/manage/choosecourse' component={ChooseCourse}/>
+          <PrivateRoute exact path='/home/manage/managecourse' component={Managecourse}/>
+          <PrivateRoute exact path='/home/manage/managestudent' component={ManageStudent}/>
 
           <Redirect exact from='/' to='/home'/>
         </Switch>

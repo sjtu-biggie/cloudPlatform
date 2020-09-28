@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.2.2",
     "@antv/data-set": "^0.8.9",
     "@babel/polyfill": "^7.2.5",
     "animate.css": "^3.6.1",

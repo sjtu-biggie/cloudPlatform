@@ -277,13 +277,13 @@ class CoursePageDemo extends React.Component {
                                 <Steps current={this.state.step} style={{marginTop:'200px',fontWeight:'bold'}} size="large">
                                     <Steps.Step title="提交作业"  onClick={()=>{
                                         this.setState({step:0})
-                                    }}description="排名更准确"/>
+                                    }} description="排名更准确"/>
                                     <Steps.Step title="查看排名" onClick={()=>{
                                         this.setState({step:1})
                                     }} description="胜败乃兵家常事" />
                                     <Steps.Step title="排名分析"  onClick={()=>{
                                         this.setState({step:2})
-                                    }}description="知己知彼"/>
+                                    }} description="知己知彼"/>
                                 </Steps>
 
                         </Col>

@@ -37,10 +37,11 @@ class SiderNav extends React.Component {
                     key: '/home/homework',
                     subs: [
                         {key: '/home/homework/overall', title: '总览', icon: ''},
-                        {key: '/home/display/carousel', title: this.state.role === 'student' ? '已交' : '已收齐', icon: ''},
-                        {key: '/home/display/collapse', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
-                        {key: '/home/display/list', title: '已截止', icon: ''},
-                        {key: '/home/display/table', title: '未截止', icon: ''},
+                        {key: '/home/homework/submitted', title: this.state.role === 'student' ? '已交' : '已收齐', icon: ''},
+                        {key: '/home/homework/uncommitted', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
+                        {key: '/home/homework/closed', title: '已截止', icon: ''},
+                        {key: '/home/homework/notclosed', title: '未截止', icon: ''},
+                        {key: '/home/homework/Assign', title: '布置作业', icon: ''},
                         /*{key: '/home/display/tabs', title: '标签页', icon: '',},*/
                     ]
                 },

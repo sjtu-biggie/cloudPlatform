@@ -161,7 +161,7 @@ const styles = {
     textAlign: 'center',
   },
   listStyle:{
-    width:'80%'
+    width:'100%'
   },
   affixBox:{
     position: 'absolute',

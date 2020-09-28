@@ -33,6 +33,8 @@ const genExtra = () => (
 @Form.create()
 class AddCourse extends React.Component {
     state = {
+        addContent:false,
+        addChapter:false,
         text: '获取验证码',
         disabled: false,
         step: 1,
@@ -320,18 +322,34 @@ class AddCourse extends React.Component {
                         </Steps>
                     </Card>
                     <Card bordered={false} className='card-item' title="设计课程大纲">
-                        <Collapse defaultActiveKey={['1']}>{chapterList.map((value, index) => {
-                            return (<Collapse.Panel header={value.title} key={index} extra={genExtra()} >
+                        <Collapse defaultActiveKey={['1']} onChange={()=>{this.setState({addChapter:false,addContent:false})}}>{chapterList.map((value, index) => {
+                            return (<Collapse.Panel header={value.title} key={index}  >
+                                    {this.state.addChapter?<Input defaultValue="请输入章节名，按回车确认！" style={{marginBottom:'15px'}}/>:null}
+                                <Button type="primary" onClick={()=>{
+                                    this.setState({addChapter:true})
+                                }} style={{}}>添加一个章节</Button>
+                                <Button type="primary" onClick={()=>{}} style={{marginLeft:'10px',marginBottom:'20px'}}>删除这个章节</Button>
                                 <List
+
                                     bordered
                                     dataSource={value.content}
                                     renderItem={item => (
-                                        <List.Item>
+                                        <List.Item style={{display:'block'}}>
                                             {item}
                                         </List.Item>
                                     )}
-                                /></Collapse.Panel>)
+                                />
+                                <Button type="danger" onClick={()=>{
+                                    this.setState({addContent:true})
+                                }} style={{}}>添加一个小节</Button>
+                                <Button type="danger" onClick={()=>{}} style={{marginLeft:'10px'}}>删除一个小节</Button>
+                                {this.state.addContent?<Input defaultValue="请输入小节名，按回车确认！" style={{marginBottom:'15px'}}/>:null}
+                            </Collapse.Panel>)
                         })}</Collapse>
+                        <Collapse
+                            defaultActiveKey={['1']}
+                        >
+                        </Collapse>
                     </Card>
                 </div>);
             case 2:

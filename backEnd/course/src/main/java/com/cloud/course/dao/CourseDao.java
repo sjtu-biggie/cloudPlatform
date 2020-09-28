@@ -2,10 +2,7 @@ package com.cloud.course.dao;
 
 
 import com.cloud.course.dto.WholeCourse;
-import com.cloud.course.entity.Course;
-import com.cloud.course.entity.CourseBulletin;
-import com.cloud.course.entity.CourseInfo;
-import com.cloud.course.entity.CoursePic;
+import com.cloud.course.entity.*;
 
 import java.util.Date;
 import java.util.List;
@@ -28,4 +25,12 @@ public interface CourseDao {
     CourseBulletin getBulletin(String id, Date publish_date);
 
     void deleteBulletin(CourseBulletin courseBulletin);
+
+    List<Course> getCoursesByStudent(String id);
+
+    List<Notification> getNoteByUser(String id);
+
+    List<Notification> getNoteByTeacher(String id);
+
+    void saveNote(Notification notification);
 }

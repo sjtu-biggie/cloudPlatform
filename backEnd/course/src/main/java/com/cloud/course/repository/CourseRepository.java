@@ -17,4 +17,7 @@ public interface CourseRepository extends CrudRepository<Course,String> {
 
     @Query(value = "from Course where teacher=?1")
     List<Course> findAllByTeacher(String teacher_id);
+
+    @Query(nativeQuery = true,value="select * from course where id in (select course_id from student_course where user_id = ?1)")
+    List<Course> getCoursesByStudent(String id);
 }

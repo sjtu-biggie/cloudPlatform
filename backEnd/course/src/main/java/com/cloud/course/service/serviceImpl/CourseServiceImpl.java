@@ -3,10 +3,7 @@ package com.cloud.course.service.serviceImpl;
 import com.alibaba.fastjson.JSONObject;
 import com.cloud.course.dao.CourseDao;
 import com.cloud.course.dto.WholeCourse;
-import com.cloud.course.entity.Course;
-import com.cloud.course.entity.CourseBulletin;
-import com.cloud.course.entity.CourseInfo;
-import com.cloud.course.entity.CoursePic;
+import com.cloud.course.entity.*;
 import com.cloud.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +85,23 @@ public class CourseServiceImpl implements CourseService {
         courseDao.saveBulletin(courseBulletin);
     }
     @Override
+    public void addNote(JSONObject object){
+        String recId = object.getString("receiverId");
+        String sendId= object.getString("senderId");
+        String title= object.getString("title");
+        String content= object.getString("content");
+        Date publish_date = new Date();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String _publish_date = object.getString("publishDate");
+        try {
+            publish_date = sdf.parse(_publish_date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Notification notification=new Notification(recId,sendId,title,publish_date,false,content);
+        courseDao.saveNote(notification);
+    }
+    @Override
     public void deleteBulletin(String id, String publish_date){
         Date _publish_date = new Date();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -99,5 +113,14 @@ public class CourseServiceImpl implements CourseService {
         System.out.println(_publish_date);
         CourseBulletin courseBulletin = courseDao.getBulletin(id,_publish_date);
         courseDao.deleteBulletin(courseBulletin);
+    }
+    @Override
+    public List<Course> getCourseByStudent(String id){
+        return courseDao.getCoursesByStudent(id);
+    }
+
+    @Override
+    public List<Notification> getNoteByUser(String id){
+        return courseDao.getNoteByUser(id);
     }
 }

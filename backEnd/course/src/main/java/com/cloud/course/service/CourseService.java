@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cloud.course.dto.WholeCourse;
 import com.cloud.course.entity.Course;
 import com.cloud.course.entity.CourseBulletin;
+import com.cloud.course.entity.Notification;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface CourseService {
     void addBulletin(JSONObject object);
 
     void deleteBulletin(String id, String publish_date);
+
+    List<Course> getCourseByStudent(String id);
+
+    List<Notification> getNoteByUser(String id);
+
+    void addNote(JSONObject object);
 }

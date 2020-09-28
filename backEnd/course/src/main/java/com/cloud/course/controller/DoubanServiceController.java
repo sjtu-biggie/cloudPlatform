@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cloud.course.dto.WholeCourse;
 import com.cloud.course.entity.Course;
 import com.cloud.course.entity.CourseBulletin;
+import com.cloud.course.entity.Notification;
 import com.cloud.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,23 @@ public class DoubanServiceController {
     @GetMapping(path = "/course/getCoursesByTeacher")
     public List<WholeCourse> getCoursesByTeacher(@RequestParam("userId") String id) {
         return courseService.getCoursesByTeacher(id);
+    }
+    @GetMapping(path = "/course/getCoursesByUser")
+    //note that the modification will also come into this controller
+    public List<Course> getCoursesByStudent(@RequestParam("userId") String id) {
+        System.out.println("getCourseByStudent");
+        return courseService.getCourseByStudent(id);
+    }
+    @GetMapping(path = "/course/getNoteByUser")
+    //note that the modification will also come into this controller
+    public List<Notification>getNoteByUser(@RequestParam("userId") String id) {
+        System.out.println("getNoteByUser");
+        return courseService.getNoteByUser(id);
+    }
+    @PostMapping(path = "/course/addNote")
+    public void addNote(@RequestBody JSONObject object) {
+        System.out.println("note added");
+        courseService.addNote(object);
     }
 
     @GetMapping(path = "/course/getBulletin")
@@ -59,4 +77,6 @@ public class DoubanServiceController {
         System.out.println("course added");
         courseService.addcourse(object);
     }
+
+
 }

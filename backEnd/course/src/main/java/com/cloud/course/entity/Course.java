@@ -23,6 +23,4 @@ public class Course {
     private Date start_date;
     @Column(name = "END_DATE")
     private Date end_date;
-
-
 }

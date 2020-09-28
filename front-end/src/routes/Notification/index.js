@@ -154,7 +154,7 @@ class Notification extends React.Component {
                                   <List.Item.Meta
                                       avatar={<Avatar
                                           src={require('../../pic/math1.png')}/>}
-                                      title={<a href={"/home/homework"}>{'【通知】七年级数学作业'}</a>}
+                                      title={<a href={"/home/notification/page"}>{'【通知】七年级数学作业'}</a>}
                                       description={<p>{"9/29的作业已发布，截止到第二天早上"}</p>}
                                   />
                               </List.Item>

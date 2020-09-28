@@ -10,7 +10,7 @@ const menus = [
   {
     title: '通知',
     icon: 'notification',
-    key: '/notification'
+    key: '/home/notification'
   },
   {
     title: '课程',

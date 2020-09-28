@@ -2,7 +2,8 @@ import React from 'react'
 import { withRouter, Switch, Redirect } from 'react-router-dom'
 import LoadableComponent from '../../utils/LoadableComponent'
 import PrivateRoute from '../PrivateRoute'
-import CoursePageDemo from "../../routes/Course/coursepage";
+import CoursePageDemo from "../../routes/Course/coursepage"
+import NotificationPage from "../../routes/Notification/notificationpage"
 
 const Home = LoadableComponent(()=>import('../../routes/Home/index'))  //参数一定要是函数，否则不会懒加载，只会代码拆分
 
@@ -49,6 +50,7 @@ const Mistakes = LoadableComponent(()=>import('../../routes/Mistakes/index'))
 
 //通知
 const Notification = LoadableComponent(()=>import('../../routes/Notification/index'))
+/*const NotificationPage = LoadableComponent(()=>import('../../routes/Notification/notificationpage'))*/
 
 @withRouter
 class ContentMain extends React.Component {
@@ -58,7 +60,8 @@ class ContentMain extends React.Component {
         <Switch>
           <PrivateRoute exact path='/home' component={Home}/>
 
-          <PrivateRoute exact path='/notification' component={Notification}/>
+          <PrivateRoute exact path='/home/notification' component={Notification}/>
+
 
           <PrivateRoute exact path='/home/general/button' component={ButtonDemo}/>
           <PrivateRoute exact path='/home/general/icon' component={IconDemo}/>
@@ -95,6 +98,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/course/end' component={CourseDemo}/>
           <PrivateRoute exact path='/home/course/class*' component={CoursePageDemo}/>
 
+          <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
 
           <Redirect exact from='/' to='/home'/>

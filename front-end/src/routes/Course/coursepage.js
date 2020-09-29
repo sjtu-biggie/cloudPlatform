@@ -20,88 +20,14 @@ import {
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
+import FormDemo1 from '../../routes/Homework/Assign';
+import LoadableComponent from "../../utils/LoadableComponent";
 
 
-const IconText = ({type, text}) => (
-    <span>
-    <Icon type={type} style={{marginRight: 8}}/>
-        {text}
-  </span>
-);
-const deadCourse = {
-    course_name: `七年级数学`,
-    pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    start_date: '1999-10-12',
-    end_date: '2020-10-10',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    nickname: "陈小红",
-    id: 1,
-    textbook: "人教版七年级数学上册",
-    introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
-    syllabus: {
-        chapter1: {
-            title: "一百以内算术",
-            content: [
-                "加法",
-                "减法", "乘法", "除法"
-            ]
-        },
-        chapter2: {
-            title: "微积分",
-            content: [
-                "微分",
-                "积分", "偏微分"
-            ]
-        },
-        chapter3: {
-            title: "数学史",
-            content: [
-                "时间简史",
-                "二战史",
-                "线性代数史"
-            ]
-        },
-        chapter4: {
-            title: "提高篇",
-            content: [
-                "矩阵",
-                "行列式",
-                "特征向量",
-                "正交矩阵",
-                "正定矩阵"
-            ]
-        },
-    }
-};
-const bulletin = [];
-//TODO:add pagination support
-for (let i = 0; i < 10; i++) {
-    bulletin.push({
-        title: '重要通知' + i + '号',
-        bulletin: `值得注意的是，这五大创新技术，包括了全新的“4680”型电池，号称能量密度提高五倍，动力输出提高 6 倍，续航里程可提高 16%。
-　　马斯克称，新电池已经开始在一家工厂生产，将需要一年时间达到 10 千兆瓦时的产能。
-　　另外，早在今年 4 月，马斯克就表示，今年的电池日活动是“特斯拉历史上最让人兴奋的日子之一”，预计将于 2020 年投产一种新型电池，这种电池能够驱动特斯拉汽车行驶百万英里，是普通电池包寿命的2-3 倍。
-　　据悉，这种电池是一种锂离子电池，是宁德时代与特斯拉合作生产的，可以使电动汽车持续行驶 100 万英里。马斯克曾在推特上表示，他将会在“电池技术日”活动上详细介绍一项百万英里电池项目。
-　　但是，直到此次电池日活动结束，投资者高度期待的“百万英里电池”依然不见踪影。特斯拉股价也由上涨5% 转为下跌近7%。`,
-        publish_date: '1999-10-12',
-    })
-}
-const steps = [
-    {
-        title: 'First',
-        content: 'First-content',
-    },
-    {
-        title: 'Second',
-        content: 'Second-content',
-    },
-    {
-        title: 'Last',
-        content: 'Last-content',
-    }];
+
 class CoursePageDemo extends React.Component {
     state = {
-        step:0,
+        step: 0,
         //type indicate which content to render
         //parameter is detailed content of one type
         type: 1,
@@ -113,6 +39,9 @@ class CoursePageDemo extends React.Component {
         loadingMore: false,
         course: deadCourse,
         bulletins: bulletin,
+        role: 'teacher',
+        addHomework:false,
+        deleteHomework: false,
     };
 
     componentDidMount() {
@@ -151,6 +80,26 @@ class CoursePageDemo extends React.Component {
         })
     };
     homeworkRender = () => {
+        //TODO:传参给FormDemo1
+        return (
+            <div>
+                <Card bordered={false} style={{marginBottom: 10,height:'90px'}} id="howUse">
+                    <Row/>
+                    <Button style={{float:'left'}} type="primary" icon="up-circle-o" size='large' onClick={()=>{
+                        this.setState({addHomework:true})
+                    }}>创建新的一次作业</Button>
+
+                    <Button style={{float:'left',marginLeft:'20px'}} type="danger" icon="down-circle-o" size='large'>删除现有一次作业</Button>
+                    <Button style={{float:'left',marginLeft:'20px'}} type="dashed"  size='large' onClick={()=>{
+                        this.setState({addHomework:false,deleteHomework:false,})
+                    }}>返回</Button>
+                </Card>
+                {
+                    this.state.addHomework?<FormDemo1 datas={this.state.type}/>:null
+                }
+
+            </div>
+        )
 
     };
     mainRender = () => {
@@ -192,7 +141,7 @@ class CoursePageDemo extends React.Component {
                                 fontSize: '20px',
                                 fontWeight: 'bold',
                                 display: 'block',
-                                paddingRight:'50px'
+                                paddingRight: '50px'
                             }}>老师有话说 ：</p>
                             <p>
                                 这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
@@ -274,20 +223,21 @@ class CoursePageDemo extends React.Component {
                     <Row>
                         <Col span={10} offset={6}>
 
-                                <Steps current={this.state.step} style={{marginTop:'200px',fontWeight:'bold'}} size="large">
-                                    <Steps.Step title="提交作业"  onClick={()=>{
-                                        this.setState({step:0})
-                                    }} description="排名更准确"/>
-                                    <Steps.Step title="查看排名" onClick={()=>{
-                                        this.setState({step:1})
-                                    }} description="胜败乃兵家常事" />
-                                    <Steps.Step title="排名分析"  onClick={()=>{
-                                        this.setState({step:2})
-                                    }} description="知己知彼"/>
-                                </Steps>
+                            <Steps current={this.state.step} style={{marginTop: '200px', fontWeight: 'bold'}}
+                                   size="large">
+                                <Steps.Step title="提交作业" onClick={() => {
+                                    this.setState({step: 0})
+                                }} description="排名更准确"/>
+                                <Steps.Step title="查看排名" onClick={() => {
+                                    this.setState({step: 1})
+                                }} description="胜败乃兵家常事"/>
+                                <Steps.Step title="排名分析" onClick={() => {
+                                    this.setState({step: 2})
+                                }} description="知己知彼"/>
+                            </Steps>
 
                         </Col>
-                        </Row>
+                    </Row>
                 </Card>
 
             </div>
@@ -327,7 +277,7 @@ class CoursePageDemo extends React.Component {
                 <CustomBreadcrumb
                     arr={['课程', this.state.course.course_name]}/>
                 <Card bordered={false} style={{marginBottom: '10px'}}>
-                    <Menu mode="horizontal">
+                    <Menu mode="horizontal" onSelect={()=>{this.setState({addHomework:false,deleteHomework:false})}}>
                         <Menu.Item onClick={() => {
                             this.setState({type: 1})
                         }}>主页</Menu.Item>
@@ -402,6 +352,83 @@ const styles = {
         right: 50,
         with: 170
     }
+};
+const IconText = ({type, text}) => (
+    <span>
+    <Icon type={type} style={{marginRight: 8}}/>
+        {text}
+  </span>
+);
+const deadCourse = {
+    course_name: `七年级数学`,
+    pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    start_date: '1999-10-12',
+    end_date: '2020-10-10',
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    nickname: "陈小红",
+    id: 1,
+    textbook: "人教版七年级数学上册",
+    introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
+    syllabus: {
+        chapter1: {
+            title: "一百以内算术",
+            content: [
+                "加法",
+                "减法", "乘法", "除法"
+            ]
+        },
+        chapter2: {
+            title: "微积分",
+            content: [
+                "微分",
+                "积分", "偏微分"
+            ]
+        },
+        chapter3: {
+            title: "数学史",
+            content: [
+                "时间简史",
+                "二战史",
+                "线性代数史"
+            ]
+        },
+        chapter4: {
+            title: "提高篇",
+            content: [
+                "矩阵",
+                "行列式",
+                "特征向量",
+                "正交矩阵",
+                "正定矩阵"
+            ]
+        },
+    }
+};
+const bulletin = [];
+//TODO:add pagination support
+for (let i = 0; i < 10; i++) {
+    bulletin.push({
+        title: '重要通知' + i + '号',
+        bulletin: `值得注意的是，这五大创新技术，包括了全新的“4680”型电池，号称能量密度提高五倍，动力输出提高 6 倍，续航里程可提高 16%。
+　　马斯克称，新电池已经开始在一家工厂生产，将需要一年时间达到 10 千兆瓦时的产能。
+　　另外，早在今年 4 月，马斯克就表示，今年的电池日活动是“特斯拉历史上最让人兴奋的日子之一”，预计将于 2020 年投产一种新型电池，这种电池能够驱动特斯拉汽车行驶百万英里，是普通电池包寿命的2-3 倍。
+　　据悉，这种电池是一种锂离子电池，是宁德时代与特斯拉合作生产的，可以使电动汽车持续行驶 100 万英里。马斯克曾在推特上表示，他将会在“电池技术日”活动上详细介绍一项百万英里电池项目。
+　　但是，直到此次电池日活动结束，投资者高度期待的“百万英里电池”依然不见踪影。特斯拉股价也由上涨5% 转为下跌近7%。`,
+        publish_date: '1999-10-12',
+    })
 }
+const steps = [
+    {
+        title: 'First',
+        content: 'First-content',
+    },
+    {
+        title: 'Second',
+        content: 'Second-content',
+    },
+    {
+        title: 'Last',
+        content: 'Last-content',
+    }];
 
 export default CoursePageDemo

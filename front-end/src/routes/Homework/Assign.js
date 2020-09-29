@@ -16,7 +16,7 @@ const options = [
         label: '一年级4班',
         value: '1-4',
     }
-]
+];
 
 @Form.create()
 class FormDemo1 extends React.Component {
@@ -24,8 +24,8 @@ class FormDemo1 extends React.Component {
         text: '获取验证码',
         disabled: false,
 
-    }
-    timer = 0
+    };
+    timer = 0;
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -78,7 +78,6 @@ class FormDemo1 extends React.Component {
 
         return (
             <div>
-                <CustomBreadcrumb arr={['作业', '布置作业']}/>
                 <Card bordered={false} title='布置作业'>
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                         <FormItem label='作业名称' {...formItemLayout} required>
@@ -124,13 +123,27 @@ class FormDemo1 extends React.Component {
                             }
                         </FormItem>
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
+                        {
+                            (
+                                <DraftDemo/>
+                            )
+                        }
+                    </FormItem>
+                        <FormItem label='上传作业附件' {...formItemLayout} >
+                            {
+                                (
+                                    <UploadDemo/>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
                             {
                                 (
                                     <DraftDemo/>
                                 )
                             }
                         </FormItem>
-                        <FormItem label='上传附件' {...formItemLayout} >
+                        <FormItem label='上传答案附件' {...formItemLayout} >
                             {
                                 (
                                     <UploadDemo/>

@@ -64,9 +64,7 @@ const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index')
 
 
 //管理
-  const Choosecourse=LoadableComponent(()=>import('../../routes/Manage/index'))
-const Managecourse=LoadableComponent(()=>import('../../routes/Manage/courseset'))
-const ManageStudent=LoadableComponent(()=>import('../../routes/Manage/change'))
+const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'))
 
 @withRouter
 class ContentMain extends React.Component {
@@ -124,9 +122,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
 
-          <PrivateRoute exact path='/home/manage/choosecourse' component={ChooseCourse}/>
-          <PrivateRoute exact path='/home/manage/managecourse' component={Managecourse}/>
-          <PrivateRoute exact path='/home/manage/managestudent' component={ManageStudent}/>
+          <PrivateRoute exact path='/home/manage/studentTable' component={StudentTable}/>
 
           <Redirect exact from='/' to='/home'/>
         </Switch>

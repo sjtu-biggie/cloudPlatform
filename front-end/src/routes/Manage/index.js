@@ -237,7 +237,7 @@ class ChooseCourse extends React.Component {
                                                    style={{}}/>
                                           </Col>
                                           <Col span={19}>
-                                              <a style={{fontSize:'20px',fontWeight:'bold',display:'block'}} href={"/home/manage/courseSet"}>{item.course_name}</a>
+                                              <a style={{fontSize:'20px',fontWeight:'bold',display:'block'}} href={"/home/manage/managecourse"}>{item.course_name}</a>
                                               <p style={{marginTop:'10px',height:'90px'}}>{item.introduction}</p>
                                               <p style={{height:'10px'}}>开始时间：{item.start_date} 结束时间：{item.end_date}</p>
                                           </Col>

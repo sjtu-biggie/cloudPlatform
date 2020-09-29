@@ -9,7 +9,6 @@ for(let i=0;i<23;i++){
     data3.push({
         title: `一年级上语文作业 ${i}`,
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        description: '任课老师： 沈备军',
         content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
     })
 }
@@ -231,7 +230,7 @@ const styles = {
         textAlign: 'center',
     },
     listStyle:{
-        width:'100%'
+        width:'100%',
     },
     affixBox:{
         position: 'absolute',

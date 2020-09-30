@@ -21,6 +21,8 @@ public interface NoteRepository extends CrudRepository<Notification,String> {
     @Modifying
     void deleteBySenderId(String id);
 
-
+    @Transactional
+    @Modifying
+    void deleteByNotificationId(int id);
 
 }

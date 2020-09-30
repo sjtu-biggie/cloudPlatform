@@ -3,11 +3,11 @@ package com.cloud.course.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@IdClass(NoteKeys.class)
 @Entity
 @Table(name = "STUDENT_NOTIFICATION")
 @Data
@@ -15,9 +15,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class Notification {
     @Id
+    @GeneratedValue(generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
+    @Column(name = "NOTIFICATION_ID")
+    private int notificationId;
     @Column(name = "RECEIVER_ID")
     private String receiverId;
-    @Id
     @Column(name = "SENDER_ID")
     private String senderId;
     @Column(name = "TITLE")
@@ -28,4 +31,15 @@ public class Notification {
     private boolean reading;
     @Column(name = "CONTENT")
     private String content;
+
+    public Notification(String _receiverId,String _senderId,String _title,Date _publishDate,boolean _reading,String _content){
+        receiverId=_receiverId;
+        senderId=_senderId;
+        title=_title;
+        publishDate=_publishDate;
+        reading=_reading;
+        content=_content;
+    }
 }
+
+

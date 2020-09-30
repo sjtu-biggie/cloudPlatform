@@ -46,6 +46,12 @@ public class DoubanServiceController {
         System.out.println("note added");
         courseService.addNote(object);
     }
+    @PostMapping(path = "/course/deleteNote")
+    public void deleteNote(@RequestBody Map<String, String> params) {
+        System.out.println("note deleted");
+        String id = params.get("notificationId");
+        courseService.deleteNote(id);
+    }
 
     @GetMapping(path = "/course/getBulletin")
     public List<CourseBulletin> getBulletin(@RequestParam("courseId") String id) {

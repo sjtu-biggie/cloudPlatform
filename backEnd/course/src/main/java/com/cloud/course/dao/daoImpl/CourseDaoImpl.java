@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 
 @Repository
 public class CourseDaoImpl implements CourseDao {
@@ -115,5 +117,9 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void saveNote(Notification notification){
         noteRepository.save(notification);
+    }
+    @Override
+    public void deleteNote(String id){
+        noteRepository.deleteByNotificationId(parseInt(id));
     }
 }

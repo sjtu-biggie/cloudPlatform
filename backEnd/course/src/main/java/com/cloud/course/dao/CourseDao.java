@@ -33,4 +33,6 @@ public interface CourseDao {
     List<Notification> getNoteByTeacher(String id);
 
     void saveNote(Notification notification);
+
+    void deleteNote(String id);
 }

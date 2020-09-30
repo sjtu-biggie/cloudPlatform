@@ -31,4 +31,6 @@ public interface CourseService {
     List<Notification> getNoteByUser(String id);
 
     void addNote(JSONObject object);
+
+    void deleteNote(String id);
 }

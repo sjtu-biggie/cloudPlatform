@@ -123,4 +123,8 @@ public class CourseServiceImpl implements CourseService {
     public List<Notification> getNoteByUser(String id){
         return courseDao.getNoteByUser(id);
     }
+    @Override
+    public void deleteNote(String id){
+        courseDao.deleteNote(id);
+    }
 }

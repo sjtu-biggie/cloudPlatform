@@ -24,6 +24,7 @@ class HomeworkList extends React.Component {
         bordered: true,
         loading: false,
         loadingMore: false,
+        delete: false
     };
 
     componentDidMount() {
@@ -52,8 +53,8 @@ class HomeworkList extends React.Component {
                               renderItem={item=>{
                                   return (
                                       <List.Item
-                                          actions={[<IconText type="file-text" text="100" />, <IconText type="calendar" text="截止：2020-10-1 20:00" />, <IconText type="clock-circle-o" text="已结束" />]}
-                                          extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}>
+                                          actions={[<IconText type="file-text" text="100" />, <IconText type="calendar" text="截止：2020-10-1 20:00" />, <IconText type="schedule" text="已提交" />, <IconText type="clock-circle-o" text="已结束" />,<Button type="danger">删除</Button>]}
+                                          >
                                           <List.Item.Meta
                                               avatar={<Avatar src={item.avatar} />}
                                               title={<a>{item.title}</a>}

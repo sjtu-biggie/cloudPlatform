@@ -6,8 +6,11 @@ class TypingCard extends React.Component {
   static defaultProps = {
     title: '何时使用',
     source:'',
-    height:136
+    height:400
   }
+  state={
+    title1:"作业0"
+  };
   componentDidMount(){
     const typing = new Typing({
       source:this.source,
@@ -18,7 +21,7 @@ class TypingCard extends React.Component {
   }
   render() {
     return (
-      <Card hoverable bordered={false} className='card-item' title={this.props.title} style={{minHeight:this.props.height}} id={this.props.id}>
+      <Card hoverable bordered={false} className='card-item' title={this.state.title1} style={{minHeight:this.props.height}} id={this.props.id}>
         <div style={{display:'none'}} ref={el => this.source = el} dangerouslySetInnerHTML={{__html:this.props.source}}/>
         <div ref={el => this.output = el}/>
       </Card>

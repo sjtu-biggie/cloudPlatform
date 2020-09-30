@@ -5,9 +5,9 @@ import axios from 'axios'
 const data3 = [];
 for(let i=0;i<23;i++){
     data3.push({
-        title: `一年级上语文作业 ${i}`,
+        title: `七年级上数学作业 ${i}`,
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+        content: '同学们记得认真完成按时提交',
     })
 }
 const IconText = ({ type, text }) => (
@@ -57,7 +57,7 @@ class HomeworkList extends React.Component {
                                           >
                                           <List.Item.Meta
                                               avatar={<Avatar src={item.avatar} />}
-                                              title={<a>{item.title}</a>}
+                                              title={<a href={"/home/homework/commit"}>{item.title}</a>}
                                               description={item.description}
                                           />
                                           {item.content}

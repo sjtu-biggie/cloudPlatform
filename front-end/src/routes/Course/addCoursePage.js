@@ -39,7 +39,7 @@ class AddCourse extends React.Component {
         addChapter:false,
         text: '获取验证码',
         disabled: false,
-        step: 3,
+        step: 0,
         syllabus: {
             chapter1: {
                 title: "一百以内算术",

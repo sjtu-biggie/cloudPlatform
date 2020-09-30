@@ -19,9 +19,9 @@ import {
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
-import TypingCard from '../../components/TypingCard'
 import FormDemo1 from '../../routes/Homework/Assign';
-import LoadableComponent from "../../utils/LoadableComponent";
+import HomeworkList from '../Homework/HomeworkList';
+import AddBulletin from './AddBulletin'
 
 
 
@@ -40,8 +40,10 @@ class CoursePageDemo extends React.Component {
         course: deadCourse,
         bulletins: bulletin,
         role: 'teacher',
-        addHomework:false,
+        addHomework: false,
         deleteHomework: false,
+        addBulletin: false,
+        deleteBulletin: false,
     };
 
     componentDidMount() {
@@ -83,19 +85,26 @@ class CoursePageDemo extends React.Component {
         //TODO:传参给FormDemo1
         return (
             <div>
-                <Card bordered={false} style={{marginBottom: 10,height:'90px'}} id="howUse">
+                <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
                     <Row/>
-                    <Button style={{float:'left'}} type="primary" icon="up-circle-o" size='large' onClick={()=>{
-                        this.setState({addHomework:true})
+                    <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
+                        this.setState({addHomework: true})
                     }}>创建新的一次作业</Button>
 
-                    <Button style={{float:'left',marginLeft:'20px'}} type="danger" icon="down-circle-o" size='large'>删除现有一次作业</Button>
-                    <Button style={{float:'left',marginLeft:'20px'}} type="dashed"  size='large' onClick={()=>{
-                        this.setState({addHomework:false,deleteHomework:false,})
+                    <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
+                            size='large'>删除现有一次作业</Button>
+                    <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
+                        this.setState({
+                            addHomework: false,
+                            deleteHomework: false,
+                            addBulletin: false,
+                            deleteBulletin: false
+                        })
                     }}>返回</Button>
                 </Card>
                 {
-                    this.state.addHomework?<FormDemo1 datas={this.state.type}/>:null
+                    this.state.addHomework ? <FormDemo1 datas={this.state.type}/> :
+                        <HomeworkList delete={this.state.deleteHomework}/>
                 }
 
             </div>
@@ -202,16 +211,33 @@ class CoursePageDemo extends React.Component {
     bulletinRender = () => {
         return (
             <div>
+                {this.state.role === 'teacher' ? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
+                    <Row/>
+                    <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
+                        this.setState({addBulletin: true})
+                    }}>创建新的一条公告</Button>
+                    <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
+                            size='large' onClick={() => {
+                        this.setState({deleteBulletin: true})
+                    }}>删除现有一条公告</Button>
+                    <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
+                        this.setState({addBulletin: false, deleteBulletin: false,})
+                    }}>返回</Button>
+                </Card> : null}
+                {this.state.addBulletin?<AddBulletin/>:
+                    <div>
                 <Collapse style={{marginBottom: "10px"}}
                           defaultActiveKey={['1']}>{this.state.bulletins.map((value, index) => {
                     return (<Collapse.Panel header={value.title} key={index}>
                         <p>{value.bulletin}</p>
-                        <p>{value.publish_date}</p>
+                        <span style={{fontWeight:'bold'}}>发布时间：</span>{value.publish_date}
+                        {this.state.deleteBulletin?<Button type="danger" style={{float:'right'}}>删除</Button>:null}
                     </Collapse.Panel>)
                 })}</Collapse>
                 <Pagination defaultCurrent={1} total={50}/>
+                    </div>
+                }
             </div>);
-
     };
     examRender = () => {
         return null;
@@ -277,7 +303,9 @@ class CoursePageDemo extends React.Component {
                 <CustomBreadcrumb
                     arr={['课程', this.state.course.course_name]}/>
                 <Card bordered={false} style={{marginBottom: '10px'}}>
-                    <Menu mode="horizontal" onSelect={()=>{this.setState({addHomework:false,deleteHomework:false})}}>
+                    <Menu mode="horizontal" onSelect={() => {
+                        this.setState({addHomework: false, deleteHomework: false})
+                    }}>
                         <Menu.Item onClick={() => {
                             this.setState({type: 1})
                         }}>主页</Menu.Item>

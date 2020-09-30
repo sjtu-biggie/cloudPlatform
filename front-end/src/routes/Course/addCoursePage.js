@@ -1,6 +1,7 @@
 import React from 'react'
 import { SettingOutlined } from '@ant-design/icons';
 import {
+
     Card,
     Cascader,
     Tooltip,
@@ -14,11 +15,12 @@ import {
     Row,
     message,
     BackTop,
-    Steps, DatePicker, Upload, Collapse, List
+    Steps, DatePicker, Upload, Collapse, List, Progress
 } from 'antd'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
 import TextArea from "antd/es/input/TextArea";
+import StudenTable from '../Manage/studentTable'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -37,7 +39,7 @@ class AddCourse extends React.Component {
         addChapter:false,
         text: '获取验证码',
         disabled: false,
-        step: 1,
+        step: 3,
         syllabus: {
             chapter1: {
                 title: "一百以内算术",
@@ -99,9 +101,9 @@ class AddCourse extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (err) {
-                message.warning('请先填写正确的表单')
+                message.warning('请填写正确的课程信息')
             } else {
-                message.success('提交成功')
+                message.success('提交成功');
                 console.log(values);
                 this.setState({step:1});
             }
@@ -129,7 +131,7 @@ class AddCourse extends React.Component {
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
-                sm: {span: 4},
+                sm: {span: 6},
             },
             wrapperCol: {
                 xs: {span: 24},
@@ -304,7 +306,7 @@ class AddCourse extends React.Component {
                                 }
                             </FormItem>
                             <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                                <Button type="primary" htmlType="submit">提交</Button>
+                                <Button type="primary" htmlType="submit">下一步</Button>
                             </FormItem>
                         </Form>
                     </Card>
@@ -350,12 +352,63 @@ class AddCourse extends React.Component {
                             defaultActiveKey={['1']}
                         >
                         </Collapse>
+                        <Row>
+                            <Col offset={10}>
+                                <Button onClick={()=>{this.setState({step:0})}} style={{marginTop:'20px',size:'large'}}>上一步</Button>
+                                <Button onClick={()=>{this.setState({step:2})}} style={{marginTop:'20px',size:'large',marginLeft:'20px'}}>下一步</Button>
+                            </Col>
+                        </Row>
                     </Card>
                 </div>);
             case 2:
-                return (null);
+                return <div>
+                    <Card bordered={false} className='card-item'>
+                        <Steps>
+                            <Steps.Step status="finish" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="finish" title="添加课程细节"
+                                        icon={<Icon type="book"/>}/>
+                            <Steps.Step status="process" title="选取学生加入"
+                                        icon={<Icon type="solution"/>}/>
+                            <Steps.Step status="wait" title="完成" icon={<Icon type="check"/>}/>
+                        </Steps>
+                    </Card>
+                    <StudenTable/>;
+                    <Row>
+                        <Col offset={10}>
+                            <Button onClick={()=>{this.setState({step:1})}} style={{marginTop:'20px',size:'large'}}>上一步</Button>
+                            <Button onClick={()=>{this.setState({step:3})}} style={{marginTop:'20px',size:'large',marginLeft:'20px'}}>下一步</Button>
+                        </Col>
+                    </Row>
+                </div>;
             default:
-                return (null);
+                return <div>
+                    <Card bordered={false} className='card-item'>
+                        <Steps>
+                            <Steps.Step status="finish" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="finish" title="添加课程细节"
+                                        icon={<Icon type="book"/>}/>
+                            <Steps.Step status="finish" title="选取学生加入"
+                                        icon={<Icon type="solution"/>}/>
+                            <Steps.Step status="process" title="完成" icon={<Icon type="check"/>}/>
+                        </Steps>
+                    </Card>
+                    <Card bordered={false} className='card-item'>
+                        <Row>
+                            <Col offset={10}>
+                                <Progress type="circle" percent={100} style={{}}/>
+                            </Col>
+                            <Col  style={{marginTop:'20px'}} span={12} offset={6}>
+                                <h1>你已经成功创建课程！若要为课程发布公告，布置作业等，请进入课程主页。</h1>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col offset={10}>
+                                <Button onClick={()=>{}} style={{marginTop:'20px',size:'large'}} type="primary">进入课程主页</Button>
+
+                            </Col>
+                        </Row>
+                    </Card>
+                </div>;
         }
     };
 

@@ -27,107 +27,30 @@ const data = [
     'Man charged over missing wedding girl.',
     'Los Angeles battles huge wildfires.',
 ];
-const menu1 = (
-    <Menu>
-        <Menu.SubMenu title="所有">
-            <Menu.Item onClick={() => {
-            }}>语文</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>数学</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>英语</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>物理</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>化学</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>生物</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>历史</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>地理</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>政治</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>体育</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>心理</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="文科类">
-            <Menu.Item onClick={() => {
-            }}>语文</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>英语</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>历史</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>地理</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>政治</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="理科类">
-            <Menu.Item onClick={() => {
-            }}>数学</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>物理</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>化学</Menu.Item>
-            <Menu.Item onClick={() => {
-            }}>生物</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.Item>其它</Menu.Item>
-    </Menu>
-);
-const menu2 = (
-    <Menu>
-        <Menu.SubMenu title="一年级">
-            <Menu.Item>一年级上</Menu.Item>
-            <Menu.Item>一年级下</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="二年级">
-            <Menu.Item>二年级上</Menu.Item>
-            <Menu.Item>二年级下</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="三年级">
-            <Menu.Item>三年级上</Menu.Item>
-            <Menu.Item>三年级下</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="四年级">
-            <Menu.Item>四年级上</Menu.Item>
-            <Menu.Item>四年级下</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="五年级">
-            <Menu.Item>五年级上</Menu.Item>
-            <Menu.Item>五年级下</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="六年级">
-            <Menu.Item>六年级上</Menu.Item>
-            <Menu.Item>六年级下</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="七年级">
-            <Menu.Item>七年级上</Menu.Item>
-            <Menu.Item>七年级下</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="八年级">
-            <Menu.Item>八年级上</Menu.Item>
-            <Menu.Item>八年级下</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu title="九年级">
-            <Menu.Item>九年级上</Menu.Item>
-            <Menu.Item>九年级下</Menu.Item>
-        </Menu.SubMenu>
-    </Menu>
-);
+
 const data3 = [];
-for (let i = 0; i < 23; i++) {
+for (let i = 0; i < 6; i++) {
     data3.push({
-        role: 'teacher',
+        type: '数学',
         course_name: `七年级数学 ${i}`,
         pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         start_date: '1999-10-12',
         end_date: '2020-10-10',
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         nickname: "陈小红",
+        id: 1,
+        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分"
+    })
+}
+for (let i = 0; i < 6; i++) {
+    data3.push({
+        type: '语文',
+        course_name: `七年级语文 ${i}`,
+        pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        start_date: '1999-11-12',
+        end_date: '2020-10-12',
+        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        nickname: "陈小绿",
         id: 1,
         introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分"
     })
@@ -141,22 +64,46 @@ const IconText = ({type, text}) => (
 
 class CourseDemo extends React.Component {
     state = {
+        role: 'teacher',
         courses: data3,
+        displayCourses:null,
         type: 0,
         size: 'default',
         bordered: true,
         data2: [],
         loading: false,
         loadingMore: false,
+        deleteCourses:false,
     };
-
-    componentDidMount() {
+    changeSubject=(subject)=>{
+        let modifiedList=[];
+        let courseButton=document.getElementById("courseButton");
+        if(subject==="所有"){
+            this.setState({
+                displayCourses:this.state.courses,
+            });
+            courseButton.innerText="学科";
+            return null;
+        }else{
+            for(let course of this.state.displayCourses){
+                if(course.type===subject){
+                    modifiedList.push(course);
+                }
+            }
+        }
+        courseButton.innerText=subject;
+        this.setState({
+            displayCourses:modifiedList,
+        });
+    };
+    componentWillMount() {
         //TODO:get role from local storage
         this.setState({
             loading: true,
         });
         this.getData2();
         this.setState({
+            displayCourses:this.state.courses,
             loading: false
         });
         console.log(this.props.location.pathname);
@@ -191,6 +138,87 @@ class CourseDemo extends React.Component {
     };
 
     render() {
+        const menu1 = (
+            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+                <Menu.SubMenu title="所有">
+                    <Menu.Item>所有</Menu.Item>
+                    <Menu.Item>语文</Menu.Item>
+                    <Menu.Item >数学</Menu.Item>
+                    <Menu.Item>英语</Menu.Item>
+                    <Menu.Item >物理</Menu.Item>
+                    <Menu.Item >化学</Menu.Item>
+                    <Menu.Item>生物</Menu.Item>
+                    <Menu.Item >历史</Menu.Item>
+                    <Menu.Item >地理</Menu.Item>
+                    <Menu.Item>政治</Menu.Item>
+                    <Menu.Item >体育</Menu.Item>
+                    <Menu.Item >心理</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="文科类">
+                    <Menu.Item onClick={() => {
+                    }}>语文</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>英语</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>历史</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>地理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>政治</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="理科类">
+                    <Menu.Item onClick={() => {
+                    }}>数学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>物理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>化学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>生物</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.Item>其它</Menu.Item>
+            </Menu>
+        );
+        const menu2 = (
+            <Menu>
+                <Menu.SubMenu title="一年级">
+                    <Menu.Item>一年级上</Menu.Item>
+                    <Menu.Item>一年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="二年级">
+                    <Menu.Item>二年级上</Menu.Item>
+                    <Menu.Item>二年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="三年级">
+                    <Menu.Item>三年级上</Menu.Item>
+                    <Menu.Item>三年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="四年级">
+                    <Menu.Item>四年级上</Menu.Item>
+                    <Menu.Item>四年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="五年级">
+                    <Menu.Item>五年级上</Menu.Item>
+                    <Menu.Item>五年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="六年级">
+                    <Menu.Item>六年级上</Menu.Item>
+                    <Menu.Item>六年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="七年级">
+                    <Menu.Item>七年级上</Menu.Item>
+                    <Menu.Item>七年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="八年级">
+                    <Menu.Item>八年级上</Menu.Item>
+                    <Menu.Item>八年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="九年级">
+                    <Menu.Item>九年级上</Menu.Item>
+                    <Menu.Item>九年级下</Menu.Item>
+                </Menu.SubMenu>
+            </Menu>
+        );
         const {loadingMore} = this.state
         const loadMore = (
             <div style={styles.loadMore}>
@@ -218,7 +246,7 @@ class CourseDemo extends React.Component {
                         </Form.Item>
                     </Form>
                     <Dropdown overlay={menu1} trigger={['click']} style={{marginTop: '30px'}}>
-                        <Button style={{width: "10%", marginLeft: '30px'}}>学科 <Icon type="down"/></Button>
+                        <Button style={{width: "10%", marginLeft: '30px'}}><span  id="courseButton">学科</span> <Icon type="down"/></Button>
                     </Dropdown>
                     <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
                         <Button style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
@@ -227,18 +255,28 @@ class CourseDemo extends React.Component {
                 </Card>
                 {
                     this.state.role === 'student' ? null :
-                        <Card bordered={false} style={{marginBottom: 10,height:'90px'}} id="howUse">
+                        <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
                             <Row/>
-                                <Button style={{float:'left'}} type="primary" icon="up-circle-o" size='large' onClick={()=>{
-                                    this.props.history.push('/home/course/addCourse');
-                                }}>创建一门新的课程</Button>
+                            <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large'
+                                    onClick={() => {
+                                        this.props.history.push('/home/course/addCourse');
+                                    }}>创建一门新的课程</Button>
 
-                                <Button style={{float:'left',marginLeft:'20px'}} type="danger" icon="down-circle-o" size='large'>删除一门已有课程</Button>
-                            <p style={{float:'left',color:'grey',marginLeft:'40px',height:'90px'}}>各位老师，若要修改具体课程内容，请从下方进入课程主页!</p>
+                            <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
+                                    size='large'>删除一门已有课程</Button>
+                            <p style={{
+                                float: 'left',
+                                color: 'grey',
+                                marginLeft: '40px',
+                                height: '90px'
+                            }}>各位老师，若要修改具体课程内容，请从下方进入课程主页!</p>
                         </Card>
                 }
-                <Card bordered={false} title='课程列表' style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={this.state.courses}
+                <Card>
+                    <span style={{float:'left'}}>课程列表</span>
+                </Card>
+                <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
+                    <List dataSource={this.state.displayCourses}
                           itemLayout='vertical'
                           pagination={{pageSize: 3}}
                           style={styles.listStyle}
@@ -249,17 +287,18 @@ class CourseDemo extends React.Component {
                                                          src={require('../../pic/math1.png')}
                                                          style={{border: '4px solid grey'}}/>}>
                                       <Row>
-                                          <Col span={5}>
+                                          <Col span={3} style={{fontSize:'15px'}}>
                                               <p>教师 ：{item.nickname}</p>
                                               <img width={90} height={120} alt="logo"
                                                    src={require('../../pic/defaultAvatar.png')}
                                                    style={{}}/>
                                           </Col>
-                                          <Col span={19}>
+                                          <Col span={21}>
                                               <a style={{fontSize: '20px', fontWeight: 'bold', display: 'block'}}
                                                  href={"/home/course/class=" + item.id}>{item.course_name}</a>
                                               <p style={{marginTop: '10px', height: '90px'}}>{item.introduction}</p>
-                                              <p style={{height: '10px'}}>开始时间：{item.start_date} 结束时间：{item.end_date}</p>
+                                              <p style={{height: '10px'}}>
+                                                  <span style={{marginRight:'30px'}}>类型： 数学</span>开始时间： {item.start_date} 结束时间： {item.end_date}</p>
                                           </Col>
                                       </Row>
                                   </List.Item>

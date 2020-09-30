@@ -5,7 +5,7 @@ import CustomMenu from "../CustomMenu/index";
 class SiderNav extends React.Component {
     state = {
         menus: null,
-        role: "teacher"
+        role: "student"
     };
 
     componentDidMount() {

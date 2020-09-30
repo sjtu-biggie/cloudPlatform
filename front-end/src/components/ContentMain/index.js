@@ -65,7 +65,7 @@ const HomeworkAssignmentDemo = LoadableComponent(()=>import('../../routes/Homewo
 
 //管理
 
-const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'))
+const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'));
 
 
 

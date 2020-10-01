@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {useState, useEffect, useRef} from 'react';
-import {Button, Input, Table} from 'antd';
+import {Button, Card, Input, Table,Row} from 'antd';
 import styles from './index.css';
 import {SearchOutline} from '@ant-design/icons';
 
@@ -139,7 +139,9 @@ export default function () {
 
     return (
         <div className={styles.normal}>
-            <div className={styles.control}>
+            {/*<div className={styles.control}>*/}
+            <Card className={styles.control} bordered={false} style={{marginBottom: 10}}>
+                <Row/>
                 <Input style={{width: 200, marginRight: 16}}
                        value={search}
                        allowClear
@@ -148,7 +150,9 @@ export default function () {
                 <Button type={'primary'} onClick={() => {
                     setOrData([getMockData(), ...orData]);
                 }}>添加</Button>
-            </div>
+            </Card>
+            {/*</div>*/}
+            <Card bordered={false} style={{marginBottom: 10}}>
             <Table
                 rowKey={'id'}
                 columns={[...columns.map(item => ({
@@ -168,8 +172,9 @@ export default function () {
                         }}>删除</Button>),
                 }]}
                 dataSource={renderData}/>
+            </Card>
 
-
+            <Card bordered={false} style={{marginBottom: 10}}>
             <div className={styles.control}>
                 <Button
                     type={'primary'}
@@ -186,6 +191,8 @@ export default function () {
                        onChange={event => setSearch2(event.target.value)}/>
                 <Button onClick={handleSearch2}>搜索</Button>
             </div>
+            </Card>
+            <Card bordered={false} style={{marginBottom: 10}}>
             <Table
                 rowKey={'id'}
                 columns={columns}
@@ -195,6 +202,7 @@ export default function () {
                     selectedRowKeys: modifyIds,
                     onChange: ids => setModifyIds(ids),
                 }}/>
+            </Card>
         </div>
     );
 }

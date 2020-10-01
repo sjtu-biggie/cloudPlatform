@@ -33,6 +33,7 @@ const columns = [
     {title: '班级', dataIndex: 'cls'},
     {title: '成绩', dataIndex: 'score'},
     // {title: '绩点', dataIndex: 'point'}
+    //just a test
     ];
 columns.map(item => {
     item.sorter = (a, b) => {

@@ -1,7 +1,8 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
-import { Button, Input, Table } from 'antd';
+import React, {useState, useEffect, useRef, Card,Space} from 'react';
+import {Button, Input, Table} from 'antd';
 import styles from './index.css';
+import {SearchOutline} from '@ant-design/icons';
 
 let index = 0;
 const getMockData = () => {
@@ -27,11 +28,11 @@ const data1 = getMockDatas(10);
 const data2 = getMockDatas(100);
 
 const columns = [
-    { title: '姓名', dataIndex: 'name' },
-    { title: '学号', dataIndex: 'no' },
-    { title: '班级', dataIndex: 'cls' },
-    { title: '成绩', dataIndex: 'score' },
-    { title: '绩点', dataIndex: 'point' }];
+    {title: '姓名', dataIndex: 'name'},
+    {title: '学号', dataIndex: 'no'},
+    {title: '班级', dataIndex: 'cls'},
+    {title: '成绩', dataIndex: 'score'},
+    {title: '绩点', dataIndex: 'point'}];
 columns.map(item => {
     item.sorter = (a, b) => {
         if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
@@ -43,21 +44,21 @@ columns.map(item => {
     };
 });
 
-const EditText = ({ children, onChange }) => {
+const EditText = ({children, onChange}) => {
     const [edit, setEdit] = useState(false);
     const [editValue, setEditValue] = useState(children);
-    return edit ? <Input autoFocus style={{ width: 100 }}
+    return edit ? <Input autoFocus style={{width: 100}}
                          value={editValue}
                          onChange={event => setEditValue(event.target.value)}
                          onBlur={() => {
                              setEdit(false);
                              onChange(editValue);
                          }}/> :
-        <div style={{ width: 100 }} onDoubleClick={() => setEdit(true)}>{children || <span>&nbsp;</span>}</div>;
+        <div style={{width: 100}} onDoubleClick={() => setEdit(true)}>{children || <span>&nbsp;</span>}</div>;
 };
 
 
-export default function() {
+export default function () {
     const [search, setSearch] = useState();
     const [search2, setSearch2] = useState();
     const [orData, setOrData] = useState(data1);
@@ -65,7 +66,43 @@ export default function() {
     const [renderData, setRenderData] = useState(data1);
     const [renderData2, setRenderData2] = useState(data2);
     const [modifyIds, setModifyIds] = useState([]);
+    const searchInput = useRef();
 
+    useEffect(() => {
+        columns.forEach(item => {
+            const {dataIndex, title} = item
+            item.filterDropdown = ({setSelectedKeys, selectedKeys, confirm}) => (
+                <div style={{padding: 8}}>
+                    <Input
+                        allowClear
+                        ref={searchInput}
+                        placeholder={`搜索 ${title}`}
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={confirm}
+                        style={{width: 188, marginBottom: 8, display: 'block'}}
+                    />
+                    <Button
+                        type="primary"
+                        onClick={confirm}
+                        size="small"
+                        style={{width: 90}}
+                    >
+                        搜索
+                    </Button>
+                </div>
+            );
+            item.onFilter = (value, record) =>
+                record[dataIndex]
+                    ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+                    : '';
+            item.onFilterDropdownVisibleChange = visible => {
+                if (visible) {
+                    setTimeout(() => searchInput.current.select(), 100);
+                }
+            }
+        })
+    }, []);
     const handleSearch = () => {
         const filterData = orData.filter(row => {
             if (!search) return true;
@@ -77,7 +114,6 @@ export default function() {
         });
         setRenderData(filterData);
     };
-
 
     useEffect(() => {
         handleSearch();
@@ -102,22 +138,27 @@ export default function() {
     return (
         <div className={styles.normal}>
             <div className={styles.control}>
-                <Input style={{ width: 200, marginRight: 16 }}
+                {/*<Space>*/}
+                {/*<div>*/}
+                <Input style={{width: 200, marginRight: 16}}
                        value={search}
                        allowClear
                        onChange={event => setSearch(event.target.value)}/>
-                <Button onClick={handleSearch}>搜索</Button>
-                <div style={{ flex: 1 }}/>
+                <Button onClick={handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;
+
                 <Button type={'primary'} onClick={() => {
                     setOrData([getMockData(), ...orData]);
                 }}>添加</Button>
-            </div>
+                </div>
+                {/*</Space>*/}
+
+            {/*<Card>*/}
             <Table
                 rowKey={'id'}
                 columns={[...columns.map(item => ({
                     ...item,
                     render: (text, record) => <EditText onChange={value => {
-                        const newData = [...orData];
+                            const newData = [...orData];
                         newData.find(col => col.id === record.id)[item.dataIndex] = value;
                         setOrData(newData);
                     }}>{text}</EditText>,
@@ -131,8 +172,9 @@ export default function() {
                         }}>删除</Button>),
                 }]}
                 dataSource={renderData}/>
+            {/*</Card>*/}
 
-
+            {/*<Card>*/}
             <div className={styles.control}>
                 <Button
                     type={'primary'}
@@ -143,12 +185,14 @@ export default function() {
                         setOrData([...selectData, ...orData]);
                     }}
                 >添加到上表</Button>
-                <Input style={{ width: 200, marginLeft: 16, marginRight: 16 }}
+                <Input style={{width: 200, marginLeft: 16, marginRight: 16}}
                        value={search2}
                        allowClear
                        onChange={event => setSearch2(event.target.value)}/>
                 <Button onClick={handleSearch2}>搜索</Button>
             </div>
+            {/*</Card>*/}
+
             <Table
                 rowKey={'id'}
                 columns={columns}

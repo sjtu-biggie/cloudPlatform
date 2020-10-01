@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, {useState, useEffect, useRef, Card,Space} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Button, Input, Table} from 'antd';
 import styles from './index.css';
 import {SearchOutline} from '@ant-design/icons';
@@ -138,27 +138,21 @@ export default function () {
     return (
         <div className={styles.normal}>
             <div className={styles.control}>
-                {/*<Space>*/}
-                {/*<div>*/}
                 <Input style={{width: 200, marginRight: 16}}
                        value={search}
                        allowClear
                        onChange={event => setSearch(event.target.value)}/>
-                <Button onClick={handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;
-
+                <Button onClick={handleSearch}>搜索</Button>&nbsp;&nbsp;
                 <Button type={'primary'} onClick={() => {
                     setOrData([getMockData(), ...orData]);
                 }}>添加</Button>
-                </div>
-                {/*</Space>*/}
-
-            {/*<Card>*/}
+            </div>
             <Table
                 rowKey={'id'}
                 columns={[...columns.map(item => ({
                     ...item,
                     render: (text, record) => <EditText onChange={value => {
-                            const newData = [...orData];
+                        const newData = [...orData];
                         newData.find(col => col.id === record.id)[item.dataIndex] = value;
                         setOrData(newData);
                     }}>{text}</EditText>,
@@ -172,9 +166,8 @@ export default function () {
                         }}>删除</Button>),
                 }]}
                 dataSource={renderData}/>
-            {/*</Card>*/}
 
-            {/*<Card>*/}
+
             <div className={styles.control}>
                 <Button
                     type={'primary'}
@@ -191,8 +184,6 @@ export default function () {
                        onChange={event => setSearch2(event.target.value)}/>
                 <Button onClick={handleSearch2}>搜索</Button>
             </div>
-            {/*</Card>*/}
-
             <Table
                 rowKey={'id'}
                 columns={columns}

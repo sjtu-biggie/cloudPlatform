@@ -12,7 +12,7 @@ const getMockData = () => {
         no: 'no.' + index,
         cls: 'class' + index,
         score: (Math.random() * 100).toFixed(2),
-        point: (Math.random() * 10).toFixed(1),
+        // point: (Math.random() * 10).toFixed(1),
     };
     index += 1;
     return result;
@@ -32,7 +32,8 @@ const columns = [
     {title: '学号', dataIndex: 'no'},
     {title: '班级', dataIndex: 'cls'},
     {title: '成绩', dataIndex: 'score'},
-    {title: '绩点', dataIndex: 'point'}];
+    // {title: '绩点', dataIndex: 'point'}
+    ];
 columns.map(item => {
     item.sorter = (a, b) => {
         if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {

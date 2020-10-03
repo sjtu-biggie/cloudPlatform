@@ -35,11 +35,12 @@ const genExtra = () => (
 @Form.create()
 class AddCourse extends React.Component {
     state = {
+        processChapter:0,
         addContent:false,
         addChapter:false,
         text: '获取验证码',
         disabled: false,
-        step: 0,
+        step: 1,
         syllabus: {
             chapter1: {
                 title: "一百以内算术",
@@ -77,6 +78,27 @@ class AddCourse extends React.Component {
 
     };
     timer = 0;
+    deleteSmall=(index,smallName)=>{
+        console.log(index,smallName);
+        let chapterName='chapter'+(index+1);
+        let modifiedSyllabus = this.state.syllabus;
+        for(let a in modifiedSyllabus){
+            if(a===chapterName){
+                console.log(a);
+                let chapter = modifiedSyllabus[a].content;
+                for(let i=0;i<chapter.length;++i){
+                    if(chapter[i]===smallName){
+                        if(i===0) {chapter = chapter.slice(1);modifiedSyllabus[a].content=chapter}
+                        else chapter.splice(i,i);
+                        console.log(chapter);
+                        break;
+                    }
+                }
+            }
+        }
+        console.log(modifiedSyllabus);
+        this.setState({syllabus:modifiedSyllabus});
+    };
     countdown = (e) => {
         let time = 60;
         this.setState({
@@ -121,9 +143,6 @@ class AddCourse extends React.Component {
             let str = 'this.state.syllabus.chapter' + i;
             let contents = eval(str);
             if (contents === undefined || contents === null) break;
-            else {
-                console.log(i);
-            }
             chapterList.push(contents);
             ++i;
         }
@@ -332,19 +351,19 @@ class AddCourse extends React.Component {
                                 }} style={{}}>添加一个章节</Button>
                                 <Button type="primary" onClick={()=>{}} style={{marginLeft:'10px',marginBottom:'20px'}}>删除这个章节</Button>
                                 <List
-
+                                    rowKey={(text,record)=>text.key}
                                     bordered
                                     dataSource={value.content}
                                     renderItem={item => (
-                                        <List.Item style={{display:'block'}}>
-                                            {item}
+                                        <List.Item  actions={[<Button type="danger" onClick={()=>{
+                                            this.setState({addContent:!this.state.addContent})
+                                        }} style={{}}>添加一个小节</Button>,<Button type="danger" onClick={()=>{this.deleteSmall(index,item)}} style={{marginLeft:'10px'}}>删除这个小节</Button>]}>
+                                            <List.Item.Meta
+                                                title={item}
+                                            />
                                         </List.Item>
                                     )}
                                 />
-                                <Button type="danger" onClick={()=>{
-                                    this.setState({addContent:true})
-                                }} style={{}}>添加一个小节</Button>
-                                <Button type="danger" onClick={()=>{}} style={{marginLeft:'10px'}}>删除一个小节</Button>
                                 {this.state.addContent?<Input defaultValue="请输入小节名，按回车确认！" style={{marginBottom:'15px'}}/>:null}
                             </Collapse.Panel>)
                         })}</Collapse>
@@ -397,7 +416,7 @@ class AddCourse extends React.Component {
                             <Col offset={10}>
                                 <Progress type="circle" percent={100} style={{}}/>
                             </Col>
-                            <Col  style={{marginTop:'20px'}} span={12} offset={6}>
+                            <Col  style={{marginTop:'20px'}} span={12} offset={7}>
                                 <h1>你已经成功创建课程！若要为课程发布公告，布置作业等，请进入课程主页。</h1>
                             </Col>
                         </Row>

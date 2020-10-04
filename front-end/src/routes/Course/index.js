@@ -85,7 +85,7 @@ class CourseDemo extends React.Component {
             courseButton.innerText="学科";
             return null;
         }else{
-            for(let course of this.state.displayCourses){
+            for(let course of this.state.courses){
                 if(course.type===subject){
                     modifiedList.push(course);
                 }

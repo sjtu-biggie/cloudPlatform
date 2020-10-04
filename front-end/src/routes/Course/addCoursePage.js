@@ -15,7 +15,7 @@ import {
     Row,
     message,
     BackTop,
-    Steps, DatePicker, Upload, Collapse, List, Progress
+    Steps, DatePicker, Upload, Collapse, List, Progress, Dropdown, Menu
 } from 'antd'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
@@ -37,6 +37,8 @@ const genExtra = () => (
 @Form.create()
 class AddCourse extends React.Component {
     state = {
+        grade:'一年级',
+        courseType:'数学',
         processChapter: 0,
         addContent: false,
         addChapter: false,
@@ -176,8 +178,104 @@ class AddCourse extends React.Component {
     componentWillUnmount() {
         clearInterval(this.timer)
     }
-
+    changeSubject=(subject)=>{
+        let courseButton=document.getElementById("courseButton");
+        this.setState({
+            courseType:subject
+        });
+        courseButton.innerText = subject;
+        return null;
+    };
+    changeSubject2=(subject)=>{
+        let courseButton=document.getElementById("courseButton2");
+        this.setState({
+            courseType:subject
+        });
+        courseButton.innerText = subject;
+        return null;
+    };
     renderStep = () => {
+        const menu1 = (
+            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+                <Menu.SubMenu title="所有">
+                    <Menu.Item>所有</Menu.Item>
+                    <Menu.Item>语文</Menu.Item>
+                    <Menu.Item >数学</Menu.Item>
+                    <Menu.Item>英语</Menu.Item>
+                    <Menu.Item >物理</Menu.Item>
+                    <Menu.Item >化学</Menu.Item>
+                    <Menu.Item>生物</Menu.Item>
+                    <Menu.Item >历史</Menu.Item>
+                    <Menu.Item >地理</Menu.Item>
+                    <Menu.Item>政治</Menu.Item>
+                    <Menu.Item >体育</Menu.Item>
+                    <Menu.Item >心理</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="文科类">
+                    <Menu.Item onClick={() => {
+                    }}>语文</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>英语</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>历史</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>地理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>政治</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="理科类">
+                    <Menu.Item onClick={() => {
+                    }}>数学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>物理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>化学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>生物</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.Item>其它</Menu.Item>
+            </Menu>
+        );
+        const menu2 = (
+            <Menu onClick={(e)=>{this.changeSubject2(e.item.props.children)}}>
+                <Menu.SubMenu title="一年级">
+                    <Menu.Item>一年级上</Menu.Item>
+                    <Menu.Item>一年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="二年级">
+                    <Menu.Item>二年级上</Menu.Item>
+                    <Menu.Item>二年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="三年级">
+                    <Menu.Item>三年级上</Menu.Item>
+                    <Menu.Item>三年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="四年级">
+                    <Menu.Item>四年级上</Menu.Item>
+                    <Menu.Item>四年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="五年级">
+                    <Menu.Item>五年级上</Menu.Item>
+                    <Menu.Item>五年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="六年级">
+                    <Menu.Item>六年级上</Menu.Item>
+                    <Menu.Item>六年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="七年级">
+                    <Menu.Item>七年级上</Menu.Item>
+                    <Menu.Item>七年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="八年级">
+                    <Menu.Item>八年级上</Menu.Item>
+                    <Menu.Item>八年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="九年级">
+                    <Menu.Item>九年级上</Menu.Item>
+                    <Menu.Item>九年级下</Menu.Item>
+                </Menu.SubMenu>
+            </Menu>
+        );
         let i = 1;
         let chapterList = [];
         while (1) {
@@ -248,6 +346,22 @@ class AddCourse extends React.Component {
                     </Card>
                     <Card bordered={false} title='基本信息'>
                         <Form layout='horizontal' style={{width: '80%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
+                            <FormItem label='目标年级' {...formItemLayout}>
+                                {
+                                    getFieldDecorator('course_name', {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: '请选择目标年级'
+                                            }
+                                        ]
+                                    })(
+                                        <Dropdown overlay={menu2} trigger={['click']}>
+                                            <Button ><span  id="courseButton2">一年级上</span> <Icon type="down"/></Button>
+                                        </Dropdown>
+                                    )
+                                }
+                            </FormItem>
                             <FormItem label='课程类型' {...formItemLayout}>
                                 {
                                     getFieldDecorator('course_name', {
@@ -258,10 +372,13 @@ class AddCourse extends React.Component {
                                             }
                                         ]
                                     })(
-                                        <Input addonBefore={courseSelector}/>
+                                        <Dropdown overlay={menu1} trigger={['click']}>
+                                            <Button ><span  id="courseButton">数学</span> <Icon type="down"/></Button>
+                                        </Dropdown>
                                     )
                                 }
                             </FormItem>
+
                             <FormItem label='课程教材' {...formItemLayout}>
                                 {
                                     getFieldDecorator('textbook', {

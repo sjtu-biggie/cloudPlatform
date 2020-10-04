@@ -1,5 +1,6 @@
 import React from 'react'
 import {SettingOutlined} from '@ant-design/icons';
+import moment from 'moment';
 import {
 
     Card,
@@ -15,7 +16,7 @@ import {
     Row,
     message,
     BackTop,
-    Steps, DatePicker, Upload, Collapse, List, Progress
+    Steps, DatePicker, Upload, Collapse, List, Progress, Dropdown, Menu
 } from 'antd'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
@@ -37,6 +38,9 @@ const genExtra = () => (
 @Form.create()
 class AddCourse extends React.Component {
     state = {
+        courseJson:null,
+        grade:'一年级',
+        courseType:'数学',
         processChapter: 0,
         addContent: false,
         addChapter: false,
@@ -167,8 +171,12 @@ class AddCourse extends React.Component {
                 message.warning('请填写正确的课程信息')
             } else {
                 message.success('提交成功');
+                values.type=this.state.courseType;
+                values.grade=this.state.grade;
+                values.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
+                values.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
+                this.setState({step: 1,courseJson:values});
                 console.log(values);
-                this.setState({step: 1});
             }
         });
     };
@@ -176,8 +184,104 @@ class AddCourse extends React.Component {
     componentWillUnmount() {
         clearInterval(this.timer)
     }
-
+    changeSubject=(subject)=>{
+        let courseButton=document.getElementById("courseButton");
+        this.setState({
+            courseType:subject
+        });
+        courseButton.innerText = subject;
+        return null;
+    };
+    changeSubject2=(subject)=>{
+        let courseButton=document.getElementById("courseButton2");
+        this.setState({
+            courseType:subject
+        });
+        courseButton.innerText = subject;
+        return null;
+    };
     renderStep = () => {
+        const menu1 = (
+            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+                <Menu.SubMenu title="所有">
+                    <Menu.Item>所有</Menu.Item>
+                    <Menu.Item>语文</Menu.Item>
+                    <Menu.Item >数学</Menu.Item>
+                    <Menu.Item>英语</Menu.Item>
+                    <Menu.Item >物理</Menu.Item>
+                    <Menu.Item >化学</Menu.Item>
+                    <Menu.Item>生物</Menu.Item>
+                    <Menu.Item >历史</Menu.Item>
+                    <Menu.Item >地理</Menu.Item>
+                    <Menu.Item>政治</Menu.Item>
+                    <Menu.Item >体育</Menu.Item>
+                    <Menu.Item >心理</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="文科类">
+                    <Menu.Item onClick={() => {
+                    }}>语文</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>英语</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>历史</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>地理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>政治</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="理科类">
+                    <Menu.Item onClick={() => {
+                    }}>数学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>物理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>化学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>生物</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.Item>其它</Menu.Item>
+            </Menu>
+        );
+        const menu2 = (
+            <Menu onClick={(e)=>{this.changeSubject2(e.item.props.children)}}>
+                <Menu.SubMenu title="一年级">
+                    <Menu.Item>一年级上</Menu.Item>
+                    <Menu.Item>一年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="二年级">
+                    <Menu.Item>二年级上</Menu.Item>
+                    <Menu.Item>二年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="三年级">
+                    <Menu.Item>三年级上</Menu.Item>
+                    <Menu.Item>三年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="四年级">
+                    <Menu.Item>四年级上</Menu.Item>
+                    <Menu.Item>四年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="五年级">
+                    <Menu.Item>五年级上</Menu.Item>
+                    <Menu.Item>五年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="六年级">
+                    <Menu.Item>六年级上</Menu.Item>
+                    <Menu.Item>六年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="七年级">
+                    <Menu.Item>七年级上</Menu.Item>
+                    <Menu.Item>七年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="八年级">
+                    <Menu.Item>八年级上</Menu.Item>
+                    <Menu.Item>八年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="九年级">
+                    <Menu.Item>九年级上</Menu.Item>
+                    <Menu.Item>九年级下</Menu.Item>
+                </Menu.SubMenu>
+            </Menu>
+        );
         let i = 1;
         let chapterList = [];
         while (1) {
@@ -248,20 +352,51 @@ class AddCourse extends React.Component {
                     </Card>
                     <Card bordered={false} title='基本信息'>
                         <Form layout='horizontal' style={{width: '80%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
-                            <FormItem label='课程类型' {...formItemLayout}>
+                            <FormItem label='课程名称' {...formItemLayout}>
                                 {
                                     getFieldDecorator('course_name', {
                                         rules: [
                                             {
+                                                max: 10,
+                                                message: '课程简介不能超过十个字'
+                                            },
+                                            {
                                                 required: true,
-                                                message: '请选择课程类型'
+                                                message: '请补充课程名称'
                                             }
                                         ]
                                     })(
-                                        <Input addonBefore={courseSelector}/>
+                                        <Input/>
                                     )
                                 }
                             </FormItem>
+                            <FormItem label='目标年级' {...formItemLayout}>
+                                {
+                                    getFieldDecorator('grade', {
+                                        rules: [
+
+                                        ]
+                                    })(
+                                        <Dropdown overlay={menu2} trigger={['click']}>
+                                            <Button ><span  id="courseButton2">一年级上</span> <Icon type="down"/></Button>
+                                        </Dropdown>
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='课程类型' {...formItemLayout}>
+                                {
+                                    getFieldDecorator('type', {
+                                        rules: [
+
+                                        ]
+                                    })(
+                                        <Dropdown overlay={menu1} trigger={['click']}>
+                                            <Button ><span  id="courseButton">数学</span> <Icon type="down"/></Button>
+                                        </Dropdown>
+                                    )
+                                }
+                            </FormItem>
+
                             <FormItem label='课程教材' {...formItemLayout}>
                                 {
                                     getFieldDecorator('textbook', {
@@ -335,7 +470,7 @@ class AddCourse extends React.Component {
                             </FormItem>
                             <FormItem label='开始时间' {...formItemLayout} required>
                                 {
-                                    getFieldDecorator('start_date', {
+                                    getFieldDecorator('startDate', {
                                         rules: [
                                             {
                                                 required: true,
@@ -351,7 +486,7 @@ class AddCourse extends React.Component {
                             </FormItem>
                             <FormItem label='结束时间' {...formItemLayout} required>
                                 {
-                                    getFieldDecorator('end_date', {
+                                    getFieldDecorator('endDate', {
                                         rules: [
                                             {
                                                 required: true,
@@ -444,7 +579,10 @@ class AddCourse extends React.Component {
                                     this.setState({step: 0})
                                 }} style={{marginTop: '20px', size: 'large'}}>上一步</Button>
                                 <Button onClick={() => {
-                                    this.setState({step: 2})
+                                    let courseValue = this.state.courseJson;
+                                    courseValue['syllabus'] = this.state.syllabus;
+                                    this.setState({step: 2,courseJson:courseValue})
+                                    console.log(this.state.courseJson);
                                 }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>下一步</Button>
                             </Col>
                         </Row>
@@ -470,7 +608,7 @@ class AddCourse extends React.Component {
                             }} style={{marginTop: '20px', size: 'large'}}>上一步</Button>
                             <Button onClick={() => {
                                 this.setState({step: 3})
-                            }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>下一步</Button>
+                            }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>确认</Button>
                         </Col>
                     </Row>
                 </div>;

@@ -608,7 +608,7 @@ class AddCourse extends React.Component {
                             }} style={{marginTop: '20px', size: 'large'}}>上一步</Button>
                             <Button onClick={() => {
                                 this.setState({step: 3})
-                            }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>下一步</Button>
+                            }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>确认</Button>
                         </Col>
                     </Row>
                 </div>;

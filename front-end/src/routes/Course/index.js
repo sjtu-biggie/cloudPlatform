@@ -283,22 +283,23 @@ class CourseDemo extends React.Component {
                           renderItem={item => {
                               return (
                                   <List.Item style={{height: "210px"}}
-                                             extra={<img width={272} height={190} alt="logo"
+                                             extra={<img width={172} height={170} alt="logo"
                                                          src={require('../../pic/math1.png')}
                                                          style={{border: '4px solid grey'}}/>}>
                                       <Row>
                                           <Col span={3} style={{fontSize:'15px'}}>
-                                              <p>教师 ：{item.nickname}</p>
+
                                               <img width={90} height={120} alt="logo"
                                                    src={require('../../pic/defaultAvatar.png')}
                                                    style={{}}/>
+                                              <p style={{marginTop:'25px'}}>教师 ：{item.nickname}</p>
                                           </Col>
                                           <Col span={21}>
                                               <a style={{fontSize: '20px', fontWeight: 'bold', display: 'block'}}
                                                  href={"/home/course/class=" + item.id}>{item.course_name}</a>
                                               <p style={{marginTop: '10px', height: '90px'}}>{item.introduction}</p>
                                               <p style={{height: '10px'}}>
-                                                  <span style={{marginRight:'30px'}}>类型： 数学</span>开始时间： {item.start_date} 结束时间： {item.end_date}</p>
+                                                  <span style={{marginRight:'30px',fontSize:15}}>类型： 数学</span><span style={{marginRight:'30px'}}>开始时间： {item.start_date} </span><span style={{marginRight:'30px'}}>结束时间： {item.end_date}</span></p>
                                           </Col>
                                       </Row>
                                   </List.Item>

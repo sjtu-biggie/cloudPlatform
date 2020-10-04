@@ -23,4 +23,8 @@ public class Course {
     private Date start_date;
     @Column(name = "END_DATE")
     private Date end_date;
+    @Column(name = "TYPE")
+    private String type;
+    @Column(name = "GRADE")
+    private String grade;
 }

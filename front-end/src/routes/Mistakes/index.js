@@ -26,6 +26,7 @@ const cols = {
 const data3 = [];
 for (let i = 0; i < 23; i++) {
     data3.push({
+        type:"数学",
         id:1,
         title: `数学${i}`,
         avatar: '../../assets/img/mistakes.png',
@@ -35,6 +36,18 @@ for (let i = 0; i < 23; i++) {
 /*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*/
     })
 }
+
+for (let i = 0; i < 6; i++) {
+    data3.push({
+        type: '语文',
+        title: `语文${i}`,
+        id: 1,
+        description: [['给括号前面的字注音'],[<br></br>],["一棵枫树，表皮灰暗而粗犷（  ），发着苦涩（  ）气息"]],
+        contexts:[["guang(三声)"],["se(四声)"]],
+        time: `2020/9/27`,
+    })
+}
+
 const IconText = ({ type, text }) => (
     <span>
     <Icon type={type} style={{ marginRight: 8 }} />
@@ -49,16 +62,43 @@ class Mistakes extends React.Component {
         data2: [],
         loading: false,
         loadingMore: false,
+        displayCourses:null,
+        courses:data3,
     }
 
-    componentDidMount() {
+    changeSubject=(subject)=>{
+        let modifiedList=[];
+        let courseButton=document.getElementById("courseButton");
+        if(subject==="所有"){
+            this.setState({
+                displayCourses:this.state.courses,
+            });
+            courseButton.innerText="学科";
+            return null;
+        }else{
+            for(let course of this.state.displayCourses){
+                if(course.type===subject){
+                    modifiedList.push(course);
+                }
+            }
+        }
+        courseButton.innerText=subject;
+        this.setState({
+            displayCourses:modifiedList,
+        });
+    };
+
+    componentWillMount() {
+        //TODO:get role from local storage
         this.setState({
             loading: true,
-        })
+        });
         this.getData2();
         this.setState({
+            displayCourses:this.state.courses,
             loading: false
-        })
+        });
+        console.log(this.props.location.pathname);
     }
 
     getData2 = () => {
@@ -75,16 +115,44 @@ class Mistakes extends React.Component {
 
     render() {
         const menu1 = (
-            <Menu onClick={this.handleMenuClick}>
-                <Menu.Item key="1">语文</Menu.Item>
-                <Menu.Item key="2">数学</Menu.Item>
-                <Menu.Item key="3">英语</Menu.Item>
-                <Menu.Item key="4">历史</Menu.Item>
-                <Menu.Item key="5">物理</Menu.Item>
-                <Menu.Item key="6">政治</Menu.Item>
-                <Menu.Item key="7">化学</Menu.Item>
-                <Menu.Item key="8">生物</Menu.Item>
-                <Menu.Item key="9">地理</Menu.Item>
+            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+                <Menu.SubMenu title="所有">
+                    <Menu.Item>所有</Menu.Item>
+                    <Menu.Item>语文</Menu.Item>
+                    <Menu.Item >数学</Menu.Item>
+                    <Menu.Item>英语</Menu.Item>
+                    <Menu.Item >物理</Menu.Item>
+                    <Menu.Item >化学</Menu.Item>
+                    <Menu.Item>生物</Menu.Item>
+                    <Menu.Item >历史</Menu.Item>
+                    <Menu.Item >地理</Menu.Item>
+                    <Menu.Item>政治</Menu.Item>
+                    <Menu.Item >体育</Menu.Item>
+                    <Menu.Item >心理</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="文科类">
+                    <Menu.Item onClick={() => {
+                    }}>语文</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>英语</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>历史</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>地理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>政治</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="理科类">
+                    <Menu.Item onClick={() => {
+                    }}>数学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>物理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>化学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>生物</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.Item>其它</Menu.Item>
             </Menu>
         )
         const { SubMenu } = Menu;
@@ -152,7 +220,7 @@ class Mistakes extends React.Component {
                                 </Form.Item>
                             </Form>
                             <Dropdown overlay={menu1} trigger={['click']} style={{ marginTop: '30px'}}>
-                                <Button  style={{width:"10%",marginLeft:'30px'}}>学科 <Icon type="down"/></Button>
+                                <Button id="courseButton" style={{width:"10%",marginLeft:'30px'}}>学科 <Icon type="down"/></Button>
                             </Dropdown>
                             <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft:'30px'}}>
                                 <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
@@ -169,7 +237,7 @@ class Mistakes extends React.Component {
                 </Chart>
             </Card>
                 <Card bordered={false} title='题目' style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={data3}
+                    <List dataSource={this.state.displayCourses}
                           itemLayout='vertical'
                           pagination={{pageSize: 2}}
                           style={styles.listStyle}
@@ -177,11 +245,8 @@ class Mistakes extends React.Component {
                               return (
                                   <List.Item
                                       /*actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}*/
-                                      extra={<img /*width={275}*/ alt="logo" src={require("../../assets/img/mistakes.png" )}/>}>
-                                      {/*<List.Item.Meta
-                                          avatar={<Avatar src={item.avatar} />}
-                                          title={<a>{item.title}</a>}
-                                          description={item.description}>*/}
+                                      extra={<img /*width={275}*/ alt="logo" src={require("../../pic/math1.png")}/>}>
+
                                           <row>
                                       <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>
                                               <p style={{fontSize:'5px',fontWeight:'bold',display:'block'}}>{item.time}</p>

@@ -14,26 +14,24 @@ class HomeworkCommit extends React.Component{
         description: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
         time:"2020-10-1 20:00",
         editorState: EditorState.createEmpty(),
-        size: 'default'
+        size: 'default',
+        iscommit:true,
+        overddl:true,
 }
+
     render(){
         const { editorState,contentState } = this.state;
         return (
             <div>
                 <CustomBreadcrumb arr={['作业','提交']}/>
-                <Card hoverable bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
+                <Card  bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
                     <List.Item
-                        /*actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}*/
-                        extra={<img /*width={275}*/ alt="logo" src={require("../../assets/img/mistakes.png" )}/>}>
-                        {/*<List.Item.Meta
-                                          avatar={<Avatar src={item.avatar} />}
-                                          title={<a>{item.title}</a>}
-                                          description={item.description}>*/}
+                        extra={<img  alt="logo" src={require("../../assets/img/mistakes.png" )}/>}>
                         <row>
-                            <p style={{fontSize:'5px',fontWeight:'bold',display:'block'}}>{"截止日期："+this.state.time}</p>
+                            <p style={{fontSize:'15px',fontWeight:'bold',display:'block'}}>{"截止日期："+this.state.time}</p>
+                            <p style={{fontSize:'15px',fontWeight:'bold',display:'block'}}>{this.state.overddl===true?"已截止":"未截止"}{this.state.iscommit===true?" 已提交":" 未提交"}</p>
                             <p style={{marginTop:'10px'}}>{this.state.description}</p>
                         </row>
-                        {/*{item.content}*/}
                     </List.Item>
                     <Card bordered={false} className='card-item'>
                         <Editor
@@ -54,7 +52,7 @@ class HomeworkCommit extends React.Component{
 
                     </Upload>
                     <br></br>
-                    <Button type="primary" size={this.state.size}>提交</Button>&emsp;
+                    <Button type="primary" size={this.state.size}>{this.state.iscommit===true?"重新提交":"提交"}</Button>&emsp;
                 </Card>
             </div>
         )

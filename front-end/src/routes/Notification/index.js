@@ -26,12 +26,23 @@ for (let i = 0; i < 23; i++) {
 const data3 = [];
 for (let i = 0; i < 23; i++) {
     data3.push({
+        type:"数学",
         id:1,
         title: `【通知】七年级数学作业`,
         avatar: '../../pic/math1.png',
-        description: '9/29的作业已发布，截止到第二天早上',
+        description: '9/30的作业已发布，截止到第二天晚上',
         time: `2020/9/27`,
         /*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*/
+    })
+}
+
+for (let i = 0; i < 6; i++) {
+    data3.push({
+        type: '语文',
+        title: `【通知】七年级语文作业`,
+        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        id: 1,
+        description: "9/30的作业已发布，截止到第二天晚上"
     })
 }
 
@@ -50,16 +61,43 @@ class Notification extends React.Component {
         loading: false,
         loadingMore: false,
         read:false,
+        courses:data3,
+        displayCourses:null,
     }
 
-    componentDidMount() {
+    changeSubject=(subject)=>{
+        let modifiedList=[];
+        let courseButton=document.getElementById("courseButton");
+        if(subject==="所有"){
+            this.setState({
+                displayCourses:this.state.courses,
+            });
+            courseButton.innerText="学科";
+            return null;
+        }else{
+            for(let course of this.state.displayCourses){
+                if(course.type===subject){
+                    modifiedList.push(course);
+                }
+            }
+        }
+        courseButton.innerText=subject;
+        this.setState({
+            displayCourses:modifiedList,
+        });
+    };
+
+    componentWillMount() {
+        //TODO:get role from local storage
         this.setState({
             loading: true,
-        })
+        });
         this.getData2();
         this.setState({
+            displayCourses:this.state.courses,
             loading: false
-        })
+        });
+        console.log(this.props.location.pathname);
     }
 
     getData2 = () => {
@@ -76,16 +114,44 @@ class Notification extends React.Component {
 
     render() {
         const menu1 = (
-            <Menu onClick={this.handleMenuClick}>
-                <Menu.Item key="1">语文</Menu.Item>
-                <Menu.Item key="2">数学</Menu.Item>
-                <Menu.Item key="3">英语</Menu.Item>
-                <Menu.Item key="4">历史</Menu.Item>
-                <Menu.Item key="5">物理</Menu.Item>
-                <Menu.Item key="6">政治</Menu.Item>
-                <Menu.Item key="7">化学</Menu.Item>
-                <Menu.Item key="8">生物</Menu.Item>
-                <Menu.Item key="9">地理</Menu.Item>
+            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+                <Menu.SubMenu title="所有">
+                    <Menu.Item>所有</Menu.Item>
+                    <Menu.Item>语文</Menu.Item>
+                    <Menu.Item >数学</Menu.Item>
+                    <Menu.Item>英语</Menu.Item>
+                    <Menu.Item >物理</Menu.Item>
+                    <Menu.Item >化学</Menu.Item>
+                    <Menu.Item>生物</Menu.Item>
+                    <Menu.Item >历史</Menu.Item>
+                    <Menu.Item >地理</Menu.Item>
+                    <Menu.Item>政治</Menu.Item>
+                    <Menu.Item >体育</Menu.Item>
+                    <Menu.Item >心理</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="文科类">
+                    <Menu.Item onClick={() => {
+                    }}>语文</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>英语</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>历史</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>地理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>政治</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="理科类">
+                    <Menu.Item onClick={() => {
+                    }}>数学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>物理</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>化学</Menu.Item>
+                    <Menu.Item onClick={() => {
+                    }}>生物</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.Item>其它</Menu.Item>
             </Menu>
         )
         const { SubMenu } = Menu;
@@ -152,7 +218,7 @@ class Notification extends React.Component {
                         </Form.Item>
                     </Form>
                     <Dropdown overlay={menu1} trigger={['click']} style={{ marginTop: '30px'}}>
-                        <Button  style={{width:"10%",marginLeft:'30px'}}>学科 <Icon type="down"/></Button>
+                        <Button id="courseButton" style={{width:"10%",marginLeft:'30px'}}>学科 <Icon type="down"/></Button>
                     </Dropdown>
                     <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft:'30px'}}>
                         <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
@@ -177,7 +243,7 @@ class Notification extends React.Component {
                 </Card>*/}
 
                 <Card bordered={false} title='通知' style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={data3}
+                    <List dataSource={this.state.displayCourses}
                           /*itemLayout='vertical'*/
                           pagination={{pageSize: 10}}
                           style={styles.listStyle}

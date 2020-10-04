@@ -44,12 +44,12 @@ class SiderNav extends React.Component {
                         {key: '/home/homework/general', title: '提交情况', icon: ''},
                     ]
                 },
-                // this.state.role === 'student' ?
-                //     {
-                //         title: '错题',
-                //         icon: 'info-circle-o',
-                //         key: '/home/mistakes'
-                //     } :
+                this.state.role === 'student' ?
+                    {
+                        title: '错题',
+                        icon: 'info-circle-o',
+                        key: '/home/mistakes'
+                    } :
                     {
                         title: '管理',
                         icon: 'info-circle-o',

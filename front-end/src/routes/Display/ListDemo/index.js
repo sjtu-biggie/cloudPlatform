@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Spin, Button, Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon} from 'antd'
+import {Card, Spin, Button, Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon,Pagination} from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb/index'
 import TypingCard from '../../../components/TypingCard'

@@ -15,13 +15,14 @@ import {
     Form,
     Input,
     Menu,
-    Dropdown, Row, Col, Collapse, Avatar, Pagination, Steps
+    Dropdown, Row, Col, Collapse, Avatar, Pagination, Steps, Statistic, Progress
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import FormDemo1 from '../../routes/Homework/Assign';
 import HomeworkList from '../Homework/HomeworkList';
 import AddBulletin from './AddBulletin'
+import {Axis, Chart, Geom, Tooltip} from "bizcharts";
 
 
 
@@ -30,7 +31,7 @@ class CoursePageDemo extends React.Component {
         step: 0,
         //type indicate which content to render
         //parameter is detailed content of one type
-        type: 1,
+        type: 5,
         parameter: 0,
         size: 'default',
         bordered: true,
@@ -44,6 +45,7 @@ class CoursePageDemo extends React.Component {
         deleteHomework: false,
         addBulletin: false,
         deleteBulletin: false,
+        homework:deadHomework
     };
 
     componentDidMount() {
@@ -243,6 +245,35 @@ class CoursePageDemo extends React.Component {
         return null;
     };
     rankRender = () => {
+        const data = [
+            {year: '1991', value: 3},
+            {year: '1992', value: 4},
+            {year: '1993', value: 3.5},
+            {year: '1994', value: 5},
+            {year: '1995', value: 4.9},
+            {year: '1996', value: 6},
+            {year: '1997', value: 7},
+            {year: '1998', value: 9},
+            {year: '1999', value: 13}
+        ]
+        const cols = {
+            'value': {min: 0},
+            'year': {range: [0, 1]}
+        }
+
+        const data2 = [
+            {year: '1951 年', sales: 38},
+            {year: '1952 年', sales: 52},
+            {year: '1956 年', sales: 61},
+            {year: '1957 年', sales: 145},
+            {year: '1958 年', sales: 48},
+            {year: '1959 年', sales: 38},
+            {year: '1960 年', sales: 38},
+            {year: '1962 年', sales: 38},
+        ];
+        const cols2 = {
+            'sales': {tickInterval: 20},
+        };
         return (
             <div>
                 <Card bordered={false} style={{marginBottom: 10}} id='gradeCard'>
@@ -254,10 +285,10 @@ class CoursePageDemo extends React.Component {
                                 <Steps.Step title="提交作业" onClick={() => {
                                     this.setState({step: 0})
                                 }} description="排名更准确"/>
-                                <Steps.Step title="查看排名" onClick={() => {
+                                <Steps.Step title="学习数据" onClick={() => {
                                     this.setState({step: 1})
                                 }} description="胜败乃兵家常事"/>
-                                <Steps.Step title="排名分析" onClick={() => {
+                                <Steps.Step title="数据分析" onClick={() => {
                                     this.setState({step: 2})
                                 }} description="知己知彼"/>
                             </Steps>
@@ -265,7 +296,84 @@ class CoursePageDemo extends React.Component {
                         </Col>
                     </Row>
                 </Card>
+                {
+                    this.state.step>=1?
+                        <Row>
+                            <Col span={16}>
+                                <Card style={{height:'130px'}}>
+                                    <Statistic style={{marginTop:'10px',float:"left"}} title="姓名" value={'陈小红'} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已完成作业数" value={12} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="缺交作业数" value={1} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="平均得分" value={84.25} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="近两周平均得分" value={86.75} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="综合评级" value={'良'} />
+                                </Card>
+                            </Col>
+                            <Col span={4}>
+                                <Card style={{height:'130px'}}>
+                                位次比例
+                                <Progress style={{marginLeft:'10px'}}width={80} type="circle" percent={73} />
+                                </Card>
+                            </Col>
+                            <Col span={4}>
+                                <Card style={{height:'130px'}}>
+                                <Statistic style={{marginTop:'10px',display:'block'}} title="总排名" value={93} suffix="/ 120" />
+                                </Card>
+                                </Col>
+                            <Col span={24}>
+                                <Card style={{marginTop:'10px'}} title={'单次作业排名'}>
+                                    <List
+                                        pagination={{pageSize: 6}}
+                                        dataSource={this.state.homework}
+                                        renderItem={item => (
+                                            <List.Item>
+                                                <List.Item.Meta
+                                                    title={<a href="https://ant.design">{item.title}</a>}
+                                                />
+                                                <div>{item.rank}/120</div>
+                                            </List.Item>
+                                        )}
+                                    >
+                                        {this.state.loading && this.state.hasMore && (
+                                            <div className="demo-loading-container">
+                                                <Spin />
+                                            </div>
+                                        )}
+                                    </List>
+                                </Card>
+                            </Col>
 
+                        </Row>
+                    :null
+                }
+                {
+                    this.state.step >= 2 ?
+                        <Row gutter={10} style={{marginTop:'10px'}}>
+                            <Col span={12}>
+                                <Card title='近一个月排名变化' bordered={false} className='card-item'>
+                                    <Chart height={400} data={data} scale={cols} forceFit>
+                                        <Axis name="year"/>
+                                        <Axis name="value"/>
+                                        <Tooltip crosshairs={{type: 'y'}}/>
+                                        <Geom type="line" position="year*value" size={2}/>
+                                        <Geom type='point' position="year*value" size={4} shape={'circle'}
+                                              style={{stroke: '#fff', lineWidth: 1}}/>
+                                    </Chart>
+                                </Card>
+                            </Col>
+                            <Col span={12}>
+                                <Card title='近一个月作业得分' bordered={false} className='card-item'>
+                                    <Chart height={400} data={data2} scale={cols2} forceFit>
+                                        <Axis name="year"/>
+                                        <Axis name="sales"/>
+                                        <Tooltip crosshairs={{type: 'y'}}/>
+                                        <Geom type="interval" position="year*sales"/>
+                                    </Chart>
+                                </Card>
+                            </Col>
+                        </Row>:
+                        null
+                }
             </div>
         );
     };
@@ -331,7 +439,7 @@ class CoursePageDemo extends React.Component {
                         </Menu.SubMenu>
                         <Menu.Item onClick={() => {
                             this.setState({type: 5})
-                        }} key="rank"><Icon type="appstore"/>排名</Menu.Item>
+                        }} key="rank"><Icon type="appstore"/>数据</Menu.Item>
                         <Menu.Item onClick={() => {
                             this.setState({type: 6})
                         }} key="set" disabled><Icon type="setting"/>设置</Menu.Item>
@@ -433,6 +541,14 @@ const deadCourse = {
     }
 };
 const bulletin = [];
+const deadHomework = [
+];
+for (let i = 0; i < 15; i++) {
+    deadHomework.push({
+        title: '七年级作业' + i,
+        rank: 1+i,
+    })
+}
 //TODO:add pagination support
 for (let i = 0; i < 10; i++) {
     bulletin.push({

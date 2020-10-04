@@ -42,7 +42,7 @@ class AddCourse extends React.Component {
         addChapter: false,
         text: '获取验证码',
         disabled: false,
-        step: 1,
+        step: 0,
         syllabus: {
             chapterNum:4,
             chapter1: {

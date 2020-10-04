@@ -1,5 +1,6 @@
 import React from 'react'
 import {SettingOutlined} from '@ant-design/icons';
+import moment from 'moment';
 import {
 
     Card,
@@ -37,6 +38,7 @@ const genExtra = () => (
 @Form.create()
 class AddCourse extends React.Component {
     state = {
+        courseJson:null,
         grade:'一年级',
         courseType:'数学',
         processChapter: 0,
@@ -169,8 +171,12 @@ class AddCourse extends React.Component {
                 message.warning('请填写正确的课程信息')
             } else {
                 message.success('提交成功');
+                values.type=this.state.courseType;
+                values.grade=this.state.grade;
+                values.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
+                values.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
+                this.setState({step: 1,courseJson:values});
                 console.log(values);
-                this.setState({step: 1});
             }
         });
     };
@@ -346,14 +352,29 @@ class AddCourse extends React.Component {
                     </Card>
                     <Card bordered={false} title='基本信息'>
                         <Form layout='horizontal' style={{width: '80%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
-                            <FormItem label='目标年级' {...formItemLayout}>
+                            <FormItem label='课程名称' {...formItemLayout}>
                                 {
                                     getFieldDecorator('course_name', {
                                         rules: [
                                             {
+                                                max: 10,
+                                                message: '课程简介不能超过十个字'
+                                            },
+                                            {
                                                 required: true,
-                                                message: '请选择目标年级'
+                                                message: '请补充课程名称'
                                             }
+                                        ]
+                                    })(
+                                        <Input/>
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='目标年级' {...formItemLayout}>
+                                {
+                                    getFieldDecorator('grade', {
+                                        rules: [
+
                                         ]
                                     })(
                                         <Dropdown overlay={menu2} trigger={['click']}>
@@ -364,12 +385,9 @@ class AddCourse extends React.Component {
                             </FormItem>
                             <FormItem label='课程类型' {...formItemLayout}>
                                 {
-                                    getFieldDecorator('course_name', {
+                                    getFieldDecorator('type', {
                                         rules: [
-                                            {
-                                                required: true,
-                                                message: '请选择课程类型'
-                                            }
+
                                         ]
                                     })(
                                         <Dropdown overlay={menu1} trigger={['click']}>
@@ -452,7 +470,7 @@ class AddCourse extends React.Component {
                             </FormItem>
                             <FormItem label='开始时间' {...formItemLayout} required>
                                 {
-                                    getFieldDecorator('start_date', {
+                                    getFieldDecorator('startDate', {
                                         rules: [
                                             {
                                                 required: true,
@@ -468,7 +486,7 @@ class AddCourse extends React.Component {
                             </FormItem>
                             <FormItem label='结束时间' {...formItemLayout} required>
                                 {
-                                    getFieldDecorator('end_date', {
+                                    getFieldDecorator('endDate', {
                                         rules: [
                                             {
                                                 required: true,
@@ -561,7 +579,10 @@ class AddCourse extends React.Component {
                                     this.setState({step: 0})
                                 }} style={{marginTop: '20px', size: 'large'}}>上一步</Button>
                                 <Button onClick={() => {
-                                    this.setState({step: 2})
+                                    let courseValue = this.state.courseJson;
+                                    courseValue['syllabus'] = this.state.syllabus;
+                                    this.setState({step: 2,courseJson:courseValue})
+                                    console.log(this.state.courseJson);
                                 }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>下一步</Button>
                             </Col>
                         </Row>

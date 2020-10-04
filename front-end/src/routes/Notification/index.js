@@ -254,7 +254,7 @@ class Notification extends React.Component {
                                        >
                                       <List.Item.Meta
                                           avatar={<Avatar src={require("../../pic/math1.png")} />}
-                                          title={<a onClick={()=>{this.state.setState({read:true})}} href={"/home/notification/page"}>{item.title}</a>}
+                                          title={<a onClick={()=>{this.setState({read:true})}} href={"/home/notification/page"}>{item.title}</a>}
                                           description={item.description}>
                                       <row>
                                           <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>

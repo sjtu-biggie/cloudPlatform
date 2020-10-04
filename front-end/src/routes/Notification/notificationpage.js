@@ -34,7 +34,7 @@ const deadCourse = {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     nickname: "陈小红",
     id: 1,
-    introduction: "9/30的数学作业已发布，截止到第二天晚上",
+    introduction: "10/1的数学作业已发布，截止到第二天晚上",
 };
 const bulletin = [];
 //TODO:add pagination support
@@ -82,7 +82,7 @@ class NotificationPage extends React.Component {
                                 fontWeight: 'bold',
                                 display: 'block'
                             }}>【通知】{this.state.course.course_name}作业</p>
-                            <a  href={"/home/homework/overall"} style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</a>
+                            <a  href={"/home/homework/commit"} style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</a>
                         </Col>
 
                     </Row>

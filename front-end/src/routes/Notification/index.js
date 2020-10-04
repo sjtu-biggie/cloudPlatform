@@ -30,7 +30,7 @@ for (let i = 0; i < 23; i++) {
         id:1,
         title: `【通知】七年级数学作业`,
         avatar: '../../pic/math1.png',
-        description: '9/30的作业已发布，截止到第二天晚上',
+        description: '10/1的作业已发布，截止到第二天晚上',
         time: `2020/9/27`,
         /*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*/
     })
@@ -42,7 +42,7 @@ for (let i = 0; i < 6; i++) {
         title: `【通知】七年级语文作业`,
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         id: 1,
-        description: "9/30的作业已发布，截止到第二天晚上"
+        description: "10/1的作业已发布，截止到第二天晚上"
     })
 }
 
@@ -63,6 +63,7 @@ class Notification extends React.Component {
         read:false,
         courses:data3,
         displayCourses:null,
+        nrnum:0,
     }
 
     changeSubject=(subject)=>{
@@ -254,7 +255,7 @@ class Notification extends React.Component {
                                        >
                                       <List.Item.Meta
                                           avatar={<Avatar src={require("../../pic/math1.png")} />}
-                                          title={<a onClick={()=>{this.state.setState({read:true})}} href={"/home/notification/page"}>{item.title}</a>}
+                                          title={<a onClick={()=>{this.setState({read:true})}} href={"/home/notification/page"}>{item.title}</a>}
                                           description={item.description}>
                                       <row>
                                           <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>

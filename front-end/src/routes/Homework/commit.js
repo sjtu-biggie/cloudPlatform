@@ -1,10 +1,11 @@
 import React from 'react'
-import {Card, Col, Row, Button, Tooltip, notification, Select, List, Icon, Upload} from 'antd'
+import {Card, Col, Row, Button, Tooltip, notification, Select, Typography,List,Divider, Icon, Upload, Avatar} from 'antd'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import TypingCard from '../../components/TypingCard'
 import {Editor} from "react-draft-wysiwyg";
 
+const { Text, Link } = Typography;
 class HomeworkCommit extends React.Component{
 
     state={
@@ -25,13 +26,12 @@ class HomeworkCommit extends React.Component{
             <div>
                 <CustomBreadcrumb arr={['作业','提交']}/>
                 <Card  bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
-                    <List.Item
+                    <Text type={"secondary"}>{"截止日期："+this.state.time}</Text>
+                    <List.Item actions={[<p>{this.state.overddl===true?"已截止":"未截止"}</p>,<p>{this.state.iscommit===true?" 已提交":" 未提交"}</p>]}
                         extra={<img  alt="logo" src={require("../../assets/img/mistakes.png" )}/>}>
-                        <row>
-                            <p style={{fontSize:'15px',fontWeight:'bold',display:'block'}}>{"截止日期："+this.state.time}</p>
-                            <p style={{fontSize:'15px',fontWeight:'bold',display:'block'}}>{this.state.overddl===true?"已截止":"未截止"}{this.state.iscommit===true?" 已提交":" 未提交"}</p>
-                            <p style={{marginTop:'10px'}}>{this.state.description}</p>
-                        </row>
+
+                        <p>{this.state.description}</p>
+                        <Text style={{textAlign:"right"}} ></Text>
                     </List.Item>
                     <Card bordered={false} className='card-item'>
                         <Editor

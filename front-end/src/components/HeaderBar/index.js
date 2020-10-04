@@ -10,7 +10,7 @@ import { isAuthenticated } from '../../utils/Session'
 class HeaderBar extends React.Component {
   state = {
     icon: 'arrows-alt',
-    count: 100,
+    count: 29,
     visible: false,
     avatar: require('./img/04.jpg')
   }

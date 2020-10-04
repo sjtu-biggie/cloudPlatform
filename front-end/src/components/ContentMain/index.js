@@ -63,6 +63,7 @@ const AddCourseDemo = LoadableComponent(()=>import('../../routes/Course/addCours
 const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index'))
 const HomeworkAssignmentDemo = LoadableComponent(()=>import('../../routes/Homework/Assign'))
 const HomeworkCommit = LoadableComponent(()=>import('../../routes/Homework/commit'))
+const HomeworkGeneral = LoadableComponent(()=>import('../../routes/Homework/General'))
 //管理
 
 const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'));
@@ -124,6 +125,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/homework/notclosed' component={HomeworkDemo}/>
           <PrivateRoute exact path='/home/homework/Assign' component={HomeworkAssignmentDemo}/>
           <PrivateRoute exact path='/home/homework/commit' component={HomeworkCommit}/>
+          <PrivateRoute exact path='/home/homework/General' component={HomeworkGeneral}/>
 
           <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>

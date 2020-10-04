@@ -41,6 +41,7 @@ class SiderNav extends React.Component {
                         {key: '/home/homework/uncommitted', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
                         {key: '/home/homework/closed', title: '已截止', icon: ''},
                         {key: '/home/homework/notclosed', title: '未截止', icon: ''},
+                        {key: '/home/homework/general', title: '提交情况', icon: ''},
                     ]
                 },
                 // this.state.role === 'student' ?

@@ -34,7 +34,7 @@ const deadCourse = {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     nickname: "陈小红",
     id: 1,
-    introduction: "9/29的数学作业已发布，截止到第二天早上",
+    introduction: "9/30的数学作业已发布，截止到第二天晚上",
 };
 const bulletin = [];
 //TODO:add pagination support

@@ -24,7 +24,8 @@ class HomeworkList extends React.Component {
         bordered: true,
         loading: false,
         loadingMore: false,
-        delete: false
+        delete: false,
+        role: 'teacher'
     };
 
     componentDidMount() {
@@ -53,7 +54,9 @@ class HomeworkList extends React.Component {
                               renderItem={item=>{
                                   return (
                                       <List.Item
-                                          actions={[<IconText type="file-text" text="100" />, <IconText type="calendar" text="截止：2020-10-1 20:00" />, <IconText type="schedule" text="已提交" />, <IconText type="clock-circle-o" text="已结束" />]}
+                                          actions={this.state.role === 'student' ?
+                                              [<IconText type="file-text" text="100" />, <IconText type="calendar" text="截止：2020-10-1 20:00" />, <IconText type="schedule" text = "已提交" />, <IconText type="clock-circle-o" text="已结束" />]
+                                          : [<IconText type="file-text" text="100" />, <IconText type="calendar" text="截止：2020-10-1 20:00" />, <IconText type="schedule" text = "提交人数/总人数" />, <IconText type="clock-circle-o" text="已结束" />]}
                                           extra={(this.state.delete === false ? []:[<Button type="danger">删除</Button>])}
                                           >
                                           <List.Item.Meta

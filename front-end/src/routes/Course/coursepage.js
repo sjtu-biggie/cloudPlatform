@@ -23,6 +23,7 @@ import FormDemo1 from '../../routes/Homework/Assign';
 import HomeworkList from '../Homework/HomeworkList';
 import AddBulletin from './AddBulletin'
 import {Axis, Chart, Geom, Tooltip} from "bizcharts";
+import StudenTable from "../Manage/studentTable";
 
 
 
@@ -378,7 +379,9 @@ class CoursePageDemo extends React.Component {
         );
     };
 
-
+    studentTableRender=()=>{
+        return(<StudenTable courseId={this.state.course.id}/>)
+    };
     typeRender = () => {
         switch (this.state.type) {
             case 1:
@@ -389,8 +392,10 @@ class CoursePageDemo extends React.Component {
                 return this.homeworkRender();
             case 4:
                 return this.examRender();
-            default:
+            case 5:
                 return this.rankRender();
+            case 6:
+                return this.studentTableRender();
         }
 
 
@@ -440,9 +445,12 @@ class CoursePageDemo extends React.Component {
                         <Menu.Item onClick={() => {
                             this.setState({type: 5})
                         }} key="rank"><Icon type="appstore"/>数据</Menu.Item>
-                        <Menu.Item onClick={() => {
-                            this.setState({type: 6})
-                        }} key="set" disabled><Icon type="setting"/>设置</Menu.Item>
+                        {
+                            this.state.role==='teacher'?                        <Menu.Item onClick={() => {
+                                this.setState({type: 6})
+                            }} key="set"><Icon type="setting"/>管理</Menu.Item>:null
+                        }
+
                     </Menu>
                 </Card>
                 {this.typeRender()}

@@ -10,14 +10,14 @@ const {Sider, Header, Content, Footer} = Layout
 class Index extends React.Component{
   state = {
     collapsed: false
-  }
+  };
 
   toggle = () => {
     // console.log(this)  状态提升后，到底是谁调用的它
     this.setState({
       collapsed: !this.state.collapsed
     })
-  }
+  };
   render() {
     // 设置Sider的minHeight可以使左右自适应对齐
     return (
@@ -34,7 +34,7 @@ class Index extends React.Component{
               <HeaderBar collapsed={this.state.collapsed} onToggle={this.toggle}/>
             </Header>
             <Content>
-              <ContentMain/>
+              <ContentMain id='containMain'/>
             </Content>
             <Footer style={{textAlign: 'center'}}>易学-云作业平台 ©2020 Created by 云作业平台创始团队</Footer>
           </Layout>

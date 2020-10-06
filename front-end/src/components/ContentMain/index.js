@@ -75,7 +75,7 @@ const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTabl
 class ContentMain extends React.Component {
   render () {
     return (
-      <div style={{padding: 16, position: 'relative'}}>
+      <div style={{padding: 16, position: 'relative'}} id='duck'>
         <Switch>
           <PrivateRoute exact path='/home' component={Home}/>
 

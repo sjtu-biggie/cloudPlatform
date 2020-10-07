@@ -24,13 +24,15 @@ public interface CourseService {
 
     void addBulletin(JSONObject object);
 
-    void deleteBulletin(String id, String publish_date);
+    void deleteBulletin(String id);
 
-    List<Course> getCourseByStudent(String id);
+    List<WholeCourse> getCourseByStudent(String id);
 
     List<Notification> getNoteByUser(String id);
 
     void addNote(JSONObject object);
 
     void deleteNote(String id);
+
+    void register(JSONObject object);
 }

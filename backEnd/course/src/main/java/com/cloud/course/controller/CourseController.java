@@ -31,7 +31,7 @@ public class CourseController {
     }
     @GetMapping(path = "/course/getCoursesByUser")
     //note that the modification will also come into this controller
-    public List<Course> getCoursesByStudent(@RequestParam("userId") String id) {
+    public List<WholeCourse> getCoursesByStudent(@RequestParam("userId") String id) {
         System.out.println("getCourseByStudent");
         return courseService.getCourseByStudent(id);
     }
@@ -61,9 +61,8 @@ public class CourseController {
     @PostMapping(path = "/course/deleteBulletin")
     public void deleteBulletin(@RequestBody Map<String, String> params) {
         System.out.println("bulletin delete");
-        String id = params.get("courseId");
-        String publish_date = params.get("publishDate");
-        courseService.deleteBulletin(id,publish_date);
+        String id = params.get("bulletinId");
+        courseService.deleteBulletin(id);
     }
     @PostMapping(path = "/course/addBulletin")
     public void addBulletin(@RequestBody JSONObject object) {
@@ -84,5 +83,10 @@ public class CourseController {
         courseService.addcourse(object);
     }
 
-
+    @PostMapping(path = "/course/register")
+    //note that the modification will also come into this controller
+    public void register(@RequestBody JSONObject object) {
+        System.out.println("register student");
+        courseService.register(object);
+    }
 }

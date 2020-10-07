@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface CourseDao {
     WholeCourse getCourseById(String id);
+    int findMaxId();
     List<WholeCourse> getCoursesByTeacher(String teacher_id);
     void deleteById(String id);
 
@@ -16,17 +17,17 @@ public interface CourseDao {
 
     void saveInfo(CourseInfo courseInfo);
 
-    List<CourseBulletin> getBulletin(String id);
+    List<CourseBulletin> getBulletin(int id);
 
     void savePic(CoursePic coursePic);
 
     void saveBulletin(CourseBulletin courseBulletin);
 
-    CourseBulletin getBulletin(String id, Date publish_date);
+    CourseBulletin getOneBulletin(int bulletinId);
 
     void deleteBulletin(CourseBulletin courseBulletin);
 
-    List<Course> getCoursesByStudent(String id);
+    List<WholeCourse> getCoursesByStudent(String id);
 
     List<Notification> getNoteByUser(String id);
 
@@ -35,4 +36,7 @@ public interface CourseDao {
     void saveNote(Notification notification);
 
     void deleteNote(String id);
+
+
+    void register(String courseId, String string,Date join_date);
 }

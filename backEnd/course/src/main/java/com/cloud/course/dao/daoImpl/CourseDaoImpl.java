@@ -34,12 +34,10 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public WholeCourse getCourseById(String id){
-        Course course = courseRepository.findAllById(id);
+        int courseId = parseInt(id);
+        Course course = courseRepository.findAllById(courseId);
         if(course==null){
             System.out.println("course nonexist in getCoursesById");
-            return null;
-        }
-        if(course.getId()==null){
             return null;
         }
         CoursePic coursePic = coursePicRepository.findAllById(course.getId());
@@ -52,10 +50,10 @@ public class CourseDaoImpl implements CourseDao {
         List<Course> courseList = courseRepository.findAllByTeacher(teacher_id);
         List<WholeCourse> wholeCourseList = new ArrayList<>();
         for (Course course:courseList){
-            if(course.getId()==null){
-                System.out.println("course Id nonexist in getCoursesByTeacher");
-                continue;
-            }
+//            if(course.getId()==null){
+//                System.out.println("course Id nonexist in getCoursesByTeacher");
+//                continue;
+//            }
             CoursePic  coursePic = coursePicRepository.findAllById(course.getId());
             CourseInfo courseInfo = courseInfoRepository.findAllById(course.getId());
             WholeCourse wholeCourse = new WholeCourse(course,courseInfo,coursePic);
@@ -65,9 +63,13 @@ public class CourseDaoImpl implements CourseDao {
     }
     @Override
     public void deleteById(String id){
-        courseRepository.deleteById(id);
+        int courseId = parseInt(id);
+        courseRepository.deleteById(courseId);
     }
-
+    @Override
+    public int findMaxId(){
+        return courseRepository.findMaxId();
+    }
     @Override
     public void save(Course course){
         courseRepository.save(course);
@@ -79,9 +81,10 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public List<CourseBulletin> getBulletin(String id){
-        return courseBulletinRepository.findAllById(id);
+    public List<CourseBulletin> getBulletin(int id){
+        return courseBulletinRepository.findAllByCourseId(id);
     }
+
     @Override
     public void savePic(CoursePic coursePic){
         coursePicRepository.save(coursePic);
@@ -93,8 +96,8 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public  CourseBulletin getBulletin(String id, Date publish_date){
-        return courseBulletinRepository.findByIdAndPublishDate(id,publish_date);
+    public  CourseBulletin getOneBulletin(int bulletinId){
+        return courseBulletinRepository.findCourseBulletinByBulletinId(bulletinId);
     }
     @Override
     public void deleteBulletin(CourseBulletin courseBulletin){
@@ -102,8 +105,20 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public List<Course> getCoursesByStudent(String id){
-        return courseRepository.getCoursesByStudent(id);
+    public List<WholeCourse> getCoursesByStudent(String id){
+        List<Course> courseList = courseRepository.getCoursesByStudent(id);
+        List<WholeCourse> wholeCourseList = new ArrayList<>();
+        for (Course course:courseList){
+//            if(course.getId()==null){
+//                System.out.println("course Id nonexist in getCoursesByTeacher");
+//                continue;
+//            }
+            CoursePic  coursePic = coursePicRepository.findAllById(course.getId());
+            CourseInfo courseInfo = courseInfoRepository.findAllById(course.getId());
+            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,coursePic);
+            wholeCourseList.add(wholeCourse);
+        }
+        return wholeCourseList;
     }
     @Override
     public List<Notification> getNoteByUser(String id){
@@ -121,5 +136,10 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void deleteNote(String id){
         noteRepository.deleteByNotificationId(parseInt(id));
+    }
+
+    @Override
+    public void register(String courseId, String userId,Date join_date){
+        courseRepository.register(courseId,userId,join_date);
     }
 }

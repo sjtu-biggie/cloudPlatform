@@ -13,6 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class CoursePic {
     @Id
-    private String id;
+    private int id;
     private String pic;
 }

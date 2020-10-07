@@ -1,15 +1,13 @@
 package com.cloud.course.repository;
 
 import com.cloud.course.entity.CourseBulletin;
-import com.cloud.course.entity.CoursePic;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
 import java.util.List;
 
-public interface CourseBulletinRepository extends MongoRepository<CourseBulletin,String> {
-    List<CourseBulletin> findAllById(String id);
+public interface CourseBulletinRepository extends JpaRepository<CourseBulletin,Integer> {
+    List<CourseBulletin> findAllByCourseId(int id);
 
-
-    CourseBulletin findByIdAndPublishDate(String id, Date publish_date);
+    CourseBulletin findCourseBulletinByBulletinId(int id);
 }

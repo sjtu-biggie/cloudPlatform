@@ -9,11 +9,10 @@ import java.util.Date;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Document(collection = "courseBulletin")
+@Entity
+@Table(name = "COURSE_BULLETIN")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,4 +30,11 @@ public class CourseBulletin {
     private String content;
     @Column(name = "PUBLISH_DATE")
     private Date publishDate;
+
+    public CourseBulletin(int _courseId,String _title,String _content,Date _publishDate){
+        courseId=_courseId;
+        title=_title;
+        content=_content;
+        publishDate=_publishDate;
+    }
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class DoubanServiceController {
+public class CourseController {
     @Autowired
     private CourseService courseService;
 

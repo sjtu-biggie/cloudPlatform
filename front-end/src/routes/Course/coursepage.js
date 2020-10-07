@@ -557,7 +557,7 @@ class CoursePageDemo extends React.Component {
                         this.setState({addBulletin: false, deleteBulletin: false,})
                     }}>返回</Button>
                 </Card> : null}
-                {this.state.addBulletin?<AddBulletin id={this.state.course.id}/>:
+                {this.state.addBulletin?<AddBulletin course_id={this.state.course.id}/>:
                     <div>
                 <Collapse style={{marginBottom: "10px"}}
                           defaultActiveKey={['1']}>{this.state.bulletins.map((value, index) => {

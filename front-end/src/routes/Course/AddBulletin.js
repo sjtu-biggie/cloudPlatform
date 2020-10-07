@@ -16,6 +16,45 @@ const options = [
     }
 ];
 
+/**
+ * @return {string}
+ */
+function CurentTime()
+{
+    let now = new Date();
+
+    let year = now.getFullYear();       //年
+    let month = now.getMonth() + 1;     //月
+    let day = now.getDate();            //日
+
+    let hh = now.getHours();            //时
+    let mm = now.getMinutes();          //分
+    let ss = now.getSeconds();           //秒
+
+    let clock = year + "-";
+
+    if(month < 10)
+        clock += "0";
+
+    clock += month + "-";
+
+    if(day < 10)
+        clock += "0";
+
+    clock += day + " ";
+
+    if(hh < 10)
+        clock += "0";
+
+    clock += hh + ":";
+    if (mm < 10) clock += '0';
+    clock += mm + ":";
+
+    if (ss < 10) clock += '0';
+    clock += ss;
+    return(clock);
+}
+
 @Form.create()
 class AddBulletin extends React.Component {
     state = {
@@ -30,7 +69,10 @@ class AddBulletin extends React.Component {
             if (err) {
                 message.warning('请填写正确的公告内容')
             } else {
-                message.success('提交成功')
+                message.success('提交成功');
+                values.course_id = this.props.course_id;
+                values.publish_date = CurentTime();
+                console.log(values);
             }
         });
     };
@@ -80,11 +122,11 @@ class AddBulletin extends React.Component {
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                         <FormItem label='公告标题' {...formItemLayout} required>
                             {
-                                getFieldDecorator('homework_name', {
+                                getFieldDecorator('title', {
                                     rules: [
                                         {
                                             required: true,
-                                            message: '请填写作业名称'
+                                            message: '请填写公告标题'
                                         }
                                     ]
                                 })(
@@ -94,7 +136,7 @@ class AddBulletin extends React.Component {
                         </FormItem>
                         <FormItem label='公告内容' {...formItemLayout} required>
                             {
-                                getFieldDecorator('range', {
+                                getFieldDecorator('content', {
                                     rules: [
                                         {
                                             required: true,

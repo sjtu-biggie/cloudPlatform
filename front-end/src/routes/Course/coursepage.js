@@ -26,6 +26,7 @@ import AddBulletin from './AddBulletin'
 import {Axis, Chart, Geom, Tooltip} from "bizcharts";
 import StudenTable from "../Manage/studentTable";
 import TextArea from "antd/es/input/TextArea";
+import Search from "antd/es/input/Search";
 
 
 @Form.create()
@@ -51,6 +52,8 @@ class CoursePageDemo extends React.Component {
         homework:deadHomework,
         modifyCourse:false,
         modifySyllabus:false,
+        addChapter:false,
+        addContent:false,
     };
 
     componentDidMount() {
@@ -127,17 +130,17 @@ class CoursePageDemo extends React.Component {
                 {this.state.role === 'teacher' ? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
                     <Row/>
                     <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
-                        this.setState({modifyCourse: true})
+                        this.setState({modifyCourse: true,modifySyllabus:false})
                     }}>修改课程信息</Button>
                     <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
                             size='large' onClick={() => {
-                        this.setState({modifySyllabus: true})
+                        this.setState({modifySyllabus: true,modifyCourse:false})
                     }}>修改课程大纲</Button>
                     <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
                         this.setState({modifySyllabus: false, modifyCourse: false,})
                     }}>返回</Button>
                 </Card> : null}
-                {this.state.modifyCourse?this.modifiedCourse():<div>
+                {this.state.modifyCourse?this.modifiedCourse():this.state.modifySyllabus?this.modifiedSyllabus():<div>
                     <Card bordered={false} style={{marginBottom: 10}} id="howUse">
                         <Row style={{height: "200px"}}>
                             <Col span={18}>
@@ -210,12 +213,153 @@ class CoursePageDemo extends React.Component {
                 modifiedCourse.textbook = values.textbook;
                 modifiedCourse.introduction = values.introduction;
                 modifiedCourse.detail = values.detail;
-                modifiedCourse.start_Date = values.startDate.format('YYYY-MM-DD HH:mm:ss');
-                modifiedCourse.end_Date = values.endDate.format('YYYY-MM-DD HH:mm:ss');
+                modifiedCourse.start_date = values.startDate.format('YYYY-MM-DD HH:mm:ss');
+                modifiedCourse.end_date = values.endDate.format('YYYY-MM-DD HH:mm:ss');
                 this.setState({course: modifiedCourse,modifyCourse:false});
                 console.log(values);
             }
         });
+    };
+    deleteSmall = (index, smallName) => {
+        let chapterName = 'chapter' + (index + 1);
+        let modifiedSyllabus = this.state.course.syllabus;
+        for (let a in modifiedSyllabus) {
+            if (a === chapterName) {
+                let chapter = modifiedSyllabus[a].content;
+                for (let i = 0; i < chapter.length; ++i) {
+                    if (chapter[i] === smallName) {
+                        if (i === 0) {
+                            chapter = chapter.slice(1);
+                            modifiedSyllabus[a].content = chapter
+                        } else chapter.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+        let modifiedCourse = this.state.course;
+        modifiedCourse.syllabus = modifiedSyllabus;
+        this.setState({course: modifiedCourse});
+    };
+    addSmall = (index, smallName) => {
+        let chapterName = 'chapter' + (index + 1);
+        let modifiedSyllabus = this.state.course.syllabus;
+        for (let a in modifiedSyllabus) {
+            if (a === chapterName) {
+                let chapter = modifiedSyllabus[a].content;
+                chapter.push(smallName);
+                modifiedSyllabus[a].content = chapter;
+            }
+        }
+        let modifiedCourse = this.state.course;
+        modifiedCourse.syllabus = modifiedSyllabus;
+        this.setState({course: modifiedCourse});
+    };
+    addBig = (index, smallName) => {
+        let chapterString ='chapter' + (index + 2);
+        let chapterName = {title:smallName,content:[]};
+        let modifiedSyllabus = this.state.course.syllabus;
+        for(let i=modifiedSyllabus.chapterNum;i>index+1;--i){
+            let prvChapter = 'chapter' + i;
+            let mdfChapter = 'chapter' + (i + 1);
+            modifiedSyllabus[mdfChapter]=modifiedSyllabus[prvChapter];
+        }
+        modifiedSyllabus[chapterString] = chapterName;
+        modifiedSyllabus['chapterNum']=modifiedSyllabus['chapterNum']+1;
+        let modifiedCourse = this.state.course;
+        modifiedCourse.syllabus = modifiedSyllabus;
+        this.setState({course: modifiedCourse});
+    };
+    deleteBig = (index)=>{
+        let modifiedSyllabus = this.state.course.syllabus;
+        for(let i=index+1;i<modifiedSyllabus.chapterNum;++i){
+            let prvChapter = 'chapter' + i;
+            let mdfChapter = 'chapter' + (i + 1);
+            modifiedSyllabus[prvChapter]=modifiedSyllabus[mdfChapter];
+        }
+        delete modifiedSyllabus[ 'chapter'+modifiedSyllabus.chapterNum];
+        modifiedSyllabus['chapterNum']=modifiedSyllabus['chapterNum']-1;
+        let modifiedCourse = this.state.course;
+        modifiedCourse.syllabus = modifiedSyllabus;
+        this.setState({course: modifiedCourse});
+    };
+    modifiedSyllabus=()=>{
+        let i = 1;
+        let chapterList = [];
+        while (1) {
+            let str = 'this.state.course.syllabus.chapter' + i;
+            let contents = eval(str);
+            if (contents === undefined || contents === null) break;
+            chapterList.push(contents);
+            ++i;
+        }
+        return(<div>
+            <Card bordered={false} className='card-item' title="设计课程大纲">
+                <Collapse defaultActiveKey={['0']} onChange={() => {
+                    this.setState({addChapter: false, addContent: false})
+                }}>{chapterList.map((value, index) => {
+                    return (<Collapse.Panel header={value.title} key={index}>
+                        {this.state.addChapter ?
+                            <Search
+                                style={{marginBottom: '15px'}}
+                                placeholder="请输入要添加的章节名，按回车确认！"
+                                enterButton="添加"
+                                onSearch={(value) => {
+                                    if (value === "") {
+                                        message.warning("章节名称不能为空！", 3);
+                                        return;
+                                    }
+                                    this.addBig(index, value)
+                                }}
+                            /> : null}
+                        <Button type="primary" onClick={() => {
+                            this.setState({addChapter: !this.state.addChapter})
+                        }} style={{}}>在此添加章节</Button>
+                        <Button type="danger" onClick={() => {this.deleteBig(index)
+                        }} style={{marginLeft: '10px', marginBottom: '20px'}}>删除这个章节</Button>
+                        <List
+                            rowKey={(text, record) => text.key}
+                            bordered
+                            dataSource={value.content}
+                            renderItem={item => (
+                                <List.Item actions={[<Button type="danger" onClick={() => {
+                                    this.deleteSmall(index, item)
+                                }} style={{marginLeft: '10px'}}>删除这个小节</Button>]}>
+                                    <List.Item.Meta
+                                        title={item}
+                                    />
+                                </List.Item>
+                            )}
+                        />
+                        <Search
+                            style={{marginTop: '15px'}}
+                            placeholder="请输入要添加的小节名，按回车确认！"
+                            enterButton="添加一个小节"
+                            onSearch={(value) => {
+                                if (value === "") {
+                                    message.warning("小节名称不能为空！", 3);
+                                    return;
+                                }
+                                this.addSmall(index, value)
+                            }}
+                        />
+                    </Collapse.Panel>)
+                })}</Collapse>
+                <Collapse
+                    defaultActiveKey={['1']}
+                >
+                </Collapse>
+                <Row>
+                    <Col offset={11}>
+                        <Button onClick={() => {
+                            this.setState({
+                                modifySyllabus:false
+                            })
+                        }} style={{marginTop: '20px', size: 'large'}}>确认修改</Button>
+                    </Col>
+                </Row>
+            </Card>
+        </div>);
     };
     modifiedCourse=()=>{
         const FormItem = Form.Item;
@@ -364,7 +508,7 @@ class CoursePageDemo extends React.Component {
                       <p style={{marginLeft:'100px'}}>原结束时间：{this.state.course.end_date}</p>
                   </Col></Row>
                   <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                      <Button type="primary" htmlType="submit">确认修改</Button>
+                      <Button htmlType="submit">确认修改</Button>
                   </FormItem>
               </Form>
           </Card>
@@ -413,7 +557,7 @@ class CoursePageDemo extends React.Component {
                         this.setState({addBulletin: false, deleteBulletin: false,})
                     }}>返回</Button>
                 </Card> : null}
-                {this.state.addBulletin?<AddBulletin/>:
+                {this.state.addBulletin?<AddBulletin id={this.state.course.id}/>:
                     <div>
                 <Collapse style={{marginBottom: "10px"}}
                           defaultActiveKey={['1']}>{this.state.bulletins.map((value, index) => {
@@ -707,6 +851,7 @@ const deadCourse = {
     textbook: "人教版七年级数学上册",
     introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
     syllabus: {
+        chapterNum:4,
         chapter1: {
             title: "一百以内算术",
             content: [

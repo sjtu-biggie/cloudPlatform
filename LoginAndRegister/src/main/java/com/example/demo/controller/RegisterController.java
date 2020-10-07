@@ -23,9 +23,15 @@ public class RegisterController {
     public String register(HttpServletRequest request){
         String username=request.getParameter("username");
         String password=request.getParameter("password");
+        String sid=request.getParameter("sid");
+        String email=request.getParameter("email");
+        String telephone=request.getParameter("telephone");
         User user=new User();
-        user.setUserName(username);
+        user.setUsername(username);
         user.setPassword(password);
+        user.setEmail(email);
+        user.setSid(sid);
+        user.setTelephone(telephone);
         userMapper.save(user);
         return  "login";
     }

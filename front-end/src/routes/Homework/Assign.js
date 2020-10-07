@@ -19,7 +19,7 @@ const options = [
 ];
 
 @Form.create()
-class FormDemo1 extends React.Component {
+class Assign extends React.Component {
     state = {
         text: '获取验证码',
         disabled: false,
@@ -162,4 +162,4 @@ class FormDemo1 extends React.Component {
     }
 }
 
-export default FormDemo1
+export default Assign

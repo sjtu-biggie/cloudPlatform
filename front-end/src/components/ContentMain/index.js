@@ -68,6 +68,8 @@ const HomeworkGeneral = LoadableComponent(()=>import('../../routes/Homework/Gene
 
 const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'));
 
+//个人中心
+const PersonalCenter = LoadableComponent(()=>import('../../routes/PersonalCenter/Info'))
 
 
 
@@ -129,6 +131,8 @@ class ContentMain extends React.Component {
 
           <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
+
+          <PrivateRoute exact path='/home/personalcenter' component={PersonalCenter}/>
 
           <PrivateRoute exact path='/home/manage/studentTable' component={StudentTable}/>
 

@@ -61,7 +61,7 @@ class HomeworkList extends React.Component {
                                           >
                                           <List.Item.Meta
                                               avatar={<Avatar src={item.avatar} />}
-                                              title={<a href={"/home/homework/commit"}>{item.title}</a>}
+                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit"}>{item.title}</a> : <a href={"/home/homework/General"}>{item.title}</a>}
                                               description={item.description}
                                           />
                                           {item.content}

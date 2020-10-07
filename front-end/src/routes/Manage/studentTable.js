@@ -1,8 +1,8 @@
 /* eslint-disable */
-import React, {useState, useEffect, useRef} from 'react';
-import {Button, Card, Input, Table,Row} from 'antd';
+import React, { Component, createRef } from 'react';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
 import styles from './index.css';
-import {SearchOutline} from '@ant-design/icons';
+import {Router} from "react-router-dom";
 
 let index = 0;
 const getMockData = () => {
@@ -28,13 +28,19 @@ const data1 = getMockDatas(10);
 const data2 = getMockDatas(100);
 
 const columns = [
-    {title: '姓名', dataIndex: 'name'},
-    {title: '学号', dataIndex: 'no'},
-    {title: '班级', dataIndex: 'cls'},
-    {title: '成绩', dataIndex: 'score'},
+    { title: '姓名', dataIndex: 'name' },
+    { title: '学号', dataIndex: 'no' },
+    { title: '班级', dataIndex: 'cls' },
+    { title: '成绩', dataIndex: 'score' },
     // {title: '绩点', dataIndex: 'point'}
     //just a test
-    ];
+];
+
+// function handleMenuClick(e) {
+//     console.log('click', e);
+// }
+
+
 columns.map(item => {
     item.sorter = (a, b) => {
         if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
@@ -46,49 +52,64 @@ columns.map(item => {
     };
 });
 
-const EditText = ({children, onChange}) => {
-    const [edit, setEdit] = useState(false);
-    const [editValue, setEditValue] = useState(children);
-    return edit ? <Input autoFocus style={{width: 100}}
-                         value={editValue}
-                         onChange={event => setEditValue(event.target.value)}
-                         onBlur={() => {
-                             setEdit(false);
-                             onChange(editValue);
-                         }}/> :
-        <div style={{width: 100}} onDoubleClick={() => setEdit(true)}>{children || <span>&nbsp;</span>}</div>;
+class EditText extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            edit: false,
+            editValue: props.children,
+        };
+    }
+
+    render() {
+        const { edit, editValue } = this.state;
+        return (edit ? <Input autoFocus style={{ width: 100 }}
+                              value={editValue}
+                              onChange={event => this.setState({ editValue: event.target.value })}
+                              onBlur={() => {
+                                  this.setState({ edit: false });
+                                  onChange(editValue);
+                              }}/> :
+            <div style={{ width: 100 }} onDoubleClick={() => this.setState({ edit: true })}>
+                {this.props.children || <span>&nbsp;</span>}
+            </div>);
+    }
 };
 
 
-export default function () {
-    const [search, setSearch] = useState();
-    const [search2, setSearch2] = useState();
-    const [orData, setOrData] = useState(data1);
-    const [orData2, setOrData2] = useState(data2);
-    const [renderData, setRenderData] = useState(data1);
-    const [renderData2, setRenderData2] = useState(data2);
-    const [modifyIds, setModifyIds] = useState([]);
-    const searchInput = useRef();
+export default class StudentTable extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            search: '',
+            search2: '',
+            search3:'',
+            orData: data1,
+            renderData: data1,
+            orData2: data2,
+            renderData2: data2,
+            modifyIds: [],
+        };
+        this.searchInput = createRef();
 
-    useEffect(() => {
         columns.forEach(item => {
-            const {dataIndex, title} = item
-            item.filterDropdown = ({setSelectedKeys, selectedKeys, confirm}) => (
-                <div style={{padding: 8}}>
+            const { dataIndex, title } = item;
+            item.filterDropdown = ({ setSelectedKeys, selectedKeys, confirm }) => (
+                <div style={{ padding: 8 }}>
                     <Input
                         allowClear
-                        ref={searchInput}
+                        ref={this.searchInput}
                         placeholder={`搜索 ${title}`}
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={confirm}
-                        style={{width: 188, marginBottom: 8, display: 'block'}}
+                        style={{ width: 188, marginBottom: 8, display: 'block' }}
                     />
                     <Button
                         type="primary"
                         onClick={confirm}
                         size="small"
-                        style={{width: 90}}
+                        style={{ width: 90 }}
                     >
                         搜索
                     </Button>
@@ -100,109 +121,163 @@ export default function () {
                     : '';
             item.onFilterDropdownVisibleChange = visible => {
                 if (visible) {
-                    setTimeout(() => searchInput.current.select(), 100);
+                    setTimeout(() => this.searchInput.current.select(), 100);
                 }
-            }
-        })
-    }, []);
-    const handleSearch = () => {
-        const filterData = orData.filter(row => {
-            if (!search) return true;
-            const keys = columns.map(item => item.dataIndex);
-            for (let i = 0; i < keys.length; i++) {
-                if (String(row[keys[i]] || '').toLowerCase().includes(search.toLowerCase())) return true;
-            }
-            return false;
+            };
         });
-        setRenderData(filterData);
-    };
 
-    useEffect(() => {
-        handleSearch();
-    }, [orData]);
+        this.handleSearch = () => {
+            const { orData, search } = this.state;
+            const filterData = orData.filter(row => {
+                if (!search) return true;
+                const keys = columns.map(item => item.dataIndex);
+                for (let i = 0; i < keys.length; i++) {
+                    if (String(row[keys[i]] || '').toLowerCase().includes(search.toLowerCase())) return true;
+                }
+                return false;
+            });
+            this.setState({ renderData: filterData });
+        };
 
-    const handleSearch2 = () => {
-        const filterData = orData2.filter(row => {
-            if (!search2) return true;
-            const keys = columns.map(item => item.dataIndex);
-            for (let i = 0; i < keys.length; i++) {
-                if (String(row[keys[i]] || '').toLowerCase().includes(search2.toLowerCase())) return true;
-            }
-            return false;
-        });
-        setRenderData2(filterData);
-    };
+        this.handleSearch2 = () => {
+            const { orData2, search2 } = this.state;
+            const filterData = orData2.filter(row => {
+                if (!search2) return true;
+                const keys = columns.map(item => item.dataIndex);
+                for (let i = 0; i < keys.length; i++) {
+                    if (String(row[keys[i]] || '').toLowerCase().includes(search2.toLowerCase())) return true;
+                }
+                return false;
+            });
+            this.setState({ renderData2: filterData });
+        };
 
-    useEffect(() => {
-        handleSearch2();
-    }, [orData2]);
+        this.handleSearch3 = () => {
+            const { orData2, search3 } = this.state;
+            const filterData = orData2.filter(row => {
+                if (!search3) return true;
+                const keys = columns.map(item => item.dataIndex);
+                for (let i = 0; i < keys.length; i++) {
+                    if (String(row[keys[i]] || '').toLowerCase()===search3.toLowerCase()) return true;
+                }
+                return false;
+            });
+            this.setState({ renderData2: filterData });
+        };
+    }
 
-    return (
-        <div className={styles.normal}>
-            {/*<div className={styles.control}>*/}
-            <Card className={styles.control} bordered={false} style={{marginBottom: 10}}>
-                <Row/>
-                <Input style={{width: 200, marginRight: 16}}
-                       value={search}
-                       allowClear
-                       onChange={event => setSearch(event.target.value)}/>
-                <Button onClick={handleSearch}>搜索</Button>&nbsp;&nbsp;
-                <Button type={'primary'} onClick={() => {
-                    setOrData([getMockData(), ...orData]);
-                }}>添加</Button>
-            </Card>
-            {/*</div>*/}
-            <Card bordered={false} style={{marginBottom: 10}}>
-            <Table
-                rowKey={'id'}
-                columns={[...columns.map(item => ({
-                    ...item,
-                    render: (text, record) => <EditText onChange={value => {
-                        const newData = [...orData];
-                        newData.find(col => col.id === record.id)[item.dataIndex] = value;
-                        setOrData(newData);
-                    }}>{text}</EditText>,
-                })), {
-                    name: '操作',
-                    key: 'del',
-                    render: record => (
-                        <Button onClick={() => {
-                            setOrData(orData.filter(item => item.id !== record.id));
-                            setOrData2([record, ...orData2]);
-                        }}>删除</Button>),
-                }]}
-                dataSource={renderData}/>
-            </Card>
-
-            <Card bordered={false} style={{marginBottom: 10}}>
-            <div className={styles.control}>
-                <Button
-                    type={'primary'}
-                    onClick={() => {
-                        const selectData = orData2.filter(item => modifyIds.includes(item.id));
-                        const notSelectData = orData2.filter(item => !modifyIds.includes(item.id));
-                        setOrData2(notSelectData);
-                        setOrData([...selectData, ...orData]);
-                    }}
-                >添加到上表</Button>
-                <Input style={{width: 200, marginLeft: 16, marginRight: 16}}
-                       value={search2}
-                       allowClear
-                       onChange={event => setSearch2(event.target.value)}/>
-                <Button onClick={handleSearch2}>搜索</Button>
+    render() {
+        const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
+        return (
+            <div className={styles.normal}>
+                {/*<div className={styles.control}>*/}
+                {/*<Row>*/}
+                <Col span={12}>
+                    <Card title={<div style={{textAlign:"center"}}>上课学生</div>} >
+                        <Card className={styles.control} bordered={false} style={{ marginBottom: 10 }}>
+                            <Row>
+                                <Col span={6}>
+                            <Input style={{ width: 300, marginRight: 16 }}
+                                   value={search}
+                                   allowClear
+                                   onChange={event => this.setState({ search: event.target.value })}/>
+                                </Col>
+                                <Col span={2} offset={4}>
+                            <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </Col>
+                                <Col span={2} offset={5}>
+                                    <Button  onClick={() => {
+                                this.setState({ orData: [getMockData(), ...orData,getMockData()] });
+                            }}>添加</Button>&nbsp;&nbsp;&nbsp;
+                                </Col>
+                                <Col span={2} offset={1}>
+                            <div>
+                                    <Upload action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>
+                                        <Button>
+                                    <Icon type="upload"/> 从excel中添加
+                                        </Button>
+                                    </Upload>
+                            </div>
+                                </Col>
+                            </Row>
+                        </Card>
+                        <Card bordered={false} style={{ marginBottom: 10, height: 800 }}>
+                            <Table
+                                rowKey={'id'}
+                                columns={[...columns.map(item => ({
+                                    ...item,
+                                    render: (text, record) => <EditText onChange={value => {
+                                        const newData = [...orData];
+                                        newData.find(col => col.id === record.id)[item.dataIndex] = value;
+                                        this.setState({ orData: newData });
+                                    }}>{text}</EditText>,
+                                })), {
+                                    name: '操作',
+                                    key: 'del',
+                                    render: record => (
+                                        <Button onClick={() => {
+                                            this.setState({
+                                                orData: orData.filter(item => item.id !== record.id),
+                                                orData2: [record, ...orData2],
+                                            }, () => {
+                                                this.handleSearch();
+                                                this.handleSearch2();
+                                            });
+                                        }}>删除</Button>),
+                                }]}
+                                dataSource={renderData}/>
+                        </Card>
+                    </Card>
+                </Col>
+                <Col span={12}>
+                    <Card title={<div style={{textAlign:"center"}}>未上课学生</div>}>
+                        <Card bordered={false} style={{ marginBottom: 10 }}>
+                            <div className={styles.control}>
+                                <Button
+                                    type={'primary'}
+                                    onClick={() => {
+                                        const selectData = orData2.filter(item => modifyIds.includes(item.id));
+                                        const notSelectData = orData2.filter(item => !modifyIds.includes(item.id));
+                                        this.setState({
+                                            orData: [...selectData, ...orData],
+                                            orData2: notSelectData,
+                                        }, () => {
+                                            this.handleSearch();
+                                            this.handleSearch2();
+                                        });
+                                    }}
+                                >添加到上课表</Button>
+                                <Input style={{ width: 400, marginLeft: 16, marginRight: 16 }}
+                                       value={search2}
+                                       allowClear
+                                       onChange={event => this.setState({ search2: event.target.value })}/>
+                                <Button onClick={this.handleSearch2} style={{marginBottom:10}}>模糊搜索</Button>
+                            </div>
+                                <div className={styles.control}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <Input style={{ width: 400, marginLeft: 16, marginRight: 16 }}
+                                       value={search3}
+                                       allowClear
+                                       onChange={event => this.setState({search3:event.target.value})}/>
+                                       <Button onClick={this.handleSearch3}>精确搜索</Button>
+                            </div>
+                        </Card>
+                        <Card bordered={false} style={{ marginBottom: 10, height: 780 }}>
+                            <Table
+                                rowKey={'id'}
+                                columns={columns}
+                                dataSource={renderData2}
+                                rowSelection={{
+                                    type: 'checkbox',
+                                    selectedRowKeys: modifyIds,
+                                    onChange: ids => this.setState({ modifyIds: ids }),
+                                }}/>
+                        </Card>
+                    </Card>
+                </Col>
+                {/*</Row>*/}
             </div>
-            </Card>
-            <Card bordered={false} style={{marginBottom: 10}}>
-            <Table
-                rowKey={'id'}
-                columns={columns}
-                dataSource={renderData2}
-                rowSelection={{
-                    type: 'checkbox',
-                    selectedRowKeys: modifyIds,
-                    onChange: ids => setModifyIds(ids),
-                }}/>
-            </Card>
-        </div>
-    );
+        );
+    }
 }
+

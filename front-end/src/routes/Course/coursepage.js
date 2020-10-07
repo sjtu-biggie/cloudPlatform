@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment';
 import './courseCss.css'
 import Shuffle from 'shufflejs'
 import 'animate.css'
@@ -15,7 +16,7 @@ import {
     Form,
     Input,
     Menu,
-    Dropdown, Row, Col, Collapse, Avatar, Pagination, Steps, Statistic, Progress
+    Dropdown, Row, Col, Collapse, Avatar, Pagination, Steps, Statistic, Progress, Upload, DatePicker, FormItem, message
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
@@ -24,15 +25,16 @@ import HomeworkList from '../Homework/HomeworkList';
 import AddBulletin from './AddBulletin'
 import {Axis, Chart, Geom, Tooltip} from "bizcharts";
 import StudenTable from "../Manage/studentTable";
+import TextArea from "antd/es/input/TextArea";
 
 
-
+@Form.create()
 class CoursePageDemo extends React.Component {
     state = {
         step: 0,
         //type indicate which content to render
         //parameter is detailed content of one type
-        type: 5,
+        type: 1,
         parameter: 0,
         size: 'default',
         bordered: true,
@@ -46,7 +48,9 @@ class CoursePageDemo extends React.Component {
         deleteHomework: false,
         addBulletin: false,
         deleteBulletin: false,
-        homework:deadHomework
+        homework:deadHomework,
+        modifyCourse:false,
+        modifySyllabus:false,
     };
 
     componentDidMount() {
@@ -101,7 +105,9 @@ class CoursePageDemo extends React.Component {
                             addHomework: false,
                             deleteHomework: false,
                             addBulletin: false,
-                            deleteBulletin: false
+                            deleteBulletin: false,
+                            modifyCourse: false,
+                            modifySyllabus: false
                         })
                     }}>返回</Button>
                 </Card>
@@ -115,74 +121,254 @@ class CoursePageDemo extends React.Component {
 
     };
     mainRender = () => {
+
         return (
             <div>
-                <Card bordered={false} style={{marginBottom: 10}} id="howUse">
-                    <Row style={{height: "200px"}}>
-                        <Col span={18}>
-                            <p style={{
-                                fontSize: '20px',
-                                fontWeight: 'bold',
-                                display: 'block'
-                            }}>课程名 : {this.state.course.course_name}</p>
-                            <p style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</p>
-                            <p style={{height: '10px'}}>开始时间：{this.state.course.start_date} 结束时间：{this.state.course.end_date}</p>
+                {this.state.role === 'teacher' ? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
+                    <Row/>
+                    <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
+                        this.setState({modifyCourse: true})
+                    }}>修改课程信息</Button>
+                    <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
+                            size='large' onClick={() => {
+                        this.setState({modifySyllabus: true})
+                    }}>修改课程大纲</Button>
+                    <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
+                        this.setState({modifySyllabus: false, modifyCourse: false,})
+                    }}>返回</Button>
+                </Card> : null}
+                {this.state.modifyCourse?this.modifiedCourse():<div>
+                    <Card bordered={false} style={{marginBottom: 10}} id="howUse">
+                        <Row style={{height: "200px"}}>
+                            <Col span={18}>
+                                <p style={{
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    display: 'block'
+                                }}>课程名 : {this.state.course.course_name}</p>
+                                <p style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</p>
+                                <p style={{height: '10px'}}>开始时间：{this.state.course.start_date} 结束时间：{this.state.course.end_date}</p>
+                            </Col>
+                            <Col span={6}>
+                            </Col>
+                        </Row>
+
+                    </Card>
+
+                    <Row style={{}}>
+                        <Col span={5}>
+                            <Card bordered={false} style={{marginBottom: 10, height: "300px"}} id="howUse">
+                                <p style={{
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    display: 'block'
+                                }}>授课教师 : {this.state.course.nickname}</p>
+                                <img alt="logo"
+                                     src={require('../../pic/defaultAvatar.png')}
+                                     style={{height: '190px', weight: '160px'}}/>
+                            </Card>
                         </Col>
-                        <Col span={6}>
+                        <Col span={19}>
+                            <Card bordered={false} style={{marginBottom: 10, height: "300px", marginLeft: 10}} id="howUse">
+                                <p style={{
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    display: 'block',
+                                    paddingRight: '50px'
+                                }}>老师有话说 ：</p>
+                                <p>
+                                    {this.state.course.detail}
+                                </p>
+                            </Card>
                         </Col>
                     </Row>
+                    <Card bordered={false} style={{marginBottom: 10}} id="howUse">
+                        <p style={{
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                            display: 'block'
+                        }}>课程大纲 :</p>
+                        {this._renderSyllabus()}
+                    </Card>
 
-                </Card>
-
-                <Row style={{}}>
-                    <Col span={5}>
-                        <Card bordered={false} style={{marginBottom: 10, height: "300px"}} id="howUse">
-                            <p style={{
-                                fontSize: '20px',
-                                fontWeight: 'bold',
-                                display: 'block'
-                            }}>授课教师 : {this.state.course.nickname}</p>
-                            <img alt="logo"
-                                 src={require('../../pic/defaultAvatar.png')}
-                                 style={{height: '190px', weight: '160px'}}/>
-                        </Card>
-                    </Col>
-                    <Col span={19}>
-                        <Card bordered={false} style={{marginBottom: 10, height: "300px", marginLeft: 10}} id="howUse">
-                            <p style={{
-                                fontSize: '20px',
-                                fontWeight: 'bold',
-                                display: 'block',
-                                paddingRight: '50px'
-                            }}>老师有话说 ：</p>
-                            <p>
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                                这门课是个人都能会，这门课是个人都能会，这门课是个人都能会，
-                            </p>
-                        </Card>
-                    </Col>
-                </Row>
-                <Card bordered={false} style={{marginBottom: 10}} id="howUse">
-                    <p style={{
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                        display: 'block'
-                    }}>课程大纲 :</p>
-                    {this._renderSyllabus()}
-                </Card>
+                </div>}
 
 
             </div>
 
         )
+    };
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (err) {
+                message.warning('请填写正确的课程信息')
+            } else {
+                message.success('提交成功');
+                let modifiedCourse = this.state.course;
+                modifiedCourse.course_name = values.course_name;
+                modifiedCourse.textbook = values.textbook;
+                modifiedCourse.introduction = values.introduction;
+                modifiedCourse.detail = values.detail;
+                modifiedCourse.start_Date = values.startDate.format('YYYY-MM-DD HH:mm:ss');
+                modifiedCourse.end_Date = values.endDate.format('YYYY-MM-DD HH:mm:ss');
+                this.setState({course: modifiedCourse,modifyCourse:false});
+                console.log(values);
+            }
+        });
+    };
+    modifiedCourse=()=>{
+        const FormItem = Form.Item;
+        const {getFieldDecorator, getFieldValue} = this.props.form
+        const formItemLayout = {
+            labelCol: {
+                xs: {span: 24},
+                sm: {span: 6},
+            },
+            wrapperCol: {
+                xs: {span: 24},
+                sm: {span: 12},
+            },
+        };
+        const tailFormItemLayout = {
+            wrapperCol: {
+                xs: {
+                    span: 24,
+                    offset: 0,
+                },
+                sm: {
+                    span: 12,
+                    offset: 4,
+                },
+            },
+        };
+        const normFile = e => {
+            console.log('Upload event:', e);
+            if (Array.isArray(e)) {
+                return e;
+            }
+            return e && e.fileList;
+        };
+        const dateFormat = 'YYYY-MM-DD';
+      return(<div>
+          <Card bordered={false} title='基本信息'>
+              <Form  initialValues={{
+                  ['name']: 3,
+              }} layout='horizontal' style={{width: '80%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
+                  <FormItem name='name' label='课程名称' {...formItemLayout} >
+                      {
+                          getFieldDecorator('course_name', {
+                              initialValue:this.state.course.course_name,
+                              rules: [
+                                  {
+                                      max: 10,
+                                      message: '课程简介不能超过十个字'
+                                  },
+                                  {
+                                      required: true,
+                                      message: '请补充课程名称'
+                                  }
+                              ]
+                          })(
+                              <Input/>
+                          )
+                      }
+                  </FormItem>
+                  <FormItem label='课程教材' {...formItemLayout}>
+                      {
+                          getFieldDecorator('textbook', {
+                              initialValue:this.state.course.textbook,
+                              rules: [
+                                  {
+                                      required: true,
+                                      message: '请补充课程教材'
+                                  }
+                              ]
+                          })(
+                              <TextArea style={{height: '80px'}}/>
+                          )
+                      }
+                  </FormItem>
+                  <FormItem label='课程简介' {...formItemLayout}>
+                      {
+                          getFieldDecorator('introduction', {
+                              initialValue:this.state.course.introduction,
+                              rules: [
+                                  {
+                                      min: 10,
+                                      message: '课程简介不能低于十个字'
+                                  },
+                                  {
+                                      max: 80,
+                                      message: '课程简介不能超过八十个字'
+                                  },
+                                  {
+                                      required: true,
+                                      message: '请补充课程简介'
+                                  }
+                              ]
+                          })(
+                              <Input/>
+                          )
+                      }
+                  </FormItem>
+                  <FormItem label='详细介绍' {...formItemLayout}>
+                      {
+                          getFieldDecorator('detail', {
+                              initialValue:this.state.course.detail,
+                              rules: [
+                                  {
+                                      max: 300,
+                                      message: '详细介绍不能超过三百个字'
+                                  },
+                              ]
+                          })(
+                              <TextArea style={{height: '150px'}}/>
+                          )
+                      }
+                  </FormItem>
+                  <FormItem label='开始时间' {...formItemLayout} required>
+                      {
+                          getFieldDecorator('startDate', {
+                              rules: [
+                                  {
+                                      required: true,
+                                      message: '请选择开始时间'
+                                  }
+                              ]
+                          })(
+                              <DatePicker/>
+                          )
+                      }
+                  </FormItem>
+                  <Row><Col offset ={4} span={10}>
+                      <p style={{marginLeft:'100px'}}>原开始时间：{this.state.course.start_date}</p>
+                  </Col></Row>
+                  <FormItem label='结束时间' {...formItemLayout} required>
+                      {
+                          getFieldDecorator('endDate', {
+                              rules: [
+                                  {
+                                      required: true,
+                                      message: '请选择结束时间'
+                                  }
+                              ]
+                          })(
+                              <DatePicker onChange={() => {
+
+                              }}> </DatePicker>
+                          )
+                      }
+                  </FormItem>
+                  <Row><Col offset ={4} span={10}>
+                      <p style={{marginLeft:'100px'}}>原结束时间：{this.state.course.end_date}</p>
+                  </Col></Row>
+                  <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
+                      <Button type="primary" htmlType="submit">确认修改</Button>
+                  </FormItem>
+              </Form>
+          </Card>
+      </div>);
     };
     _renderSyllabus = () => {
         let i = 1;
@@ -504,6 +690,13 @@ const IconText = ({type, text}) => (
   </span>
 );
 const deadCourse = {
+    detail:'这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
+        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
+        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
+        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
+        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
+        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
+        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。',
     course_name: `七年级数学`,
     pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     start_date: '1999-10-12',

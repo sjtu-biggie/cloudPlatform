@@ -72,7 +72,7 @@ class EditText extends Component {
                               onChange={event => this.setState({ editValue: event.target.value })}
                               onBlur={() => {
                                   this.setState({ edit: false });
-                                  onChange(editValue);
+                                  this.props.onChange(editValue);
                               }}/> :
             <div style={{ width: 100 }} onDoubleClick={() => this.setState({ edit: true })}>
                 {this.props.children || <span>&nbsp;</span>}

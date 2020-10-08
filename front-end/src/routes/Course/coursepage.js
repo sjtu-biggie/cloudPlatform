@@ -167,7 +167,7 @@ class CoursePageDemo extends React.Component {
                                     display: 'block'
                                 }}>授课教师 : {this.state.course.nickname}</p>
                                 <img alt="logo"
-                                     src={require('../../pic/defaultAvatar.png')}
+                                     src={require('../../pic/teacher2.jpg')}
                                      style={{height: '190px', weight: '160px'}}/>
                             </Card>
                         </Col>
@@ -643,7 +643,7 @@ class CoursePageDemo extends React.Component {
                             <Col span={4}>
                                 <Card style={{height:'130px'}}>
                                 位次比例
-                                <Progress style={{marginLeft:'10px'}}width={80} type="circle" percent={73} />
+                                <Progress style={{marginLeft:'10px'}} width={80} type="circle" percent={73} />
                                 </Card>
                             </Col>
                             <Col span={4}>

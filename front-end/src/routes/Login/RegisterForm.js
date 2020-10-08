@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, message } from 'antd'
+import { Form, Input, message,Row,Col } from 'antd'
 import { inject, observer } from 'mobx-react/index'
 import { calculateWidth } from '../../utils/utils'
 import PromptBox from '../../components/PromptBox'
@@ -8,7 +8,8 @@ import PromptBox from '../../components/PromptBox'
 @inject('appStore') @observer @Form.create()
 class RegisterForm extends React.Component {
   state = {
-    focusItem: -1
+    focusItem: -1,
+    isPhone:false,
   }
   registerSubmit = (e) => {
     e.preventDefault()
@@ -132,6 +133,7 @@ class RegisterForm extends React.Component {
                 addonBefore={<span className='iconfont icon-suo1' style={focusItem === 2 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>
+          {this.state.isPhone===false?
           <Form.Item help={getFieldError('registerEmail') && <PromptBox info={getFieldError('registerEmail')}
                                                                            width={calculateWidth(getFieldError('registerEmail'))}/>}>
             {getFieldDecorator('registerEmail', {
@@ -149,7 +151,7 @@ class RegisterForm extends React.Component {
                     addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 3 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>
-
+:
           <Form.Item help={getFieldError('registerPhonenumber') && <PromptBox info={getFieldError('registerPhonenumber')}
                                                                            width={calculateWidth(getFieldError('registerPhonenumber'))}/>}>
             {getFieldDecorator('registerPhonenumber', {
@@ -166,16 +168,21 @@ class RegisterForm extends React.Component {
                     placeholder='手机号'
                     addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 5 ? styles.focus : {}}/>}/>
             )}
-          </Form.Item>
+          </Form.Item>}
 
-          <div className='bottom'>
-            <input className='loginBtn' type="submit" value='注册'/>
-            <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>
-          </div>
+
+            <Row className="bottom">
+              <Col span={12}>
+                <input className='loginBtn' type="submit" value='注册'/>
+              </Col>
+              <Col span={6}>
+                <span className='registerBtn' onClick={()=>this.setState({isPhone:!this.state.isPhone})}>{this.state.isPhone===false?"手机注册":"邮箱注册"}</span>
+              </Col>
+              <Col span={6}>
+                <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>
+              </Col>
+            </Row>
         </Form>
-        {/*<div className='footer'>
-          <div>欢迎登陆后台管理系统</div>
-        </div>*/}
       </div>
     )
   }

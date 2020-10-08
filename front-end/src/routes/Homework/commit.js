@@ -26,13 +26,16 @@ class HomeworkCommit extends React.Component{
             <div>
                 <CustomBreadcrumb arr={['作业','提交']}/>
                 <Card  bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
-                    <Text type={"secondary"}>{"截止日期："+this.state.time}</Text>
-                    <List.Item actions={[<p>{this.state.overddl===true?"已截止":"未截止"}</p>,<p>{this.state.iscommit===true?" 已提交":" 未提交"}</p>]}
-                        extra={<img  alt="logo" src={require("../../assets/img/mistakes.png" )}/>}>
-
-                        <p>{this.state.description}</p>
-                        <Text style={{textAlign:"right"}} ></Text>
-                    </List.Item>
+                    <Row>
+                        <Col span={20}>{this.state.description}</Col>
+                        <Col span={4}>{this.state.overddl===true?"已截止 |":"未截止 |"}{this.state.iscommit===true?" 已提交":" 未提交"}</Col>
+                    </Row>
+                    <Row>
+                        <img  alt="logo" src={require("../../assets/img/mistakes.png" )}/>
+                    </Row>
+                    <Row>
+                        <Text type={"secondary"}>{"截止日期："+this.state.time}</Text>
+                    </Row>
                     <Card bordered={false} className='card-item'>
                         <Editor
                             editorState={editorState}

@@ -23,7 +23,7 @@ class Assign extends React.Component {
     state = {
         text: '获取验证码',
         disabled: false,
-
+        homeworkJson: null
     };
     timer = 0;
     handleSubmit = (e) => {
@@ -32,7 +32,11 @@ class Assign extends React.Component {
             if (err) {
                 message.warning('请先填写正确的表单')
             } else {
-                message.success('提交成功')
+                message.success('提交成功');
+                values.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
+                values.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
+                this.setState({homeworkJson:values});
+                console.log(values);
             }
         });
     }

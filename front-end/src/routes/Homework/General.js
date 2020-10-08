@@ -37,7 +37,7 @@ const IconText = ({ type, text }) => (
 );
 const deadHomework = {
   title: '作业123',
-  homeworkid:'1'
+  homeworkid:'11'
 };
 class ListDemo extends React.Component {
   state = {

@@ -11,7 +11,7 @@ for(let i=0;i<23;i++){
         starttime:'2020-10-01 12:12:12',
         endtime:'2020-10-02 12:12:13',
         handinamount:'40',
-        accessmentalgorithms:'0'
+        accessmentalgorithms:'0',
     })
 }
 const IconText = ({ type, text }) => (

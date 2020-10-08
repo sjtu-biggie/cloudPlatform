@@ -28,7 +28,41 @@ const IconText = ({ type, text }) => (
     {text}
   </span>
 );
-
+const deadStudentHomeworkList = [];
+for(let i=0;i<1;i++){
+  deadStudentHomeworkList.push({
+      courseid:'2',
+      homeworkid: '1',
+      studentid:'3',
+      handintime:'2020-10-01 12:12:12',
+    nickname:"刘皓"+i,
+    grade:1,
+    comment:"做的还不错",
+  })
+}
+for(let i=0;i<10;i++){
+  deadStudentHomeworkList.push({
+    courseid:'2',
+    homeworkid: '1',
+    studentid:'3',
+    handintime:'2020-10-01 12:12:12',
+    nickname:"刘皓"+(1+i),
+    grade:null,
+    comment:"null",
+  })
+}
+const deadHomework={
+  courseid:'2',
+  homeworkid: '1',
+  title: `七年级上数学作业`,
+  avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+  content: '同学们记得认真完成按时提交',
+  starttime:'2020-10-01 12:12:12',
+  endtime:'2020-10-02 12:12:13',
+  handinamount:'40',
+  accessmentalgorithms:'主观题',
+  answer:"先这样，在那样"
+};
 class RatePage extends React.Component {
   state = {
     size: 'default',
@@ -36,7 +70,8 @@ class RatePage extends React.Component {
     data2: [],
     loading: false,
     loadingMore: false,
-    homework:1,
+    homework:deadHomework,
+    studentHomeworkList:deadStudentHomeworkList,
   };
 
   componentDidMount() {
@@ -61,14 +96,13 @@ class RatePage extends React.Component {
     })
   };
 
-  render() {
+  render=()=> {
     const {size, bordered, loading, data2, loadingMore} = this.state
     return (
       <div>
-        <CustomBreadcrumb arr={['作业', '提交情况']}/>
-        <TypingCard id='howUse' source='作业内容' height = '15'/>
-        <Card bordered={false} title='提交情况' style={{marginBottom: 15}} id='verticalStyle'>
-          <Rating/>
+        <CustomBreadcrumb arr={['作业', '批改']}/>
+        <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
+          <Rating homework = {this.state.homework} studentHomeworkList = {this.state.studentHomeworkList}/>
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>
       </div>

@@ -29,10 +29,8 @@ class HomeworkList extends React.Component {
         loading: false,
         loadingMore: false,
         delete: false,
-        role: 'teacher',
-        homeworkList:data3
-    };
-
+        role: 'teacher'
+    }
     componentDidMount() {
 
         this.setState({

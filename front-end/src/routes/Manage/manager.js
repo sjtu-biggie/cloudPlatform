@@ -8,15 +8,19 @@ let index = 0;
 const getMockData = () => {
     const result = {
         id: index,
-        name: 'name' + index,
-        no: 'no.' + index,
-        cls: 'class' + index,
-        point: (Math.random()*100).toFixed(2),
+        username: 'username' + index,
+        sid:'sid'+index,
+        telephone: 'telephone' + index,
+        nickname: 'nickname' + index,
+        type:'type'+index,
+        theGrade:'theGrade'+index,
+        theClass:'theClass'+index,
+        email:"email"+index,
+
     };
     index += 1;
     return result;
 };
-
 const getMockDatas = (num) => {
     const data = [];
     for (let i = 0; i < num; i++) {
@@ -28,21 +32,20 @@ const data1 = getMockDatas(10);
 const data2 = getMockDatas(100);
 
 const columns = [
-    { title: '姓名', dataIndex: 'name' },
-    { title: '学号', dataIndex: 'no' },
-    { title: '班级', dataIndex: 'cls' },
-    { title: '分数', dataIndex: 'point'},
+    { title: '用户名', dataIndex: 'username' },
+    { title: '学号', dataIndex: 'sid' },
+    { title: '电话', dataIndex: 'telephone' },
+    { title: '昵称', dataIndex: 'nickname' },
+    { title: '用户类型', dataIndex: 'type' },
+    { title: '年级', dataIndex: 'theGrade' },
+    { title: '班级', dataIndex: 'theClass' },
+    { title: '邮箱', dataIndex: 'email' },
+
 ];
 
-const columns1=[
-    {title:'姓名',dataIndex:'name'},
-    {title:'学号',dataIndex:'no'},
-    {title:'班级',dataIndex:'cls'},
-]
 
 
 
-//排序使用
 columns.map(item => {
     item.sorter = (a, b) => {
         if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
@@ -54,8 +57,6 @@ columns.map(item => {
     };
 });
 
-
-//编辑单元格使用
 class EditText extends Component {
     constructor(props) {
         super(props);
@@ -64,7 +65,6 @@ class EditText extends Component {
             editValue: props.children,
         };
     }
-
     render() {
         const { edit, editValue } = this.state;
         return (edit ? <Input autoFocus style={{ width: 100 }}
@@ -81,9 +81,7 @@ class EditText extends Component {
 };
 
 
-
-//输出组件
-export default class Manager extends Component {
+export default class StudentTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -97,7 +95,6 @@ export default class Manager extends Component {
             modifyIds: [],
         };
         this.searchInput = createRef();
-
 
         columns.forEach(item => {
             const { dataIndex, title } = item;
@@ -146,6 +143,7 @@ export default class Manager extends Component {
             this.setState({ renderData: filterData });
         };
 
+
         this.handleSearch2 = () => {
             const { orData2, search2 } = this.state;
             const filterData = orData2.filter(row => {
@@ -173,31 +171,35 @@ export default class Manager extends Component {
         };
     }
 
-
-
-        render() {
+    render() {
         const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
         return (
             <div className={styles.normal}>
-                {/*<div className={styles.control}>*/}
-                <Row>
-                <Col span={12}>
-                    <Card title={<div style={{textAlign:"center"}}>上课学生</div>} >
+                    <Card title={<div style={{textAlign:"center"}}>管理后台名单</div>} >
                         <Card className={styles.control} bordered={false} style={{ marginBottom: 10 }}>
                             <Row>
-                                <Col span={6}>
-                            <Input style={{ width: 300, marginRight: 16 }}
-                                   value={search}
-                                   allowClear
-                                   onChange={event => this.setState({ search: event.target.value })}/>
+                                <Col span={8}>
+                                    <Input style={{ width: 560, marginRight: 16 }}
+                                           value={search}
+                                           allowClear
+                                           onChange={event => this.setState({ search: event.target.value })}/>
                                 </Col>
-                                <Col span={2} offset={4}>
-                            <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <Col span={1} offset={1}>
+                                    <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </Col>
-                                <Col span={2} offset={9}>
+                                <Col span={1} offset={10}>
                                     <Button  onClick={() => {
-                                this.setState({ orData: [getMockData(), ...orData,getMockData()] });
-                            }}>添加</Button>&nbsp;&nbsp;&nbsp;
+                                        this.setState({ orData: [getMockData(), ...orData] });
+                                    }}>添加</Button>&nbsp;&nbsp;&nbsp;
+                                </Col>
+                                <Col span={1}>
+                                    <div>
+                                        <Upload action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>
+                                            <Button>
+                                                <Icon type="upload"/> 从excel中添加
+                                            </Button>
+                                        </Upload>
+                                    </div>
                                 </Col>
                             </Row>
                         </Card>
@@ -228,54 +230,6 @@ export default class Manager extends Component {
                                 dataSource={renderData}/>
                         </Card>
                     </Card>
-                </Col>
-                <Col span={12}>
-                    <Card title={<div style={{textAlign:"center"}}>未上课学生</div>}>
-                        <Card bordered={false} style={{ marginBottom: 10 }}>
-                            <div className={styles.control}>
-                                <Button
-                                    type={'primary'}
-                                    onClick={() => {
-                                        const selectData = orData2.filter(item => modifyIds.includes(item.id));
-                                        const notSelectData = orData2.filter(item => !modifyIds.includes(item.id));
-                                        this.setState({
-                                            orData: [...selectData, ...orData],
-                                            orData2: notSelectData,
-                                        }, () => {
-                                            this.handleSearch();
-                                            this.handleSearch2();
-                                        });
-                                    }}
-                                >添加到上课表</Button>
-                                <Input style={{ width: 400, marginLeft: 16, marginRight: 16 }}
-                                       value={search2}
-                                       allowClear
-                                       onChange={event => this.setState({ search2: event.target.value })}/>
-                                <Button onClick={this.handleSearch2} style={{marginBottom:10}}>模糊搜索</Button>
-                            </div>
-                                <div className={styles.control}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <Input style={{ width: 400, marginLeft: 16, marginRight: 16 }}
-                                       value={search3}
-                                       allowClear
-                                       onChange={event => this.setState({search3:event.target.value})}/>
-                                       <Button onClick={this.handleSearch3}>精确搜索</Button>
-                            </div>
-                        </Card>
-                        <Card bordered={false} style={{ marginBottom: 10, height: 780 }}>
-                            <Table
-                                rowKey={'id'}
-                                columns={columns1}
-                                dataSource={renderData2}
-                                rowSelection={{
-                                    type: 'checkbox',
-                                    selectedRowKeys: modifyIds,
-                                    onChange: ids => this.setState({ modifyIds: ids }),
-                                }}/>
-                        </Card>
-                    </Card>
-                </Col>
-                </Row>
             </div>
         );
     }

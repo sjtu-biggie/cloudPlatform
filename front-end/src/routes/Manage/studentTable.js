@@ -154,7 +154,7 @@ export default class Manager extends Component {
             const filterData = orData2.filter(row => {
                 if (!search2) return true;
                 const keys = columns.map(item => item.dataIndex);
-                for (let i = 0; i < keys.length; i++) {
+                for (let i = 0; i < keys.length-1; i++) {
                     if (String(row[keys[i]] || '').toLowerCase().includes(search2.toLowerCase())) return true;
                 }
                 return false;
@@ -182,7 +182,6 @@ export default class Manager extends Component {
         const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
         return (
             <div className={styles.normal}>
-                {/*<div className={styles.control}>*/}
                 <Row>
                 <Col span={12}>
                     <Card title={<div style={{textAlign:"center"}}>上课学生</div>} >

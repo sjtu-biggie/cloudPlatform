@@ -187,12 +187,7 @@ export default class StudentTable extends Component {
                                 <Col span={1} offset={1}>
                                     <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </Col>
-                                <Col span={1} offset={10}>
-                                    <Button  onClick={() => {
-                                        this.setState({ orData: [getMockData(), ...orData] });
-                                    }}>添加</Button>&nbsp;&nbsp;&nbsp;
-                                </Col>
-                                <Col span={1}>
+                                <Col span={1} offset={11}>
                                     <div>
                                         <Upload action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>
                                             <Button>

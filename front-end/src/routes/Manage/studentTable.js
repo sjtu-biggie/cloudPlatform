@@ -24,8 +24,11 @@ const getMockDatas = (num) => {
     }
     return data;
 };
+
+
 const data1 = getMockDatas(10);
 const data2 = getMockDatas(100);
+
 
 const columns = [
     { title: '姓名', dataIndex: 'name' },
@@ -193,11 +196,6 @@ export default class Manager extends Component {
                                 </Col>
                                 <Col span={2} offset={4}>
                             <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                </Col>
-                                <Col span={2} offset={9}>
-                                    <Button  onClick={() => {
-                                this.setState({ orData: [getMockData(), ...orData,getMockData()] });
-                            }}>添加</Button>&nbsp;&nbsp;&nbsp;
                                 </Col>
                             </Row>
                         </Card>

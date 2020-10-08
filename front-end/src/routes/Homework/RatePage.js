@@ -36,6 +36,7 @@ class RatePage extends React.Component {
     data2: [],
     loading: false,
     loadingMore: false,
+    homework:1,
   };
 
   componentDidMount() {
@@ -91,6 +92,6 @@ const styles = {
   listStyle:{
     width:'100%'
   },
-}
+};
 
 export default RatePage

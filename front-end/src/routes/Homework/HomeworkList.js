@@ -8,6 +8,10 @@ for(let i=0;i<23;i++){
         title: `七年级上数学作业 ${i}`,
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         content: '同学们记得认真完成按时提交',
+        starttime:'2020-10-01 12:12:12',
+        endtime:'2020-10-02 12:12:13',
+        handinamount:'40',
+        accessmentalgorithms:'0'
     })
 }
 const IconText = ({ type, text }) => (
@@ -25,7 +29,8 @@ class HomeworkList extends React.Component {
         loading: false,
         loadingMore: false,
         delete: false,
-        role: 'teacher'
+        role: 'teacher',
+        homeworkList:data3
     };
 
     componentDidMount() {
@@ -47,7 +52,7 @@ class HomeworkList extends React.Component {
                             <Button style={{marginLeft:'30px'}}>按时间升序</Button>
                             <Button style={{marginLeft:'30px'}}>按时间降序</Button>
                         </div>
-                        <List dataSource={data3}
+                        <List dataSource={this.state.homeworkList}
                               itemLayout='vertical'
                               pagination={{pageSize: 3}}
                               style={styles.listStyle}
@@ -55,8 +60,8 @@ class HomeworkList extends React.Component {
                                   return (
                                       <List.Item
                                           actions={this.state.role === 'student' ?
-                                              [<IconText type="file-text" text="100" />, <IconText type="calendar" text="截止：2020-10-1 20:00" />, <IconText type="schedule" text = "已提交" />, <IconText type="clock-circle-o" text="已结束" />]
-                                          : [<IconText type="file-text" text="100" />, <IconText type="calendar" text="截止：2020-10-1 20:00" />, <IconText type="schedule" text = "提交人数/总人数" />, <IconText type="clock-circle-o" text="已结束" />]}
+                                              [<IconText type="file-text" text="100" />, <IconText type="calendar" text={"截止："+item.endtime} />, <IconText type="schedule" text = "已提交" />, <IconText type="clock-circle-o" text="已结束" />]
+                                          : [<IconText type="file-text" text="100" />, <IconText type="calendar" text={"截止："+item.endtime} />, <IconText type="schedule" text = {item.handinamount+"/总人数"} />, <IconText type="clock-circle-o" text="已结束" />]}
                                           extra={(this.state.delete === false ? []:[<Button type="danger">删除</Button>])}
                                           >
                                           <List.Item.Meta

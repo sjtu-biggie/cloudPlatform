@@ -4,13 +4,16 @@ import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './style.css'
+import TypingCard from "../../components/TypingCard";
 
 const content = {"entityMap":{},"blocks":[{"key":"637gr","text":"Initialized from content state.","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]};
-
+const preCon = 'pre-作业内容'
 class Draft extends React.Component{
     state = {
         editorState: EditorState.createEmpty(),
-        contentState:content
+        contentState:content,
+        preContent: preCon
+
     }
 
     onEditorStateChange = (editorState) => {

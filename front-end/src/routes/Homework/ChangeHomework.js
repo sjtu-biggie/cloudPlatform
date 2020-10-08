@@ -2,6 +2,9 @@ import React from 'react'
 import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker} from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
+import moment from 'moment';
+
+const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -38,7 +41,9 @@ const Hw = {
     class: '一年级3班',
     type: '主观题',
     content: '作业内容',
-    answer: '参考答案'
+    answer: '参考答案',
+    startTime: '2020-10-10 00:00:00',
+    endTime: '2020-10-12 00:00:00',
 }
 
 @Form.create()
@@ -47,6 +52,7 @@ class ChangeHomework extends React.Component {
         text: '获取验证码',
         disabled: false,
         homework: Hw,
+        ableState: true
     };
     timer = 0;
     handleSubmit = (e) => {
@@ -105,32 +111,56 @@ class ChangeHomework extends React.Component {
 
         return (
             <div>
-                <Card bordered={false} title='布置作业'>
+                <Card bordered={false} title='修改作业'>
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
-                        <FormItem label='作业名称' {...formItemLayout}>
+                        <FormItem label='作业名称' {...formItemLayout} required>
                             {
-                                (
-                                    <Input placeholder={this.state.homework.title}/>
+                                getFieldDecorator('homework_name', {
+                                    initialValue:this.state.homework.title,
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请填写作业名称'
+                                        }
+                                    ]
+                                })(
+                                    <Input disabled={this.state.ableState}/>
                                 )
                             }
                         </FormItem>
-                        <FormItem label='布置范围' {...formItemLayout}>
+                        <FormItem label='布置范围' {...formItemLayout} required>
                             {
-                                (
-                                    <Cascader options={options} expandTrigger="hover" placeholder = {this.state.homework.class}/>
+                                getFieldDecorator('range', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请选择布置班级'
+                                        }
+                                    ]
+                                })(
+                                    <Cascader disabled={this.state.ableState} options={options} expandTrigger="hover" placeholder={this.state.homework.class}/>
                                 )
                             }
                         </FormItem>
-                        <FormItem label='作业类型' {...formItemLayout}>
+                        <FormItem label='作业类型' {...formItemLayout} required>
                             {
+                                getFieldDecorator('type', {
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请选择布置班级'
+                                    }
+                                ]
+                                })
                                (
-                                    <Cascader options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
+                                    <Cascader disabled={this.state.ableState} options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
                                 )
                             }
                         </FormItem>
                         <FormItem label='起止时间' {...formItemLayout} required>
                             {
                                 getFieldDecorator('time', {
+                                    // initialValue:[this.state.homework.startTime, this.state.homework.endTime],
                                     rules: [
                                         {
                                             required: true,
@@ -138,14 +168,14 @@ class ChangeHomework extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <DatePicker.RangePicker/>
+                                    <DatePicker.RangePicker disabled={this.state.ableState} placeholder={[this.state.homework.startTime, this.state.homework.endTime]}/>
                                 )
                             }
                         </FormItem>
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
                         {
                             (
-                                <DraftDemo placeholder = {this.state.homework.content}/>
+                                <DraftDemo/>
                             )
                         }
                     </FormItem>
@@ -159,7 +189,7 @@ class ChangeHomework extends React.Component {
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
                             {
                                 (
-                                    <DraftDemo placeholder = {this.state.homework.answer}/>
+                                    <DraftDemo disabled='true' placeholder = {this.state.homework.answer}/>
                                 )
                             }
                         </FormItem>
@@ -172,7 +202,11 @@ class ChangeHomework extends React.Component {
                         </FormItem>
 
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" >提交</Button>
+                            <Button type="primary" htmlType="submit" disabled={this.state.ableState}>提交</Button>
+                            <Button type="primary" style={{marginLeft: 50}} onClick={()=>{
+                                this.setState({ableState: false});
+                                message.success('开始修改');
+                            }}>修改</Button>
                         </FormItem>
                     </Form>
                 </Card>

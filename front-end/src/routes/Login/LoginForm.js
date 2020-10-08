@@ -172,10 +172,14 @@ class LoginForm extends React.Component {
               </Row>
             )}
           </Form.Item>
-          <div className='bottom'>
-            <input className='loginBtn' type="submit" value='登录'/>
-            <span className='registerBtn' onClick={this.register}>注册</span>
-          </div>
+          <Row className='bottom'>
+            <Col span={16}>
+              <input className='loginBtn' type="submit" value='登录'/>
+            </Col>
+            <Col span={8}>
+              <span className='registerBtn' onClick={this.register}>注册</span>
+            </Col>
+          </Row>
         </Form>
         {/*<div className='footer'>
           <div>欢迎登陆后台管理系统</div>

@@ -12,13 +12,13 @@ class HomeworkCommit extends React.Component{
         title:"作业0",
         id:1,
         avatar: '../../assets/img/mistakes.png',
-        description: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
+        content: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
         time:"2020-10-1 20:00",
         editorState: EditorState.createEmpty(),
         size: 'default',
         iscommit:true,
         overddl:true,
-}
+};
 
     render(){
         const { editorState,contentState } = this.state;
@@ -30,7 +30,7 @@ class HomeworkCommit extends React.Component{
                     <List.Item actions={[<p>{this.state.overddl===true?"已截止":"未截止"}</p>,<p>{this.state.iscommit===true?" 已提交":" 未提交"}</p>]}
                         extra={<img  alt="logo" src={require("../../assets/img/mistakes.png" )}/>}>
 
-                        <p>{this.state.description}</p>
+                        <p>{this.state.content}</p>
                         <Text style={{textAlign:"right"}} ></Text>
                     </List.Item>
                     <Card bordered={false} className='card-item'>

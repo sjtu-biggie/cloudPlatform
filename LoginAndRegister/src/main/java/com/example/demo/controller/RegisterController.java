@@ -19,6 +19,9 @@ public class RegisterController {
         return "register";
     }
 
+    @GetMapping("/all")
+    public String RegisterAll(){return "registerall";}
+
     @RequestMapping("/addUser")
     public String register(HttpServletRequest request){
         String username=request.getParameter("username");
@@ -36,4 +39,28 @@ public class RegisterController {
         return  "login";
     }
 
+    @RequestMapping("/addUserAll")
+    public String registerAll(HttpServletRequest request){
+        String username=request.getParameter("username");
+        String password=request.getParameter("password");
+        String sid=request.getParameter("sid");
+        String email=request.getParameter("email");
+        String telephone=request.getParameter("telephone");
+        String type=request.getParameter("type");
+        String nickname=request.getParameter("nickname");
+        String theGrade=request.getParameter("theGrade");
+        String theClass=request.getParameter("theClass");
+        User user=new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setSid(sid);
+        user.setTelephone(telephone);
+        user.setType(type);
+        user.setNickname(nickname);
+        user.setTheClass(theClass);
+        user.setTheGrade(theGrade);
+        userMapper.update(user);
+        return  "login";
+    }
 }

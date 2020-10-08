@@ -79,7 +79,7 @@ class Rating extends React.Component {
                                 textAlign: 'center',
                                 height: '90px'
                             }}>
-                                查看内容
+                                查看作业
                             </Card.Grid>
                             <Card.Grid style={{
                                 width: '10%',

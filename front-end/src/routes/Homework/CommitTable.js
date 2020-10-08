@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import {Button, Card, Input, Table,Row} from 'antd';
 import styles from './index.css';
 
@@ -60,7 +60,9 @@ const EditText = ({children, onChange}) => {
 };
 
 
-export default function () {
+export default function (param) {
+    const count = param.homeworkId;
+    console.log(count);
     const [search, setSearch] = useState();
     const [orData, setOrData] = useState(data1);
     const [orData2, setOrData2] = useState(data2);
@@ -117,7 +119,6 @@ export default function () {
     useEffect(() => {
         handleSearch();
     }, [orData]);
-
     return (
         <div className={styles.normal}>
             <Card bordered={false} style={{marginBottom: 10}}>
@@ -142,8 +143,7 @@ export default function () {
                     name: '操作',
                     key: 'cor',
                     render: record => (
-                        <Button onClick={() => {
-                        }}>批改</Button>),
+                        <a href={"/home/homework/rate?homeworkId="+count}>批改</a>),
                 }]}
                 dataSource={renderData}/>
             </Card>

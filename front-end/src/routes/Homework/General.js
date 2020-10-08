@@ -35,7 +35,10 @@ const IconText = ({ type, text }) => (
     {text}
   </span>
 );
-
+const deadHomework = {
+  title: '作业123',
+  homeworkid:'1'
+};
 class ListDemo extends React.Component {
   state = {
     size: 'default',
@@ -43,6 +46,7 @@ class ListDemo extends React.Component {
     data2: [],
     loading: false,
     loadingMore: false,
+    homework:deadHomework
   };
 
   componentDidMount() {
@@ -53,6 +57,7 @@ class ListDemo extends React.Component {
     this.setState({
       loading: false
     })
+
   }
 
   getData2 = () => {
@@ -87,7 +92,7 @@ class ListDemo extends React.Component {
             </Card>
           </Col>
           <Col span = {24}>
-            <CommitTable/>
+            <CommitTable homeworkId ={this.state.homework.homeworkid}/>
           </Col>
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>

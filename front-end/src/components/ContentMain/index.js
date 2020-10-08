@@ -56,20 +56,21 @@ const Notification = LoadableComponent(()=>import('../../routes/Notification/ind
 
 
 //课程
-const CourseDemo = LoadableComponent(()=>import('../../routes/Course/index'))
+const CourseDemo = LoadableComponent(()=>import('../../routes/Course/index'));
 const AddCourseDemo = LoadableComponent(()=>import('../../routes/Course/addCoursePage'))
 
 //作业
-const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index'))
-const HomeworkAssignmentDemo = LoadableComponent(()=>import('../../routes/Homework/Assign'))
-const HomeworkCommit = LoadableComponent(()=>import('../../routes/Homework/commit'))
-const HomeworkGeneral = LoadableComponent(()=>import('../../routes/Homework/General'))
+const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index'));
+const HomeworkAssignmentDemo = LoadableComponent(()=>import('../../routes/Homework/Assign'));
+const HomeworkCommit = LoadableComponent(()=>import('../../routes/Homework/commit'));
+const HomeworkGeneral = LoadableComponent(()=>import('../../routes/Homework/General'));
+const RatePage = LoadableComponent(()=>import('../../routes/Homework/RatePage'));
 //管理
 
 const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'));
 
 //个人中心
-const PersonalCenter = LoadableComponent(()=>import('../../routes/PersonalCenter/Info'))
+const PersonalCenter = LoadableComponent(()=>import('../../routes/PersonalCenter/Info'));
 
 
 
@@ -128,6 +129,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/homework/Assign' component={HomeworkAssignmentDemo}/>
           <PrivateRoute exact path='/home/homework/commit' component={HomeworkCommit}/>
           <PrivateRoute exact path='/home/homework/General' component={HomeworkGeneral}/>
+          <PrivateRoute exact path='/home/homework/rate' component={RatePage}/>
 
           <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
@@ -135,7 +137,6 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/personalcenter' component={PersonalCenter}/>
 
           <PrivateRoute exact path='/home/manage/studentTable' component={StudentTable}/>
-
           <Redirect exact from='/' to='/home'/>
         </Switch>
       </div>

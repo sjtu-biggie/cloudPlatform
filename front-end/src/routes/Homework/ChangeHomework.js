@@ -6,7 +6,7 @@ import UploadDemo from './upload'
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const options1 = [
+const options = [
     {
         label: '一年级3班',
         value: '1-3',
@@ -32,12 +32,21 @@ const options2 = [
     }
 ];
 
+
+const Hw = {
+    title: '第一次作业',
+    class: '一年级3班',
+    type: '主观题',
+    content: '作业内容',
+    answer: '参考答案'
+}
+
 @Form.create()
-class Assign extends React.Component {
+class ChangeHomework extends React.Component {
     state = {
         text: '获取验证码',
         disabled: false,
-        homeworkJson: null
+        homework: Hw,
     };
     timer = 0;
     handleSubmit = (e) => {
@@ -98,45 +107,24 @@ class Assign extends React.Component {
             <div>
                 <Card bordered={false} title='布置作业'>
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
-                        <FormItem label='作业名称' {...formItemLayout} required>
+                        <FormItem label='作业名称' {...formItemLayout}>
                             {
-                                getFieldDecorator('homework_name', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请填写作业名称'
-                                        }
-                                    ]
-                                })(
-                                    <Input/>
+                                (
+                                    <Input placeholder={this.state.homework.title}/>
                                 )
                             }
                         </FormItem>
-                        <FormItem label='布置范围' {...formItemLayout} required>
+                        <FormItem label='布置范围' {...formItemLayout}>
                             {
-                                getFieldDecorator('range', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请选择布置班级'
-                                        }
-                                    ]
-                                })(
-                                    <Cascader options={options1} expandTrigger="hover" placeholder=''/>
+                                (
+                                    <Cascader options={options} expandTrigger="hover" placeholder = {this.state.homework.class}/>
                                 )
                             }
                         </FormItem>
-                        <FormItem label='作业类型' {...formItemLayout} required>
+                        <FormItem label='作业类型' {...formItemLayout}>
                             {
-                                getFieldDecorator('type', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请选择作业类型'
-                                        }
-                                    ]
-                                })(
-                                    <Cascader options={options2} expandTrigger="hover" placeholder=''/>
+                               (
+                                    <Cascader options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
                                 )
                             }
                         </FormItem>
@@ -157,7 +145,7 @@ class Assign extends React.Component {
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
                         {
                             (
-                                <DraftDemo/>
+                                <DraftDemo placeholder = {this.state.homework.content}/>
                             )
                         }
                     </FormItem>
@@ -171,7 +159,7 @@ class Assign extends React.Component {
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
                             {
                                 (
-                                    <DraftDemo/>
+                                    <DraftDemo placeholder = {this.state.homework.answer}/>
                                 )
                             }
                         </FormItem>
@@ -194,4 +182,4 @@ class Assign extends React.Component {
     }
 }
 
-export default Assign
+export default ChangeHomework

@@ -17,8 +17,8 @@ import {
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
-import TypingCard from '../../components/TypingCard'
 import CommitTable from './CommitTable'
+import ChangeHomework from './ChangeHomework'
 
 const data3 = []
 for(let i=0;i<23;i++){
@@ -77,7 +77,9 @@ class ListDemo extends React.Component {
     return (
       <div>
         <CustomBreadcrumb arr={['作业', '提交情况']}/>
-        <TypingCard id='howUse' source='作业内容' height = '15'/>
+        <Card bordered={false} title='作业内容' style={{marginBottom: 15}} id='verticalStyle'>
+          <ChangeHomework/>
+        </Card>
         <Card bordered={false} title='提交情况' style={{marginBottom: 15}} id='verticalStyle'>
           <Col span={24}>
             <Card style={{height:'130px'}}>

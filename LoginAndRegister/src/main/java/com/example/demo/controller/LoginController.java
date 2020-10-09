@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class LoginController {
     @Autowired(required = false)
@@ -21,13 +22,18 @@ public class LoginController {
     public String login(@RequestBody JSONObject obj) {
         String username=obj.getString("username");
         String password=obj.getString("password");
+        User user1=userMapper.testUsername(username);
+        if (user1==null)
+        {
+            return "用户名称错误";
+        }
         User user=userMapper.getUser(username,password);
         if (user!=null)
         {
             return "成功登陆";
         }
         else {
-            return "登陆失败";
+            return "密码错误";
         }
     }
 

@@ -50,7 +50,7 @@ class HomeworkList extends React.Component {
         bordered: true,
         loading: false,
         delete: false,
-        role: 'teacher',
+        role: 'student',
         homeworkList: deathHomework,
         allAmount: 40,
         t: test

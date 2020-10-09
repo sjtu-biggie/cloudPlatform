@@ -28,13 +28,59 @@ class RegisterForm extends React.Component {
               errors: [new Error('用户名已存在')]
             }
           })
+
           return
         }
 
+        /*const result1 = users.find(item => item.password === values.registerPassword)
+        if (result1) {
+          this.props.form.setFields({
+            registerPassword: {
+              value: values.registerPassword,
+            }
+          })
+          console.log("2")
+          return
+        }
+
+        const result2 = users.find(item => item.studentNumber === values.registerStudentNumber)
+        if (result2) {
+          this.props.form.setFields({
+            registerStudentNumber: {
+              value: values.registerStudentNumber,
+            }
+          })
+          return
+        }
+
+        const result3 = users.find(item => item.email === values.registerEmail)
+        if (result3) {
+          this.props.form.setFields({
+            registerEmail: {
+              value: values.registerEmail,
+            }
+          })
+          return
+        }
+
+        const result4 = users.find(item => item.phoneNumber === values.registerPhoneNumber)
+        if (result4) {
+          this.props.form.setFields({
+            registerPhoneNumber: {
+              value: values.registerPhoneNumber,
+            }
+          })
+          return
+        }*/
+
         const obj = [...this.props.appStore.users, {
           username: values.registerUsername,
-          password: values.registerPassword
+          password: values.registerPassword,
+          studentNumber:values.registerStudentNumber,
+          email:values.registerEmail,
+          phoneNumber:values.registerPhoneNumber,
         }]
+        console.log(obj)
         localStorage.setItem('users', JSON.stringify(obj))
         this.props.appStore.initUsers()
         message.success('注册成功')
@@ -72,9 +118,9 @@ class RegisterForm extends React.Component {
             )}
           </Form.Item>
 
-          <Form.Item help={getFieldError('registerStudentnumber') && <PromptBox info={getFieldError('registerStudentnumber')}
-                                                                           width={calculateWidth(getFieldError('registerStudentnumber'))}/>}>
-            {getFieldDecorator('registerStudentnumber', {
+          <Form.Item help={getFieldError('registerStudentNumber') && <PromptBox info={getFieldError('registerStudentNumber')}
+                                                                           width={calculateWidth(getFieldError('registerStudentNumber'))}/>}>
+            {getFieldDecorator('registerStudentNumber', {
               validateFirst: true,
               rules: [
                 {required: true, message: '学号不能为空'},
@@ -152,9 +198,9 @@ class RegisterForm extends React.Component {
             )}
           </Form.Item>
 :
-          <Form.Item help={getFieldError('registerPhonenumber') && <PromptBox info={getFieldError('registerPhonenumber')}
-                                                                           width={calculateWidth(getFieldError('registerPhonenumber'))}/>}>
-            {getFieldDecorator('registerPhonenumber', {
+          <Form.Item help={getFieldError('registerPhoneNumber') && <PromptBox info={getFieldError('registerPhoneNumber')}
+                                                                           width={calculateWidth(getFieldError('registerPhoneNumber'))}/>}>
+            {getFieldDecorator('registerPhoneNumber', {
               validateFirst: true,
               rules: [
                 {required: true, message: '手机不能为空'},

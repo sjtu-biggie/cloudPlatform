@@ -76,7 +76,7 @@ class Mistakes extends React.Component {
             courseButton.innerText="学科";
             return null;
         }else{
-            for(let course of this.state.displayCourses){
+            for(let course of this.state.courses){
                 if(course.type===subject){
                     modifiedList.push(course);
                 }
@@ -98,7 +98,6 @@ class Mistakes extends React.Component {
             displayCourses:this.state.courses,
             loading: false
         });
-        console.log(this.props.location.pathname);
     }
 
     getData2 = () => {
@@ -245,7 +244,7 @@ class Mistakes extends React.Component {
                               return (
                                   <List.Item
                                       /*actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}*/
-                                      extra={<img /*width={275}*/ alt="logo" src={require("../../pic/math1.png")}/>}>
+                                      extra={<img /*width={275}*/ alt="logo" src={require("../../assets/img/mistakes.png")}/>}>
 
                                           <row>
                                       <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>

@@ -76,7 +76,7 @@ class Notification extends React.Component {
             courseButton.innerText="学科";
             return null;
         }else{
-            for(let course of this.state.displayCourses){
+            for(let course of this.state.courses){
                 if(course.type===subject){
                     modifiedList.push(course);
                 }
@@ -98,7 +98,6 @@ class Notification extends React.Component {
             displayCourses:this.state.courses,
             loading: false
         });
-        console.log(this.props.location.pathname);
     }
 
     getData2 = () => {
@@ -225,23 +224,6 @@ class Notification extends React.Component {
                         <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
                     </Dropdown>
                 </Card>
-                {/*<Card bordered={false} title='通知' style={{marginBottom: 10}} id='remoteLoading'>
-                    <List loading={loading}
-                          dataSource={data2}
-                          loadMore={loadMore}
-                          style={styles.listStyle}
-                          renderItem={item => (
-                              <List.Item >
-                                  <List.Item.Meta
-                                      avatar={<Avatar
-                                          src={require('../../pic/math1.png')}/>}
-                                      title={<a href={"/home/notification/page"}>{'【通知】七年级数学作业'}</a>}
-                                      description={<p>{"9/29的作业已发布，截止到第二天早上"}</p>}
-                                  />
-                              </List.Item>
-                          )}
-                    />
-                </Card>*/}
 
                 <Card bordered={false} title='通知' style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={this.state.displayCourses}

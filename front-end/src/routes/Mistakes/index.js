@@ -42,7 +42,7 @@ for (let i = 0; i < 6; i++) {
         type: '语文',
         title: `语文${i}`,
         id: 1,
-        description: [['给括号前面的字注音'],[<br></br>],["一棵枫树，表皮灰暗而粗犷（  ），发着苦涩（  ）气息"]],
+        description: '给括号前面的字注音:一棵枫树，表皮灰暗而粗犷（  ），发着苦涩（  ）气息',
         contexts:[["guang(三声)"],["se(四声)"]],
         time: `2020/9/27`,
     })
@@ -83,6 +83,17 @@ class Mistakes extends React.Component {
             }
         }
         courseButton.innerText=subject;
+        this.setState({
+            displayCourses:modifiedList,
+        });
+    };
+
+    searchFun=()=>{
+        let value = document.getElementById("search").value;
+        let modifiedList=this.state.courses.filter(function(item){
+            console.log(value)
+            return (item.title.indexOf(value)  !== -1)|| item.description.indexOf(value) !==-1||item.time.indexOf(value)!==-1;
+        });
         this.setState({
             displayCourses:modifiedList,
         });
@@ -213,7 +224,7 @@ class Mistakes extends React.Component {
                                 <Form.Item label='搜索' >
                                     {
                                         (
-                                            <Input/>
+                                            <Input id="search" onKeyUp={(e)=>{this.searchFun()}} />
                                         )
                                     }
                                 </Form.Item>

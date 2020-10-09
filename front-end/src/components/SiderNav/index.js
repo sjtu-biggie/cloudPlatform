@@ -18,11 +18,6 @@ class SiderNav extends React.Component {
                     key: '/home'
                 },
                 {
-                    title: '个人中心',
-                    icon: 'user',
-                    key: '/home/personalcenter'
-                },
-                {
                     title: '课程',
                     icon: 'laptop',
                     key: '/home/course',
@@ -48,105 +43,97 @@ class SiderNav extends React.Component {
                         {key: '/home/homework/notclosed', title: '未截止', icon: ''},
                     ]
                 },
-                this.state.role === 'student' ?
                     {
                         title: '错题',
                         icon: 'info-circle-o',
                         key: '/home/mistakes'
-                    } :
-                    {
-                        title: '管理',
-                        icon: 'info-circle-o',
-                        key: '/home/manage',
-                    subs:[
-                        {key: '/home/manage/studentTable', title: '学生管理', icon: ''},
-                    ]
-
                     },
                 {
-                    title:'管理展示',
-                    icon:'info-circle-o',
-                    key:'/home/manage',
-                    subs:[
-                        {key:'/home/manage/manager',title:'管理展示',icon:''},
-                    ]
+                    title: '用户管理',
+                    icon: 'solution',
+                    key: '/home/manage/manager'
                 },
                 {
-                    title: '展示组件',
-                    icon: 'desktop',
-                    key: '/home/display',
-                    subs: [
-                        {key: '/home/display/carousel', title: '走马灯', icon: ''},
-                        {key: '/home/display/collapse', title: '下拉组件', icon: ''},
-                        {key: '/home/display/list', title: '列表', icon: ''},
-                        {key: '/home/display/table', title: '表格', icon: ''},
-                        /*{key: '/home/display/tabs', title: '标签页', icon: '',},*/
-                    ]
-                },
-                {
-                    title: '按钮',
-                    icon: 'laptop',
-                    key: '/home/general',
-                    subs: [
-                        {key: '/home/general/button', title: '正在进行', icon: '',},
-                        {key: '/home/general/icon', title: '已结束', icon: '',},
-                    ]
-                },
-                {
-                    title: '导航组件',
-                    icon: 'bars',
-                    key: '/home/navigation',
-                    subs: [
-                        {key: '/home/navigation/dropdown', title: '下拉菜单', icon: ''},
-                        {key: '/home/navigation/menu', title: '导航菜单', icon: ''},
-                        {key: '/home/navigation/steps', title: '步骤条', icon: ''},
-                    ]
-                },
-
-                {
-
-                    title: '输入组件',
-                    icon: 'edit',
-                    key: '/home/entry',
-                    subs: [
-                        {
-                            key: '/home/entry/form',
-                            title: '表单',
-                            icon: '',
-                            subs: [
-                                {key: '/home/entry/form/basic-form', title: '基础表单', icon: ''},
-                                {key: '/home/entry/form/step-form', title: '分步表单', icon: ''}
-                            ]
-                        },
-                        {key: '/home/entry/upload', title: '上传', icon: ''},
-                    ]
-
-                },
-                {
-                    title: '反馈组件',
-                    icon: 'message',
-                    key: '/home/feedback',
-                    subs: [
-                        {key: '/home/feedback/modal', title: '对话框', icon: '',},
-                        {key: '/home/feedback/notification', title: '通知提醒框', icon: ''},
-                        {key: '/home/feedback/spin', title: '加载中', icon: '',}
-                    ]
-                },
-                {
-                    title: '其它',
-                    icon: 'bulb',
-                    key: '/home/other',
-                    subs: [
-                        {key: '/home/other/animation', title: '动画', icon: '',},
-                        {key: '/home/other/gallery', title: '画廊', icon: '',},
-                        {key: '/home/other/draft', title: '富文本', icon: ''},
-                        {key: '/home/other/chart', title: '图表', icon: ''},
-                        {key: '/home/other/loading', title: '加载动画', icon: ''},
-                        {key: '/home/other/404', title: '404', icon: ''},
-                        {key: '/home/other/springText', title: '弹性文字', icon: ''},
-                    ]
-
+                    title: '帮助',
+                    icon: 'file-unknown',
+                    key: '/home/display/list'
                 }
+                // {
+                //     title: '展示组件',
+                //     icon: 'desktop',
+                //     key: '/home/display',
+                //     subs: [
+                //         {key: '/home/display/carousel', title: '走马灯', icon: ''},
+                //         {key: '/home/display/collapse', title: '下拉组件', icon: ''},
+                //         {key: '/home/display/list', title: '列表', icon: ''},
+                //         {key: '/home/display/table', title: '表格', icon: ''},
+                //         /*{key: '/home/display/tabs', title: '标签页', icon: '',},*/
+                //     ]
+                // },
+                // {
+                //     title: '按钮',
+                //     icon: 'laptop',
+                //     key: '/home/general',
+                //     subs: [
+                //         {key: '/home/general/button', title: '正在进行', icon: '',},
+                //         {key: '/home/general/icon', title: '已结束', icon: '',},
+                //     ]
+                // },
+                // {
+                //     title: '导航组件',
+                //     icon: 'bars',
+                //     key: '/home/navigation',
+                //     subs: [
+                //         {key: '/home/navigation/dropdown', title: '下拉菜单', icon: ''},
+                //         {key: '/home/navigation/menu', title: '导航菜单', icon: ''},
+                //         {key: '/home/navigation/steps', title: '步骤条', icon: ''},
+                //     ]
+                // },
+                //
+                // {
+                //
+                //     title: '输入组件',
+                //     icon: 'edit',
+                //     key: '/home/entry',
+                //     subs: [
+                //         {
+                //             key: '/home/entry/form',
+                //             title: '表单',
+                //             icon: '',
+                //             subs: [
+                //                 {key: '/home/entry/form/basic-form', title: '基础表单', icon: ''},
+                //                 {key: '/home/entry/form/step-form', title: '分步表单', icon: ''}
+                //             ]
+                //         },
+                //         {key: '/home/entry/upload', title: '上传', icon: ''},
+                //     ]
+                //
+                // },
+                // {
+                //     title: '反馈组件',
+                //     icon: 'message',
+                //     key: '/home/feedback',
+                //     subs: [
+                //         {key: '/home/feedback/modal', title: '对话框', icon: '',},
+                //         {key: '/home/feedback/notification', title: '通知提醒框', icon: ''},
+                //         {key: '/home/feedback/spin', title: '加载中', icon: '',}
+                //     ]
+                // },
+                // {
+                //     title: '其它',
+                //     icon: 'bulb',
+                //     key: '/home/other',
+                //     subs: [
+                //         {key: '/home/other/animation', title: '动画', icon: '',},
+                //         {key: '/home/other/gallery', title: '画廊', icon: '',},
+                //         {key: '/home/other/draft', title: '富文本', icon: ''},
+                //         {key: '/home/other/chart', title: '图表', icon: ''},
+                //         {key: '/home/other/loading', title: '加载动画', icon: ''},
+                //         {key: '/home/other/404', title: '404', icon: ''},
+                //         {key: '/home/other/springText', title: '弹性文字', icon: ''},
+                //     ]
+                //
+                // }
 
             ]
         })

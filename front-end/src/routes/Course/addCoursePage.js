@@ -243,6 +243,8 @@ class AddCourse extends React.Component {
         );
         const menu2 = (
             <Menu onClick={(e)=>{this.changeSubject2(e.item.props.children)}}>
+                <Menu.Item title="所有">所有
+                </Menu.Item>
                 <Menu.SubMenu title="一年级">
                     <Menu.Item>一年级上</Menu.Item>
                     <Menu.Item>一年级下</Menu.Item>

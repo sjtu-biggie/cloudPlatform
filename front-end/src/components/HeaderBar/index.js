@@ -13,7 +13,7 @@ class HeaderBar extends React.Component {
     count: 29,
     visible: false,
     avatar: require('./img/04.jpg')
-  }
+  };
 
   componentDidMount () {
     screenfull.onchange(() => {
@@ -29,7 +29,7 @@ class HeaderBar extends React.Component {
 
   toggle = () => {
     this.props.onToggle()
-  }
+  };
   screenfullToggle = () => {
     if (screenfull.enabled) {
       screenfull.toggle()
@@ -53,12 +53,8 @@ class HeaderBar extends React.Component {
       <Menu className='menu'>
         <Menu.ItemGroup title='用户中心' className='menu-group'>
           <Menu.Item>你好 - {isAuthenticated()}</Menu.Item>
-          <Menu.Item>个人信息</Menu.Item>
+          <Menu.Item onClick={()=>{this.props.history.push("/home/personalcenter")}}>个人信息</Menu.Item>
           <Menu.Item><span onClick={this.logout}>退出登录</span></Menu.Item>
-        </Menu.ItemGroup>
-        <Menu.ItemGroup title='设置中心' className='menu-group'>
-          <Menu.Item>个人设置</Menu.Item>
-          <Menu.Item>系统设置</Menu.Item>
         </Menu.ItemGroup>
       </Menu>
     )

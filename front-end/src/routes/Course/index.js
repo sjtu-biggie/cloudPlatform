@@ -125,18 +125,40 @@ class CourseDemo extends React.Component {
         this.setState({
             loadingMore: true
         });
-        axios.get('https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo').then(res => {
-            this.setState({
-                data2: this.state.data2.concat(res.data.results),
-                loadingMore: false
-            })
-        })
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
     };
     handleSubmit = (e) => {
         e.preventDefault();
         console.log(123);
     };
+    getUserInfo=async (username)=>{
 
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
+    };
     render() {
         const menu1 = (
             <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
@@ -181,6 +203,7 @@ class CourseDemo extends React.Component {
         );
         const menu2 = (
             <Menu>
+                <Menu.Item title="所有">所有</Menu.Item>
                 <Menu.SubMenu title="一年级">
                     <Menu.Item>一年级上</Menu.Item>
                     <Menu.Item>一年级下</Menu.Item>

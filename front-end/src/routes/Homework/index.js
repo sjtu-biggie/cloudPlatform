@@ -8,6 +8,7 @@ const deathHomework = [];
 for(let i=0;i<3;i++){
     deathHomework.push({
         type:'数学',
+        grade:'七年级上',
         title: `七年级上数学作业 ${i}`,
         content: '同学们记得认真完成按时提交',
         startTime:'2020-10-11 12:12:12',
@@ -21,6 +22,7 @@ for(let i=0;i<3;i++){
 for(let i=0;i<3;i++){
     deathHomework.push({
         type:'语文',
+        grade:'七年级上',
         title: `七年级上语文作业 ${i}`,
         content: '同学们记得认真完成按时提交',
         startTime:'2020-10-11 12:12:12',
@@ -34,7 +36,36 @@ for(let i=0;i<3;i++){
 for(let i=0;i<3;i++){
     deathHomework.push({
         type:'英语',
+        grade:'七年级上',
         title: `七年级上英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100'
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'英语',
+        grade:'八年级上',
+        title: `八年级上英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100'
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'英语',
+        grade:'八年级上',
+        title: `八年级下英语作业 ${i}`,
         content: '同学们记得认真完成按时提交',
         startTime:'2020-10-11 12:12:12',
         handinTime: null,
@@ -50,7 +81,7 @@ class HomeworkDemo extends React.Component {
         size: 'default',
         bordered: true,
         homework: deathHomework,
-        displayHomework: deathHomework,
+        displayHomework: null,
     };
 
     searchFun=()=>{
@@ -65,14 +96,14 @@ class HomeworkDemo extends React.Component {
         });
     };
 
-    changeSubject=(subject)=>{
+    changeSubject1=(subject)=>{
         let modifiedList = [];
-        let homeworkButton = document.getElementById("homeworkButton");
+        let typeButton = document.getElementById("typeButton");
         if(subject === "所有"){
             this.setState({
                 displayHomework:this.state.homework,
             });
-            homeworkButton.innerText="学科";
+            typeButton.innerText="学科";
             return null;
         }else{
             for(let homework of this.state.homework){
@@ -81,14 +112,37 @@ class HomeworkDemo extends React.Component {
                 }
             }
         }
-        homeworkButton.innerText=subject;
+        typeButton.innerText=subject;
+        this.setState({
+            displayHomework:modifiedList,
+        });
+    };
+
+    changeSubject2=(subject)=>{
+        console.log(this.state);
+        let modifiedList = [];
+        let gradeButton = document.getElementById("gradeButton");
+        if(subject === "所有"){
+            this.setState({
+                displayHomework:this.state.homework,
+            });
+            gradeButton.innerText="年级";
+            return null;
+        }else{
+            for(let homework of this.state.homework){
+                if(homework.grade === subject){
+                    modifiedList.push(homework);
+                }
+            }
+        }
+        gradeButton.innerText=subject;
         this.setState({
             displayHomework:modifiedList,
         });
     };
 
     componentWillMount() {
-
+        this.setState({displayHomework: this.state.homework})
         console.log(this.props.location.pathname);
         if(this.props.location.pathname==="/home/homework/overall"){
             this.setState({type:0});
@@ -114,7 +168,7 @@ class HomeworkDemo extends React.Component {
 
     render() {
         const menu1 = (
-            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+            <Menu onClick={(e)=>{this.changeSubject1(e.item.props.children)}}>
                 <Menu.SubMenu title="所有">
                     <Menu.Item onClick={() => {
                     }}>所有</Menu.Item>
@@ -168,7 +222,7 @@ class HomeworkDemo extends React.Component {
         );
 
         const menu2 = (
-            <Menu>
+            <Menu onClick={(e)=>{this.changeSubject2(e.item.props.children)}}>
                 <Menu.SubMenu title="一年级">
                     <Menu.Item>一年级上</Menu.Item>
                     <Menu.Item>一年级下</Menu.Item>
@@ -224,10 +278,10 @@ class HomeworkDemo extends React.Component {
                             </Form.Item>
                         </Form>
                         <Dropdown overlay={menu1} trigger={['click']} style={{ marginTop: '30px'}}>
-                            <Button  style={{width:"10%",marginLeft:'30px'}} ><span  id="homeworkButton">学科</span><Icon type="down"/></Button>
+                            <Button  style={{width:"10%",marginLeft:'30px'}} ><span id="typeButton">学科</span><Icon type="down"/></Button>
                         </Dropdown>
                         <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft:'30px'}}>
-                            <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
+                            <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}><span id="gradeButton">年级</span><Icon type="down"/></Button>
                         </Dropdown>
                     </Card>
                 </div>

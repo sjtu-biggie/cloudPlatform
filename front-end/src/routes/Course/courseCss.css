@@ -1,0 +1,15 @@
+#gradeCard{
+    background-image:url("../../pic/gradeBackground.png") ;
+    height:500px;
+    background-repeat: no-repeat;
+    background-size: 100% 500px;
+}
+#picc{
+    background-image:url("../../pic/home2.png") ;
+}
+#teacher1:hover{
+     opacity: 60%;
+ }
+#teacher2:hover{
+    opacity: 60%;
+}

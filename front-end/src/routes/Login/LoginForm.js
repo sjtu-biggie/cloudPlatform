@@ -2,8 +2,9 @@ import React from 'react'
 import { randomNum, calculateWidth } from '../../utils/utils'
 import { withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react/index'
-import { Form, Input, Row, Col } from 'antd'
+import {Form, Input, Row, Col, message} from 'antd'
 import PromptBox from '../../components/PromptBox'
+import axios from "axios";
 
 
 @withRouter @inject('appStore') @observer @Form.create()
@@ -11,7 +12,7 @@ class LoginForm extends React.Component {
   state = {
     focusItem: -1,   //保存当前聚焦的input
     code: ''         //验证码
-  }
+  };
 
   componentDidMount () {
     this.createCode()
@@ -21,29 +22,29 @@ class LoginForm extends React.Component {
    * 生成验证码
    */
   createCode = () => {
-    const ctx = this.canvas.getContext('2d')
+    const ctx = this.canvas.getContext('2d');
     const chars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    let code = ''
-    ctx.clearRect(0, 0, 80, 39)
+    let code = '';
+    ctx.clearRect(0, 0, 80, 39);
     for (let i = 0; i < 4; i++) {
-      const char = chars[randomNum(0, 57)]
-      code += char
-      ctx.font = randomNum(20, 25) + 'px SimHei'  //设置字体随机大小
+      const char = chars[randomNum(0, 57)];
+      code += char;
+      ctx.font = randomNum(20, 25) + 'px SimHei' ; //设置字体随机大小
       ctx.fillStyle = '#D3D7F7'
       ctx.textBaseline = 'middle'
-      ctx.shadowOffsetX = randomNum(-3, 3)
-      ctx.shadowOffsetY = randomNum(-3, 3)
-      ctx.shadowBlur = randomNum(-3, 3)
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)'
-      let x = 80 / 5 * (i + 1)
-      let y = 39 / 2
-      let deg = randomNum(-25, 25)
+      ctx.shadowOffsetX = randomNum(-3, 3);
+      ctx.shadowOffsetY = randomNum(-3, 3);
+      ctx.shadowBlur = randomNum(-3, 3);
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+      let x = 80 / 5 * (i + 1);
+      let y = 39 / 2;
+      let deg = randomNum(-25, 25);
       /**设置旋转角度和坐标原点**/
-      ctx.translate(x, y)
-      ctx.rotate(deg * Math.PI / 180)
-      ctx.fillText(char, 0, 0)
+      ctx.translate(x, y);
+      ctx.rotate(deg * Math.PI / 180);
+      ctx.fillText(char, 0, 0);
       /**恢复旋转角度和坐标原点**/
-      ctx.rotate(-deg * Math.PI / 180)
+      ctx.rotate(-deg * Math.PI / 180);
       ctx.translate(-x, -y)
     }
     this.setState({
@@ -51,10 +52,10 @@ class LoginForm extends React.Component {
     })
   }
   loginSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     this.setState({
       focusItem: -1
-    })
+    });
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 表单登录时，若验证码长度小于4则不会验证，所以我们这里要手动验证一次，线上的未修复
@@ -64,54 +65,85 @@ class LoginForm extends React.Component {
               value: values.verification,
               errors: [new Error('验证码错误')]
             }
-          })
+          });
           return
         }
+        const obj =  {
+          username: values.username,
+          password: values.password,
+        };
+        this.login(obj);
+        //
+        // const users = this.props.appStore.users
+        // // 检测用户名是否存在
+        // const result = users.find(item => item.username === values.username)
+        // if (!result) {
+        //   this.props.form.setFields({
+        //     username: {
+        //       value: values.username,
+        //       errors: [new Error('用户名不存在')]
+        //     }
+        //   })
+        //   return
+        // } else {
+        //   //检测密码是否错误
+        //   if (result.password !== values.password) {
+        //     this.props.form.setFields({
+        //       password: {
+        //         value: values.password,
+        //         errors: [new Error('密码错误')]
+        //       }
+        //     })
+        //     return
+        //   }
+        // }
 
-        const users = this.props.appStore.users
-        // 检测用户名是否存在
-        const result = users.find(item => item.username === values.username)
-        if (!result) {
-          this.props.form.setFields({
-            username: {
-              value: values.username,
-              errors: [new Error('用户名不存在')]
-            }
-          })
-          return
-        } else {
-          //检测密码是否错误
-          if (result.password !== values.password) {
-            this.props.form.setFields({
-              password: {
-                value: values.password,
-                errors: [new Error('密码错误')]
-              }
-            })
-            return
-          }
-        }
 
-        this.props.appStore.toggleLogin(true, {username: values.username})
-
-        const {from} = this.props.location.state || {from: {pathname: '/'}}
-        this.props.history.push(from)
       }
     })
-  }
+  };
+  login=async(obj)=>{
+    let config = {
+      method: 'post',
+      data: obj,
+      url: 'http://106.13.209.140:8000/login',
+      headers: {
+        withCredentials: true,
+      }
+    };
+    const message1 = await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    if(message1==='成功登陆'){
+      let storage = window.localStorage;
+      storage.setItem("username",obj.username);
+      this.props.appStore.toggleLogin(true, {username: obj.username})
+
+      const {from} = this.props.location.state || {from: {pathname: '/'}}
+      this.props.history.push(from)
+    }else{
+      message.error(message1);
+    }
+  };
   register = () => {
-    this.props.switchShowBox('register')
+    this.props.switchShowBox('register');
     setTimeout(() => this.props.form.resetFields(), 500)
-  }
+  };
 
   render () {
     const {getFieldDecorator, getFieldError} = this.props.form
     const {focusItem, code} = this.state
     return (
       <div className={this.props.className}>
-        <h3 className='title'>云作业平台</h3>
-        <h4 className='title'>登录</h4>
-        <Form onSubmit={this.loginSubmit}>
+        <img width={240} height={120} alt="logo"
+             src={require('../../pic/title.png')}
+             style={{}}/>
+        <Form onSubmit={this.loginSubmit} style={{marginTop:'45px'}}>
           <Form.Item help={getFieldError('username') &&
           <PromptBox info={getFieldError('username')} width={calculateWidth(getFieldError('username'))}/>}>
             {getFieldDecorator('username', {
@@ -171,10 +203,14 @@ class LoginForm extends React.Component {
               </Row>
             )}
           </Form.Item>
-          <div className='bottom'>
-            <input className='loginBtn' type="submit" value='登录'/>
-            <span className='registerBtn' onClick={this.register}>注册</span>
-          </div>
+          <Row className='bottom'>
+            <Col span={16}>
+              <input className='loginBtn' type="submit" value='登录'/>
+            </Col>
+            <Col span={8}>
+              <span className='registerBtn' onClick={this.register}>注册</span>
+            </Col>
+          </Row>
         </Form>
         {/*<div className='footer'>
           <div>欢迎登陆后台管理系统</div>

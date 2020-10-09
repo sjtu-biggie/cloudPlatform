@@ -1,5 +1,6 @@
 import React from 'react'
-import { Form, Input, message } from 'antd'
+import axios from 'axios'
+import { Form, Input, message,Row,Col } from 'antd'
 import { inject, observer } from 'mobx-react/index'
 import { calculateWidth } from '../../utils/utils'
 import PromptBox from '../../components/PromptBox'
@@ -8,46 +9,75 @@ import PromptBox from '../../components/PromptBox'
 @inject('appStore') @observer @Form.create()
 class RegisterForm extends React.Component {
   state = {
-    focusItem: -1
-  }
-  registerSubmit = (e) => {
-    e.preventDefault()
+    focusItem: -1,
+    isPhone:false,
+  };
+  registerSubmit = async (e) => {
+    e.preventDefault();
     this.setState({
       focusItem: -1
-    })
+    });
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const users = this.props.appStore.users
-        // 检测用户名是否存在
-        const result = users.find(item => item.username === values.registerUsername)
-        if (result) {
-          this.props.form.setFields({
-            registerUsername: {
-              value: values.registerUsername,
-              errors: [new Error('用户名已存在')]
-            }
-          })
-          return
-        }
-
-        const obj = [...this.props.appStore.users, {
+        // const users = this.props.appStore.users;
+        // // 检测用户名是否存在
+        // const result = users.find(item => item.username === values.registerUsername);
+        // if (result) {
+        //   this.props.form.setFields({
+        //     registerUsername: {
+        //       value: values.registerUsername,
+        //       errors: [new Error('用户名已存在')]
+        //     }
+        //   });
+        //   return
+        // }
+        const obj =  {
           username: values.registerUsername,
-          password: values.registerPassword
-        }]
-        localStorage.setItem('users', JSON.stringify(obj))
-        this.props.appStore.initUsers()
-        message.success('注册成功')
+          password: values.registerPassword,
+          sid:values.registerStudentNumber,
+          email:values.registerEmail,
+          telephone:values.registerPhoneNumber,
+        };
+        this.register(obj);
       }
     })
-  }
+  };
+  register = async (obj) => {
+    let config = {
+      method: 'post',
+      data: obj,
+      url: 'http://106.13.209.140:8000/register',
+      headers: {
+        withCredentials: true,
+      }
+    };
+    console.log("传入数据",obj);
+    const message1 = await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    if (message1==='注册成功') {
+      message.success('注册成功',5);
+      this.gobackLogin();
+    }else{
+      message.error(message1);
+    }
+  };
   gobackLogin = () => {
-    this.props.switchShowBox('login')
-    setTimeout(() => this.props.form.resetFields(), 500)
-  }
+    let storage = window.localStorage;
+    let tt = storage.getItem("user");
+    console.log(tt);
+    this.props.switchShowBox('login');
+    setTimeout(() => this.props.form.resetFields(), 500);
+  };
 
   render () {
-    const {getFieldDecorator, getFieldError, getFieldValue} = this.props.form
-    const {focusItem} = this.state
+    const {getFieldDecorator, getFieldError, getFieldValue} = this.props.form;
+    const {focusItem} = this.state;
 
     return (
       <div  className={this.props.className}>
@@ -71,9 +101,9 @@ class RegisterForm extends React.Component {
             )}
           </Form.Item>
 
-          <Form.Item help={getFieldError('registerStudentnumber') && <PromptBox info={getFieldError('registerStudentnumber')}
-                                                                           width={calculateWidth(getFieldError('registerStudentnumber'))}/>}>
-            {getFieldDecorator('registerStudentnumber', {
+          <Form.Item help={getFieldError('registerStudentNumber') && <PromptBox info={getFieldError('registerStudentNumber')}
+                                                                           width={calculateWidth(getFieldError('registerStudentNumber'))}/>}>
+            {getFieldDecorator('registerStudentNumber', {
               validateFirst: true,
               rules: [
                 {required: true, message: '学号不能为空'},
@@ -132,6 +162,7 @@ class RegisterForm extends React.Component {
                 addonBefore={<span className='iconfont icon-suo1' style={focusItem === 2 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>
+          {this.state.isPhone===false?
           <Form.Item help={getFieldError('registerEmail') && <PromptBox info={getFieldError('registerEmail')}
                                                                            width={calculateWidth(getFieldError('registerEmail'))}/>}>
             {getFieldDecorator('registerEmail', {
@@ -149,10 +180,10 @@ class RegisterForm extends React.Component {
                     addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 3 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>
-
-          <Form.Item help={getFieldError('registerPhonenumber') && <PromptBox info={getFieldError('registerPhonenumber')}
-                                                                           width={calculateWidth(getFieldError('registerPhonenumber'))}/>}>
-            {getFieldDecorator('registerPhonenumber', {
+:
+          <Form.Item help={getFieldError('registerPhoneNumber') && <PromptBox info={getFieldError('registerPhoneNumber')}
+                                                                           width={calculateWidth(getFieldError('registerPhoneNumber'))}/>}>
+            {getFieldDecorator('registerPhoneNumber', {
               validateFirst: true,
               rules: [
                 {required: true, message: '手机不能为空'},
@@ -166,16 +197,21 @@ class RegisterForm extends React.Component {
                     placeholder='手机号'
                     addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 5 ? styles.focus : {}}/>}/>
             )}
-          </Form.Item>
+          </Form.Item>}
 
-          <div className='bottom'>
-            <input className='loginBtn' type="submit" value='注册'/>
-            <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>
-          </div>
+
+            <Row className="bottom">
+              <Col span={12}>
+                <input className='loginBtn' type="submit" value='注册'/>
+              </Col>
+              <Col span={6}>
+                <span className='registerBtn' onClick={()=>this.setState({isPhone:!this.state.isPhone})}>{this.state.isPhone===false?"手机注册":"邮箱注册"}</span>
+              </Col>
+              <Col span={6}>
+                <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>
+              </Col>
+            </Row>
         </Form>
-        {/*<div className='footer'>
-          <div>欢迎登陆后台管理系统</div>
-        </div>*/}
       </div>
     )
   }

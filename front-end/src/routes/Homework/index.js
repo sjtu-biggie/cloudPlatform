@@ -14,7 +14,7 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        grade: '100'
+        score: '100'
     })
 }
 
@@ -27,7 +27,7 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        grade: '100'
+        score: '100'
     })
 }
 
@@ -40,7 +40,7 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        grade: '100'
+        score: '100'
     })
 }
 

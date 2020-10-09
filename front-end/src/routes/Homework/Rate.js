@@ -150,7 +150,7 @@ class Rating extends React.Component {
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>提交时间 : </span>
                                 {this.state.studentHomeworkList[this.state.studentIndex].handintime}</p>
                             {
-                                this.state.studentHomeworkList[this.state.studentIndex].grade === null ?
+                                this.state.studentHomeworkList[this.state.studentIndex].score === null ?
                                     <div>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
                                             <InputNumber style={{marginLeft: '20px'}} id={'inputNumber'}min={0} max={100}/> /100</p>
@@ -161,7 +161,7 @@ class Rating extends React.Component {
                                     <div>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
                                             <span style={{fontSize: '20px', fontWeight: 'bold', color: 'blue'}}>已评分！</span>
-                                            <p> {this.state.studentHomeworkList[this.state.studentIndex].grade}/100</p>
+                                            <p> {this.state.studentHomeworkList[this.state.studentIndex].score}/100</p>
                                             <Button  style={{fontWeight:'bold',marginLeft:'10px'}}> 重新评分 </Button>
                                           </p>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>

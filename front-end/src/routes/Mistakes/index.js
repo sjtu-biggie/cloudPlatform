@@ -5,6 +5,7 @@ import CustomBreadcrumb from '../../components/CustomBreadcrumb'
 import TypingCard from '../../components/TypingCard'
 import { Chart, Axis, Geom, Tooltip, Coord, Label, Legend, G2 } from 'bizcharts'
 import { View } from '@antv/data-set'
+import axios from "axios"
 
 const data = [
     {date: '9/1', value: '3%'},

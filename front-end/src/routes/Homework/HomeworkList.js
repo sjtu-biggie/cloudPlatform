@@ -93,11 +93,11 @@ class HomeworkList extends React.Component {
                                   return (
                                       <List.Item
                                           actions={this.state.role === 'student' ?
-                                              [<IconText type="file-text" text= {item.grade} />,
+                                              [<IconText type="file-text" text= {item.score} />,
                                                   <IconText type="calendar" text={"截止："+item.endTime} />,
                                                   <IconText type="schedule" text ={ item.handinTime === null ? "未提交":"已提交"} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />]
-                                          : [<IconText type="file-text" text={item.grade} />,
+                                          : [<IconText type="file-text" text={item.score} />,
                                                   <IconText type="calendar" text={"截止："+item.endTime} />,
                                                   <IconText type="pie-chart" text = {10 +"/" + this.state.allAmount} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />]}

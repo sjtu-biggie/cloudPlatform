@@ -187,13 +187,13 @@ export default class Manager extends Component {
                     <Card title={<div style={{textAlign:"center"}}>上课学生</div>} >
                         <Card className={styles.control} bordered={false} style={{ marginBottom: 10 }}>
                             <Row>
-                                <Col span={6}>
-                            <Input style={{ width: 300, marginRight: 16 }}
+                                <Col span={16}>
+                            <Input style={{ width: 500, marginRight: 16 }}
                                    value={search}
                                    allowClear
                                    onChange={event => this.setState({ search: event.target.value })}/>
                                 </Col>
-                                <Col span={2} offset={4}>
+                                <Col span={2} offset={1}>
                             <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </Col>
                             </Row>
@@ -259,7 +259,7 @@ export default class Manager extends Component {
                                        <Button onClick={this.handleSearch3}>精确搜索</Button>
                             </div>
                         </Card>
-                        <Card bordered={false} style={{ marginBottom: 10, height: 780 }}>
+                        <Card bordered={false} style={{ marginBottom: 10, height: 778 }}>
                             <Table
                                 rowKey={'id'}
                                 columns={columns1}

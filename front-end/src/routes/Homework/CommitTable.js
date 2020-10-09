@@ -35,7 +35,7 @@ const columns = [
     {title: '是否批改', dataIndex: 'correct'},
     {title: '成绩', dataIndex: 'score'}
     ];
-columns.map(item => {
+    columns.map(item => {
     item.sorter = (a, b) => {
         if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
             return a[item.dataIndex] - b[item.dataIndex];

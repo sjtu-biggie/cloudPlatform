@@ -54,10 +54,9 @@ class HomeworkList extends React.Component {
         homeworkList: deathHomework,
         allAmount: 40,
         t: test
-    }
+    };
 
     componentDidMount() {
-
         this.setState({
             loading: true,
         });

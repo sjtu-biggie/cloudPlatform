@@ -289,8 +289,8 @@ class CourseDemo extends React.Component {
                                       <Row>
                                           <Col span={3} style={{fontSize:'15px'}}>
 
-                                              <img width={90} height={120} alt="logo"
-                                                   src={require('../../pic/defaultAvatar.png')}
+                                              <img width={120} height={120} alt="logo"
+                                                   src={require('../../pic/teacher2.jpg')}
                                                    style={{}}/>
                                               <p style={{marginTop:'25px'}}>教师 ：{item.nickname}</p>
                                           </Col>

@@ -2,11 +2,14 @@ import React from 'react'
 import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker} from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
+import moment from 'moment';
+
+const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const options1 = [
+const options = [
     {
         label: '一年级3班',
         value: '1-3',
@@ -32,12 +35,24 @@ const options2 = [
     }
 ];
 
+
+const Hw = {
+    title: '第一次作业',
+    class: '一年级3班',
+    type: '主观题',
+    content: '作业内容',
+    answer: '参考答案',
+    startTime: '2020-10-10 00:00:00',
+    endTime: '2020-10-12 00:00:00',
+}
+
 @Form.create()
-class Assign extends React.Component {
+class ChangeHomework extends React.Component {
     state = {
         text: '获取验证码',
         disabled: false,
-        homeworkJson: null
+        homework: Hw,
+        ableState: true
     };
     timer = 0;
     handleSubmit = (e) => {
@@ -96,11 +111,12 @@ class Assign extends React.Component {
 
         return (
             <div>
-                <Card bordered={false} title='布置作业'>
+                <Card bordered={false} title='修改作业'>
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                         <FormItem label='作业名称' {...formItemLayout} required>
                             {
                                 getFieldDecorator('homework_name', {
+                                    initialValue:this.state.homework.title,
                                     rules: [
                                         {
                                             required: true,
@@ -108,7 +124,7 @@ class Assign extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <Input/>
+                                    <Input disabled={this.state.ableState}/>
                                 )
                             }
                         </FormItem>
@@ -122,27 +138,29 @@ class Assign extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <Cascader options={options1} expandTrigger="hover" placeholder=''/>
+                                    <Cascader disabled={this.state.ableState} options={options} expandTrigger="hover" placeholder={this.state.homework.class}/>
                                 )
                             }
                         </FormItem>
                         <FormItem label='作业类型' {...formItemLayout} required>
                             {
                                 getFieldDecorator('type', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请选择作业类型'
-                                        }
-                                    ]
-                                })(
-                                    <Cascader options={options2} expandTrigger="hover" placeholder=''/>
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请选择布置班级'
+                                    }
+                                ]
+                                })
+                               (
+                                    <Cascader disabled={this.state.ableState} options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
                                 )
                             }
                         </FormItem>
                         <FormItem label='起止时间' {...formItemLayout} required>
                             {
                                 getFieldDecorator('time', {
+                                    // initialValue:[this.state.homework.startTime, this.state.homework.endTime],
                                     rules: [
                                         {
                                             required: true,
@@ -150,7 +168,7 @@ class Assign extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <DatePicker.RangePicker/>
+                                    <DatePicker.RangePicker disabled={this.state.ableState} placeholder={[this.state.homework.startTime, this.state.homework.endTime]}/>
                                 )
                             }
                         </FormItem>
@@ -171,7 +189,7 @@ class Assign extends React.Component {
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
                             {
                                 (
-                                    <DraftDemo/>
+                                    <DraftDemo disabled='true' placeholder = {this.state.homework.answer}/>
                                 )
                             }
                         </FormItem>
@@ -184,7 +202,11 @@ class Assign extends React.Component {
                         </FormItem>
 
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" >提交</Button>
+                            <Button type="primary" htmlType="submit" disabled={this.state.ableState}>提交</Button>
+                            <Button type="primary" style={{marginLeft: 50}} onClick={()=>{
+                                this.setState({ableState: false});
+                                message.success('开始修改');
+                            }}>修改</Button>
                         </FormItem>
                     </Form>
                 </Card>
@@ -194,4 +216,4 @@ class Assign extends React.Component {
     }
 }
 
-export default Assign
+export default ChangeHomework

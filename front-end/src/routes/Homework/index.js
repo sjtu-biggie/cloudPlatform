@@ -84,7 +84,8 @@ class HomeworkDemo extends React.Component {
         homework: deathHomework,
         displayHomework: null,
         gradeHomework: null,
-        subjectHomework: null
+        subjectHomework: null,
+        userInfo: null
     };
 
     searchFun=(value)=>{
@@ -95,6 +96,38 @@ class HomeworkDemo extends React.Component {
         this.setState({
             displayHomework:modifiedList,
         });
+    };
+
+    getData2 = () => {
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
+    };
+
+    getUserInfo = async (username)=>{
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
     };
 
     changeSubject1=(subject)=>{
@@ -162,8 +195,9 @@ class HomeworkDemo extends React.Component {
             displayHomework: this.state.homework,
             subjectHomework: this.state.homework,
             gradeHomework: this.state.homework
-        })
-        console.log(this.props.location.pathname);
+        });
+        this.getData2();
+
         if(this.props.location.pathname==="/home/homework/overall"){
             this.setState({type:0});
             console.log(0);

@@ -36,7 +36,7 @@ class HomeworkList extends React.Component {
         size: 'default',
         bordered: true,
         delete: false,
-        role: 'student',
+        role: 'teacher',
         homeworkList: test,
         allAmount: 40,
         t: test
@@ -99,7 +99,7 @@ class HomeworkList extends React.Component {
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />]
                                           : [<IconText type="file-text" text={item.score} />,
                                                   <IconText type="calendar" text={"截止："+item.endTime} />,
-                                                  <IconText type="pie-chart" text = {10 +"/" + this.state.allAmount} />,
+                                                  <IconText type="pie-chart" text = {this.state.homeworkList.length +"/" + this.state.allAmount} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />]}
                                           extra={(this.state.delete === false ? []:[<Button type="danger" onClick={()=>{
                                               //delete

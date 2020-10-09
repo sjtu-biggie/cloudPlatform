@@ -318,7 +318,7 @@ class HomeworkDemo extends React.Component {
                 <div>
                     <Card bordered={false} style={{marginBottom: 10}} id="howUse">
                         <Form layout='horizontal' style={{width: '70%',float:'left'}} onSubmit={this.handleSubmit}>
-                            <Form.Item>
+                            <Form.Item label='搜索' >
                                 {
                                     (
                                         <Search

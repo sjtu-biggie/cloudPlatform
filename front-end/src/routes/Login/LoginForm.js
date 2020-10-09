@@ -2,8 +2,9 @@ import React from 'react'
 import { randomNum, calculateWidth } from '../../utils/utils'
 import { withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react/index'
-import { Form, Input, Row, Col } from 'antd'
+import {Form, Input, Row, Col, message} from 'antd'
 import PromptBox from '../../components/PromptBox'
+import axios from "axios";
 
 
 @withRouter @inject('appStore') @observer @Form.create()
@@ -11,7 +12,7 @@ class LoginForm extends React.Component {
   state = {
     focusItem: -1,   //保存当前聚焦的input
     code: ''         //验证码
-  }
+  };
 
   componentDidMount () {
     this.createCode()
@@ -51,10 +52,10 @@ class LoginForm extends React.Component {
     })
   }
   loginSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     this.setState({
       focusItem: -1
-    })
+    });
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 表单登录时，若验证码长度小于4则不会验证，所以我们这里要手动验证一次，线上的未修复
@@ -64,45 +65,75 @@ class LoginForm extends React.Component {
               value: values.verification,
               errors: [new Error('验证码错误')]
             }
-          })
+          });
           return
         }
+        const obj =  {
+          username: values.username,
+          password: values.password,
+        };
+        this.login(obj);
+        //
+        // const users = this.props.appStore.users
+        // // 检测用户名是否存在
+        // const result = users.find(item => item.username === values.username)
+        // if (!result) {
+        //   this.props.form.setFields({
+        //     username: {
+        //       value: values.username,
+        //       errors: [new Error('用户名不存在')]
+        //     }
+        //   })
+        //   return
+        // } else {
+        //   //检测密码是否错误
+        //   if (result.password !== values.password) {
+        //     this.props.form.setFields({
+        //       password: {
+        //         value: values.password,
+        //         errors: [new Error('密码错误')]
+        //       }
+        //     })
+        //     return
+        //   }
+        // }
 
-        const users = this.props.appStore.users
-        // 检测用户名是否存在
-        const result = users.find(item => item.username === values.username)
-        if (!result) {
-          this.props.form.setFields({
-            username: {
-              value: values.username,
-              errors: [new Error('用户名不存在')]
-            }
-          })
-          return
-        } else {
-          //检测密码是否错误
-          if (result.password !== values.password) {
-            this.props.form.setFields({
-              password: {
-                value: values.password,
-                errors: [new Error('密码错误')]
-              }
-            })
-            return
-          }
-        }
 
-        this.props.appStore.toggleLogin(true, {username: values.username})
-
-        const {from} = this.props.location.state || {from: {pathname: '/'}}
-        this.props.history.push(from)
       }
     })
-  }
+  };
+  login=async(obj)=>{
+    let config = {
+      method: 'post',
+      data: obj,
+      url: 'http://106.13.209.140:8000/login',
+      headers: {
+        withCredentials: true,
+      }
+    };
+    const message1 = await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    if(message1==='成功登陆'){
+      let storage = window.localStorage;
+      storage.setItem("username",obj.username);
+      this.props.appStore.toggleLogin(true, {username: obj.username})
+
+      const {from} = this.props.location.state || {from: {pathname: '/'}}
+      this.props.history.push(from)
+    }else{
+      message.error(message1);
+    }
+  };
   register = () => {
-    this.props.switchShowBox('register')
+    this.props.switchShowBox('register');
     setTimeout(() => this.props.form.resetFields(), 500)
-  }
+  };
 
   render () {
     const {getFieldDecorator, getFieldError} = this.props.form

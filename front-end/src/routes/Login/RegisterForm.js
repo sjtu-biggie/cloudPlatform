@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { Form, Input, message,Row,Col } from 'antd'
 import { inject, observer } from 'mobx-react/index'
 import { calculateWidth } from '../../utils/utils'
@@ -11,90 +12,72 @@ class RegisterForm extends React.Component {
     focusItem: -1,
     isPhone:false,
   }
-  registerSubmit = (e) => {
-    e.preventDefault()
+  registerSubmit = async (e) => {
+    e.preventDefault();
     this.setState({
       focusItem: -1
-    })
+    });
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const users = this.props.appStore.users
-        // 检测用户名是否存在
-        const result = users.find(item => item.username === values.registerUsername)
-        if (result) {
-          this.props.form.setFields({
-            registerUsername: {
-              value: values.registerUsername,
-              errors: [new Error('用户名已存在')]
-            }
-          })
-
-          return
-        }
-
-        /*const result1 = users.find(item => item.password === values.registerPassword)
-        if (result1) {
-          this.props.form.setFields({
-            registerPassword: {
-              value: values.registerPassword,
-            }
-          })
-          console.log("2")
-          return
-        }
-
-        const result2 = users.find(item => item.studentNumber === values.registerStudentNumber)
-        if (result2) {
-          this.props.form.setFields({
-            registerStudentNumber: {
-              value: values.registerStudentNumber,
-            }
-          })
-          return
-        }
-
-        const result3 = users.find(item => item.email === values.registerEmail)
-        if (result3) {
-          this.props.form.setFields({
-            registerEmail: {
-              value: values.registerEmail,
-            }
-          })
-          return
-        }
-
-        const result4 = users.find(item => item.phoneNumber === values.registerPhoneNumber)
-        if (result4) {
-          this.props.form.setFields({
-            registerPhoneNumber: {
-              value: values.registerPhoneNumber,
-            }
-          })
-          return
-        }*/
-
-        const obj = [...this.props.appStore.users, {
+        // const users = this.props.appStore.users;
+        // // 检测用户名是否存在
+        // const result = users.find(item => item.username === values.registerUsername);
+        // if (result) {
+        //   this.props.form.setFields({
+        //     registerUsername: {
+        //       value: values.registerUsername,
+        //       errors: [new Error('用户名已存在')]
+        //     }
+        //   });
+        //   return
+        // }
+        const obj =  {
           username: values.registerUsername,
           password: values.registerPassword,
-          studentNumber:values.registerStudentNumber,
+          sid:values.registerStudentNumber,
           email:values.registerEmail,
-          phoneNumber:values.registerPhoneNumber,
-        }]
-        console.log(obj)
-        localStorage.setItem('users', JSON.stringify(obj))
-        this.props.appStore.initUsers()
-        message.success('注册成功')
+          telephone:values.registerPhoneNumber,
+        };
+        this.register(obj);
       }
     })
-  }
+  };
+  register = async (obj) => {
+    let config = {
+      method: 'post',
+      data: obj,
+      url: 'http://106.13.209.140:8000/register',
+      headers: {
+        withCredentials: true,
+      }
+    };
+    console.log("传入数据",obj);
+    const message1 = await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    if (message1==='注册成功') {
+      message.success('注册成功',5);
+      this.gobackLogin();
+    }else{
+      message.error(message1);
+    }
+  };
   gobackLogin = () => {
-    this.props.switchShowBox('login')
-    setTimeout(() => this.props.form.resetFields(), 500)
-  }
+    let storage = window.localStorage;
+    let tt = storage.getItem("user");
+    console.log(tt);
+    this.props.switchShowBox('login');
+    setTimeout(() => this.props.form.resetFields(), 500);
+  };
 
   render () {
-    const {getFieldDecorator, getFieldError, getFieldValue} = this.props.form
-    const {focusItem} = this.state
+    const {getFieldDecorator, getFieldError, getFieldValue} = this.props.form;
+    const {focusItem} = this.state;
 
     return (
       <div  className={this.props.className}>

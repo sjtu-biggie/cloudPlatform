@@ -1,12 +1,56 @@
 import React from 'react'
 import {Card, Carousel, Col, Icon, List, Row} from 'antd'
 import './style.css'
+import axios from "axios";
 
 const imgs = [
   '../../pic/home2.png',
 ];
 
 class Home extends React.Component {
+  state = {
+    role: null,
+    userInfo:null,
+  };
+  componentDidMount() {
+  }
+
+  componentWillMount() {
+    let storage = window.localStorage;
+    let username = storage.getItem("username");
+    this.getUserInfo(username);
+  }
+  getUserInfo=async (username)=>{
+
+    let config = {
+      method: 'post',
+      data :{
+        'username':username
+      },
+      url: 'http://106.13.209.140:8000/getUserMessage',
+      headers: {
+        withCredentials: true,
+      }
+    };
+    const user = await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    console.log(user);
+    this.setState({
+      userInfo:user
+    })
+  };
+  beTeacher=async(data)=>{
+
+  };
+  beStudent=async(data)=>{
+
+  };
   render() {
     return (
       <div style={styles.bg} className='home'>

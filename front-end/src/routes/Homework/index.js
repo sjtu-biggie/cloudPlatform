@@ -4,38 +4,80 @@ import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import HomeworkList from './HomeworkList'
 
-const data3 = [];
-for(let i=0;i<23;i++){
-    data3.push({
-        title: `一年级上语文作业 ${i}`,
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+const deathHomework = [];
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'数学',
+        title: `七年级上数学作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        grade: '100'
     })
 }
-const IconText = ({ type, text }) => (
-    <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-        {text}
-  </span>
-);
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'语文',
+        title: `七年级上语文作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        grade: '100'
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'英语',
+        title: `七年级上英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        grade: '100'
+    })
+}
 
 class HomeworkDemo extends React.Component {
     state = {
         type:0,
         size: 'default',
         bordered: true,
-        loading: false,
-        loadingMore: false,
+        homework: deathHomework,
+        displayHomework: deathHomework,
     };
 
-    componentDidMount() {
 
+    changeSubject=(subject)=>{
+        let modifiedList = [];
+        let homeworkButton = document.getElementById("homeworkButton");
+        if(subject === "所有"){
+            this.setState({
+                displayHomework:this.state.homework,
+            });
+            homeworkButton.innerText="学科";
+            return null;
+        }else{
+            for(let homework of this.state.homework){
+                if(homework.type === subject){
+                    modifiedList.push(homework);
+                }
+            }
+        }
+        homeworkButton.innerText=subject;
         this.setState({
-            loading: true,
+            displayHomework:modifiedList,
         });
-        this.setState({
-            loading: false
-        });
+    };
+
+    componentWillMount() {
+
         console.log(this.props.location.pathname);
         if(this.props.location.pathname==="/home/homework/overall"){
             this.setState({type:0});
@@ -61,7 +103,7 @@ class HomeworkDemo extends React.Component {
 
     render() {
         const menu1 = (
-            <Menu>
+            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
                 <Menu.SubMenu title="所有">
                     <Menu.Item onClick={() => {
                     }}>语文</Menu.Item>
@@ -152,7 +194,6 @@ class HomeworkDemo extends React.Component {
                 </Menu.SubMenu>
             </Menu>
         );
-
         return (
             <div>
                 <div>
@@ -170,7 +211,7 @@ class HomeworkDemo extends React.Component {
                             </Form.Item>
                         </Form>
                         <Dropdown overlay={menu1} trigger={['click']} style={{ marginTop: '30px'}}>
-                            <Button  style={{width:"10%",marginLeft:'30px'}}>学科 <Icon type="down"/></Button>
+                            <Button  style={{width:"10%",marginLeft:'30px'}} ><span  id="homeworkButton">学科</span><Icon type="down"/></Button>
                         </Dropdown>
                         <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft:'30px'}}>
                             <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
@@ -178,66 +219,10 @@ class HomeworkDemo extends React.Component {
                     </Card>
                 </div>
                 <div>
-                    {/*<Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>*/}
-                    {/*    <div>*/}
-                    {/*        <span style={{height:'15px'}}>所有作业</span>*/}
-                    {/*        <Button style={{marginLeft:'30px'}}>按时间升序</Button>*/}
-                    {/*        <Button style={{marginLeft:'30px'}}>按时间降序</Button>*/}
-                    {/*    </div>*/}
-                    {/*    <List dataSource={data3}*/}
-                    {/*          itemLayout='vertical'*/}
-                    {/*          pagination={{pageSize: 3}}*/}
-                    {/*          style={styles.listStyle}*/}
-                    {/*          renderItem={item=>{*/}
-                    {/*              return (*/}
-                    {/*                  <List.Item*/}
-                    {/*                      actions={[<IconText type="file-text" text="100" />, <IconText type="calendar" text="截止：2020-10-1 20:00" />, <IconText type="clock-circle-o" text="已结束" />]}*/}
-                    {/*                      extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}>*/}
-                    {/*                      <List.Item.Meta*/}
-                    {/*                          avatar={<Avatar src={item.avatar} />}*/}
-                    {/*                          title={<a>{item.title}</a>}*/}
-                    {/*                          description={item.description}*/}
-                    {/*                      />*/}
-                    {/*                      {item.content}*/}
-                    {/*                  </List.Item>*/}
-                    {/*              )*/}
-                    {/*          }}*/}
-                    {/*    />*/}
-                    {/*</Card>*/}
-                    <HomeworkList/>
+                    <HomeworkList homeworkList={this.state.displayHomework}/>
                 </div>
             </div>
         )
-    }
-}
-
-const styles = {
-    haveBorder: {
-        minHeight: 270,
-        width:'80%',
-        boxSizing: 'border-box'
-    },
-    noBorder: {
-        minHeight: 270,
-        width:'80%',
-        padding: '0 24px',
-        boxSizing: 'border-box',
-        border: '1px solid #fff'
-    },
-    loadMore: {
-        height: 32,
-        marginTop: 16,
-        lineHeight: '32px',
-        textAlign: 'center',
-    },
-    listStyle:{
-        width:'100%',
-    },
-    affixBox:{
-        position: 'absolute',
-        top: 100,
-        right: 50,
-        with: 170
     }
 }
 

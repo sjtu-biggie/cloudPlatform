@@ -2,19 +2,6 @@ import React from 'react'
 import {Card, Spin, Button,Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon, Form, Dropdown, Input, Menu} from 'antd'
 import axios from 'axios'
 
-const deathHomework = [];
-for(let i=0;i<23;i++){
-    deathHomework.push({
-        title: `七年级上数学作业 ${i}`,
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        grade: '100'
-    })
-}
 
 const test = [
     {
@@ -48,20 +35,22 @@ class HomeworkList extends React.Component {
         type:0,
         size: 'default',
         bordered: true,
-        loading: false,
         delete: false,
         role: 'student',
-        homeworkList: deathHomework,
+        homeworkList: test,
         allAmount: 40,
         t: test
     };
 
-    componentDidMount() {
+    componentWillMount() {
         this.setState({
-            loading: true,
+            homeworkList:this.props.homeworkList
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            loading: false
+            homeworkList:nextProps.homeworkList
         });
     }
 
@@ -80,7 +69,6 @@ class HomeworkList extends React.Component {
     }
 
     render() {
-
         return (
             <div>
                     <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
@@ -111,7 +99,7 @@ class HomeworkList extends React.Component {
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />]
                                           : [<IconText type="file-text" text={item.grade} />,
                                                   <IconText type="calendar" text={"截止："+item.endTime} />,
-                                                  <IconText type="pie-chart" text = {deathHomework.length +"/" + this.state.allAmount} />,
+                                                  <IconText type="pie-chart" text = {10 +"/" + this.state.allAmount} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />]}
                                           extra={(this.state.delete === false ? []:[<Button type="danger" onClick={()=>{
                                               //delete

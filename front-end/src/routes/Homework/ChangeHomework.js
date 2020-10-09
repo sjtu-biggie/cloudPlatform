@@ -54,7 +54,7 @@ class ChangeHomework extends React.Component {
         disabled: false,
         homework: Hw,
         ableState: true,
-        visible: false,
+        buttonName:'修改作业'
     };
     timer = 0;
     handleSubmit = (e) => {
@@ -78,10 +78,11 @@ class ChangeHomework extends React.Component {
 
     render() {
         const display2 = {
-            display:this.state.visible ? 'block' : 'none',
+            display:(this.state.buttonName === '取消修改') ? 'block' : 'none',
             width: '100%',
             margin: '0 auto'
         }
+
         const {getFieldDecorator, getFieldValue} = this.props.form
         const formItemLayout = {
             labelCol: {
@@ -211,12 +212,21 @@ class ChangeHomework extends React.Component {
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
                             <Button type="primary" htmlType="submit" disabled={this.state.ableState}>提交</Button>
                             <Button type="primary" style={{marginLeft: 50}} onClick={()=>{
-                                this.setState({
-                                    ableState: false,
-                                    visible: true,
-                                });
-                                message.success('开始修改');
-                            }}>修改作业</Button>
+                                if (this.state.buttonName === '修改作业'){
+                                    this.setState({
+                                        ableState: false,
+                                        buttonName:'取消修改'
+                                    });
+                                    message.success('开始修改');
+                                }
+                                else {
+                                    this.setState({
+                                        ableState: true,
+                                        buttonName:'修改作业'
+                                    });
+                                    message.success('取消修改');
+                                }
+                            }}>{this.state.buttonName}</Button>
                         </FormItem>
                     </Form>
                 </Card>

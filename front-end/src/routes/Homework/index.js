@@ -194,7 +194,6 @@ class HomeworkDemo extends React.Component {
                 </Menu.SubMenu>
             </Menu>
         );
-        console.log(this);
         return (
             <div>
                 <div>

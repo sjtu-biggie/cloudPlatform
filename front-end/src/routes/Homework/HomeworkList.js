@@ -69,7 +69,6 @@ class HomeworkList extends React.Component {
     }
 
     render() {
-        console.log(this);
         return (
             <div>
                     <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>

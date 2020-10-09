@@ -42,7 +42,8 @@ class Home extends React.Component {
         });
     console.log(user);
     this.setState({
-      userInfo:user
+      userInfo:user,
+      role:user.type
     })
   };
   beTeacher=async(data)=>{

@@ -79,17 +79,39 @@ class CoursePageDemo extends React.Component {
             console.log(2);
         }
     }
+    getUserInfo=async (username)=>{
 
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
+    };
     getData2 = () => {
         this.setState({
             loadingMore: true
         });
-        axios.get('https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo').then(res => {
-            this.setState({
-                data2: this.state.data2.concat(res.data.results),
-                loadingMore: false
-            })
-        })
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
     };
     homeworkRender = () => {
         //TODO:传参给FormDemo1

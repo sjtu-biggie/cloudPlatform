@@ -3,6 +3,7 @@ import {Card, Spin, Button,Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import HomeworkList from './HomeworkList'
+const { Search } = Input;
 
 const deathHomework = [];
 for(let i=0;i<3;i++){
@@ -82,13 +83,14 @@ class HomeworkDemo extends React.Component {
         bordered: true,
         homework: deathHomework,
         displayHomework: null,
+        gradeHomework: null,
+        subjectHomework: null,
+        userInfo: null
     };
 
-    searchFun=()=>{
-        let value = document.getElementById("search").value;
-        let modifiedList=this.state.displayHomework.filter(function(item){
-            console.log(value)
-            return (item.title.indexOf(value)  !== -1)|| (item.content.indexOf(value) !==-1)||(item.endTime.indexOf(value)!==-1);
+    searchFun=(value)=>{
+        let modifiedList = this.state.homework.filter(function(item){
+            return (item.title.indexOf(value)  !== -1) || (item.content.indexOf(value) !==-1);
         });
         console.log(modifiedList)
         this.setState({
@@ -96,54 +98,106 @@ class HomeworkDemo extends React.Component {
         });
     };
 
+    getData2 = () => {
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
+    };
+
+    getUserInfo = async (username)=>{
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
+    };
+
     changeSubject1=(subject)=>{
-        let modifiedList = [];
+        let modifiedList1 = [];
+        let modifiedList2 = [];
         let typeButton = document.getElementById("typeButton");
         if(subject === "所有"){
             this.setState({
-                displayHomework:this.state.homework,
+                subjectHomework:this.state.homework,
+                displayHomework:this.state.gradeHomework,
             });
             typeButton.innerText="学科";
             return null;
         }else{
             for(let homework of this.state.homework){
                 if(homework.type === subject){
-                    modifiedList.push(homework);
+                    modifiedList1.push(homework);
+                }
+            }
+            for(let homework of this.state.gradeHomework){
+                if(homework.type === subject){
+                    modifiedList2.push(homework);
                 }
             }
         }
         typeButton.innerText=subject;
         this.setState({
-            displayHomework:modifiedList,
+            displayHomework:modifiedList2,
+            subjectHomework:modifiedList1
         });
     };
 
     changeSubject2=(subject)=>{
-        console.log(this.state);
-        let modifiedList = [];
+        let modifiedList1 = [];
+        let modifiedList2 = [];
         let gradeButton = document.getElementById("gradeButton");
         if(subject === "所有"){
             this.setState({
-                displayHomework:this.state.homework,
+                gradeHomework:this.state.homework,
+                displayHomework:this.state.subjectHomework,
             });
             gradeButton.innerText="年级";
             return null;
         }else{
+            for(let homework of this.state.subjectHomework){
+                if(homework.grade === subject){
+                    modifiedList1.push(homework);
+                }
+            }
             for(let homework of this.state.homework){
                 if(homework.grade === subject){
-                    modifiedList.push(homework);
+                    modifiedList2.push(homework);
                 }
             }
         }
         gradeButton.innerText=subject;
         this.setState({
-            displayHomework:modifiedList,
+            displayHomework:modifiedList1,
+            gradeHomework:modifiedList2,
         });
     };
 
     componentWillMount() {
-        this.setState({displayHomework: this.state.homework})
-        console.log(this.props.location.pathname);
+        this.setState({
+            displayHomework: this.state.homework,
+            subjectHomework: this.state.homework,
+            gradeHomework: this.state.homework
+        });
+        this.getData2();
+
         if(this.props.location.pathname==="/home/homework/overall"){
             this.setState({type:0});
             console.log(0);
@@ -168,7 +222,8 @@ class HomeworkDemo extends React.Component {
 
     render() {
         const menu1 = (
-            <Menu onClick={(e)=>{this.changeSubject1(e.item.props.children)}}>
+            <Menu onClick={(e)=>{
+                this.changeSubject1(e.item.props.children);}}>
                 <Menu.SubMenu title="所有">
                     <Menu.Item onClick={() => {
                     }}>所有</Menu.Item>
@@ -222,40 +277,68 @@ class HomeworkDemo extends React.Component {
         );
 
         const menu2 = (
-            <Menu onClick={(e)=>{this.changeSubject2(e.item.props.children)}}>
-                <Menu.SubMenu title="一年级">
+            <Menu onClick={(e)=>{this.changeSubject2(e.item.props.children)}} >
+                <Menu.SubMenu title="所有">
+                    <Menu.Item>一年级上</Menu.Item>
+                    <Menu.Item>一年级下</Menu.Item>
+
+                    <Menu.Item>二年级上</Menu.Item>
+                    <Menu.Item>二年级下</Menu.Item>
+
+                    <Menu.Item>三年级上</Menu.Item>
+                    <Menu.Item>三年级下</Menu.Item>
+
+                    <Menu.Item>四年级上</Menu.Item>
+                    <Menu.Item>四年级下</Menu.Item>
+
+                    <Menu.Item>五年级上</Menu.Item>
+                    <Menu.Item>五年级下</Menu.Item>
+
+                    <Menu.Item>六年级上</Menu.Item>
+                    <Menu.Item>六年级下</Menu.Item>
+
+                    <Menu.Item>七年级上</Menu.Item>
+                    <Menu.Item>七年级下</Menu.Item>
+
+                    <Menu.Item>八年级上</Menu.Item>
+                    <Menu.Item>八年级下</Menu.Item>
+
+                    <Menu.Item>九年级上</Menu.Item>
+                    <Menu.Item>九年级下</Menu.Item>
+                </Menu.SubMenu>
+                <Menu.SubMenu title="一年级" >
                     <Menu.Item>一年级上</Menu.Item>
                     <Menu.Item>一年级下</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu title="二年级">
+                <Menu.SubMenu title="二年级" >
                     <Menu.Item>二年级上</Menu.Item>
                     <Menu.Item>二年级下</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu title="三年级">
+                <Menu.SubMenu title="三年级" >
                     <Menu.Item>三年级上</Menu.Item>
                     <Menu.Item>三年级下</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu title="四年级">
+                <Menu.SubMenu title="四年级" >
                     <Menu.Item>四年级上</Menu.Item>
                     <Menu.Item>四年级下</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu title="五年级">
+                <Menu.SubMenu title="五年级" >
                     <Menu.Item>五年级上</Menu.Item>
                     <Menu.Item>五年级下</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu title="六年级">
+                <Menu.SubMenu title="六年级" >
                     <Menu.Item>六年级上</Menu.Item>
                     <Menu.Item>六年级下</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu title="七年级">
+                <Menu.SubMenu title="七年级" >
                     <Menu.Item>七年级上</Menu.Item>
                     <Menu.Item>七年级下</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu title="八年级">
+                <Menu.SubMenu title="八年级" >
                     <Menu.Item>八年级上</Menu.Item>
                     <Menu.Item>八年级下</Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu title="九年级">
+                <Menu.SubMenu title="九年级" >
                     <Menu.Item>九年级上</Menu.Item>
                     <Menu.Item>九年级下</Menu.Item>
                 </Menu.SubMenu>
@@ -272,7 +355,12 @@ class HomeworkDemo extends React.Component {
                             <Form.Item label='搜索' >
                                 {
                                     (
-                                        <Input id="search" onKeyUp={(e)=>{this.searchFun()}}  />
+                                        <Search
+                                            placeholder="input search text"
+                                            enterButton="搜索"
+                                            size="large"
+                                            onSearch={value => {this.searchFun(value)}}
+                                        />
                                     )
                                 }
                             </Form.Item>

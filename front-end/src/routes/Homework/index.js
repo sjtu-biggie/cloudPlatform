@@ -2,6 +2,7 @@ import React from 'react'
 import {Card, Spin, Button,Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon, Form, Dropdown, Input, Menu} from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
+
 import HomeworkList from './HomeworkList'
 const { Search } = Input;
 
@@ -75,6 +76,7 @@ for(let i=0;i<3;i++){
         score: '100'
     })
 }
+
 
 class HomeworkDemo extends React.Component {
     state = {
@@ -197,6 +199,7 @@ class HomeworkDemo extends React.Component {
             gradeHomework: this.state.homework
         });
         this.getData2();
+
 
         if(this.props.location.pathname==="/home/homework/overall"){
             this.setState({type:0});
@@ -344,6 +347,7 @@ class HomeworkDemo extends React.Component {
                 </Menu.SubMenu>
             </Menu>
         );
+
         return (
             <div>
                 <div>
@@ -361,20 +365,25 @@ class HomeworkDemo extends React.Component {
                                             size="large"
                                             onSearch={value => {this.searchFun(value)}}
                                         />
+
                                     )
                                 }
                             </Form.Item>
                         </Form>
                         <Dropdown overlay={menu1} trigger={['click']} style={{ marginTop: '30px'}}>
+
                             <Button  style={{width:"10%",marginLeft:'30px'}} ><span id="typeButton">学科</span><Icon type="down"/></Button>
                         </Dropdown>
                         <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft:'30px'}}>
                             <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}><span id="gradeButton">年级</span><Icon type="down"/></Button>
+
                         </Dropdown>
                     </Card>
                 </div>
                 <div>
+
                     <HomeworkList homeworkList={this.state.displayHomework}/>
+
                 </div>
             </div>
         )

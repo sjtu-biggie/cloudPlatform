@@ -18,41 +18,26 @@ public class LoginController {
     @Autowired(required = false)
     private UserMapper userMapper;
 
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@RequestBody JSONObject obj) {
-        String username=obj.getString("username");
-        String password=obj.getString("password");
-        User user1=userMapper.testUsername(username);
-        if (user1==null)
-        {
+        String username = obj.getString("username");
+        String password = obj.getString("password");
+        User user1 = userMapper.testUsername(username);
+        if (user1 == null) {
             return "用户名称错误";
         }
-        User user=userMapper.getUser(username,password);
-        if (user!=null)
-        {
+        User user = userMapper.getUser(username, password);
+        if (user != null) {
             return "成功登陆";
-        }
-        else {
+        } else {
             return "密码错误";
         }
     }
 
-//
-//    @RequestMapping("/addLogin")
-//    public String addLogin(HttpServletRequest request, Model model, Map<String,Object> map){
-//        String username=request.getParameter("username");
-//        String password=request.getParameter("password");
-//        User user=userMapper.Identify(username,password);
-//        if (user!=null)
-//        {
-//            model.addAttribute("user",username);
-//            map.put("msg","登陆成功");
-//            return "login";
-//        }
-//        else {
-//            map.put("msg","登陆失败");
-//            return "register";
-//        }
-//    }
-
+    @RequestMapping(value = "/getUserMessage", method = RequestMethod.POST)
+    public User getUserMessage(@RequestBody JSONObject obj) {
+        String username = obj.getString("username");
+        User user1 = userMapper.getUserMessage(username);
+        return user1;
+    }
 }

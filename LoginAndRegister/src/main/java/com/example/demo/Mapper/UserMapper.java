@@ -16,6 +16,9 @@ public interface UserMapper {
     @Select("select * from userdemo where username=#{username} and password =#{password}")
     public User getUser(String username, String password);
 
+    @Select("select * from userdemo where username=#{username}")
+    public User getUserMessage(String username);
+
     @Update("update userdemo set password=#{password},sid=#{sid},email=#{email},telephone=#{telephone},nickname=#{nickname},theGrade=#{theGrade},theClass=#{theClass},type=#{type} where username=#{username}")
     public void updateUser(User user);
 

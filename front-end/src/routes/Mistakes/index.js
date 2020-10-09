@@ -91,7 +91,6 @@ class Mistakes extends React.Component {
     searchFun=()=>{
         let value = document.getElementById("search").value;
         let modifiedList=this.state.courses.filter(function(item){
-            console.log(value)
             return (item.title.indexOf(value)  !== -1)|| item.description.indexOf(value) !==-1||item.time.indexOf(value)!==-1;
         });
         this.setState({

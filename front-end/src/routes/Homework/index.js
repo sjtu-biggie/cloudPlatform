@@ -84,6 +84,17 @@ class HomeworkDemo extends React.Component {
         displayHomework: null,
     };
 
+    searchFun=()=>{
+        let value = document.getElementById("search").value;
+        let modifiedList=this.state.displayHomework.filter(function(item){
+            console.log(value)
+            return (item.title.indexOf(value)  !== -1)|| (item.content.indexOf(value) !==-1)||(item.endTime.indexOf(value)!==-1);
+        });
+        console.log(modifiedList)
+        this.setState({
+            displayHomework:modifiedList,
+        });
+    };
 
     changeSubject1=(subject)=>{
         let modifiedList = [];
@@ -159,6 +170,8 @@ class HomeworkDemo extends React.Component {
         const menu1 = (
             <Menu onClick={(e)=>{this.changeSubject1(e.item.props.children)}}>
                 <Menu.SubMenu title="所有">
+                    <Menu.Item onClick={() => {
+                    }}>所有</Menu.Item>
                     <Menu.Item onClick={() => {
                     }}>语文</Menu.Item>
                     <Menu.Item onClick={() => {
@@ -259,7 +272,7 @@ class HomeworkDemo extends React.Component {
                             <Form.Item label='搜索' >
                                 {
                                     (
-                                        <Input/>
+                                        <Input id="search" onKeyUp={(e)=>{this.searchFun()}}  />
                                     )
                                 }
                             </Form.Item>

@@ -10,10 +10,10 @@ import { isAuthenticated } from '../../utils/Session'
 class HeaderBar extends React.Component {
   state = {
     icon: 'arrows-alt',
-    count: 100,
+    count: 29,
     visible: false,
     avatar: require('./img/04.jpg')
-  }
+  };
 
   componentDidMount () {
     screenfull.onchange(() => {
@@ -29,7 +29,7 @@ class HeaderBar extends React.Component {
 
   toggle = () => {
     this.props.onToggle()
-  }
+  };
   screenfullToggle = () => {
     if (screenfull.enabled) {
       screenfull.toggle()
@@ -53,12 +53,8 @@ class HeaderBar extends React.Component {
       <Menu className='menu'>
         <Menu.ItemGroup title='用户中心' className='menu-group'>
           <Menu.Item>你好 - {isAuthenticated()}</Menu.Item>
-          <Menu.Item>个人信息</Menu.Item>
+          <Menu.Item onClick={()=>{this.props.history.push("/home/personalcenter")}}>个人信息</Menu.Item>
           <Menu.Item><span onClick={this.logout}>退出登录</span></Menu.Item>
-        </Menu.ItemGroup>
-        <Menu.ItemGroup title='设置中心' className='menu-group'>
-          <Menu.Item>个人设置</Menu.Item>
-          <Menu.Item>系统设置</Menu.Item>
         </Menu.ItemGroup>
       </Menu>
     )
@@ -76,7 +72,7 @@ class HeaderBar extends React.Component {
         <div style={{lineHeight: '64px', float: 'right'}}>
           <ul className='header-ul'>
             <li><Icon type={icon} onClick={this.screenfullToggle}/></li>
-            <li onClick={() => this.setState({count: 0})}>
+            <li onClick={() => {this.setState({count: 0}),this.props.history.push('/home/notification')}}>
               <Badge count={appStore.isLogin ? count : 0} overflowCount={99} style={{marginRight: -17}}>
                 <Icon type="notification"/>
               </Badge>

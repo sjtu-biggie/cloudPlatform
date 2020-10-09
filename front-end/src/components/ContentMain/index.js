@@ -2,6 +2,9 @@ import React from 'react'
 import { withRouter, Switch, Redirect } from 'react-router-dom'
 import LoadableComponent from '../../utils/LoadableComponent'
 import PrivateRoute from '../PrivateRoute'
+import CoursePageDemo from "../../routes/Course/coursepage"
+import NotificationPage from "../../routes/Notification/notificationpage"
+import ChooseCourse from "../../routes/Manage";
 
 const Home = LoadableComponent(()=>import('../../routes/Home/index'))  //参数一定要是函数，否则不会懒加载，只会代码拆分
 
@@ -26,6 +29,7 @@ const ListDemo = LoadableComponent(()=>import('../../routes/Display/ListDemo/ind
 const TableDemo = LoadableComponent(()=>import('../../routes/Display/TableDemo/index'))
 const TabsDemo = LoadableComponent(()=>import('../../routes/Display/TabsDemo/index'))
 
+
 //反馈组件Demo
 const SpinDemo = LoadableComponent(()=>import('../../routes/Feedback/SpinDemo/index'))
 const ModalDemo = LoadableComponent(()=>import('../../routes/Feedback/ModalDemo/index'))
@@ -43,13 +47,44 @@ const SpringText = LoadableComponent(()=>import('../../routes/Other/SpringText/i
 //关于
 const About = LoadableComponent(()=>import('../../routes/About/index'))
 
+//错题
+const Mistakes = LoadableComponent(()=>import('../../routes/Mistakes/index'))
+
+//通知
+const Notification = LoadableComponent(()=>import('../../routes/Notification/index'))
+/*const NotificationPage = LoadableComponent(()=>import('../../routes/Notification/notificationpage'))*/
+
+
+//课程
+const CourseDemo = LoadableComponent(()=>import('../../routes/Course/index'));
+const AddCourseDemo = LoadableComponent(()=>import('../../routes/Course/addCoursePage'))
+
+//作业
+const HomeworkDemo = LoadableComponent(()=>import('../../routes/Homework/index'));
+const HomeworkAssignmentDemo = LoadableComponent(()=>import('../../routes/Homework/Assign'));
+const HomeworkCommit = LoadableComponent(()=>import('../../routes/Homework/commit'));
+const HomeworkGeneral = LoadableComponent(()=>import('../../routes/Homework/General'));
+const RatePage = LoadableComponent(()=>import('../../routes/Homework/RatePage'));
+//管理
+
+const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'));
+const Manager=LoadableComponent(()=>import('../../routes/Manage/manager'));
+
+//个人中心
+const PersonalCenter = LoadableComponent(()=>import('../../routes/PersonalCenter/Info'));
+
+
+
 @withRouter
 class ContentMain extends React.Component {
   render () {
     return (
-      <div style={{padding: 16, position: 'relative'}}>
+      <div style={{padding: 16, position: 'relative'}} id='duck'>
         <Switch>
           <PrivateRoute exact path='/home' component={Home}/>
+
+          <PrivateRoute exact path='/home/notification' component={Notification}/>
+
 
           <PrivateRoute exact path='/home/general/button' component={ButtonDemo}/>
           <PrivateRoute exact path='/home/general/icon' component={IconDemo}/>
@@ -81,7 +116,29 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/other/springText' component={SpringText}/>
 
           <PrivateRoute exact path='/home/about' component={About}/>
+          <PrivateRoute exact path='/home/course/overall' component={CourseDemo}/>
+          <PrivateRoute exact path='/home/course/ongoing' component={CourseDemo}/>
+          <PrivateRoute exact path='/home/course/end' component={CourseDemo}/>
+          <PrivateRoute exact path='/home/course/class*' component={CoursePageDemo}/>
+          <PrivateRoute exact path='/home/course/addCourse' component={AddCourseDemo}/>
 
+          <PrivateRoute exact path='/home/homework/overall' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/submitted' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/uncommitted' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/closed' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/notclosed' component={HomeworkDemo}/>
+          <PrivateRoute exact path='/home/homework/Assign' component={HomeworkAssignmentDemo}/>
+          <PrivateRoute exact path='/home/homework/commit' component={HomeworkCommit}/>
+          <PrivateRoute exact path='/home/homework/General' component={HomeworkGeneral}/>
+          <PrivateRoute exact path='/home/homework/rate' component={RatePage}/>
+
+          <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
+          <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
+
+          <PrivateRoute exact path='/home/personalcenter' component={PersonalCenter}/>
+
+          <PrivateRoute exact path='/home/manage/studentTable' component={StudentTable}/>
+          <PrivateRoute exact path='/home/manage/manager' component={Manager}/>
           <Redirect exact from='/' to='/home'/>
         </Switch>
       </div>

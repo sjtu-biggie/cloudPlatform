@@ -3,8 +3,8 @@ import {Card, Cascader, Tooltip, Icon, Form, Checkbox, Select, Input, Button, Co
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb/index'
 import TypingCard from '../../../components/TypingCard'
 
-const FormItem = Form.Item
-const Option = Select.Option
+const FormItem = Form.Item;
+const Option = Select.Option;
 
 const options = [
   {

@@ -3,12 +3,12 @@ import {Card, Col, Row, Icon, Tabs, message, Radio,BackTop} from 'antd'
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb/index'
 import TypingCard from '../../../components/TypingCard'
 
-const TabPane = Tabs.TabPane
+const TabPane = Tabs.TabPane;
 const panes = [
   {title: 'Tab 1', content: 'Content of Tab Pane 1', key: '1'},
   {title: 'Tab 2', content: 'Content of Tab Pane 2', key: '2'},
 ];
-let newTabIndex = 0
+let newTabIndex = 0;
 
 class TabsDemo extends React.Component {
   state = {

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Spin, Button, Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon} from 'antd'
+import {Card, Spin, Button, Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon,Pagination} from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb/index'
 import TypingCard from '../../../components/TypingCard'
@@ -34,12 +34,12 @@ class ListDemo extends React.Component {
     data2: [],
     loading: false,
     loadingMore: false,
-  }
+  };
 
   componentDidMount() {
     this.setState({
       loading: true,
-    })
+    });
     this.getData2();
     this.setState({
       loading: false
@@ -49,14 +49,14 @@ class ListDemo extends React.Component {
   getData2 = () => {
     this.setState({
       loadingMore: true
-    })
+    });
     axios.get('https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo').then(res => {
       this.setState({
         data2: this.state.data2.concat(res.data.results),
         loadingMore: false
       })
     })
-  }
+  };
 
   render() {
     const {size, bordered, loading, data2, loadingMore} = this.state
@@ -67,7 +67,7 @@ class ListDemo extends React.Component {
           <Spin style={loadingMore?{}:{display:'none'}}/>
           <Button style={!loadingMore?{}:{display:'none'}} onClick={() => this.getData2()}>加载更多</Button>
       </div>
-    )
+    );
     return (
       <div>
         <CustomBreadcrumb arr={['作业', '已截止']}/>
@@ -161,7 +161,7 @@ const styles = {
     textAlign: 'center',
   },
   listStyle:{
-    width:'80%'
+    width:'100%'
   },
   affixBox:{
     position: 'absolute',

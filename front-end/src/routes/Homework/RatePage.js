@@ -36,7 +36,7 @@ for(let i=0;i<1;i++){
       studentid:'3',
       handintime:'2020-10-01 12:12:12',
     nickname:"刘皓"+i,
-    grade:1,
+    score:1,
     comment:"做的还不错",
   })
 }
@@ -47,7 +47,7 @@ for(let i=0;i<10;i++){
     studentid:'3',
     handintime:'2020-10-01 12:12:12',
     nickname:"刘皓"+(1+i),
-    grade:null,
+    score:null,
     comment:"null",
   })
 }

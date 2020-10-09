@@ -85,7 +85,6 @@ class EditText extends Component {
 
 
 
-//输出组件
 export default class Manager extends Component {
     constructor(props) {
         super(props);

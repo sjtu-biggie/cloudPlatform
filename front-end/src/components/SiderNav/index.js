@@ -1,5 +1,6 @@
 import React from 'react'
 import CustomMenu from "../CustomMenu/index";
+import {Row} from "antd";
 
 
 class SiderNav extends React.Component {
@@ -143,12 +144,15 @@ class SiderNav extends React.Component {
 
         return (
             <div style={{height: '100vh', overflowY: 'scroll'}}>
+                <div style={{}}>
                 <div style={styles.logo}><p
                 style={{margin: '10px 0', fontSize: '20px', fontWeight: 'bold', color: 'navajowhite'}}>学易 ·
                 云作业平台</p></div>
                 <div><p
-                    style={{marginLeft: '65px', fontSize: '15px', color: 'white'}}>{this.state.role==='student'?'学生用户':'教师用户'}</p></div>
+                    style={{marginLeft: '65px', fontSize: '18px', color: 'white'}}>{this.state.role==='student'?'学生用户':'教师用户'}</p></div>
+                </div>
                 <CustomMenu menus={this.state.menus}/>
+
             </div>
         )
     }

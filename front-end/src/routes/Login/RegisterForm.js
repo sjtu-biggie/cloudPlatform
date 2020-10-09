@@ -11,7 +11,7 @@ class RegisterForm extends React.Component {
   state = {
     focusItem: -1,
     isPhone:false,
-  }
+  };
   registerSubmit = async (e) => {
     e.preventDefault();
     this.setState({

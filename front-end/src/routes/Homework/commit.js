@@ -13,7 +13,7 @@ class HomeworkCommit extends React.Component{
         title:"作业0",
         isCommit:false,
 };
-    
+
     render(){
         const { editorState,contentState } = this.state;
         return (
@@ -21,7 +21,7 @@ class HomeworkCommit extends React.Component{
                 <CustomBreadcrumb arr={['作业','提交']}/>
                 <Card  bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
 
-                    <CommitPage/>
+                    <CommitPage isCommit={this.state.isCommit} />
 
 
                     <Card bordered={false} className='card-item'>
@@ -42,7 +42,7 @@ class HomeworkCommit extends React.Component{
                         <Button><Icon type="upload"/>上传作业</Button>
                     </Upload>
                     <br></br>
-                    <Button type="primary"  onclick={()=>this.setState({isCommit:!this.state.isCommit})} size={this.state.size}>{this.state.isCommit===true?"重新提交":"提交"}</Button>&emsp;
+                    <Button type="primary"  onClick={()=>this.setState({isCommit:!this.state.isCommit})} size={this.state.size}>{this.state.isCommit===true?"重新提交":"提交"}</Button>&emsp;
                 </Card>
             </div>
         )

@@ -15,11 +15,16 @@ class commitPage extends React.Component{
         time:"2020-10-1 20:00",
         editorState: EditorState.createEmpty(),
         size: 'default',
-        isCommit:false,
         overDdl:false,
+        isCommit:null,
     };
 
 
+    componentWillMount() {
+        this.setState({
+            isCommit:this.props.isCommit
+        })
+    }
 
     render(){
         const { editorState,contentState } = this.state;

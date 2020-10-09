@@ -39,7 +39,8 @@ for (let i = 0; i < 6; i++) {
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         nickname: "陈小红",
         id: 1,
-        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分"
+        grade:"七年级上",
+        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
     })
 }
 for (let i = 0; i < 6; i++) {
@@ -64,7 +65,7 @@ const IconText = ({type, text}) => (
 
 class CourseDemo extends React.Component {
     state = {
-        role: 'teacher',
+        role: 'student',
         courses: data3,
         displayCourses:null,
         type: 0,
@@ -322,7 +323,7 @@ class CourseDemo extends React.Component {
                                                  href={"/home/course/class=" + item.id}>{item.course_name}</a>
                                               <p style={{marginTop: '10px', height: '90px'}}>{item.introduction}</p>
                                               <p style={{height: '10px'}}>
-                                                  <span style={{marginRight:'30px',fontSize:15}}>类型： 数学</span><span style={{marginRight:'30px'}}>开始时间： {item.start_date} </span><span style={{marginRight:'30px'}}>结束时间： {item.end_date}</span></p>
+                                                  <span style={{marginRight:'30px',fontSize:15}}>类型： {item.type}</span> <span style={{marginRight:'30px',fontSize:15}}>年级： {item.grade}</span><span style={{marginRight:'30px'}}>开始时间： {item.start_date} </span><span style={{marginRight:'30px'}}>结束时间： {item.end_date}</span></p>
                                           </Col>
                                       </Row>
                                   </List.Item>

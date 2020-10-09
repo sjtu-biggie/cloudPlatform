@@ -32,6 +32,7 @@ const IconText = ({ type, text }) => (
 
 class HomeworkList extends React.Component {
     state = {
+        loading:false,
         type:0,
         size: 'default',
         bordered: true,
@@ -46,8 +47,43 @@ class HomeworkList extends React.Component {
         this.setState({
             homeworkList:this.props.homeworkList
         });
-    }
+        this.getData2();
 
+    }
+    getUserInfo=async (username)=>{
+
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
+    };
+    getData2 = () => {
+        this.setState({
+            loadingMore: true
+        });
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
+    };
     componentWillReceiveProps(nextProps) {
         this.setState({
             homeworkList:nextProps.homeworkList

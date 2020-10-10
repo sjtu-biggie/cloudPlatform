@@ -184,7 +184,7 @@ export default class Manager extends Component {
                 <Row>
                 <Col span={12}>
                     <Card title={<div style={{textAlign:"center"}}>上课学生</div>} >
-                        <Card className={styles.control} bordered={false} style={{ marginBottom: 10 }}>
+                        <Card className={styles.control} bordered={false} style={{ marginBottom: 10,height:'100px' }}>
                             <Row>
                                 <Col span={16}>
                             <Input style={{ width: 500, marginRight: 16 }}
@@ -193,11 +193,11 @@ export default class Manager extends Component {
                                    onChange={event => this.setState({ search: event.target.value })}/>
                                 </Col>
                                 <Col span={2} offset={1}>
-                            <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <Button   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </Col>
                             </Row>
                         </Card>
-                        <Card bordered={false} style={{ marginBottom: 10, height: 800 }}>
+                        <Card bordered={false} style={{ marginBottom: 10, height: 770 }}>
                             <Table
                                 rowKey={'id'}
                                 columns={[...columns.map(item => ({
@@ -211,7 +211,7 @@ export default class Manager extends Component {
                                     name: '操作',
                                     key: 'del',
                                     render: record => (
-                                        <Button onClick={() => {
+                                        <a size={"small"} onClick={() => {
                                             this.setState({
                                                 orData: orData.filter(item => item.id !== record.id),
                                                 orData2: [record, ...orData2],
@@ -219,7 +219,7 @@ export default class Manager extends Component {
                                                 this.handleSearch();
                                                 this.handleSearch2();
                                             });
-                                        }}>删除</Button>),
+                                        }}>删除</a>),
                                 }]}
                                 dataSource={renderData}/>
                         </Card>
@@ -227,7 +227,7 @@ export default class Manager extends Component {
                 </Col>
                 <Col span={12}>
                     <Card title={<div style={{textAlign:"center"}}>未上课学生</div>}>
-                        <Card bordered={false} style={{ marginBottom: 10 }}>
+                        <Card bordered={false} style={{ marginBottom: 10 ,height:'100px'}} >
                             <div className={styles.control}>
                                 <Button
                                     type={'primary'}
@@ -258,7 +258,7 @@ export default class Manager extends Component {
                                        <Button onClick={this.handleSearch3}>精确搜索</Button>
                             </div>
                         </Card>
-                        <Card bordered={false} style={{ marginBottom: 10, height: 778 }}>
+                        <Card bordered={false} style={{ marginBottom: 10, height: 770 }}>
                             <Table
                                 rowKey={'id'}
                                 columns={columns1}

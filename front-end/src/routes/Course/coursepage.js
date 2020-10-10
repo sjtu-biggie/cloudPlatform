@@ -587,7 +587,7 @@ class CoursePageDemo extends React.Component {
                     return (<Collapse.Panel header={value.title} key={index}>
                         <p>{value.bulletin}</p>
                         <span style={{fontWeight:'bold'}}>发布时间：</span>{value.publish_date}
-                        {this.state.deleteBulletin?<Button type="danger" style={{float:'right'}}>删除</Button>:null}
+                        {this.state.deleteBulletin?<Button type="danger" size={'small'} style={{float:'right'}}>删除</Button>:null}
                     </Collapse.Panel>)
                 })}</Collapse>
                 <Pagination defaultCurrent={1} total={50}/>
@@ -609,11 +609,11 @@ class CoursePageDemo extends React.Component {
             {year: '1997', value: 7},
             {year: '1998', value: 9},
             {year: '1999', value: 13}
-        ]
+        ];
         const cols = {
             'value': {min: 0},
             'year': {range: [0, 1]}
-        }
+        };
 
         const data2 = [
             {year: '1951 年', sales: 38},
@@ -651,7 +651,7 @@ class CoursePageDemo extends React.Component {
                     </Row>
                 </Card>
                 {
-                    this.state.step>=1?
+                    this.state.step===1?
                         <Row>
                             <Col span={16}>
                                 <Card style={{height:'130px'}}>
@@ -682,9 +682,9 @@ class CoursePageDemo extends React.Component {
                                         renderItem={item => (
                                             <List.Item>
                                                 <List.Item.Meta
-                                                    title={<a href="https://ant.design">{item.title}</a>}
+                                                    title={<a  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}} href="https://ant.design">{item.title}</a>}
                                                 />
-                                                <div>{item.rank}/120</div>
+                                                <div>成绩：{item.score}<br/> 排名：{item.rank}/120</div>
                                             </List.Item>
                                         )}
                                     >
@@ -701,7 +701,7 @@ class CoursePageDemo extends React.Component {
                     :null
                 }
                 {
-                    this.state.step >= 2 ?
+                    this.state.step === 2 ?
                         <Row gutter={10} style={{marginTop:'10px'}}>
                             <Col span={12}>
                                 <Card title='近一个月排名变化' bordered={false} className='card-item'>
@@ -733,8 +733,16 @@ class CoursePageDemo extends React.Component {
     };
 
     studentTableRender=()=>{
-        return(<StudenTable courseId={this.state.course.id}/>)
-    };
+        return(
+            <div>
+                <Card title={"学生管理"} style={{marginBottom:'10px'}}>
+                    点击学生名字，可以看到学生在该门课程中的具体数据！
+                </Card>
+
+                <StudenTable courseId={this.state.course.id}/>
+
+            </div>
+        ) };
     typeRender = () => {
         switch (this.state.type) {
             case 1:
@@ -914,8 +922,9 @@ const deadHomework = [
 ];
 for (let i = 0; i < 15; i++) {
     deadHomework.push({
-        title: '七年级作业' + i,
+        title: '七年级上数学作业' + i,
         rank: 1+i,
+        score:72+i,
     })
 }
 //TODO:add pagination support

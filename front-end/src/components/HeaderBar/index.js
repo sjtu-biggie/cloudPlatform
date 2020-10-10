@@ -37,7 +37,7 @@ class HeaderBar extends React.Component {
   }
   logout = () => {
     this.props.appStore.toggleLogin(false)
-    this.props.history.push(this.props.location.pathname)
+    this.props.history.push("/login")
   }
 
   render () {

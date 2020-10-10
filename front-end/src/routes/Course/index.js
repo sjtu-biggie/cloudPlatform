@@ -319,7 +319,7 @@ class CourseDemo extends React.Component {
                                               <p style={{marginTop:'25px'}}>教师 ：{item.nickname}</p>
                                           </Col>
                                           <Col span={21}>
-                                              <a style={{fontSize: '20px', fontWeight: 'bold', display: 'block'}}
+                                              <a style={{color:'darkslategray',fontSize: '20px', fontWeight: 'bold', display: 'block'}}
                                                  href={"/home/course/class=" + item.id}>{item.course_name}</a>
                                               <p style={{marginTop: '10px', height: '90px'}}>{item.introduction}</p>
                                               <p style={{height: '10px'}}>

@@ -954,7 +954,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级三班','八年级二班']
+
     })
 }
 
@@ -968,7 +970,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级三班','八年级二班']
+
     })
 }
 
@@ -982,7 +986,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级三班','八年级二班']
+
     })
 }
 
@@ -996,7 +1002,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级一班','八年级四班']
+
     })
 }
 
@@ -1010,7 +1018,8 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级一班','八年级二班']
     })
 }
 

@@ -45,10 +45,7 @@ class SiderNav extends React.Component {
         this.setState({
             userInfo:user,
             role:user.type
-        })
-    };
-    componentDidMount() {
-        //TODO:get role of user from local storage
+        });
         if(this.state.role==='student'){
             this.setState({
                 menus: [
@@ -154,7 +151,7 @@ class SiderNav extends React.Component {
                         ]
                     },
                     {
-                        title: '错题',
+                        title: '班级',
                         icon: 'info-circle-o',
                         key: '/home/mistakes'
                     },
@@ -181,6 +178,10 @@ class SiderNav extends React.Component {
                 }
             ]
         })
+    };
+    componentDidMount() {
+        //TODO:get role of user from local storage
+
     }
     // {
     //     title: '展示组件',
@@ -270,7 +271,7 @@ class SiderNav extends React.Component {
                 云作业平台</p></div>
 
                 <div><p
-                    style={{marginLeft: '65px', fontSize: '18px', color: 'white'}}>{this.state.role==='student'?'学生用户':this.state.role==='teacher'?'教师用户':'管理员用户'}</p></div>
+                    style={{marginLeft: '65px', fontSize: '18px', color: 'white'}}>{this.state.role==='student'?'学生用户':this.state.role==='teacher'?'教师用户':this.state.role==='teacher'?'管理员用户':'未认证用户'}</p></div>
                 </div>
                 <img style={{marginLeft:'20px'}} width={160} src={require('../../pic/sjtulogored.png')}/>
 <div style={{marginTop:'30px'}}/>

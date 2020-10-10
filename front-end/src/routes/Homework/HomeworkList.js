@@ -126,23 +126,32 @@ class HomeworkList extends React.Component {
                               pagination={{pageSize: 3}}
                               style={styles.listStyle}
                               renderItem={item=>{
+                                  let range="";
+                                  for(let i of item.range){
+                                      range=range+i+",";
+                                  }
                                   return (
                                       <List.Item
                                           actions={this.state.role === 'student' ?
                                               [<IconText type="file-text" text= {item.score} />,
                                                   <IconText type="calendar" text={"截止："+item.endTime} />,
                                                   <IconText type="schedule" text ={ item.handinTime === null ? "未提交":"已提交"} />,
-                                                  <IconText type="clock-circle-o" text={this.SetCon(item)} />]
+                                                  <IconText type="clock-circle-o" text={this.SetCon(item)} />,
+                                                  <IconText type="profile" text={"布置范围："+range} />
+                                                  ]
                                           : [<IconText type="file-text" text={item.score} />,
                                                   <IconText type="calendar" text={"截止："+item.endTime} />,
                                                   <IconText type="pie-chart" text = {this.state.homeworkList.length +"/" + this.state.allAmount} />,
-                                                  <IconText type="clock-circle-o" text={this.SetCon(item)} />]}
+                                                  <IconText type="clock-circle-o" text={this.SetCon(item)} />,
+                                                  <IconText type="profile" text={"布置范围："+range} />
+                                              ]}
+
                                           extra={(this.state.delete === false ? []:[<Button type="danger" onClick={()=>{
                                               //delete
                                           }}>删除</Button>])}
                                           >
                                           <List.Item.Meta
-                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit"}>{item.title}</a> : <a href={"/home/homework/General"}>{item.title}</a>}
+                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit"}>{item.title}</a> : <a href={"/home/homework/General"}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
                                               description={item.description}
                                           />
                                           {item.content}
@@ -159,6 +168,7 @@ class HomeworkList extends React.Component {
 const styles = {
     listStyle:{
         width:'100%',
+        marginTop:'15px'
     }
 }
 

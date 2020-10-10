@@ -551,7 +551,7 @@ class CoursePageDemo extends React.Component {
             ++i;
         }
         return (
-            <Collapse defaultActiveKey={['1']}>{chapterList.map((value, index) => {
+            <Collapse defaultActiveKey={['0']}>{chapterList.map((value, index) => {
                 return (<Collapse.Panel header={value.title} key={index}>
                     <List
                         bordered

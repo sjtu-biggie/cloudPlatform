@@ -95,6 +95,7 @@ class SiderNav extends React.Component {
                     }
                 ]
             })
+            return;
         }
         if(this.state.role==='manager'){
             this.setState({
@@ -115,7 +116,8 @@ class SiderNav extends React.Component {
                         key: '/home/display/list'
                     }
                 ]
-            })
+            });
+            return;
         }
         if(this.state.role==='teacher'){
             this.setState({
@@ -157,19 +159,28 @@ class SiderNav extends React.Component {
                         key: '/home/mistakes'
                     },
                     {
-                        title: '用户管理',
-                        icon: 'solution',
-                        key: '/home/manage/manager'
-                    },
-                    {
                         title: '帮助',
                         icon: 'file-unknown',
                         key: '/home/display/list'
                     }
                 ]
             })
+            return;
         }
-
+        this.setState({
+            menus: [
+                {
+                    title: '首页',
+                    icon: 'home',
+                    key: '/home'
+                },
+                {
+                    title: '帮助',
+                    icon: 'file-unknown',
+                    key: '/home/display/list'
+                }
+            ]
+        })
     }
     // {
     //     title: '展示组件',

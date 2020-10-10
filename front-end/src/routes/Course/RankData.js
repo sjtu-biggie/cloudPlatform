@@ -15,10 +15,11 @@ import {
     Dropdown,
     Input,
     Menu,
-    Col, Row, Statistic, InputNumber
+    Col, Row, Statistic, InputNumber, Steps, Progress
 } from 'antd'
 import axios from 'axios'
 import TextArea from "antd/es/input/TextArea";
+import {Axis, Chart, Geom, Tooltip} from "bizcharts";
 
 const data3 = [];
 for (let i = 0; i < 23; i++) {
@@ -34,26 +35,24 @@ const gridStyle = {
 };
 
 
-class Rating extends React.Component {
+class RankData extends React.Component {
     state = {
         type: 0,
+        step:0,
         size: 'default',
         bordered: true,
         loading: false,
         loadingMore: false,
         delete: false,
         role: 'teacher',
-        studentIndex: 0,
-        studentHomeworkList: null,
-        homework: null,
+        homework:null,
     };
 
     componentWillMount() {
 
         this.setState({
             loading: true,
-            studentHomeworkList: this.props.studentHomeworkList,
-            homework: this.props.homework
+            homework:this.props.homework,
         });
         this.setState({
             loading: false
@@ -61,125 +60,137 @@ class Rating extends React.Component {
     }
 
     render() {
+        const data = [
+            {year: '1991', value: 3},
+            {year: '1992', value: 4},
+            {year: '1993', value: 3.5},
+            {year: '1994', value: 5},
+            {year: '1995', value: 4.9},
+            {year: '1996', value: 6},
+            {year: '1997', value: 7},
+            {year: '1998', value: 9},
+            {year: '1999', value: 13}
+        ];
+        const cols = {
+            'value': {min: 0},
+            'year': {range: [0, 1]}
+        };
+
+        const data2 = [
+            {year: '1951 年', sales: 38},
+            {year: '1952 年', sales: 52},
+            {year: '1956 年', sales: 61},
+            {year: '1957 年', sales: 145},
+            {year: '1958 年', sales: 48},
+            {year: '1959 年', sales: 38},
+            {year: '1960 年', sales: 38},
+            {year: '1962 年', sales: 38},
+        ];
+        const cols2 = {
+            'sales': {tickInterval: 20},
+        };
         return (
             <div>
-                <Row>
-                    <Col span={24}>
-                        <Card style={{
-                            fontWeight: 'bold',
-                            fontSize: '25px',
-                            width: '100%',
-                            height: '90px',
-                            backgroundColor: 'darkslategray',
-                            color: 'white'
-                        }}>
+                <Card bordered={false} style={{marginBottom: 10}} id='gradeCard'>
+                    <Row>
+                        <Col span={10} offset={6}>
 
-                            <Card.Grid style={{
-                                width: '10%',
-                                textAlign: 'center',
-                                height: '90px'
-                            }}>
-                                查看作业
-                            </Card.Grid>
-                            <Card.Grid style={{
-                                width: '10%',
-                                textAlign: 'center',
-                                height: '90px'
-                            }}>
-                                查看答案
-                            </Card.Grid>
-                            <Card.Grid style={{
-                                width: '30%',
-                                textAlign: 'center',
-                                height: '90px'
-                            }}>{this.props.homework.title}</Card.Grid>
-                            <Card.Grid style={{
-                                width: '11%',
-                                textAlign: 'center',
-                                height: '90px'
-                            }} hoverable={false}>
-                                <Statistic style={{color: 'white', fontWeight: 'bold'}} title="已批改/未批改" value={35}
-                                           suffix="/ 50"/>
-                            </Card.Grid>
-                            <Card.Grid style={{
-                                width: '10%',
-                                textAlign: 'center',
-                                height: '90px'
-                            }} hoverable={false}>
-                                <Statistic style={{color: 'white', fontWeight: 'bold', paddingBottom: '20px'}}
-                                           title="当前平均分" value={93} suffix="/ 100"/>
-                            </Card.Grid>
-                            <Card.Grid style={{
-                                width: '29%',
-                                textAlign: 'center',
-                                height: '90px'
-                            }} hoverable={false}>
-                                {this.state.studentIndex <= 0 ? null :
-                                    <Icon type={'left'} onClick={
-                                        () => {
-                                            this.setState({
-                                                studentIndex: this.state.studentIndex - 1
-                                            })
-                                        }
-                                    } style={{float: 'left', marginTop: '5px'}}/>}
-                                {this.state.studentHomeworkList[this.state.studentIndex].nickname}
-                                {this.state.studentIndex >= (this.state.studentHomeworkList.length - 1) ? null :
-                                    <Icon type={'right'} onClick={
-                                        () => {
-                                            this.setState({
-                                                studentIndex: this.state.studentIndex + 1
-                                            })
-                                        }
-                                    } style={{float: 'right', marginTop: '5px'}}/>}
+                            <Steps current={this.state.step} style={{marginTop: '200px', fontWeight: 'bold'}}
+                                   size="large">
+                                <Steps.Step title="提交作业" onClick={() => {
+                                    this.setState({step: 0})
+                                }} description="排名更准确"/>
+                                <Steps.Step title="学习数据" onClick={() => {
+                                    this.setState({step: 1})
+                                }} description="胜败乃兵家常事"/>
+                                <Steps.Step title="数据分析" onClick={() => {
+                                    this.setState({step: 2})
+                                }} description="知己知彼"/>
+                            </Steps>
 
-                            </Card.Grid>
+                        </Col>
+                    </Row>
+                </Card>
+                {
+                    this.state.step===1?
+                        <Row>
+                            <Col span={16}>
+                                <Card style={{height:'130px'}}>
+                                    <Statistic style={{marginTop:'10px',float:"left"}} title="姓名" value={'陈小红'} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已完成作业数" value={12} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="缺交作业数" value={1} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="平均得分" value={84.25} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="近两周平均得分" value={86.75} />
+                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="综合评级" value={'良'} />
+                                </Card>
+                            </Col>
+                            <Col span={4}>
+                                <Card style={{height:'130px'}}>
+                                    位次比例
+                                    <Progress style={{marginLeft:'10px'}} width={80} type="circle" percent={73} />
+                                </Card>
+                            </Col>
+                            <Col span={4}>
+                                <Card style={{height:'130px'}}>
+                                    <Statistic style={{marginTop:'10px',display:'block'}} title="总排名" value={93} suffix="/ 120" />
+                                </Card>
+                            </Col>
+                            <Col span={24}>
+                                <Card style={{marginTop:'10px'}} title={'单次作业排名'}>
+                                    <List
+                                        pagination={{pageSize: 6}}
+                                        dataSource={this.state.homework}
+                                        renderItem={item => (
+                                            <List.Item>
+                                                <List.Item.Meta
+                                                    title={<a  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}} href="https://ant.design">{item.title}</a>}
+                                                />
+                                                <div>成绩：{item.score}<br/> 排名：{item.rank}/120</div>
+                                            </List.Item>
+                                        )}
+                                    >
+                                        {this.state.loading && this.state.hasMore && (
+                                            <div className="demo-loading-container">
+                                                <Spin />
+                                            </div>
+                                        )}
+                                    </List>
+                                </Card>
+                            </Col>
 
-                        </Card>
-                    </Col>
-                    <Col span={17}>
-                        <Card style={{height: '800px',overflow:'scroll'}}>
-                            <img style={{overflow:'scroll'}} width={800} alt="logo" src={require("../../pic/deadHomework1.jpg" )}/>
-
-                        </Card>
-                    </Col>
-                    <Col span={7}>
-                        <Card style={{height: '800px'}}>
-                            <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>作业类型 : </span>
-                                {this.state.homework.accessmentalgorithms}</p>
-                            <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>截止时间 : </span>
-                                {this.state.homework.endtime}</p>
-                            <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>提交时间 : </span>
-                                {this.state.studentHomeworkList[this.state.studentIndex].handintime}</p>
-                            {
-                                this.state.studentHomeworkList[this.state.studentIndex].score === null ?
-                                    <div>
-                                        <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
-                                            <InputNumber style={{marginLeft: '20px'}} id={'inputNumber'}min={0} max={100}/> /100</p>
-                                        <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>
-                                            <TextArea style={{height:'200px',marginTop:'15px'}} id={'textarea'}/></p>
-                                    </div>
-                                    :
-                                    <div>
-                                        <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
-                                            <span style={{fontSize: '20px', fontWeight: 'bold', color: 'blue'}}>已评分！</span>
-                                            <p> {this.state.studentHomeworkList[this.state.studentIndex].score}/100</p>
-                                            <Button  style={{fontWeight:'bold',marginLeft:'10px'}}> 重新评分 </Button>
-                                          </p>
-                                        <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>
-                                            <span style={{fontSize: '20px', fontWeight: 'bold', color: 'blue'}}>已评价！</span>
-                                            <p>{this.state.studentHomeworkList[this.state.studentIndex].comment}</p>
-                                            <Button  style={{fontWeight:'bold',marginLeft:'10px'}}> 重新评价 </Button>
-                                        </p>
-                                    </div>
-
-                            }
-
-
-                        </Card>
-                    </Col>
-                </Row>
+                        </Row>
+                        :null
+                }
+                {
+                    this.state.step === 2 ?
+                        <Row gutter={10} style={{marginTop:'10px'}}>
+                            <Col span={12}>
+                                <Card title='近一个月排名变化' bordered={false} className='card-item'>
+                                    <Chart height={400} data={data} scale={cols} forceFit>
+                                        <Axis name="year"/>
+                                        <Axis name="value"/>
+                                        <Tooltip crosshairs={{type: 'y'}}/>
+                                        <Geom type="line" position="year*value" size={2}/>
+                                        <Geom type='point' position="year*value" size={4} shape={'circle'}
+                                              style={{stroke: '#fff', lineWidth: 1}}/>
+                                    </Chart>
+                                </Card>
+                            </Col>
+                            <Col span={12}>
+                                <Card title='近一个月作业得分' bordered={false} className='card-item'>
+                                    <Chart height={400} data={data2} scale={cols2} forceFit>
+                                        <Axis name="year"/>
+                                        <Axis name="sales"/>
+                                        <Tooltip crosshairs={{type: 'y'}}/>
+                                        <Geom type="interval" position="year*sales"/>
+                                    </Chart>
+                                </Card>
+                            </Col>
+                        </Row>:
+                        null
+                }
             </div>
-        )
+        );
     }
 }
 
@@ -189,4 +200,4 @@ const styles = {
     }
 };
 
-export default Rating
+export default RankData

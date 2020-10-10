@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Spin, Button,Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon, Form, Dropdown, Input, Menu} from 'antd'
+import {Card, Button, List, Icon,} from 'antd'
 import axios from 'axios'
 
 
@@ -32,11 +32,12 @@ const IconText = ({ type, text }) => (
 
 class HomeworkList extends React.Component {
     state = {
+        loading:false,
         type:0,
         size: 'default',
         bordered: true,
         delete: false,
-        role: 'student',
+        role: 'teacher',
         homeworkList: test,
         allAmount: 40,
         t: test
@@ -46,8 +47,43 @@ class HomeworkList extends React.Component {
         this.setState({
             homeworkList:this.props.homeworkList
         });
-    }
+        this.getData2();
 
+    }
+    getUserInfo=async (username)=>{
+
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
+    };
+    getData2 = () => {
+        this.setState({
+            loadingMore: true
+        });
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
+    };
     componentWillReceiveProps(nextProps) {
         this.setState({
             homeworkList:nextProps.homeworkList
@@ -99,7 +135,7 @@ class HomeworkList extends React.Component {
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />]
                                           : [<IconText type="file-text" text={item.score} />,
                                                   <IconText type="calendar" text={"截止："+item.endTime} />,
-                                                  <IconText type="pie-chart" text = {10 +"/" + this.state.allAmount} />,
+                                                  <IconText type="pie-chart" text = {this.state.homeworkList.length +"/" + this.state.allAmount} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />]}
                                           extra={(this.state.delete === false ? []:[<Button type="danger" onClick={()=>{
                                               //delete

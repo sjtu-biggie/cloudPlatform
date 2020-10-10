@@ -38,6 +38,7 @@ for(let i=0;i<1;i++){
     nickname:"刘皓"+i,
     score:1,
     comment:"做的还不错",
+    pic:"1kjeS92j12vf%4"
   })
 }
 for(let i=0;i<10;i++){

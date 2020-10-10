@@ -137,7 +137,8 @@ class Rating extends React.Component {
                         </Card>
                     </Col>
                     <Col span={17}>
-                        <Card style={{height: '800px'}}>
+                        <Card style={{height: '800px',overflow:'scroll'}}>
+                            <img style={{overflow:'scroll'}} width={800} alt="logo" src={require("../../pic/deadHomework1.jpg" )}/>
 
                         </Card>
                     </Col>

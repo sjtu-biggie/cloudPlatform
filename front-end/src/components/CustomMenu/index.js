@@ -72,8 +72,8 @@ class CustomMenu extends React.Component {
 
   renderMenuItem = ({key, icon, title,}) => {
     return (
-      <Menu.Item key={key}>
-        <Link to={key}>
+      <Menu.Item key={key} >
+        <Link to={key}  style={{fontSize:'20px'}} >
           {icon && <Icon type={icon}/>}
           <span>{title}</span>
         </Link>
@@ -82,7 +82,7 @@ class CustomMenu extends React.Component {
   }
   renderSubMenu = ({key, icon, title, subs}) => {
     return (
-      <Menu.SubMenu key={key} title={<span>{icon && <Icon type={icon}/>}<span>{title}</span></span>}>
+      <Menu.SubMenu  key={key} title={<span>{icon && <Icon style={{}} type={icon}/>}<span  style={{fontSize:'20px'}} >{title}</span></span>}>
         {
           subs && subs.map(item => {
             return item.subs && item.subs.length > 0 ? this.renderSubMenu(item) : this.renderMenuItem(item)
@@ -93,10 +93,10 @@ class CustomMenu extends React.Component {
   }
 
   render() {
-    const {openKeys, selectedKeys} = this.state
+    const {openKeys, selectedKeys} = this.state;
     return (
       <Menu
-        onOpenChange={this.onOpenChange}
+          onOpenChange={this.onOpenChange}
         onClick={({key}) => this.setState({selectedKeys: [key]})}
         openKeys={openKeys}
         selectedKeys={selectedKeys}

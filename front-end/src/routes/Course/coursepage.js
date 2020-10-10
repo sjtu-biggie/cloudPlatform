@@ -44,7 +44,7 @@ class CoursePageDemo extends React.Component {
         loadingMore: false,
         course: deadCourse,
         bulletins: bulletin,
-        role: 'teacher',
+        role: 'student',
         addHomework: false,
         deleteHomework: false,
         addBulletin: false,
@@ -54,6 +54,7 @@ class CoursePageDemo extends React.Component {
         modifySyllabus:false,
         addChapter:false,
         addContent:false,
+        displayHomeworkList:deathHomework
     };
 
     componentDidMount() {
@@ -79,17 +80,39 @@ class CoursePageDemo extends React.Component {
             console.log(2);
         }
     }
+    getUserInfo=async (username)=>{
 
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
+    };
     getData2 = () => {
         this.setState({
             loadingMore: true
         });
-        axios.get('https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo').then(res => {
-            this.setState({
-                data2: this.state.data2.concat(res.data.results),
-                loadingMore: false
-            })
-        })
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
     };
     homeworkRender = () => {
         //TODO:传参给FormDemo1
@@ -116,7 +139,7 @@ class CoursePageDemo extends React.Component {
                 </Card>
                 {
                     this.state.addHomework ? <FormDemo1 datas={this.state.type}/> :
-                        <HomeworkList delete={this.state.deleteHomework}/>
+                        <HomeworkList homeworkList={this.state.displayHomeworkList} delete={this.state.deleteHomework}/>
                 }
 
             </div>
@@ -528,7 +551,7 @@ class CoursePageDemo extends React.Component {
             ++i;
         }
         return (
-            <Collapse defaultActiveKey={['1']}>{chapterList.map((value, index) => {
+            <Collapse defaultActiveKey={['0']}>{chapterList.map((value, index) => {
                 return (<Collapse.Panel header={value.title} key={index}>
                     <List
                         bordered
@@ -920,5 +943,75 @@ const steps = [
         title: 'Last',
         content: 'Last-content',
     }];
+const deathHomework = [];
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'数学',
+        grade:'七年级上',
+        title: `七年级上数学作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100'
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'语文',
+        grade:'七年级上',
+        title: `七年级上语文作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100'
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'英语',
+        grade:'七年级上',
+        title: `七年级上英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100'
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'英语',
+        grade:'八年级上',
+        title: `八年级上英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100'
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'英语',
+        grade:'八年级上',
+        title: `八年级下英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100'
+    })
+}
 
 export default CoursePageDemo

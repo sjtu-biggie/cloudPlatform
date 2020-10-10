@@ -44,6 +44,7 @@ const Hw = {
     answer: '参考答案',
     startTime: '2020-10-10 00:00:00',
     endTime: '2020-10-12 00:00:00',
+
 }
 
 @Form.create()
@@ -52,7 +53,8 @@ class ChangeHomework extends React.Component {
         text: '获取验证码',
         disabled: false,
         homework: Hw,
-        ableState: true
+        ableState: true,
+        buttonName:'修改作业'
     };
     timer = 0;
     handleSubmit = (e) => {
@@ -71,10 +73,16 @@ class ChangeHomework extends React.Component {
     }
 
     componentWillUnmount() {
-        clearInterval(this.timer)
+        clearInterval(this.timer);
     }
 
     render() {
+        const display2 = {
+            display:(this.state.buttonName === '取消修改') ? 'block' : 'none',
+            width: '100%',
+            margin: '0 auto'
+        }
+
         const {getFieldDecorator, getFieldValue} = this.props.form
         const formItemLayout = {
             labelCol: {
@@ -111,7 +119,7 @@ class ChangeHomework extends React.Component {
 
         return (
             <div>
-                <Card bordered={false} title='修改作业'>
+                <Card bordered={false}>
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                         <FormItem label='作业名称' {...formItemLayout} required>
                             {
@@ -172,28 +180,28 @@ class ChangeHomework extends React.Component {
                                 )
                             }
                         </FormItem>
-                        <FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
+                        <FormItem style={display2} label='作业详情' {...DraftLayout} >
                         {
                             (
                                 <DraftDemo/>
                             )
                         }
                     </FormItem>
-                        <FormItem label='上传作业附件' {...formItemLayout} >
+                        <FormItem label='上传作业附件' {...formItemLayout} style={display2} >
                             {
                                 (
                                     <UploadDemo/>
                                 )
                             }
                         </FormItem>
-                        <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
+                        <FormItem style={display2} label='参考答案'  {...DraftLayout}>
                             {
                                 (
                                     <DraftDemo disabled='true' placeholder = {this.state.homework.answer}/>
                                 )
                             }
                         </FormItem>
-                        <FormItem label='上传答案附件' {...formItemLayout} >
+                        <FormItem label='上传答案附件' {...formItemLayout} style={display2}>
                             {
                                 (
                                     <UploadDemo/>
@@ -204,9 +212,21 @@ class ChangeHomework extends React.Component {
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
                             <Button type="primary" htmlType="submit" disabled={this.state.ableState}>提交</Button>
                             <Button type="primary" style={{marginLeft: 50}} onClick={()=>{
-                                this.setState({ableState: false});
-                                message.success('开始修改');
-                            }}>修改</Button>
+                                if (this.state.buttonName === '修改作业'){
+                                    this.setState({
+                                        ableState: false,
+                                        buttonName:'取消修改'
+                                    });
+                                    message.success('开始修改');
+                                }
+                                else {
+                                    this.setState({
+                                        ableState: true,
+                                        buttonName:'修改作业'
+                                    });
+                                    message.success('取消修改');
+                                }
+                            }}>{this.state.buttonName}</Button>
                         </FormItem>
                     </Form>
                 </Card>

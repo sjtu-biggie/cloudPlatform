@@ -70,6 +70,7 @@ const RatePage = LoadableComponent(()=>import('../../routes/Homework/RatePage'))
 
 const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'));
 const Manager=LoadableComponent(()=>import('../../routes/Manage/manager'));
+const ClassStudentManage=LoadableComponent(()=>import('../../routes/Manage/classStudentManage'));
 
 //个人中心
 const PersonalCenter = LoadableComponent(()=>import('../../routes/PersonalCenter/Info'));
@@ -141,6 +142,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/manage/studentTable' component={StudentTable}/>
           <PrivateRoute exact path='/home/manage/manager' component={Manager}/>
           <PrivateRoute exact path='/home/manage/data' component={DataPage}/>
+          <PrivateRoute exact path='/home/manage/classStudentManage' component={ClassStudentManage}/>
 
           <Redirect exact from='/' to='/home'/>
         </Switch>

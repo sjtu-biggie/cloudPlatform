@@ -153,7 +153,8 @@ class SiderNav extends React.Component {
                     {
                         title: '班级',
                         icon: 'info-circle-o',
-                        key: '/home/mistakes'
+                        key:'/home/manage/classStudentManage'
+                        // key: '/home/mistakes'
                     },
                     {
                         title: '帮助',

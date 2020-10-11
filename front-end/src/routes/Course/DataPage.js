@@ -70,7 +70,9 @@ class DataPage extends React.Component {
     return (
       <div>
         <RankData homework={this.state.homework}/>
+
       </div>
+
     )
   }
 }

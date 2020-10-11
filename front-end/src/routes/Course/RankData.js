@@ -159,8 +159,8 @@ class RankData extends React.Component {
                         </Row>
                         <Row gutter={10} style={{marginTop:'10px'}}>
                             <Col span={12}>
-                                <Card title='近一个月排名变化' bordered={false} className='card-item'>
-                                    <Chart height={400} data={data} scale={cols} forceFit>
+                                <Card title='近一个月排名变化' bordered={false} className='card-item' style={{width:'833px'}}>
+                                    <Chart height={400} data={data} scale={cols} forceFit >
                                         <Axis name="year"/>
                                         <Axis name="value"/>
                                         <Tooltip crosshairs={{type: 'y'}}/>
@@ -171,7 +171,7 @@ class RankData extends React.Component {
                                 </Card>
                             </Col>
                             <Col span={12}>
-                                <Card title='近一个月作业得分' bordered={false} className='card-item'>
+                                <Card title='近一个月作业得分' bordered={false} className='card-item' style={{width:'833px'}}>
                                     <Chart height={400} data={data2} scale={cols2} forceFit>
                                         <Axis name="year"/>
                                         <Axis name="sales"/>
@@ -181,7 +181,6 @@ class RankData extends React.Component {
                                 </Card>
                             </Col>
                         </Row>
-                }
             </div>
         );
     }

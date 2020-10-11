@@ -141,6 +141,14 @@ export default class ClassManage extends Component {
             this.setState({ renderData: filterData });
         };
 
+        this.addStudent=()=>{
+            const {orData} =this.state;
+            const getData=[getMockData(),...this.state.orData];
+            this.setState({
+                orData:getData,
+                renderData:getData
+            });
+        }
 
         this.handleSearch2 = () => {
             const { orData2, search2 } = this.state;
@@ -168,6 +176,8 @@ export default class ClassManage extends Component {
             });
             this.setState({ renderData2: filterData });
         };
+
+
     }
 
     render() {
@@ -186,16 +196,23 @@ export default class ClassManage extends Component {
                             <Col span={1} offset={1}>
                                 <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Col>
-                            <Col span={1} offset={11}>
+                            <Col span={4} offset={10}>
                                 <div>
                                     {/*<Upload action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>*/}
                                     {/*    <Button>*/}
                                     {/*        <Icon type="upload"/> 从excel中添加*/}
                                     {/*    </Button>*/}
                                     {/*</Upload>*/}
-                                    <Button type={'primary'} onClick={()=>{
-                                        this.setState({orData:[getMockData(),...orData]});
-                                    }}>
+                                    {/*<Row>*/}
+                                    {/*    <Col span={}>*/}
+                                    {/*        */}
+                                    {/*    </Col>*/}
+                                    {/*</Row>*/}
+
+                                    <Dropdown  overlay={menu} placement="bottomCenter">
+                                        <Button >班级选择</Button>
+                                    </Dropdown>
+                                    <Button type={'primary'} onClick={this.addStudent} style={{marginLeft:'30px'}}>
                                         添加
                                     </Button>
                                 </div>
@@ -233,4 +250,17 @@ export default class ClassManage extends Component {
         );
     }
 }
-
+const menu = (
+    <Menu>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+                七年级三班
+            </a>
+        </Menu.Item>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+                七年级四班
+            </a>
+        </Menu.Item>
+    </Menu>
+);

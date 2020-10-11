@@ -177,7 +177,7 @@ export default class Manager extends Component {
 
 
 
-        render() {
+        render=()=> {
         const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
         return (
             <div className={styles.normal}>
@@ -200,13 +200,13 @@ export default class Manager extends Component {
                         <Card bordered={false} style={{ marginBottom: 10, height: 770 }}>
                             <Table
                                 rowKey={'id'}
-                                columns={[...columns.map(item => ({
+                                columns={[...columns.map((item,idx) => ({
                                     ...item,
-                                    render: (text, record) => <EditText onChange={value => {
+                                    render: (text, record) => {return(idx!==0?<EditText onChange={value => {
                                         const newData = [...orData];
                                         newData.find(col => col.id === record.id)[item.dataIndex] = value;
                                         this.setState({ orData: newData });
-                                    }}>{text}</EditText>,
+                                    }}>{text}</EditText>:<a href={"/home/manage/data"}>{text}</a>)},
                                 })), {
                                     name: '操作',
                                     key: 'del',

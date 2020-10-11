@@ -601,7 +601,8 @@ class CoursePageDemo extends React.Component {
         return null;
     };
     rankRender = () => {
-       return(<RankData homework={this.state.homework}/>);
+       return(
+           <RankData homework={this.state.homework}/>);
     };
 
     studentTableRender=()=>{
@@ -611,10 +612,13 @@ class CoursePageDemo extends React.Component {
                     点击学生名字，可以看到学生在该门课程中的具体数据！
                 </Card>
 
-                <StudenTable courseId={this.state.course.id}/>
+                <StudenTable courseId={this.state.course.id} getChildValue={this.childValue}/>
 
             </div>
         ) };
+    childValue=(username)=>{
+      console.log(username);
+    };
     typeRender = () => {
         switch (this.state.type) {
             case 1:

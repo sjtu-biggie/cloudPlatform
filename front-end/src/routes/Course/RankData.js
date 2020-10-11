@@ -91,28 +91,26 @@ class RankData extends React.Component {
         };
         return (
             <div>
-                <Card bordered={false} style={{marginBottom: 10}} id='gradeCard'>
-                    <Row>
-                        <Col span={10} offset={6}>
+                {/*<Card bordered={false} style={{marginBottom: 10}} id='gradeCard'>*/}
+                {/*    <Row>*/}
+                {/*        <Col span={10} offset={6}>*/}
 
-                            <Steps current={this.state.step} style={{marginTop: '200px', fontWeight: 'bold'}}
-                                   size="large">
-                                <Steps.Step title="提交作业" onClick={() => {
-                                    this.setState({step: 0})
-                                }} description="排名更准确"/>
-                                <Steps.Step title="学习数据" onClick={() => {
-                                    this.setState({step: 1})
-                                }} description="胜败乃兵家常事"/>
-                                <Steps.Step title="数据分析" onClick={() => {
-                                    this.setState({step: 2})
-                                }} description="知己知彼"/>
-                            </Steps>
+                {/*            <Steps current={this.state.step} style={{marginTop: '200px', fontWeight: 'bold'}}*/}
+                {/*                   size="large">*/}
+                {/*                <Steps.Step title="提交作业" onClick={() => {*/}
+                {/*                    this.setState({step: 0})*/}
+                {/*                }} description="排名更准确"/>*/}
+                {/*                <Steps.Step title="学习数据" onClick={() => {*/}
+                {/*                    this.setState({step: 1})*/}
+                {/*                }} description="胜败乃兵家常事"/>*/}
+                {/*                <Steps.Step title="数据分析" onClick={() => {*/}
+                {/*                    this.setState({step: 2})*/}
+                {/*                }} description="知己知彼"/>*/}
+                {/*            </Steps>*/}
 
-                        </Col>
-                    </Row>
-                </Card>
-                {
-                    this.state.step===1?
+                {/*        </Col>*/}
+                {/*    </Row>*/}
+                {/*</Card>*/}
                         <Row>
                             <Col span={16}>
                                 <Card style={{height:'130px'}}>
@@ -159,10 +157,6 @@ class RankData extends React.Component {
                             </Col>
 
                         </Row>
-                        :null
-                }
-                {
-                    this.state.step === 2 ?
                         <Row gutter={10} style={{marginTop:'10px'}}>
                             <Col span={12}>
                                 <Card title='近一个月排名变化' bordered={false} className='card-item'>
@@ -186,8 +180,7 @@ class RankData extends React.Component {
                                     </Chart>
                                 </Card>
                             </Col>
-                        </Row>:
-                        null
+                        </Row>
                 }
             </div>
         );

@@ -4,25 +4,6 @@ import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb'
 import TypingCard from '../../components/TypingCard'
 
-/*const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-];
-const data3 = [];
-for (let i = 0; i < 23; i++) {
-    data3.push({
-        id:1,
-        title: `数学${i}`,
-        avatar: '../../assets/img/mistakes.png',
-        description: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
-        contexts:[["证明："],[<br/>],["∵∠PAD=∠PDA"],[<br/>],["∴AP=PD"],[<br/>],["∴PB=PC"],[<br/>],["∴得证"],],
-        /!*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*!/
-    })
-}*/
-
 const data3 = [];
 for (let i = 0; i < 23; i++) {
     data3.push({
@@ -65,6 +46,16 @@ class Notification extends React.Component {
         displayCourses:null,
         nrnum:0,
     }
+
+    searchFun=()=>{
+        let value = document.getElementById("search").value;
+        let modifiedList=this.state.courses.filter(function(item){
+            return (item.title.indexOf(value)  !== -1)|| item.description.indexOf(value) !==-1;
+        });
+        this.setState({
+            displayCourses:modifiedList,
+        });
+    };
 
     changeSubject=(subject)=>{
         let modifiedList=[];
@@ -212,7 +203,7 @@ class Notification extends React.Component {
                         <Form.Item label='搜索' >
                             {
                                 (
-                                    <Input/>
+                                    <Input id="search" onKeyUp={(e)=>{this.searchFun()}}  />
                                 )
                             }
                         </Form.Item>

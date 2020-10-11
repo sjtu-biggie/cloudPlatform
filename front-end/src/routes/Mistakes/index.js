@@ -5,7 +5,6 @@ import CustomBreadcrumb from '../../components/CustomBreadcrumb'
 import TypingCard from '../../components/TypingCard'
 import { Chart, Axis, Geom, Tooltip, Coord, Label, Legend, G2 } from 'bizcharts'
 import { View } from '@antv/data-set'
-import axios from "axios"
 
 const data = [
     {date: '9/1', value: '3%'},
@@ -57,14 +56,19 @@ const IconText = ({ type, text }) => (
 );
 
 class Mistakes extends React.Component {
+
     state = {
         size: 'default',
         bordered: true,
         data2: [],
         loading: false,
         loadingMore: false,
-        displayCourses:null,
-        courses:data3,
+        displayMistakes:null,
+        mistakes:data3,
+    }
+
+    getMistakes=()=>{
+        let username=localStorage.getItem("username")
     }
 
     changeSubject=(subject)=>{
@@ -72,30 +76,30 @@ class Mistakes extends React.Component {
         let courseButton=document.getElementById("courseButton");
         if(subject==="所有"){
             this.setState({
-                displayCourses:this.state.courses,
+                displayMistakes:this.state.mistakes,
             });
             courseButton.innerText="学科";
             return null;
         }else{
-            for(let course of this.state.courses){
-                if(course.type===subject){
-                    modifiedList.push(course);
+            for(let mistake of this.state.mistakes){
+                if(mistake.type===subject){
+                    modifiedList.push(mistake);
                 }
             }
         }
         courseButton.innerText=subject;
         this.setState({
-            displayCourses:modifiedList,
+            displayMistakes:modifiedList,
         });
     };
 
     searchFun=()=>{
         let value = document.getElementById("search").value;
-        let modifiedList=this.state.courses.filter(function(item){
+        let modifiedList=this.state.mistakes.filter(function(item){
             return (item.title.indexOf(value)  !== -1)|| item.description.indexOf(value) !==-1||item.time.indexOf(value)!==-1;
         });
         this.setState({
-            displayCourses:modifiedList,
+            displayMistakes:modifiedList,
         });
     };
 
@@ -105,8 +109,9 @@ class Mistakes extends React.Component {
             loading: true,
         });
         this.getData2();
+        this.getMistakes();
         this.setState({
-            displayCourses:this.state.courses,
+            displayMistakes:this.state.mistakes,
             loading: false
         });
     }
@@ -243,11 +248,11 @@ class Mistakes extends React.Component {
                     <Tooltip crosshairs={{type: 'y'}}/>
                     <Geom type="line" position="date*value" size={2}/>
                     <Geom type='point' position="date*value" size={4} shape={'circle'}
-                          style={{stroke: '#fff', lineWidth: 1}}/>
+                          style={{stroke: '#ffffff', lineWidth: 1}}/>
                 </Chart>
             </Card>
-                <Card bordered={false} title='题目' style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={this.state.displayCourses}
+                <Card  bordered={false} title='题目' style={{marginBottom: 15}} id='verticalStyle'>
+                    <List dataSource={this.state.displayMistakes}
                           itemLayout='vertical'
                           pagination={{pageSize: 2}}
                           style={styles.listStyle}

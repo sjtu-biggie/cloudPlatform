@@ -1,8 +1,10 @@
 import React from 'react'
-import {Card, Spin, Button, Radio, List, Switch, Avatar,BackTop,Anchor,Affix,Icon,Pagination} from 'antd'
+import {Card, Spin, Button, Radio, List, Switch, Avatar, BackTop, Anchor, Affix, Icon, Pagination, Col, Row} from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb/index'
 import TypingCard from '../../../components/TypingCard'
+import CommitPage from "../../Homework/commitPage";
+import {Editor} from "react-draft-wysiwyg";
 
 const data = [
   'Racing car sprays burning fuel into crowd.',
@@ -34,6 +36,7 @@ class ListDemo extends React.Component {
     data2: [],
     loading: false,
     loadingMore: false,
+      content:"如果你在使用本平台的过程中遇到任何问题，请联系本平台客服，客服电话021-54749111"
   };
 
   componentDidMount() {
@@ -59,6 +62,7 @@ class ListDemo extends React.Component {
   };
 
   render() {
+      const { editorState,contentState } = this.state;
     const {size, bordered, loading, data2, loadingMore} = this.state
     const loadMore = (
       <div style={styles.loadMore}>
@@ -70,72 +74,13 @@ class ListDemo extends React.Component {
     );
     return (
       <div>
-        <CustomBreadcrumb arr={['作业', '已截止']}/>
-        <TypingCard id='howUse' source='最基础的列表展示，可承载文字、列表、图片、段落，常用于后台数据展示页面。'/>
-        <Card bordered={false} title='基本用法' style={{marginBottom: 10}} id='basicUsage'>
-          <Radio.Group value={size}
-                       onChange={e => this.setState({size: e.target.value})}
-                       style={{marginBottom: '1em'}}>
-            <Radio.Button value='large'>Large</Radio.Button>
-            <Radio.Button value='default'>Default</Radio.Button>
-            <Radio.Button value='small'>Small</Radio.Button>
-          </Radio.Group>&emsp;&emsp;&emsp;
-          是否有边框&emsp;<Switch defaultChecked
-                             onChange={checked => this.setState({bordered: checked})}/>
-          <List dataSource={data}
-                bordered={bordered}
-                size={size}
-                style={bordered ? styles.haveBorder : styles.noBorder}
-                renderItem={item => (<List.Item>{item}</List.Item>)}/>
-        </Card>
-        <Card bordered={false} title='加载更多' style={{marginBottom: 10}} id='remoteLoading'>
-          <List loading={loading}
-                dataSource={data2}
-                loadMore={loadMore}
-                style={styles.listStyle}
-                renderItem={item => (
-                  <List.Item actions={[<a>edit</a>, <a>more</a>]}>
-                    <List.Item.Meta
-                      avatar={<Avatar
-                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                      title={<a>{item.name.last}</a>}
-                      description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                    />
-                  </List.Item>
-                )}
-          />
-        </Card>
-        <Card bordered={false} title='竖排列表样式' style={{marginBottom: 15}} id='verticalStyle'>
-          <List dataSource={data3}
-                itemLayout='vertical'
-                pagination={{pageSize: 3}}
-                style={styles.listStyle}
-                renderItem={item=>{
-                  return (
-                    <List.Item
-                      actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
-                      extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}>
-                      <List.Item.Meta
-                        avatar={<Avatar src={item.avatar} />}
-                        title={<a>{item.title}</a>}
-                        description={item.description}
-                      />
-                      {item.content}
-                      </List.Item>
-                  )
-                }}
-          />
-        </Card>
+        <CustomBreadcrumb arr={['帮助']}/>
+          <Card  bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
 
-        <BackTop visibilityHeight={200} style={{right: 50}}/>
-        <Affix style={styles.affixBox}>
-          <Anchor offsetTop={50} affix={false}>
-            <Anchor.Link href='#howUse' title='何时使用'/>
-            <Anchor.Link href='#basicUsage' title='基本用法'/>
-            <Anchor.Link href='#remoteLoading' title='加载更多'/>
-            <Anchor.Link href='#verticalStyle' title='竖排列表样式'/>
-          </Anchor>
-        </Affix>
+              <Row>
+                  <Col span={20}>{this.state.content}</Col>
+              </Row>
+          </Card>
       </div>
     )
   }

@@ -5,6 +5,7 @@ import PrivateRoute from '../PrivateRoute'
 import CoursePageDemo from "../../routes/Course/coursepage"
 import NotificationPage from "../../routes/Notification/notificationpage"
 import ChooseCourse from "../../routes/Manage";
+import DataPage from "../../routes/Course/DataPage";
 
 const Home = LoadableComponent(()=>import('../../routes/Home/index'))  //参数一定要是函数，否则不会懒加载，只会代码拆分
 
@@ -69,6 +70,7 @@ const RatePage = LoadableComponent(()=>import('../../routes/Homework/RatePage'))
 
 const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'));
 const Manager=LoadableComponent(()=>import('../../routes/Manage/manager'));
+const ClassStudentManage=LoadableComponent(()=>import('../../routes/Manage/classStudentManage'));
 
 //个人中心
 const PersonalCenter = LoadableComponent(()=>import('../../routes/PersonalCenter/Info'));
@@ -139,6 +141,9 @@ class ContentMain extends React.Component {
 
           <PrivateRoute exact path='/home/manage/studentTable' component={StudentTable}/>
           <PrivateRoute exact path='/home/manage/manager' component={Manager}/>
+          <PrivateRoute exact path='/home/manage/data' component={DataPage}/>
+          <PrivateRoute exact path='/home/manage/classStudentManage' component={ClassStudentManage}/>
+
           <Redirect exact from='/' to='/home'/>
         </Switch>
       </div>

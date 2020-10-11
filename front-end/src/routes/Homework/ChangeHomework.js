@@ -161,7 +161,7 @@ class ChangeHomework extends React.Component {
                                 ]
                                 })
                                (
-                                    <Cascader disabled={this.state.ableState} options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
+                                    <Cascader  style={{width: 100}} disabled={this.state.ableState} options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
                                 )
                             }
                         </FormItem>
@@ -177,6 +177,20 @@ class ChangeHomework extends React.Component {
                                     ]
                                 })(
                                     <DatePicker.RangePicker disabled={this.state.ableState} placeholder={[this.state.homework.startTime, this.state.homework.endTime]}/>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem label='定时发布' {...formItemLayout} >
+                            {
+                                getFieldDecorator('type', {
+                                    rules: [
+                                        {
+                                            message: '请选择定时发布的时间'
+                                        }
+                                    ]
+                                })
+                                (
+                                    <DatePicker disabled={this.state.ableState}/>
                                 )
                             }
                         </FormItem>

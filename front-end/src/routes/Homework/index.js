@@ -17,7 +17,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级三班','八年级二班']
+
     })
 }
 
@@ -31,7 +33,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级三班','八年级二班']
+
     })
 }
 
@@ -45,7 +49,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级三班','八年级二班']
+
     })
 }
 
@@ -59,7 +65,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级三班','八年级二班']
+
     })
 }
 
@@ -73,7 +81,9 @@ for(let i=0;i<3;i++){
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
         accessmentalgorithms:'0',
-        score: '100'
+        score: '100',
+        range:['八年级三班','八年级二班']
+
     })
 }
 
@@ -360,7 +370,7 @@ class HomeworkDemo extends React.Component {
                                 {
                                     (
                                         <Search
-                                            placeholder="input search text"
+                                            placeholder="输入作业名称"
                                             enterButton="搜索"
                                             size="large"
                                             onSearch={value => {this.searchFun(value)}}

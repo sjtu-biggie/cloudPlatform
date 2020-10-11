@@ -19,6 +19,7 @@ import {
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
+import Search from "antd/es/input/Search";
 
 const data = [
     'Racing car sprays burning fuel into crowd.',
@@ -67,6 +68,8 @@ class CourseDemo extends React.Component {
     state = {
         role: 'student',
         courses: data3,
+        gradeCourses:null,
+        typeCourses:null,
         displayCourses:null,
         type: 0,
         size: 'default',
@@ -264,7 +267,12 @@ class CourseDemo extends React.Component {
                         <Form.Item label='搜索'>
                             {
                                 (
-                                    <Input/>
+                                    <Search
+                                        placeholder="输入课程名称"
+                                        enterButton="搜索"
+                                        size="medium"
+                                        onSearch={value => {this.searchFun(value)}}
+                                    />
                                 )
                             }
                         </Form.Item>

@@ -372,7 +372,7 @@ class HomeworkDemo extends React.Component {
                                         <Search
                                             placeholder="输入作业名称"
                                             enterButton="搜索"
-                                            size="large"
+                                            size="medium"
                                             onSearch={value => {this.searchFun(value)}}
                                         />
 

@@ -679,15 +679,15 @@ class CoursePageDemo extends React.Component {
                             <Menu.Item>已截止</Menu.Item>
                             <Menu.Item>已批改</Menu.Item>
                         </Menu.SubMenu>
-                        <Menu.Item onClick={() => {
-                            this.setState({type: 5})
-                        }} key="rank"><Icon type="appstore"/>数据</Menu.Item>
                         {
-                            this.state.role==='teacher'?                        <Menu.Item onClick={() => {
-                                this.setState({type: 6})
-                            }} key="set"><Icon type="setting"/>管理</Menu.Item>:null
+                            this.state.role === 'student' ?
+                                <Menu.Item onClick={() => {
+                                    this.setState({type: 5})
+                                }} key="rank"><Icon type="appstore"/>数据</Menu.Item> :
+                                <Menu.Item onClick={() => {
+                                    this.setState({type: 6})
+                                }} key="set"><Icon type="setting"/>管理</Menu.Item>
                         }
-
                     </Menu>
                 </Card>
                 {this.typeRender()}

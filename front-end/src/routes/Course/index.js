@@ -40,7 +40,7 @@ for (let i = 0; i < 6; i++) {
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         nickname: "陈小红",
         id: 1,
-        grade:"七年级上",
+        grade: "七年级上",
         introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
     })
 }
@@ -68,38 +68,39 @@ class CourseDemo extends React.Component {
     state = {
         role: 'student',
         courses: data3,
-        gradeCourses:null,
-        typeCourses:null,
-        displayCourses:null,
+        gradeCourses: null,
+        typeCourses: null,
+        displayCourses: null,
         type: 0,
         size: 'default',
         bordered: true,
         data2: [],
         loading: false,
         loadingMore: false,
-        deleteCourses:false,
+        deleteCourses: false,
     };
-    changeSubject=(subject)=>{
-        let modifiedList=[];
-        let courseButton=document.getElementById("courseButton");
-        if(subject==="所有"){
+    changeSubject = (subject) => {
+        let modifiedList = [];
+        let courseButton = document.getElementById("courseButton");
+        if (subject === "所有") {
             this.setState({
-                displayCourses:this.state.courses,
+                displayCourses: this.state.courses,
             });
-            courseButton.innerText="学科";
+            courseButton.innerText = "学科";
             return null;
-        }else{
-            for(let course of this.state.courses){
-                if(course.type===subject){
+        } else {
+            for (let course of this.state.courses) {
+                if (course.type === subject) {
                     modifiedList.push(course);
                 }
             }
         }
-        courseButton.innerText=subject;
+        courseButton.innerText = subject;
         this.setState({
-            displayCourses:modifiedList,
+            displayCourses: modifiedList,
         });
     };
+
     componentWillMount() {
         //TODO:get role from local storage
         this.setState({
@@ -107,7 +108,7 @@ class CourseDemo extends React.Component {
         });
         this.getData2();
         this.setState({
-            displayCourses:this.state.courses,
+            displayCourses: this.state.courses,
             loading: false
         });
         console.log(this.props.location.pathname);
@@ -137,12 +138,12 @@ class CourseDemo extends React.Component {
         e.preventDefault();
         console.log(123);
     };
-    getUserInfo=async (username)=>{
+    getUserInfo = async (username) => {
 
         let config = {
             method: 'post',
-            data :{
-                'username':username
+            data: {
+                'username': username
             },
             url: 'http://106.13.209.140:8000/getUserMessage',
             headers: {
@@ -159,26 +160,29 @@ class CourseDemo extends React.Component {
             });
         console.log(user);
         this.setState({
-            userInfo:user,
-            role:user.type
+            userInfo: user,
+            role: user.type
         })
     };
+
     render() {
         const menu1 = (
-            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+            <Menu onClick={(e) => {
+                this.changeSubject(e.item.props.children)
+            }}>
                 <Menu.SubMenu title="所有">
                     <Menu.Item>所有</Menu.Item>
                     <Menu.Item>语文</Menu.Item>
-                    <Menu.Item >数学</Menu.Item>
+                    <Menu.Item>数学</Menu.Item>
                     <Menu.Item>英语</Menu.Item>
-                    <Menu.Item >物理</Menu.Item>
-                    <Menu.Item >化学</Menu.Item>
+                    <Menu.Item>物理</Menu.Item>
+                    <Menu.Item>化学</Menu.Item>
                     <Menu.Item>生物</Menu.Item>
-                    <Menu.Item >历史</Menu.Item>
-                    <Menu.Item >地理</Menu.Item>
+                    <Menu.Item>历史</Menu.Item>
+                    <Menu.Item>地理</Menu.Item>
                     <Menu.Item>政治</Menu.Item>
-                    <Menu.Item >体育</Menu.Item>
-                    <Menu.Item >心理</Menu.Item>
+                    <Menu.Item>体育</Menu.Item>
+                    <Menu.Item>心理</Menu.Item>
                 </Menu.SubMenu>
                 <Menu.SubMenu title="文科类">
                     <Menu.Item onClick={() => {
@@ -271,14 +275,17 @@ class CourseDemo extends React.Component {
                                         placeholder="输入课程名称"
                                         enterButton="搜索"
                                         size="medium"
-                                        onSearch={value => {this.searchFun(value)}}
+                                        onSearch={value => {
+                                            this.searchFun(value)
+                                        }}
                                     />
                                 )
                             }
                         </Form.Item>
                     </Form>
                     <Dropdown overlay={menu1} trigger={['click']} style={{marginTop: '30px'}}>
-                        <Button style={{width: "10%", marginLeft: '30px'}}><span  id="courseButton">学科</span> <Icon type="down"/></Button>
+                        <Button style={{width: "10%", marginLeft: '30px'}}><span id="courseButton">学科</span> <Icon
+                            type="down"/></Button>
                     </Dropdown>
                     <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
                         <Button style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
@@ -294,8 +301,6 @@ class CourseDemo extends React.Component {
                                         this.props.history.push('/home/course/addCourse');
                                     }}>创建一门新的课程</Button>
 
-                            <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
-                                    size='large'>删除一门已有课程</Button>
                             <p style={{
                                 float: 'left',
                                 color: 'grey',
@@ -305,7 +310,7 @@ class CourseDemo extends React.Component {
                         </Card>
                 }
                 <Card>
-                    <span style={{float:'left'}}>课程列表</span>
+                    <span style={{float: 'left'}}>课程列表</span>
                 </Card>
                 <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={this.state.displayCourses}
@@ -319,37 +324,56 @@ class CourseDemo extends React.Component {
                                                          src={require('../../pic/math1.png')}
                                                          style={{border: '4px solid grey'}}/>}>
                                       <Row>
-                                          <Col span={3} style={{fontSize:'15px'}}>
+                                          <Col span={3} style={{fontSize: '15px'}}>
 
                                               <img width={120} height={120} alt="logo"
                                                    src={require('../../pic/teacher2.jpg')}
                                                    style={{}}/>
-                                              <p style={{marginTop:'25px'}}>教师 ：{item.nickname}</p>
+                                              <p style={{marginTop: '25px'}}><Icon type={"user"}/><span style={{
+                                                  fontWeight: 'bold',
+                                                  marginLeft: '10px'
+                                              }}>教师 ：</span>{item.nickname}</p>
                                           </Col>
                                           <Col span={21}>
-                                              <a style={{color:'darkslategray',fontSize: '20px', fontWeight: 'bold', display: 'block'}}
+                                              <a style={{
+                                                  color: 'darkslategray',
+                                                  fontSize: '20px',
+                                                  fontWeight: 'bold',
+                                                  display: 'block'
+                                              }}
                                                  href={"/home/course/class=" + item.id}>{item.course_name}</a>
                                               <p style={{marginTop: '10px', height: '90px'}}>{item.introduction}</p>
                                               <p style={{height: '10px'}}>
-                                                  <span style={{marginRight:'30px',fontSize:15}}>类型： {item.type}</span> <span style={{marginRight:'30px',fontSize:15}}>年级： {item.grade}</span><span style={{marginRight:'30px'}}>开始时间： {item.start_date} </span><span style={{marginRight:'30px'}}>结束时间： {item.end_date}</span></p>
+                                                  <span
+                                                      style={{marginRight: '30px', fontSize: 15}}>类型： {item.type}</span>
+                                                  <span style={{
+                                                      marginRight: '30px',
+                                                      fontSize: 15
+                                                  }}>年级： {item.grade}</span><IconText type={'calendar'}
+                                                                                      style={{}}
+                                                                                      text={'开始时间：'}/>
+                                                  <span style={{marginRight:'30px'}}>{item.start_date}</span><IconText type={'calendar'}
+                                                                             style={{marginLeft: '30px'}}
+                                                                             text={'结束时间：'}/>
+                                                  {item.end_date}</p>
                                           </Col>
                                       </Row>
                                   </List.Item>
                               )
                           }}
-                    />
-                </Card>
+                />
+            </Card>
 
-                <BackTop visibilityHeight={200} style={{right: 50}}/>
-                {/*<Affix style={styles.affixBox}>*/}
-                {/*  <Anchor offsetTop={200} affix={false}>*/}
-                {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
-                {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
-                {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
-                {/*  </Anchor>*/}
-                {/*</Affix>*/}
-            </div>
-        )
+        <BackTop visibilityHeight={200} style={{right: 50}}/>
+    {/*<Affix style={styles.affixBox}>*/}
+    {/*  <Anchor offsetTop={200} affix={false}>*/}
+    {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
+    {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
+    {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
+    {/*  </Anchor>*/}
+    {/*</Affix>*/}
+    </div>
+    )
     }
 }
 

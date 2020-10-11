@@ -141,6 +141,14 @@ export default class ClassManage extends Component {
             this.setState({ renderData: filterData });
         };
 
+        this.addStudent=()=>{
+            const {orData} =this.state;
+            const getData=[getMockData(),...this.state.orData];
+            this.setState({
+                orData:getData,
+                renderData:getData
+            });
+        }
 
         this.handleSearch2 = () => {
             const { orData2, search2 } = this.state;
@@ -168,6 +176,8 @@ export default class ClassManage extends Component {
             });
             this.setState({ renderData2: filterData });
         };
+
+
     }
 
     render() {
@@ -193,9 +203,7 @@ export default class ClassManage extends Component {
                                     {/*        <Icon type="upload"/> 从excel中添加*/}
                                     {/*    </Button>*/}
                                     {/*</Upload>*/}
-                                    <Button type={'primary'} onClick={()=>{
-                                        this.setState({orData:[getMockData(),...orData]});
-                                    }}>
+                                    <Button type={'primary'} onClick={this.addStudent}>
                                         添加
                                     </Button>
                                 </div>

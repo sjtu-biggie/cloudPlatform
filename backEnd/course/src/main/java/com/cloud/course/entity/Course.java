@@ -31,6 +31,8 @@ public class Course {
     private String type;
     @Column(name = "GRADE")
     private String grade;
+    @Column(name = "CLASSES")
+    private String classes;
     @Column(name = "NOTE_HOMEWORK_ASSIGN")
     private boolean noteHomeworkAssign;
     @Column(name = "NOTE_HOMEWORK_DUE")
@@ -43,7 +45,7 @@ public class Course {
     private boolean seeHomeworkAverage;
 
     public Course(String _user_id,String _course_name,Date _start_date,Date _end_date,String _type,String _grade
-        ,boolean _noteHomeworkAssign,boolean _noteHomeworkDue,boolean _noteHomeworkRatify
+        ,String _classes,boolean _noteHomeworkAssign,boolean _noteHomeworkDue,boolean _noteHomeworkRatify
         ,boolean _seeCourseAverage,boolean _seeHomeworkAverage){
         userId=_user_id;
         courseName=_course_name;
@@ -51,6 +53,7 @@ public class Course {
         endDate=_end_date;
         type=_type;
         grade=_grade;
+        classes=_classes;
         noteHomeworkAssign=_noteHomeworkAssign;
         noteHomeworkDue=_noteHomeworkDue;
         noteHomeworkRatify=_noteHomeworkRatify;

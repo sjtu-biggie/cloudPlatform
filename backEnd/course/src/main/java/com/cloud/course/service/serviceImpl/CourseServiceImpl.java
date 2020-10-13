@@ -65,9 +65,10 @@ public class CourseServiceImpl implements CourseService {
         String syllabus = object.getString("syllabus");
         String textbook = object.getString("textbook");
         String detail = object.getString("detail");
+        String classes = object.getString("classes");
         String type = object.getString("type");
         String grade = object.getString("grade");
-        Course course = new Course(userId,name,start_date,end_date,type,grade,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
+        Course course = new Course(userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
         courseDao.save(course);
 //        CoursePic coursePic = new CoursePic(courseDao.findMaxId(),pic);
         CourseInfo courseInfo = new CourseInfo(courseDao.findMaxId(),detail,introduction,syllabus,textbook);

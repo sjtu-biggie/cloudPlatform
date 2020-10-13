@@ -15,7 +15,7 @@ import {
     Row,
     message,
     BackTop,
-    Steps, DatePicker, Upload, Collapse, List, Progress, Dropdown, Menu
+    Steps, DatePicker, Upload, Collapse, List, Progress, Dropdown, Menu, Switch
 } from 'antd'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
@@ -174,6 +174,21 @@ class AddCourse extends React.Component {
                 values.grade=this.state.grade;
                 values.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
                 values.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
+                if (values.seeHomeworkAverage === undefined){
+                    values.seeHomeworkAverage = true;
+                }
+                if (values.seeCourseAverage === undefined){
+                    values.seeCourseAverage = true;
+                }
+                if (values.noteHomeworkAssign === undefined){
+                    values.noteHomeworkAssign= true;
+                }
+                if (values.noteHomeworkDue === undefined){
+                    values.noteHomeworkDue= true;
+                }
+                if (values.noteHomeworkRatify === undefined){
+                    values.noteHomeworkRatify= true;
+                }
                 this.setState({step: 1,courseJson:values});
                 console.log(values);
             }
@@ -343,8 +358,8 @@ class AddCourse extends React.Component {
                 return (<div>
                     <Card bordered={false} className='card-item'>
                         <Steps>
-                            <Steps.Step status="process" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
-                            <Steps.Step status="wait" title="添加课程细节"
+                            <Steps.Step status="process" title="添加课程细节" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="wait" title="设计课程大纲"
                                         icon={<Icon type="book"/>}/>
                             <Steps.Step status="wait" title="选取学生加入"
                                         icon={<Icon type="solution"/>}/>
@@ -448,27 +463,26 @@ class AddCourse extends React.Component {
                                     )
                                 }
                             </FormItem>
-                            <FormItem label="课程图片" valuePropName="fileList"
-                                      getValueFromEvent={normFile} {...formItemLayout}>
-                                {
-                                    getFieldDecorator('pic', {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: '请上传课程简介图片'
-                                            }
-                                        ]
-                                    })(
-                                        <Upload.Dragger name="files" action="/upload.do">
-                                            <p className="ant-upload-drag-icon">
-                                            </p>
-                                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                                            <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-                                        </Upload.Dragger>
-                                    )
-                                }
+                            {/*<FormItem label="课程图片" valuePropName="fileList"*/}
+                            {/*          getValueFromEvent={normFile} {...formItemLayout}>*/}
+                            {/*    {*/}
+                            {/*        getFieldDecorator('pic', {*/}
+                            {/*            rules: [*/}
+                            {/*                {*/}
+                            {/*                    required: true,*/}
+                            {/*                    message: '请上传课程简介图片'*/}
+                            {/*                }*/}
+                            {/*            ]*/}
+                            {/*        })(*/}
+                            {/*            <Upload.Dragger name="files" action="//jsonplaceholder.typicode.com/posts/">*/}
+                            {/*                <p className="ant-upload-drag-icon">*/}
+                            {/*                </p>*/}
+                            {/*                <p className="ant-upload-text">Click or drag file to this area to upload</p>*/}
+                            {/*            </Upload.Dragger>*/}
+                            {/*        )*/}
+                            {/*    }*/}
 
-                            </FormItem>
+                            {/*</FormItem>*/}
                             <FormItem label='开始时间' {...formItemLayout} required>
                                 {
                                     getFieldDecorator('startDate', {
@@ -486,18 +500,63 @@ class AddCourse extends React.Component {
                                 }
                             </FormItem>
                             <FormItem label='结束时间' {...formItemLayout} required>
-                                {
-                                    getFieldDecorator('endDate', {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: '请选择结束时间'
-                                            }
-                                        ]
-                                    })(
-                                        <DatePicker onChange={() => {
+                            {
+                                getFieldDecorator('endDate', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请选择结束时间'
+                                        }
+                                    ]
+                                })(
+                                    <DatePicker onChange={() => {
 
-                                        }}> </DatePicker>
+                                    }}> </DatePicker>
+                                )
+                            }
+                        </FormItem>
+                            <FormItem label='学生查看课程均分' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('seeCourseAverage', {
+
+                                    })(
+                                        <Switch defaultChecked />
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='学生查看作业均分' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('seeHomeworkAverage', {
+
+                                    })(
+                                        <Switch defaultChecked />
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='发送作业发布通知' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('noteHomeworkAssign', {
+
+                                    })(
+                                        <Switch defaultChecked />
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='发送作业临期通知' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('noteHomeworkDue', {
+
+                                    })(
+                                        <Switch defaultChecked />
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='发送作业批改通知' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('noteHomeworkRatify', {
+
+                                    })(
+                                        <Switch defaultChecked />
                                     )
                                 }
                             </FormItem>
@@ -511,8 +570,8 @@ class AddCourse extends React.Component {
                 return (<div>
                     <Card bordered={false} className='card-item'>
                         <Steps>
-                            <Steps.Step status="finish" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
-                            <Steps.Step status="process" title="添加课程细节"
+                            <Steps.Step status="finish" title="添加课程细节" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="process" title="设计课程大纲"
                                         icon={<Icon type="book"/>}/>
                             <Steps.Step status="wait" title="选取学生加入"
                                         icon={<Icon type="solution"/>}/>
@@ -582,7 +641,7 @@ class AddCourse extends React.Component {
                                 <Button onClick={() => {
                                     let courseValue = this.state.courseJson;
                                     courseValue['syllabus'] = this.state.syllabus;
-                                    this.setState({step: 2,courseJson:courseValue})
+                                    this.setState({step: 2,courseJson:courseValue});
                                     console.log(this.state.courseJson);
                                 }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>下一步</Button>
                             </Col>
@@ -593,8 +652,8 @@ class AddCourse extends React.Component {
                 return <div>
                     <Card bordered={false} className='card-item'>
                         <Steps>
-                            <Steps.Step status="finish" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
-                            <Steps.Step status="finish" title="添加课程细节"
+                            <Steps.Step status="finish" title="添加课程细节" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="finish" title="设计课程大纲"
                                         icon={<Icon type="book"/>}/>
                             <Steps.Step status="process" title="选取学生加入"
                                         icon={<Icon type="solution"/>}/>
@@ -617,8 +676,8 @@ class AddCourse extends React.Component {
                 return <div>
                     <Card bordered={false} className='card-item'>
                         <Steps>
-                            <Steps.Step status="finish" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
-                            <Steps.Step status="finish" title="添加课程细节"
+                            <Steps.Step status="finish" title="添加课程细节" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="finish" title="设计课程大纲"
                                         icon={<Icon type="book"/>}/>
                             <Steps.Step status="finish" title="选取学生加入"
                                         icon={<Icon type="solution"/>}/>

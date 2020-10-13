@@ -102,9 +102,13 @@ class CourseDemo extends React.Component {
     };
 
     componentWillMount() {
-        //TODO:get role from local storage
         this.setState({
             loading: true,
+        });
+        let storage = window.localStorage;
+        let role = storage.getItem("type");
+        this.setState({
+            role:role
         });
         this.getData2();
         this.setState({
@@ -132,25 +136,22 @@ class CourseDemo extends React.Component {
         });
         let storage = window.localStorage;
         let username = storage.getItem("username");
-        this.getUserInfo(username);
+        this.getCoursesInfo(username);
     };
     handleSubmit = (e) => {
         e.preventDefault();
         console.log(123);
     };
-    getUserInfo = async (username) => {
+    getCoursesInfo = async (username) => {
 
         let config = {
-            method: 'post',
-            data: {
-                'username': username
-            },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId='+username,
             headers: {
                 withCredentials: true,
             }
         };
-        const user = await axios(config)
+        const courseList = await axios(config)
             .then(function (response) {
                 console.log(response.data);
                 return response.data;
@@ -158,11 +159,7 @@ class CourseDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(user);
-        this.setState({
-            userInfo: user,
-            role: user.type
-        })
+        console.log(courseList);
     };
 
     render() {

@@ -68,11 +68,8 @@ class LoginForm extends React.Component {
           });
           return
         }
-        const obj =  {
-          username: values.username,
-          password: values.password,
-        };
-        this.login(obj);
+
+        this.login(values.username,values.password);
         //
         // const users = this.props.appStore.users
         // // 检测用户名是否存在
@@ -102,11 +99,13 @@ class LoginForm extends React.Component {
       }
     })
   };
-  login=async(obj)=>{
+  login=async(username,password)=>{
     let config = {
       method: 'post',
-      data: obj,
-      url: 'http://106.13.209.140:8000/login',
+      data: {
+        'username': username
+      },
+      url: 'http://106.13.209.140:8000/getUserMessage',
       headers: {
         withCredentials: true,
       }
@@ -119,10 +118,12 @@ class LoginForm extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
-    if(message1==='成功登陆'){
+    if(message1.password===password){
       let storage = window.localStorage;
-      storage.setItem("username",obj.username);
-      this.props.appStore.toggleLogin(true, {username: obj.username})
+      storage.setItem("username",username);
+      storage.setItem("type",message1.type);
+      storage.setItem("sid",message1.sid);
+      this.props.appStore.toggleLogin(true, {username: username})
 
       const {from} = this.props.location.state || {from: {pathname: '/'}}
       this.props.history.push(from)

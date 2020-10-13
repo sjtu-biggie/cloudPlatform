@@ -40,9 +40,9 @@ public class CourseDaoImpl implements CourseDao {
             System.out.println("course nonexist in getCoursesById");
             return null;
         }
-        CoursePic coursePic = coursePicRepository.findAllById(course.getId());
+//        CoursePic coursePic = coursePicRepository.findAllById(course.getId());
         CourseInfo courseInfo = courseInfoRepository.findAllById(course.getId());
-        return new WholeCourse(course,courseInfo,coursePic);
+        return new WholeCourse(course,courseInfo,null);
     }
 
     @Override
@@ -54,9 +54,9 @@ public class CourseDaoImpl implements CourseDao {
 //                System.out.println("course Id nonexist in getCoursesByTeacher");
 //                continue;
 //            }
-            CoursePic  coursePic = coursePicRepository.findAllById(course.getId());
+//            CoursePic  coursePic = coursePicRepository.findAllById(course.getId());
             CourseInfo courseInfo = courseInfoRepository.findAllById(course.getId());
-            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,coursePic);
+            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,null);
             wholeCourseList.add(wholeCourse);
         }
         return wholeCourseList;
@@ -113,9 +113,9 @@ public class CourseDaoImpl implements CourseDao {
 //                System.out.println("course Id nonexist in getCoursesByTeacher");
 //                continue;
 //            }
-            CoursePic  coursePic = coursePicRepository.findAllById(course.getId());
+//            CoursePic  coursePic = coursePicRepository.findAllById(course.getId());
             CourseInfo courseInfo = courseInfoRepository.findAllById(course.getId());
-            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,coursePic);
+            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,null);
             wholeCourseList.add(wholeCourse);
         }
         return wholeCourseList;

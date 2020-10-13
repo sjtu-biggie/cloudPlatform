@@ -3,6 +3,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,13 +31,30 @@ public class Course {
     private String type;
     @Column(name = "GRADE")
     private String grade;
+    @Column(name = "NOTE_HOMEWORK_ASSIGN")
+    private boolean noteHomeworkAssign;
+    @Column(name = "NOTE_HOMEWORK_DUE")
+    private boolean noteHomeworkDue;
+    @Column(name = "NOTE_HOMEWORK_RATIFY")
+    private boolean noteHomeworkRatify;
+    @Column(name = "SEE_COURSE_AVERAGE")
+    private boolean seeCourseAverage;
+    @Column(name = "seeHomeworkAverage")
+    private boolean seeHomeworkAverage;
 
-    public Course(String _user_id,String _course_name,Date _start_date,Date _end_date,String _type,String _grade){
+    public Course(String _user_id,String _course_name,Date _start_date,Date _end_date,String _type,String _grade
+        ,boolean _noteHomeworkAssign,boolean _noteHomeworkDue,boolean _noteHomeworkRatify
+        ,boolean _seeCourseAverage,boolean _seeHomeworkAverage){
         userId=_user_id;
         courseName=_course_name;
         startDate=_start_date;
         endDate=_end_date;
         type=_type;
         grade=_grade;
+        noteHomeworkAssign=_noteHomeworkAssign;
+        noteHomeworkDue=_noteHomeworkDue;
+        noteHomeworkRatify=_noteHomeworkRatify;
+        seeCourseAverage=_seeCourseAverage;
+        seeHomeworkAverage=_seeHomeworkAverage;
     }
 }

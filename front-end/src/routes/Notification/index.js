@@ -79,6 +79,31 @@ class Notification extends React.Component {
         });
     };
 
+    getNote=async (id)=>{
+        let config = {
+            method: 'get',
+            url: 'http://localhost:8080/getNoteByUser',
+            data: {
+                'sid': id
+            },
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            courses:hw,
+        })
+    };
+
     componentWillMount() {
         //TODO:get role from local storage
         this.setState({

@@ -5,6 +5,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import TypingCard from '../../components/TypingCard'
 import {Editor} from "react-draft-wysiwyg";
 import Commit from "./commit"
+import axios from "axios";
 
 const { Text, Link } = Typography;
 class commitPage extends React.Component{
@@ -19,7 +20,30 @@ class commitPage extends React.Component{
         isCommit:null,
     };
 
-
+    getStudentHomeworkOne=async (sid,hid)=>{
+        let config = {
+            method: 'get',
+            url: 'http://localhost:8080/getStudentHomeworkOne',
+            data:{
+            'sid':sid,
+            'hid':hid},
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            homework:hw,
+        })
+    };
     componentWillMount() {
         this.setState({
             isCommit:this.props.isCommit

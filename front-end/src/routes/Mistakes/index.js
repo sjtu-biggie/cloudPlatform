@@ -116,6 +116,31 @@ class Mistakes extends React.Component {
         });
     }
 
+    getMistakes=async (id)=>{
+        let config = {
+            method: 'get',
+            url: 'http://localhost:8080/getStudentHomeworkAll',
+            data: {
+                'sid': id
+            },
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            mistakes:hw,
+        })
+    };
+
     getData2 = () => {
         this.setState({
             loadingMore: true

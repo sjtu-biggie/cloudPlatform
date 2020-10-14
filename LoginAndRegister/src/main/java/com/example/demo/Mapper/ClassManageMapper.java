@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface ClassManageMapper {
-    @Insert("insert into classmanage (id,number,classNo) values (#{id},#{number},#{classNo})")
+    @Insert("insert into classmanage (id,number,classNo,classManagers) values (#{id},#{number},#{classNo},#{classManagers})")
     public void addClass(ClassManage classManage);
 
     @Select("select * from classmanage where id=#{getId} and classNo = #{getclassNo}")
@@ -16,4 +16,7 @@ public interface ClassManageMapper {
 
     @Update("update classmanage set number=number+ #{n} where id=#{getId}")
     public void updateClass(String getId,int n);
+
+    @Update("update classManage set classManagers=classManagers+#{classManagers} and number=number+#{n} where id=#{getId}")
+    public void addClassManagers(String getId,String classManagers,int n);
 }

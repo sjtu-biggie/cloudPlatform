@@ -32,11 +32,10 @@ const IconText = ({ type, text }) => (
 
 class HomeworkList extends React.Component {
     state = {
-        loading:false,
         type:0,
         size: 'default',
         bordered: true,
-        delete: false,
+        delete: true,
         role: 'teacher',
         homeworkList: test,
         allAmount: 40,
@@ -51,7 +50,6 @@ class HomeworkList extends React.Component {
 
     }
     getUserInfo=async (username)=>{
-
         let config = {
             method: 'post',
             data :{
@@ -76,6 +74,32 @@ class HomeworkList extends React.Component {
             role:user.type
         })
     };
+
+    deleteTeacherHomeworkOne=async (homeworkId)=>{
+        let config = {
+            method: 'post',
+            url: 'http://localhost:8080/deleteTeacherHomeworkOne',
+            data:{
+                'homeworkId':homeworkId
+            },
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            homework:hw,
+        })
+    };
+
     getData2 = () => {
         this.setState({
             loadingMore: true
@@ -84,6 +108,7 @@ class HomeworkList extends React.Component {
         let username = storage.getItem("username");
         this.getUserInfo(username);
     };
+
     componentWillReceiveProps(nextProps) {
         this.setState({
             homeworkList:nextProps.homeworkList

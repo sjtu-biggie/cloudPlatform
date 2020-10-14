@@ -22,48 +22,85 @@ import ChangeHomework from './ChangeHomework'
 
 const deadHomework = {
   title: '作业123',
-  homeworkid:'11'
+  homeworkid:'11',
+
 };
 class ListDemo extends React.Component {
   state = {
-    size: 'default',
-    bordered: true,
-    data2: [],
-    loading: false,
-    loadingMore: false,
-    homework:deadHomework
+    homework:deadHomework,
+    studentHomework:deadHomework,
+    userInfo:null,
+    role:null
   };
 
-  componentDidMount() {
+  getUserInfo = async (username)=>{
+    let config = {
+      method: 'post',
+      data :{
+        'username':username
+      },
+      url: 'http://106.13.209.140:8000/getUserMessage',
+      headers: {
+        withCredentials: true,
+      }
+    };
+    const user = await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    console.log(user);
     this.setState({
-      loading: true,
-    });
-    this.getData2();
-    this.setState({
-      loading: false
+      userInfo:user,
+      role:user.type
     })
-
-  }
+  };
 
   getData2 = () => {
+    let storage = window.localStorage;
+    let username = storage.getItem("username");
+    this.getUserInfo(username);
+  };
+
+
+  getHomeworkOfStudents=async (homeworkId)=>{
+    let config = {
+      method: 'post',
+      url: 'http://localhost:8080/getHomeworkOfStudents',
+      data:{
+        'homeworkId':homeworkId
+      },
+      headers: {
+        withCredentials: true,
+      }
+    };
+    const hw = await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    console.log(hw);
     this.setState({
-      loadingMore: true
-    });
-    axios.get('https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo').then(res => {
-      this.setState({
-        data2: this.state.data2.concat(res.data.results),
-        loadingMore: false
-      })
+      studentHomework:hw,
     })
   };
 
+  componentWillMount() {
+    this.getData2()
+  }
+
   render() {
-    const {size, bordered, loading, data2, loadingMore} = this.state
     return (
       <div>
         <CustomBreadcrumb arr={['作业', '提交情况']}/>
         <Card bordered={false} title='作业内容' style={{marginBottom: 15}} id='verticalStyle'>
-          <ChangeHomework/>
+          <ChangeHomework homeworkId ={this.state.homework.homeworkid}/>
         </Card>
         <Card bordered={false} title='提交情况' style={{marginBottom: 15}} id='verticalStyle'>
           <Col span={24}>
@@ -79,7 +116,7 @@ class ListDemo extends React.Component {
             </Card>
           </Col>
           <Col span = {24}>
-            <CommitTable homeworkId ={this.state.homework.homeworkid}/>
+            <CommitTable homeworkId ={this.state.studentHomework.homeworkid}/>
           </Col>
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>

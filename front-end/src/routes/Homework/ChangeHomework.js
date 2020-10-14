@@ -3,6 +3,7 @@ import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicke
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
 import moment from 'moment';
+import axios from "axios";
 
 const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 
@@ -53,9 +54,95 @@ class ChangeHomework extends React.Component {
         text: '获取验证码',
         disabled: false,
         homework: Hw,
+        homeworkId: null,
         ableState: true,
-        buttonName:'修改作业'
+        buttonName:'修改作业',
+        userInfo: null,
+        role: null
     };
+
+    getData2 = () => {
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
+    };
+
+    getUserInfo = async (username)=>{
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
+    };
+
+    getHomeworkOne=async (homeworkId)=>{
+        let config = {
+            method: 'post',
+            url: 'http://localhost:8080/getTeacherHomeworkOne',
+            data:{
+                'homeworkId':homeworkId
+            },
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            homework:hw,
+        })
+    };
+
+    editHomework=async (homework)=>{
+        let config = {
+            method: 'post',
+            url: 'http://localhost:8080//editTeacherHomework',
+            data:{
+                'homework':homework
+            },
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            homework:hw,
+        })
+    };
+
     timer = 0;
     handleSubmit = (e) => {
         e.preventDefault();
@@ -74,6 +161,7 @@ class ChangeHomework extends React.Component {
 
     componentWillUnmount() {
         clearInterval(this.timer);
+        this.getData2();
     }
 
     render() {

@@ -2,6 +2,7 @@ import React from 'react'
 import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker} from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
+import axios from "axios";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -37,8 +38,68 @@ class Assign extends React.Component {
     state = {
         text: '获取验证码',
         disabled: false,
-        homeworkJson: null
+        homework: null,
+        userInfo: null,
+        role: null
     };
+
+    getData2 = () => {
+        let storage = window.localStorage;
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
+    };
+
+    getUserInfo = async (username)=>{
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user,
+            role:user.type
+        })
+    };
+
+    addHomework=async (homework)=>{
+        let config = {
+            method: 'post',
+            url: 'http://localhost:8080//addTeacherHomework',
+            data:{
+                'homework':homework
+            },
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            homework:hw,
+        })
+    };
+
     timer = 0;
     handleSubmit = (e) => {
         e.preventDefault();
@@ -49,14 +110,15 @@ class Assign extends React.Component {
                 message.success('提交成功');
                 values.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
                 values.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
-                this.setState({homeworkJson:values});
+                this.setState({homework:values});
                 console.log(values);
             }
         });
     }
 
     componentWillUnmount() {
-        clearInterval(this.timer)
+        clearInterval(this.timer);
+        this.getData2();
     }
 
     render() {

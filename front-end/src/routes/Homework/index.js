@@ -97,7 +97,8 @@ class HomeworkDemo extends React.Component {
         displayHomework: null,
         gradeHomework: null,
         subjectHomework: null,
-        userInfo: null
+        userInfo: null,
+        role: null
     };
 
     searchFun=(value)=>{
@@ -142,6 +143,27 @@ class HomeworkDemo extends React.Component {
         })
     };
 
+    getHomeworkAll=async ()=>{
+        let config = {
+            method: 'get',
+            url: 'http://localhost:8080/getHomeworkAll',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            homework:hw,
+        })
+    };
     changeSubject1=(subject)=>{
         let modifiedList1 = [];
         let modifiedList2 = [];

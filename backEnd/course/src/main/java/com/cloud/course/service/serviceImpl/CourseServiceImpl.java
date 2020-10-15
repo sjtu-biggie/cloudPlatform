@@ -62,7 +62,7 @@ public class CourseServiceImpl implements CourseService {
         boolean seeCourseAverage = parseBoolean(object.getString("seeCourseAverage"));
         boolean seeHomeworkAverage = parseBoolean(object.getString("seeHomeworkAverage"));
         String introduction = object.getString("introduction");
-        String syllabus = object.getString("syllabus");
+        JSONObject syllabus = object.getJSONObject("syllabus");
         String textbook = object.getString("textbook");
         String detail = object.getString("detail");
         String classes = object.getString("classes");

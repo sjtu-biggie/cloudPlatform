@@ -1,5 +1,7 @@
 package com.cloud.course.entity;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,6 @@ public class CourseInfo {
     private int id;
     private String detail;
     private String introduction;
-    private String syllabus;
+    private JSONObject syllabus;
     private String textbook;
 }

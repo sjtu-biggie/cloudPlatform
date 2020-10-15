@@ -10,43 +10,16 @@ class SiderNav extends React.Component {
         menus: null,
         role: "student"
     };
-    componentWillMount() {
-        this.getData2();
-    }
-    getData2 = () => {
-        this.setState({
-            loadingMore: true
-        });
+    componentWillMount=()=> {
         let storage = window.localStorage;
-        let username = storage.getItem("username");
-        this.getUserInfo(username);
-    };
-    getUserInfo=async (username)=>{
-
-        let config = {
-            method: 'post',
-            data :{
-                'username':username
-            },
-            url: 'http://106.13.209.140:8000/getUserMessage',
-            headers: {
-                withCredentials: true,
-            }
-        };
-        const user = await axios(config)
-            .then(function (response) {
-                console.log(response.data);
-                return response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        console.log(user);
+        let role = storage.getItem("type");
         this.setState({
-            userInfo:user,
-            role:user.type
+            role:role
         });
-        if(this.state.role==='student'){
+        this.getUserInfo(role);
+    };
+    getUserInfo=(role)=>{
+        if(role==='student'){
             this.setState({
                 menus: [
                     {
@@ -91,10 +64,10 @@ class SiderNav extends React.Component {
                         key: '/home/display/list'
                     }
                 ]
-            })
+            });
             return;
         }
-        if(this.state.role==='manager'){
+        if(role==='manager'){
             this.setState({
                 menus: [
                     {
@@ -116,7 +89,7 @@ class SiderNav extends React.Component {
             });
             return;
         }
-        if(this.state.role==='teacher'){
+        if(role==='teacher'){
             this.setState({
                 menus: [
                     {
@@ -162,7 +135,7 @@ class SiderNav extends React.Component {
                         key: '/home/display/list'
                     }
                 ]
-            })
+            });
             return;
         }
         this.setState({
@@ -180,10 +153,10 @@ class SiderNav extends React.Component {
             ]
         })
     };
-    componentDidMount() {
-        //TODO:get role of user from local storage
-
-    }
+    // componentDidMount() {
+    //     //TODO:get role of user from local storage
+    //
+    // }
     // {
     //     title: '展示组件',
     //     icon: 'desktop',

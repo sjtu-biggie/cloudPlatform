@@ -33,7 +33,6 @@ import RankData from "./RankData";
 @Form.create()
 class CoursePageDemo extends React.Component {
     state = {
-        step: 0,
         //type indicate which content to render
         //parameter is detailed content of one type
         type: 1,
@@ -64,37 +63,27 @@ class CoursePageDemo extends React.Component {
         this.setState({
             loading: true,
         });
-        this.getData2();
+        let storage = window.localStorage;
+        let role = storage.getItem("type");
+        let courseId = this.props.match.params[0].substr(1);
+        this.getCourse(courseId,role).then(()=>{
+
+        });
         this.setState({
             loading: false
         });
-        console.log(this.props.location.pathname);
-        if (this.props.location.pathname === "/home/course/overall") {
-            this.setState({type: 0});
-            console.log(0);
-        }
-        if (this.props.location.pathname === "/home/course/ongoing") {
-            this.setState({type: 1});
-            console.log(1);
-        }
-        if (this.props.location.pathname === "/home/course/end") {
-            this.setState({type: 2});
-            console.log(2);
-        }
+
     }
-    getUserInfo=async (username)=>{
+    getCourse=async (courseId,role)=>{
 
         let config = {
-            method: 'post',
-            data :{
-                'username':username
-            },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getCourseById?courseId='+courseId,
             headers: {
                 withCredentials: true,
             }
         };
-        const user = await axios(config)
+        const course = await axios(config)
             .then(function (response) {
                 console.log(response.data);
                 return response.data;
@@ -102,10 +91,11 @@ class CoursePageDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(user);
+        let syllabus = course.courseInfo.syllabus;
+        console.log(syllabus);
+        console.log(JSON.parse(syllabus))
         this.setState({
-            userInfo:user,
-            role:user.type
+            course:course
         })
     };
     getData2 = () => {
@@ -312,7 +302,7 @@ class CoursePageDemo extends React.Component {
         let i = 1;
         let chapterList = [];
         while (1) {
-            let str = 'this.state.course.syllabus.chapter' + i;
+            let str = 'this.state.course.courseInfo.syllabus.chapter' + i;
             let contents = eval(str);
             if (contents === undefined || contents === null) break;
             chapterList.push(contents);
@@ -546,9 +536,6 @@ class CoursePageDemo extends React.Component {
             let str = 'this.state.course.syllabus.chapter' + i;
             let contents = eval(str);
             if (contents === undefined || contents === null) break;
-            else {
-                console.log(i);
-            }
             chapterList.push(contents);
             ++i;
         }
@@ -640,14 +627,6 @@ class CoursePageDemo extends React.Component {
 
     render() {
         const {loadingMore} = this.state
-        const loadMore = (
-            <div style={styles.loadMore}>
-                {/*不知道为什么这种写法有问题，会报错*/}
-                {/*{loadingMore ? <Spin/> : <Button onClick={() => this.getData2()}>加载更多</Button>}*/}
-                <Spin style={loadingMore ? {} : {display: 'none'}}/>
-                <Button style={!loadingMore ? {} : {display: 'none'}} onClick={() => this.getData2()}>加载更多</Button>
-            </div>
-        );
         return (
             <div>
                 <CustomBreadcrumb

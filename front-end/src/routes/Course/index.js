@@ -1,33 +1,8 @@
 import React from 'react'
-import {
-    Card,
-    Spin,
-    Button,
-    Radio,
-    List,
-    Switch,
-    Avatar,
-    BackTop,
-    Anchor,
-    Affix,
-    Icon,
-    Form,
-    Input,
-    Menu,
-    Dropdown, Row, Col
-} from 'antd'
+import {BackTop, Button, Card, Col, Dropdown, Form, Icon, List, Menu, Row, Spin,message} from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
-import TypingCard from '../../components/TypingCard'
 import Search from "antd/es/input/Search";
-
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-];
 
 const data3 = [];
 for (let i = 0; i < 6; i++) {
@@ -67,10 +42,10 @@ const IconText = ({type, text}) => (
 class CourseDemo extends React.Component {
     state = {
         role: 'student',
-        courses: data3,
-        gradeCourses: null,
-        typeCourses: null,
-        displayCourses: null,
+        courses: [],
+        gradeCourses: [],
+        typeCourses: [],
+        displayCourses: [],
         type: 0,
         size: 'default',
         bordered: true,
@@ -90,7 +65,7 @@ class CourseDemo extends React.Component {
             return null;
         } else {
             for (let course of this.state.courses) {
-                if (course.type === subject) {
+                if (course.course.type === subject) {
                     modifiedList.push(course);
                 }
             }
@@ -105,53 +80,92 @@ class CourseDemo extends React.Component {
         this.setState({
             loading: true,
         });
+        this.getCourses(type);
         let storage = window.localStorage;
         let role = storage.getItem("type");
         this.setState({
             role:role
         });
-        this.getData2();
-        this.setState({
-            displayCourses: this.state.courses,
-            loading: false
-        });
-        console.log(this.props.location.pathname);
+        let type;
         if (this.props.location.pathname === "/home/course/overall") {
+            type = 0;
             this.setState({type: 0});
-            console.log(0);
         }
         if (this.props.location.pathname === "/home/course/ongoing") {
+            type = 1;
             this.setState({type: 1});
-            console.log(1);
         }
         if (this.props.location.pathname === "/home/course/end") {
+            type = 2;
             this.setState({type: 2});
-            console.log(2);
         }
-    }
 
-    getData2 = () => {
+
+        this.setState({
+            loading: false
+        });
+
+    }
+    add0=(m)=>{return m<10?'0'+m:m }
+    format=(shijianchuo)=>
+    {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth()+1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
+    };
+    getCourses = (type) => {
+        console.log(this.state.displayCourses);
+
+        //TODO:fetch based on type
         this.setState({
             loadingMore: true
         });
         let storage = window.localStorage;
         let username = storage.getItem("username");
-        this.getCoursesInfo(username);
+        this.getCoursesInfo(username).then((res)=>{
+            if(res===null){
+                message.success("failure loading courses!");
+                return;
+            }
+            for(let i=0;i<res.length;++i){
+                res[i].course.startDate = this.format(res[i].course.startDate);
+                res[i].course.endDate = this.format(res[i].course.endDate);
+                this.getUserInfo(res[i].course.userId).then(
+                    (username)=>{
+                        console.log(username)
+                        res[i].course.nickname  =username;
+                        this.setState({
+                            courses:res,
+                            displayCourses:res
+                        });
+                    }
+                )
+            }
+            this.setState({
+                courses:res,
+                displayCourses:res
+            });
+            console.log(this.state.displayCourses);
+        });
     };
-    handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(123);
-    };
-    getCoursesInfo = async (username) => {
+    getUserInfo=async (username)=> {
 
         let config = {
-            method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId='+username,
+            method: 'post',
+            data: {
+                'username': username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
             headers: {
                 withCredentials: true,
             }
         };
-        const courseList = await axios(config)
+        const user = await axios(config)
             .then(function (response) {
                 console.log(response.data);
                 return response.data;
@@ -159,7 +173,30 @@ class CourseDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(courseList);
+        return user.nickname;
+    };
+    handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(123);
+    };
+    getCoursesInfo = async (username) => {
+        const that = this;
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId='+username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     render() {
@@ -271,7 +308,7 @@ class CourseDemo extends React.Component {
                                     <Search
                                         placeholder="输入课程名称"
                                         enterButton="搜索"
-                                        size="medium"
+                                        size="default"
                                         onSearch={value => {
                                             this.searchFun(value)
                                         }}
@@ -316,10 +353,7 @@ class CourseDemo extends React.Component {
                           style={styles.listStyle}
                           renderItem={item => {
                               return (
-                                  <List.Item style={{height: "210px"}}
-                                             extra={<img width={172} height={170} alt="logo"
-                                                         src={require('../../pic/math1.png')}
-                                                         style={{border: '4px solid grey'}}/>}>
+                                  <List.Item style={{height: "210px"}}>
                                       <Row>
                                           <Col span={3} style={{fontSize: '15px'}}>
 
@@ -329,7 +363,7 @@ class CourseDemo extends React.Component {
                                               <p style={{marginTop: '25px'}}><Icon type={"user"}/><span style={{
                                                   fontWeight: 'bold',
                                                   marginLeft: '10px'
-                                              }}>教师 ：</span>{item.nickname}</p>
+                                              }}>教师 ：</span>{item.course.nickname}</p>
                                           </Col>
                                           <Col span={21}>
                                               <a style={{
@@ -338,21 +372,21 @@ class CourseDemo extends React.Component {
                                                   fontWeight: 'bold',
                                                   display: 'block'
                                               }}
-                                                 href={"/home/course/class=" + item.id}>{item.course_name}</a>
-                                              <p style={{marginTop: '10px', height: '90px'}}>{item.introduction}</p>
+                                                 href={"/home/course/class=" + item.course.id}>{item.course.courseName}</a>
+                                              <p style={{marginTop: '10px', height: '90px'}}>{item.courseInfo.introduction}</p>
                                               <p style={{height: '10px'}}>
                                                   <span
-                                                      style={{marginRight: '30px', fontSize: 15}}>类型： {item.type}</span>
+                                                      style={{marginRight: '30px', fontSize: 15}}>类型： {item.course.type}</span>
                                                   <span style={{
                                                       marginRight: '30px',
                                                       fontSize: 15
-                                                  }}>年级： {item.grade}</span><IconText type={'calendar'}
+                                                  }}>年级： {item.course.grade}</span><IconText type={'calendar'}
                                                                                       style={{}}
                                                                                       text={'开始时间：'}/>
-                                                  <span style={{marginRight:'30px'}}>{item.start_date}</span><IconText type={'calendar'}
+                                                  <span style={{marginRight:'30px'}}>{item.course.startDate}</span><IconText type={'calendar'}
                                                                              style={{marginLeft: '30px'}}
                                                                              text={'结束时间：'}/>
-                                                  {item.end_date}</p>
+                                                  {item.course.endDate}</p>
                                           </Col>
                                       </Row>
                                   </List.Item>

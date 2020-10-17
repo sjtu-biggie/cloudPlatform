@@ -119,7 +119,7 @@ class CourseDemo extends React.Component {
         return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
     };
     getCourses = (type) => {
-        console.log(this.state.displayCourses);
+    /*    console.log(this.state.displayCourses);*/
 
         //TODO:fetch based on type
         this.setState({
@@ -137,7 +137,7 @@ class CourseDemo extends React.Component {
                 res[i].course.endDate = this.format(res[i].course.endDate);
                 this.getUserInfo(res[i].course.userId).then(
                     (username)=>{
-                        console.log(username)
+           /*             console.log(username)*/
                         res[i].course.nickname  =username;
                         this.setState({
                             courses:res,
@@ -150,7 +150,7 @@ class CourseDemo extends React.Component {
                 courses:res,
                 displayCourses:res
             });
-            console.log(this.state.displayCourses);
+         /*   console.log(this.state.displayCourses);*/
         });
     };
     getUserInfo=async (username)=> {
@@ -177,7 +177,7 @@ class CourseDemo extends React.Component {
     };
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log(123);
+       /* console.log(123);*/
     };
     getCoursesInfo = async (username) => {
         const that = this;
@@ -195,7 +195,7 @@ class CourseDemo extends React.Component {
                 return response.data;
             })
             .catch(function (error) {
-                console.log(error);
+             /*   console.log(error);*/
             });
     };
 

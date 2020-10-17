@@ -91,7 +91,7 @@ class CoursePageDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(course);
+        console.log(course)
         if(course.course.userId===username){
             this.setState({role:"teacher"})
         }else if(1){
@@ -238,7 +238,7 @@ class CoursePageDemo extends React.Component {
                 modifiedCourse.course.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
                 modifiedCourse.course.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
                 this.setState({course: modifiedCourse,modifyCourse:false});
-                console.log(values);
+                /*console.log(values);*/
             }
         });
     };
@@ -409,7 +409,7 @@ class CoursePageDemo extends React.Component {
             },
         };
         const normFile = e => {
-            console.log('Upload event:', e);
+            /*console.log('Upload event:', e);*/
             if (Array.isArray(e)) {
                 return e;
             }
@@ -611,7 +611,7 @@ class CoursePageDemo extends React.Component {
             </div>
         ) };
     childValue=(username)=>{
-      console.log(username);
+ /*     console.log(username);*/
     };
     typeRender = () => {
         switch (this.state.type) {

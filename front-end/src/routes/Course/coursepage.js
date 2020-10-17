@@ -33,7 +33,6 @@ import RankData from "./RankData";
 @Form.create()
 class CoursePageDemo extends React.Component {
     state = {
-        step: 0,
         //type indicate which content to render
         //parameter is detailed content of one type
         type: 1,
@@ -59,53 +58,51 @@ class CoursePageDemo extends React.Component {
         displayHomeworkList:deathHomework
     };
 
-    componentDidMount() {
+    componentWillMount() {
 
         this.setState({
             loading: true,
         });
-        this.getData2();
+        let storage = window.localStorage;
+        let role = storage.getItem("type");
+        let username = storage.getItem("username");
+        let courseId = this.props.match.params[0].substr(1);
+        this.getCourse(courseId,role,username).then(()=>{
+
+        });
         this.setState({
             loading: false
         });
-        console.log(this.props.location.pathname);
-        if (this.props.location.pathname === "/home/course/overall") {
-            this.setState({type: 0});
-            console.log(0);
-        }
-        if (this.props.location.pathname === "/home/course/ongoing") {
-            this.setState({type: 1});
-            console.log(1);
-        }
-        if (this.props.location.pathname === "/home/course/end") {
-            this.setState({type: 2});
-            console.log(2);
-        }
+
     }
-    getUserInfo=async (username)=>{
+    getCourse=async (courseId,role,username)=>{
 
         let config = {
-            method: 'post',
-            data :{
-                'username':username
-            },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getCourseById?courseId='+courseId,
             headers: {
                 withCredentials: true,
             }
         };
-        const user = await axios(config)
+        const course = await axios(config)
             .then(function (response) {
-                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(user);
+        console.log(course);
+        if(course.course.userId===username){
+            this.setState({role:"teacher"})
+        }else if(1){
+            //TODO:student in the class
+        }else{
+            this.setState({role:"watcher"})
+        }
+
+
         this.setState({
-            userInfo:user,
-            role:user.type
+            course:course
         })
     };
     getData2 = () => {
@@ -173,9 +170,9 @@ class CoursePageDemo extends React.Component {
                                     fontSize: '20px',
                                     fontWeight: 'bold',
                                     display: 'block'
-                                }}>课程名 : {this.state.course.course_name}</p>
-                                <p style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</p>
-                                <p style={{height: '10px'}}>开始时间：{this.state.course.start_date} 结束时间：{this.state.course.end_date}</p>
+                                }}>课程名 : {this.state.course.course.courseName}</p>
+                                <p style={{marginTop: '10px', height: '90px'}}>{this.state.course.courseInfo.introduction}</p>
+                                <p style={{height: '10px'}}>开始时间：{this.state.course.course.startDate} 结束时间：{this.state.course.course.endDate}</p>
                             </Col>
                             <Col span={6}>
                             </Col>
@@ -205,7 +202,7 @@ class CoursePageDemo extends React.Component {
                                     paddingRight: '50px'
                                 }}>老师有话说 ：</p>
                                 <p>
-                                    {this.state.course.detail}
+                                    {this.state.course.courseInfo.detail}
                                 </p>
                             </Card>
                         </Col>
@@ -234,12 +231,12 @@ class CoursePageDemo extends React.Component {
             } else {
                 message.success('提交成功');
                 let modifiedCourse = this.state.course;
-                modifiedCourse.course_name = values.course_name;
-                modifiedCourse.textbook = values.textbook;
-                modifiedCourse.introduction = values.introduction;
-                modifiedCourse.detail = values.detail;
-                modifiedCourse.start_date = values.startDate.format('YYYY-MM-DD HH:mm:ss');
-                modifiedCourse.end_date = values.endDate.format('YYYY-MM-DD HH:mm:ss');
+                modifiedCourse.course.courseName = values.courseName;
+                modifiedCourse.courseInfo.textbook = values.textbook;
+                modifiedCourse.courseInfo.introduction = values.introduction;
+                modifiedCourse.courseInfo.detail = values.detail;
+                modifiedCourse.course.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
+                modifiedCourse.course.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
                 this.setState({course: modifiedCourse,modifyCourse:false});
                 console.log(values);
             }
@@ -247,7 +244,7 @@ class CoursePageDemo extends React.Component {
     };
     deleteSmall = (index, smallName) => {
         let chapterName = 'chapter' + (index + 1);
-        let modifiedSyllabus = this.state.course.syllabus;
+        let modifiedSyllabus = this.state.course.courseInfo.syllabus;
         for (let a in modifiedSyllabus) {
             if (a === chapterName) {
                 let chapter = modifiedSyllabus[a].content;
@@ -263,12 +260,12 @@ class CoursePageDemo extends React.Component {
             }
         }
         let modifiedCourse = this.state.course;
-        modifiedCourse.syllabus = modifiedSyllabus;
+        modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
     addSmall = (index, smallName) => {
         let chapterName = 'chapter' + (index + 1);
-        let modifiedSyllabus = this.state.course.syllabus;
+        let modifiedSyllabus = this.state.course.courseInfo.syllabus;
         for (let a in modifiedSyllabus) {
             if (a === chapterName) {
                 let chapter = modifiedSyllabus[a].content;
@@ -277,13 +274,13 @@ class CoursePageDemo extends React.Component {
             }
         }
         let modifiedCourse = this.state.course;
-        modifiedCourse.syllabus = modifiedSyllabus;
+        modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
     addBig = (index, smallName) => {
         let chapterString ='chapter' + (index + 2);
         let chapterName = {title:smallName,content:[]};
-        let modifiedSyllabus = this.state.course.syllabus;
+        let modifiedSyllabus = this.state.course.courseInfo.syllabus;
         for(let i=modifiedSyllabus.chapterNum;i>index+1;--i){
             let prvChapter = 'chapter' + i;
             let mdfChapter = 'chapter' + (i + 1);
@@ -292,11 +289,11 @@ class CoursePageDemo extends React.Component {
         modifiedSyllabus[chapterString] = chapterName;
         modifiedSyllabus['chapterNum']=modifiedSyllabus['chapterNum']+1;
         let modifiedCourse = this.state.course;
-        modifiedCourse.syllabus = modifiedSyllabus;
+        modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
     deleteBig = (index)=>{
-        let modifiedSyllabus = this.state.course.syllabus;
+        let modifiedSyllabus = this.state.course.courseInfo.syllabus;
         for(let i=index+1;i<modifiedSyllabus.chapterNum;++i){
             let prvChapter = 'chapter' + i;
             let mdfChapter = 'chapter' + (i + 1);
@@ -305,14 +302,14 @@ class CoursePageDemo extends React.Component {
         delete modifiedSyllabus[ 'chapter'+modifiedSyllabus.chapterNum];
         modifiedSyllabus['chapterNum']=modifiedSyllabus['chapterNum']-1;
         let modifiedCourse = this.state.course;
-        modifiedCourse.syllabus = modifiedSyllabus;
+        modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
     modifiedSyllabus=()=>{
         let i = 1;
         let chapterList = [];
         while (1) {
-            let str = 'this.state.course.syllabus.chapter' + i;
+            let str = 'this.state.course.courseInfo.syllabus.chapter' + i;
             let contents = eval(str);
             if (contents === undefined || contents === null) break;
             chapterList.push(contents);
@@ -426,8 +423,8 @@ class CoursePageDemo extends React.Component {
               }} layout='horizontal' style={{width: '80%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                   <FormItem name='name' label='课程名称' {...formItemLayout} >
                       {
-                          getFieldDecorator('course_name', {
-                              initialValue:this.state.course.course_name,
+                          getFieldDecorator('courseName', {
+                              initialValue:this.state.course.course.courseName,
                               rules: [
                                   {
                                       max: 10,
@@ -446,7 +443,7 @@ class CoursePageDemo extends React.Component {
                   <FormItem label='课程教材' {...formItemLayout}>
                       {
                           getFieldDecorator('textbook', {
-                              initialValue:this.state.course.textbook,
+                              initialValue:this.state.course.courseInfo.textbook,
                               rules: [
                                   {
                                       required: true,
@@ -461,7 +458,7 @@ class CoursePageDemo extends React.Component {
                   <FormItem label='课程简介' {...formItemLayout}>
                       {
                           getFieldDecorator('introduction', {
-                              initialValue:this.state.course.introduction,
+                              initialValue:this.state.course.courseInfo.introduction,
                               rules: [
                                   {
                                       min: 10,
@@ -484,7 +481,7 @@ class CoursePageDemo extends React.Component {
                   <FormItem label='详细介绍' {...formItemLayout}>
                       {
                           getFieldDecorator('detail', {
-                              initialValue:this.state.course.detail,
+                              initialValue:this.state.course.courseInfo.detail,
                               rules: [
                                   {
                                       max: 300,
@@ -511,7 +508,7 @@ class CoursePageDemo extends React.Component {
                       }
                   </FormItem>
                   <Row><Col offset ={4} span={10}>
-                      <p style={{marginLeft:'100px'}}>原开始时间：{this.state.course.start_date}</p>
+                      <p style={{marginLeft:'100px'}}>原开始时间：{this.state.course.course.startDate}</p>
                   </Col></Row>
                   <FormItem label='结束时间' {...formItemLayout} required>
                       {
@@ -530,7 +527,7 @@ class CoursePageDemo extends React.Component {
                       }
                   </FormItem>
                   <Row><Col offset ={4} span={10}>
-                      <p style={{marginLeft:'100px'}}>原结束时间：{this.state.course.end_date}</p>
+                      <p style={{marginLeft:'100px'}}>原结束时间：{this.state.course.course.endDate}</p>
                   </Col></Row>
                   <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
                       <Button htmlType="submit">确认修改</Button>
@@ -543,12 +540,9 @@ class CoursePageDemo extends React.Component {
         let i = 1;
         let chapterList = [];
         while (1) {
-            let str = 'this.state.course.syllabus.chapter' + i;
+            let str = 'this.state.course.courseInfo.syllabus.chapter' + i;
             let contents = eval(str);
             if (contents === undefined || contents === null) break;
-            else {
-                console.log(i);
-            }
             chapterList.push(contents);
             ++i;
         }
@@ -640,14 +634,6 @@ class CoursePageDemo extends React.Component {
 
     render() {
         const {loadingMore} = this.state
-        const loadMore = (
-            <div style={styles.loadMore}>
-                {/*不知道为什么这种写法有问题，会报错*/}
-                {/*{loadingMore ? <Spin/> : <Button onClick={() => this.getData2()}>加载更多</Button>}*/}
-                <Spin style={loadingMore ? {} : {display: 'none'}}/>
-                <Button style={!loadingMore ? {} : {display: 'none'}} onClick={() => this.getData2()}>加载更多</Button>
-            </div>
-        );
         return (
             <div>
                 <CustomBreadcrumb
@@ -741,57 +727,56 @@ const IconText = ({type, text}) => (
   </span>
 );
 const deadCourse = {
-    detail:'这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。',
-    course_name: `七年级数学`,
-    pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    start_date: '1999-10-12',
-    end_date: '2020-10-10',
+    course:{
+        id: 1,
+        courseName: `七年级数学`,
+        startDate: '1999-10-12',
+        endDate: '2020-10-10',
+    },
+    courseInfo:{
+        textbook: "人教版七年级数学上册",
+        detail:'加载中~',
+        syllabus: {
+            chapterNum:4,
+            chapter1: {
+                title: "一百以内算术",
+                content: [
+                    "加法",
+                    "减法", "乘法", "除法"
+                ]
+            },
+            chapter2: {
+                title: "微积分",
+                content: [
+                    "微分",
+                    "积分", "偏微分"
+                ]
+            },
+            chapter3: {
+                title: "数学史",
+                content: [
+                    "时间简史",
+                    "二战史",
+                    "线性代数史"
+                ]
+            },
+            chapter4: {
+                title: "提高篇",
+                content: [
+                    "矩阵",
+                    "行列式",
+                    "特征向量",
+                    "正交矩阵",
+                    "正定矩阵"
+                ]
+            },
+        },
+        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
+    },
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     nickname: "陈小红",
-    id: 1,
-    textbook: "人教版七年级数学上册",
-    introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
-    syllabus: {
-        chapterNum:4,
-        chapter1: {
-            title: "一百以内算术",
-            content: [
-                "加法",
-                "减法", "乘法", "除法"
-            ]
-        },
-        chapter2: {
-            title: "微积分",
-            content: [
-                "微分",
-                "积分", "偏微分"
-            ]
-        },
-        chapter3: {
-            title: "数学史",
-            content: [
-                "时间简史",
-                "二战史",
-                "线性代数史"
-            ]
-        },
-        chapter4: {
-            title: "提高篇",
-            content: [
-                "矩阵",
-                "行列式",
-                "特征向量",
-                "正交矩阵",
-                "正定矩阵"
-            ]
-        },
-    }
+
+
 };
 const bulletin = [];
 const deadHomework = [

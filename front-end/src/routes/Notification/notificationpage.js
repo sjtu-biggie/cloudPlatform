@@ -161,9 +161,9 @@ class NotificationPage extends React.Component {
         let config = {
             method: 'get',
             url: 'http://localhost:8080/getNoteByUser',
-            data: {
+           /* data: {
                 'sid': id
-            },
+            },*/
             headers: {
                 withCredentials: true,
             }

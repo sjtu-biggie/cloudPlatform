@@ -105,7 +105,6 @@ class HomeworkDemo extends React.Component {
         let modifiedList = this.state.homework.filter(function(item){
             return (item.title.indexOf(value)  !== -1) || (item.content.indexOf(value) !==-1);
         });
-        console.log(modifiedList)
         this.setState({
             displayHomework:modifiedList,
         });
@@ -130,13 +129,12 @@ class HomeworkDemo extends React.Component {
         };
         const user = await axios(config)
             .then(function (response) {
-                console.log(response.data);
+
                 return response.data;
             })
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(user);
         this.setState({
             userInfo:user,
             role:user.type

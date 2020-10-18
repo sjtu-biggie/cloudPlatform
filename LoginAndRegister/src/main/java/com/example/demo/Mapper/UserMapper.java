@@ -31,4 +31,7 @@ public interface UserMapper {
     @Select("select * from userdemo where sid=#{sid}")
     public User testSid(String sid);
 
+    @Update("delete from userdemo where username=#{username}")
+    public void delUser(String username);
+
 }

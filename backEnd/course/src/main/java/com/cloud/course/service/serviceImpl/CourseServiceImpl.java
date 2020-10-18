@@ -57,7 +57,6 @@ public class CourseServiceImpl implements CourseService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        String pic = object.getString("pic");
         boolean noteHomeworkAssign = parseBoolean(object.getString("noteHomeworkAssign"));
         boolean noteHomeworkDue = parseBoolean(object.getString("noteHomeworkDue"));
         boolean noteHomeworkRatify = parseBoolean(object.getString("noteHomeworkRatify"));
@@ -70,10 +69,11 @@ public class CourseServiceImpl implements CourseService {
         String classes = object.getString("classes");
         String type = object.getString("type");
         String grade = object.getString("grade");
+        String modify = object.getString("modify");
+
         Course course = new Course(userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
-        courseDao.save(course);
-//        CoursePic coursePic = new CoursePic(courseDao.findMaxId(),pic);
         CourseInfo courseInfo = new CourseInfo(courseDao.findMaxId(),detail,introduction,syllabus,textbook);
+        courseDao.save(course);
         courseDao.saveInfo(courseInfo);
     }
     @Override

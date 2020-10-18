@@ -8,6 +8,9 @@ import com.cloud.course.entity.CourseBulletin;
 import com.cloud.course.entity.Notification;
 import com.cloud.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +54,14 @@ public class CourseController {
         System.out.println("note deleted");
         String id = params.get("notificationId");
         courseService.deleteNote(id);
+    }
+
+    @GetMapping(path = "/course/getPageBulletin")
+//    @PreAuthorize("hasRole('ROLE_USER')")
+    public Page<CourseBulletin> getPages(@RequestParam("courseId") String id, @RequestParam("page") int page, @RequestParam("size") int size) {
+        Pageable p = PageRequest.of(page,size);
+        System.out.println("********** getWeibos **********");
+        return courseService.getPageBulletin(id,p);
     }
 
     @GetMapping(path = "/course/getBulletin")

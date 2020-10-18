@@ -3,6 +3,8 @@ package com.cloud.course.dao;
 
 import com.cloud.course.dto.WholeCourse;
 import com.cloud.course.entity.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
@@ -39,4 +41,6 @@ public interface CourseDao {
 
 
     void register(String courseId, String string,Date join_date);
+
+    Page<CourseBulletin> getPageBulletin(int courseId, Pageable p);
 }

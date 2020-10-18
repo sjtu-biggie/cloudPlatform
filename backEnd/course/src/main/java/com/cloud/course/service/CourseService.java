@@ -6,6 +6,8 @@ import com.cloud.course.dto.WholeCourse;
 import com.cloud.course.entity.Course;
 import com.cloud.course.entity.CourseBulletin;
 import com.cloud.course.entity.Notification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -35,4 +37,6 @@ public interface CourseService {
     void deleteNote(String id);
 
     void register(JSONObject object);
+
+    Page<CourseBulletin> getPageBulletin(String id, Pageable p);
 }

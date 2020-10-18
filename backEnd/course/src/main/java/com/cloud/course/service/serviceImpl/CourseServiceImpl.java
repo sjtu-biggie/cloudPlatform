@@ -8,6 +8,8 @@ import com.cloud.course.entity.*;
 import com.cloud.course.service.CourseService;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Id;
@@ -74,7 +76,11 @@ public class CourseServiceImpl implements CourseService {
         CourseInfo courseInfo = new CourseInfo(courseDao.findMaxId(),detail,introduction,syllabus,textbook);
         courseDao.saveInfo(courseInfo);
     }
-
+    @Override
+    public Page<CourseBulletin> getPageBulletin(String id, Pageable p){
+        int courseId = parseInt(id);
+        return courseDao.getPageBulletin(courseId,p);
+    }
     @Override
     public List<CourseBulletin> getBulletin(String id){
         int courseId = parseInt(id);

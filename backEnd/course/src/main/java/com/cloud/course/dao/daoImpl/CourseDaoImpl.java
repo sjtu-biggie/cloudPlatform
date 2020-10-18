@@ -5,6 +5,8 @@ import com.cloud.course.dto.WholeCourse;
 import com.cloud.course.entity.*;
 import com.cloud.course.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -141,5 +143,9 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void register(String courseId, String userId,Date join_date){
         courseRepository.register(courseId,userId,join_date);
+    }
+    @Override
+    public Page<CourseBulletin> getPageBulletin(int courseId, Pageable p){
+        return courseBulletinRepository.findAllByCourseId(courseId,p);
     }
 }

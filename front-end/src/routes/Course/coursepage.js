@@ -113,7 +113,8 @@ class CoursePageDemo extends React.Component {
         } else {
             this.setState({role: "watcher"})
         }
-
+        course.course.startDate = this.format(course.course.startDate)
+        course.course.endDate = this.format(course.course.endDate)
 
         this.setState({
             course: course

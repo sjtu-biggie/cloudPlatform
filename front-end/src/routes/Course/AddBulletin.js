@@ -1,6 +1,7 @@
 import React from 'react'
 import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Switch} from 'antd'
 import TextArea from "antd/es/input/TextArea";
+import axios from "axios";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -63,16 +64,31 @@ class AddBulletin extends React.Component {
 
     };
     timer = 0;
-    handleSubmit = (e) => {
+    handleSubmit =async (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (err) {
                 message.warning('请填写正确的公告内容')
             } else {
                 message.success('提交成功');
-                values.course_id = this.props.course_id;
-                values.publish_date = CurentTime();
-                console.log(values);
+                values.courseId = this.props.course_id;
+                values.publishDate = CurentTime();
+                let config = {
+                    method: 'post',
+                    data: values,
+                    url: 'http://106.13.209.140:8787/course/addBulletin',
+                    headers: {
+                        withCredentials: true,
+                    }
+                };
+                const user = await axios(config)
+                    .then(function (response) {
+                        console.log(response.data);
+                        return response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         });
     };

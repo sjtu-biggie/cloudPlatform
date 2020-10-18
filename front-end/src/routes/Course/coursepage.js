@@ -291,9 +291,9 @@ class CoursePageDemo extends React.Component {
 
         )
     };
-    handleSubmit = (e) => {
+    handleSubmit = async(e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (err) {
                 message.warning('请填写正确的课程信息')
             } else {
@@ -306,7 +306,29 @@ class CoursePageDemo extends React.Component {
                 modifiedCourse.course.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
                 modifiedCourse.course.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
                 this.setState({course: modifiedCourse, modifyCourse: false});
-                /*console.log(values);*/
+                let courseJson = modifiedCourse.course;
+                courseJson.detail = modifiedCourse.courseInfo.detail;
+                courseJson.introduction = modifiedCourse.courseInfo.introduction;
+                courseJson.syllabus= modifiedCourse.courseInfo.syllabus;
+                courseJson.textbook = modifiedCourse.courseInfo.textbook;
+                courseJson.modify = true;
+                console.log(courseJson);
+                let config = {
+                    method: 'post',
+                    data: courseJson,
+                    url: 'http://106.13.209.140:8787/course/addCourse',
+                    headers: {
+                        withCredentials: true,
+                    }
+                };
+                const user = await axios(config)
+                    .then(function (response) {
+                        console.log(response.data);
+                        return response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         });
     };

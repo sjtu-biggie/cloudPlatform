@@ -1,5 +1,5 @@
 import React from 'react'
-import {BackTop, Button, Card, Col, Dropdown, Form, Icon, List, Menu, Row, Spin,message} from 'antd'
+import {BackTop, Button, Card, Col, Dropdown, Form, Icon, List, Menu, Row, Spin, message} from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import Search from "antd/es/input/Search";
@@ -84,7 +84,7 @@ class CourseDemo extends React.Component {
         let storage = window.localStorage;
         let role = storage.getItem("type");
         this.setState({
-            role:role
+            role: role
         });
         let type;
         if (this.props.location.pathname === "/home/course/overall") {
@@ -106,20 +106,22 @@ class CourseDemo extends React.Component {
         });
 
     }
-    add0=(m)=>{return m<10?'0'+m:m }
-    format=(shijianchuo)=>
-    {
+
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
+    }
+    format = (shijianchuo) => {
         let time = new Date(shijianchuo);
         let y = time.getFullYear();
-        let m = time.getMonth()+1;
+        let m = time.getMonth() + 1;
         let d = time.getDate();
         let h = time.getHours();
         let mm = time.getMinutes();
         let s = time.getSeconds();
-        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
     };
     getCourses = (type) => {
-    /*    console.log(this.state.displayCourses);*/
+        /*    console.log(this.state.displayCourses);*/
 
         //TODO:fetch based on type
         this.setState({
@@ -127,33 +129,33 @@ class CourseDemo extends React.Component {
         });
         let storage = window.localStorage;
         let username = storage.getItem("username");
-        this.getCoursesInfo(username).then((res)=>{
-            if(res===null){
+        this.getCoursesInfo(username).then((res) => {
+            if (res === null) {
                 message.success("failure loading courses!");
                 return;
             }
-            for(let i=0;i<res.length;++i){
+            for (let i = 0; i < res.length; ++i) {
                 res[i].course.startDate = this.format(res[i].course.startDate);
                 res[i].course.endDate = this.format(res[i].course.endDate);
                 this.getUserInfo(res[i].course.userId).then(
-                    (username)=>{
-           /*             console.log(username)*/
-                        res[i].course.nickname  =username;
+                    (username) => {
+                        /*             console.log(username)*/
+                        res[i].course.nickname = username;
                         this.setState({
-                            courses:res,
-                            displayCourses:res
+                            courses: res,
+                            displayCourses: res
                         });
                     }
                 )
             }
             this.setState({
-                courses:res,
-                displayCourses:res
+                courses: res,
+                displayCourses: res
             });
-         /*   console.log(this.state.displayCourses);*/
+            /*   console.log(this.state.displayCourses);*/
         });
     };
-    getUserInfo=async (username)=> {
+    getUserInfo = async (username) => {
 
         let config = {
             method: 'post',
@@ -177,13 +179,13 @@ class CourseDemo extends React.Component {
     };
     handleSubmit = (e) => {
         e.preventDefault();
-       /* console.log(123);*/
+        /* console.log(123);*/
     };
     getCoursesInfo = async (username) => {
         const that = this;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId='+username,
+            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -195,7 +197,7 @@ class CourseDemo extends React.Component {
                 return response.data;
             })
             .catch(function (error) {
-             /*   console.log(error);*/
+                /*   console.log(error);*/
             });
     };
 
@@ -359,52 +361,70 @@ class CourseDemo extends React.Component {
 
                                               <img width={120} height={120} alt="logo"
                                                    src={require('../../pic/teacher2.jpg')}
-                                                   style={{}}/>
+                                                   style={{marginBottom: '6px'}}/>
                                               <p style={{marginTop: '25px'}}><Icon type={"user"}/><span style={{
                                                   fontWeight: 'bold',
-                                                  marginLeft: '10px'
-                                              }}>教师 ：</span>{item.course.nickname}</p>
+                                                  fontSize: 20,
+                                                  marginLeft: '10px',
+                                              }}>教师 ：</span><span style={{fontSize: 20}}>{item.course.nickname}</span>
+                                              </p>
                                           </Col>
-                                          <Col span={21}>
+                                          <Col span={17}>
                                               <a style={{
                                                   color: 'darkslategray',
-                                                  fontSize: '20px',
+                                                  fontSize: '25px',
                                                   fontWeight: 'bold',
                                                   display: 'block'
                                               }}
                                                  href={"/home/course/class=" + item.course.id}>{item.course.courseName}</a>
-                                              <p style={{marginTop: '10px', height: '90px'}}>{item.courseInfo.introduction}</p>
-                                              <p style={{height: '10px'}}>
+                                              <p style={{
+                                                  marginTop: '10px',
+                                                  height: '90px'
+                                              }}>{item.courseInfo.introduction}</p>
+                                              <p style={{height: '20px'}}>
                                                   <span
-                                                      style={{marginRight: '30px', fontSize: 15}}>类型： {item.course.type}</span>
+                                                      style={{marginRight: '30px', fontSize: 20}}><span
+                                                      style={{fontWeight: 'bold'}}>类型：</span> {item.course.type}</span>
                                                   <span style={{
                                                       marginRight: '30px',
-                                                      fontSize: 15
-                                                  }}>年级： {item.course.grade}</span><IconText type={'calendar'}
-                                                                                      style={{}}
-                                                                                      text={'开始时间：'}/>
-                                                  <span style={{marginRight:'30px'}}>{item.course.startDate}</span><IconText type={'calendar'}
-                                                                             style={{marginLeft: '30px'}}
-                                                                             text={'结束时间：'}/>
-                                                  {item.course.endDate}</p>
+                                                      fontSize: 20
+                                                  }}><span
+                                                      style={{fontWeight: 'bold'}}>年级： </span>{item.course.grade}</span>
+                                                  <span style={{
+                                                      marginRight: '30px',
+                                                      fontSize: 20
+                                                  }}><span
+                                                      style={{fontWeight: 'bold'}}>上课班级： </span>{item.course.classes}</span>
+                                              </p>
+                                          </Col>
+                                          <Col span={4}>
+                                              <p ><IconText type={'calendar'}
+                                                            text={'开始时间：'}/>
+                                                  <span
+                                                      style={{marginRight: '30px'}}>{item.course.startDate}</span>
+                                              </p><p><IconText type={'calendar'}
+                                                               style={{marginLeft: '30px'}}
+                                                               text={'结束时间：'}/>
+                                              {item.course.endDate}</p>
                                           </Col>
                                       </Row>
+
                                   </List.Item>
                               )
                           }}
-                />
-            </Card>
+                    />
+                </Card>
 
-        <BackTop visibilityHeight={200} style={{right: 50}}/>
-    {/*<Affix style={styles.affixBox}>*/}
-    {/*  <Anchor offsetTop={200} affix={false}>*/}
-    {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
-    {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
-    {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
-    {/*  </Anchor>*/}
-    {/*</Affix>*/}
-    </div>
-    )
+                <BackTop visibilityHeight={200} style={{right: 50}}/>
+                {/*<Affix style={styles.affixBox}>*/}
+                {/*  <Anchor offsetTop={200} affix={false}>*/}
+                {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
+                {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
+                {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
+                {/*  </Anchor>*/}
+                {/*</Affix>*/}
+            </div>
+        )
     }
 }
 

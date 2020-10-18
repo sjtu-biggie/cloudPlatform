@@ -137,7 +137,7 @@ class CoursePageDemo extends React.Component {
                         this.setState({addHomework: true})
                     }}>创建新的一次作业</Button>
 
-                    <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
+                    <Button onClick={()=>{this.setState({addHomework:false,deleteHomework:true})}} style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
                             size='large'>删除现有一次作业</Button>
                     <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
                         this.setState({

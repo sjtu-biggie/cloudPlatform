@@ -2,6 +2,8 @@
 import React, { Component, createRef } from 'react';
 import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
 import styles from './index.css';
+import axios from 'axios'
+
 import {Router} from "react-router-dom";
 
 let index = 0;
@@ -88,6 +90,7 @@ export default class StudentTable extends Component {
             search: '',
             search2: '',
             search3:'',
+            delData:'',
             orData: data1,
             renderData: data1,
             orData2: data2,
@@ -169,7 +172,26 @@ export default class StudentTable extends Component {
             });
             this.setState({ renderData2: filterData });
         };
+
+        this.deleteData=()=>{
+            const {delData} =this.state;
+            console.log(delData);
+            axios({
+                url:'http://106.13.209.140:8000/delUser',
+                method:'POST',
+                data:{
+                    name:delData
+                }
+            }).then(res=>{
+                console.log(res)
+            }).catch(err=>{
+                console.log(err)
+            })
+            console.log("测试发送");
+        }
     }
+
+
 
     render() {
         const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
@@ -215,8 +237,10 @@ export default class StudentTable extends Component {
                                         <Button onClick={() => {
                                             this.setState({
                                                 orData: orData.filter(item => item.id !== record.id),
+                                                delData:record.username,
                                                 orData2: [record, ...orData2],
                                             }, () => {
+                                                this.deleteData();
                                                 this.handleSearch();
                                                 this.handleSearch2();
                                             });
@@ -228,5 +252,6 @@ export default class StudentTable extends Component {
             </div>
         );
     }
+
 }
 

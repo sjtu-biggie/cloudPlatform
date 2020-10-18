@@ -86,6 +86,7 @@ export default class ClassManage extends Component {
             search: '',
             search2: '',
             search3:'',
+            delData:'',
             orData: data1,
             renderData: data1,
             orData2: data2,

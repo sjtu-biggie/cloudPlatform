@@ -13,7 +13,7 @@ import {
     Form,
     Input,
     Menu,
-    Dropdown, Row, Col, Collapse, Avatar, Pagination, Steps
+    Dropdown, Row, Col, Collapse, Avatar, Pagination, Steps, message
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
@@ -63,12 +63,54 @@ class NotificationPage extends React.Component {
         data2: [],
         loading: false,
         loadingMore: false,
-        course: deadCourse,
+        notification: deadCourse,
         bulletins: bulletin,
     };
 
+    getNoteInfo=async (notificationId)=>{
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getNoteByUser?userId='+notificationId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
+
+    getNote=()=>{
+        let notificationId = this.props.match.params[0].substr(1);
+        this.getNoteInfo(notificationId).then((res) => {
+            if (res === null) {
+                message.success("failure loading courses!");
+                return;
+            }
+            this.setState({
+                notification: res,
+                displayNotification: res
+            });
+        });
+    }
 
 
+    componentWillMount() {
+        //TODO:get role from local storage
+        this.setState({
+            loading: true,
+        });
+        this.getNote();
+        this.setState({
+            Notification:this.state.notification,
+            loading: false
+        });
+    }
 
 
     mainRender = () => {

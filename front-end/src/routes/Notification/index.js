@@ -1,5 +1,22 @@
 import React from 'react'
-import {Card, Spin, Button, Radio, List, Switch, Avatar, Menu,BackTop, Input,Anchor,Form, Affix, Icon, Dropdown} from 'antd'
+import {
+    Card,
+    Spin,
+    Button,
+    Radio,
+    List,
+    Switch,
+    Avatar,
+    Menu,
+    BackTop,
+    Input,
+    Anchor,
+    Form,
+    Affix,
+    Icon,
+    Dropdown,
+    message
+} from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb'
 import TypingCard from '../../components/TypingCard'
@@ -41,19 +58,33 @@ class Notification extends React.Component {
         data2: [],
         loading: false,
         loadingMore: false,
-        read:false,
-        courses:data3,
-        displayCourses:null,
+        notification:data3,
+        displayNotification:null,
         nrnum:0,
+    }
+
+    format = (shijianchuo) => {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth() + 1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
+    };
+
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
     }
 
     searchFun=()=>{
         let value = document.getElementById("search").value;
-        let modifiedList=this.state.courses.filter(function(item){
+        let modifiedList=this.state.notification.filter(function(item){
             return (item.title.indexOf(value)  !== -1)|| item.description.indexOf(value) !==-1;
         });
         this.setState({
-            displayCourses:modifiedList,
+            displayNotification:modifiedList,
         });
     };
 
@@ -62,20 +93,20 @@ class Notification extends React.Component {
         let courseButton=document.getElementById("courseButton");
         if(subject==="所有"){
             this.setState({
-                displayCourses:this.state.courses,
+                displayNotification:this.state.notification,
             });
             courseButton.innerText="学科";
             return null;
         }else{
-            for(let course of this.state.courses){
-                if(course.type===subject){
-                    modifiedList.push(course);
+            for(let notification of this.state.notification){
+                if(notification.type===subject){
+                    modifiedList.push(notification);
                 }
             }
         }
         courseButton.innerText=subject;
         this.setState({
-            displayCourses:modifiedList,
+            displayNotification:modifiedList,
         });
     };
 
@@ -87,7 +118,7 @@ class Notification extends React.Component {
                 withCredentials: true,
             }
         };
-        const note = await axios(config)
+        return await axios(config)
             .then(function (response) {
                 console.log(response.data);
                 return response.data;
@@ -95,13 +126,53 @@ class Notification extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        this.setState({
-            courses:note,
-        })
     };
 
-    getNote=()=>{
+    postReading=async(item)=>{
+        const obj={
+            id:item.notificationId,
+            reading: true,
+            receiverId:item.receiverId,
+            senderId:item.senderId,
+            title:item.title,
+            publishDate:item.publishDate,
+            content:item.content,
+        }
+        console.log(obj);
+        let config = {
+            method: 'post',
+            data:obj,
+            url: 'http://106.13.209.140:8787/course/addNote',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
+    getNote=()=>{
+        let username=localStorage.getItem("username");
+        console.log(username)
+        this.getNoteInfo(username).then((res) => {
+            if (res === null) {
+                message.success("failure loading courses!");
+                return;
+            }
+            for (let i = 0; i < res.length; ++i) {
+                res[i].publishDate = this.format(res[i].publishDate);
+            }
+            this.setState({
+                notification: res,
+                displayNotification: res
+            });
+        });
     }
 
     componentWillMount() {
@@ -110,11 +181,9 @@ class Notification extends React.Component {
             loading: true,
         });
         this.getData2();
-        let username=localStorage.getItem("username");
-        console.log(username)
-        this.getNoteInfo(username);
+        this.getNote();
         this.setState({
-            displayCourses:this.state.courses,
+            displayNotification:this.state.notification,
             loading: false
         });
     }
@@ -245,23 +314,23 @@ class Notification extends React.Component {
                 </Card>
 
                 <Card bordered={false} title='通知' style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={this.state.displayCourses}
+                    <List dataSource={this.state.displayNotification}
                           /*itemLayout='vertical'*/
                           pagination={{pageSize: 10}}
                           style={styles.listStyle}
                           renderItem={item=>{
                               return (
-                                  <List.Item  actions={this.state.read===false?[<p>未读</p>]:[<p>已读</p>]}
+                                  <List.Item  actions={item.reading===false?["未读   | 发布时间："+item.publishDate]:["已读   | 发布时间："+item.publishDate]}
                                       /*actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}*/
                                        >
                                       <List.Item.Meta
                                           avatar={<Avatar src={require("../../pic/math1.png")} />}
-                                          title={<a onClick={()=>{this.setState({read:true})}} href={"/home/notification/page"}>{item.title}</a>}
-                                          description={item.description}>
+                                          title={<a onClick={()=>{this.postReading(item)}} href={"/home/notification/page="+item.notificationId}>{item.title}</a>}
+                                          description={item.content}>
                                       <row>
-                                          <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>
-                                          <p style={{fontSize:'5px',fontWeight:'bold',display:'block'}}>{item.time}</p>
-                                          <p style={{marginTop:'10px'}}>{item.description}</p>
+
+                                          <p style={{fontSize:'5px',fontWeight:'bold',display:'block'}}>{item.publishDate}</p>
+                                          <p style={{marginTop:'10px'}}>{item.content}</p>
                                       </row>
                                       </List.Item.Meta>
                                   </List.Item>

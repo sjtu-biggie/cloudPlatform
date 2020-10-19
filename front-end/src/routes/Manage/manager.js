@@ -1,8 +1,9 @@
 /* eslint-disable */
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef ,useState} from 'react';
 import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
 import styles from './index.css';
 import axios from 'axios'
+import * as XLSX from 'xlsx';
 
 import {Router} from "react-router-dom";
 
@@ -59,6 +60,44 @@ columns.map(item => {
     };
 });
 
+const WageManage = () => {
+    const [wageTableData, setWageTableData] = useState < any > ([]);
+    const uploadProps = {
+        accept: ".xls,.xlsx,application/vnd.ms-excel",
+        beforeUpload: (file) => {
+            const f = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const datas = e.target.result;
+                const workbook = XLSX.read(datas, {
+                    type: 'binary'
+                });
+                const first_worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonArr = XLSX.utils.sheet_to_json(first_worksheet, {header: 1});
+                handleImpotedJson(jsonArr, file);
+            };
+            reader.readAsBinaryString(f);
+            return false;
+        },
+        onRemove: () => {
+            setWageTableData([]);
+        }
+    }
+}
+    const handleImpotedJson = (jsonArr, file) => {
+        jsonArr.splice(0, 1); // 去掉表头
+        const jsonArrData = jsonArr.map((item, index) => {
+            let jsonObj = {};
+            jsonObj.index = index + 1;
+            jsonObj.key = 'user-wage-' + index;
+            item.forEach((im, i) => {
+                jsonObj[tableColumns[i].dataIndex] = im;
+            })
+            return jsonObj;
+        });
+        setWageTableData(jsonArrData)
+    }
+
 class EditText extends Component {
     constructor(props) {
         super(props);
@@ -67,6 +106,8 @@ class EditText extends Component {
             editValue: props.children,
         };
     }
+
+
     render() {
         const { edit, editValue } = this.state;
         return (edit ? <Input autoFocus style={{ width: 100 }}
@@ -211,7 +252,7 @@ export default class StudentTable extends Component {
                                 </Col>
                                 <Col span={1} offset={11}>
                                     <div>
-                                        <Upload action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>
+                                        <Upload {...uploadProps} action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>
                                             <Button>
                                                 <Icon type="upload"/> 从excel中添加
                                             </Button>

@@ -2,13 +2,11 @@ import React from 'react'
 import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker} from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
-import moment from 'moment';
 import axios from "axios";
 
 const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 const options = [
     {
@@ -65,6 +63,7 @@ class ChangeHomework extends React.Component {
         let storage = window.localStorage;
         let username = storage.getItem("username");
         this.getUserInfo(username);
+        this.getHomeworkOne(3);
     };
 
     getUserInfo = async (username)=>{
@@ -89,17 +88,13 @@ class ChangeHomework extends React.Component {
         console.log(user);
         this.setState({
             userInfo:user,
-            role:user.type
         })
     };
 
-    getHomeworkOne=async (homeworkId)=>{
+    getHomeworkOne = async (homeworkId)=>{
         let config = {
             method: 'post',
-            url: 'http://localhost:8080/getTeacherHomeworkOne',
-            data:{
-                'homeworkId':homeworkId
-            },
+            url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
             headers: {
                 withCredentials: true,
             }
@@ -118,10 +113,10 @@ class ChangeHomework extends React.Component {
         })
     };
 
-    editHomework=async (homework)=>{
+    editHomework = async (homework)=>{
         let config = {
             method: 'post',
-            url: 'http://localhost:8080//editTeacherHomework',
+            url: 'http://106.13.209.140:8383//editTeacherHomework',
             data:{
                 'homework':homework
             },
@@ -159,8 +154,7 @@ class ChangeHomework extends React.Component {
         });
     }
 
-    componentWillUnmount() {
-        clearInterval(this.timer);
+    componentWillMount() {
         this.getData2();
     }
 
@@ -234,7 +228,7 @@ class ChangeHomework extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <Cascader disabled={this.state.ableState} options={options} expandTrigger="hover" placeholder={this.state.homework.class}/>
+                                    <Cascader disabled={this.state.ableState} options={options} expandTrigger="hover" placeholder={this.state.homework.range}/>
                                 )
                             }
                         </FormItem>
@@ -244,7 +238,7 @@ class ChangeHomework extends React.Component {
                                 rules: [
                                     {
                                         required: true,
-                                        message: '请选择布置班级'
+                                        message: '请选择作业类型'
                                     }
                                 ]
                                 })

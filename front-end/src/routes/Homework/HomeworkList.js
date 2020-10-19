@@ -81,7 +81,7 @@ class HomeworkList extends React.Component {
     deleteTeacherHomeworkOne=async (homeworkId)=>{
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8080/deleteTeacherHomeworkOne',
+            url: 'http://106.13.209.140:8383/deleteTeacherHomeworkOne',
             data:{
                 'homeworkId':homeworkId
             },

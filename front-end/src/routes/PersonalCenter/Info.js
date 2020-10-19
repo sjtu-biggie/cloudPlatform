@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Avatar} from 'antd'
+import {Card, Form, Input, Button, message, BackTop, Avatar} from 'antd'
 import PromptBox from "../../components/PromptBox";
 import {calculateWidth} from "../../utils/utils";
 import axios from "axios";
@@ -223,13 +223,6 @@ class PersonalCenter extends React.Component {
             </div>
         )
     }
-}
-
-const styles = {
-    focus: {
-        width: '20px',
-        opacity: 1
-    },
 }
 
 export default PersonalCenter

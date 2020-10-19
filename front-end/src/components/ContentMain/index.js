@@ -134,7 +134,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/homework/General' component={HomeworkGeneral}/>
           <PrivateRoute exact path='/home/homework/rate' component={RatePage}/>
 
-          <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
+          <PrivateRoute exact path='/home/notification/page*' component={NotificationPage}/>
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
 
           <PrivateRoute exact path='/home/personalcenter' component={PersonalCenter}/>

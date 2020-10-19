@@ -16,7 +16,7 @@ import {
     Dropdown,
     Input,
     Menu,
-    Col, Row, Statistic, InputNumber
+    Col, Row, Statistic, InputNumber, Slider
 } from 'antd'
 import axios from 'axios'
 import TextArea from "antd/es/input/TextArea";
@@ -34,9 +34,14 @@ const gridStyle = {
     textAlign: 'center',
 };
 
-
+const status = {
+    DRAWING: 1,
+    NOTING: 2,
+    READING: 3,
+};
 class Rating extends React.Component {
     state = {
+        status:3,
         type: 0,
         size: 'default',
         bordered: true,
@@ -47,9 +52,20 @@ class Rating extends React.Component {
         studentIndex: 0,
         studentHomeworkList: null,
         homework: null,
+        penSize:5,
+        penLazy:1
     };
-
-    componentWillMount() {
+    onChange = value => {
+        this.setState({
+            penSize: value,
+        });
+    };
+    onChange2 = value => {
+        this.setState({
+            penLazy: value,
+        });
+    };
+    componentWillMount=()=> {
 
         this.setState({
             loading: true,
@@ -61,7 +77,27 @@ class Rating extends React.Component {
         });
     }
 
-    render() {
+    render=()=> {
+        let defaultProps = {
+            lazyRadius: this.state.penLazy,
+            onChange: null,
+            loadTimeOffset: 5,
+            brushRadius: this.state.penSize,
+            brushColor: "red",
+            catenaryColor: "#0a0302",
+            gridColor: "rgba(150,150,150,0.17)",
+            hideGrid: false,
+            canvasWidth: 1000,
+            canvasHeight: 1000,
+            disabled: false,
+            imgSrc: require("../../pic/deadHomework1.jpg"),
+            saveData: null,
+            immediateLoading: false,
+            hideInterface: false
+        };
+        const { penSize } = this.state;
+        const { penLazy } = this.state;
+
         return (
             <div>
                 <Row>
@@ -143,7 +179,7 @@ class Rating extends React.Component {
                     <Col span={17}>
                         <Card style={{height: '800px',overflow:'scroll'}}>
                             {/*<img style={{overflow:'scroll'}} width={800} alt="logo" src={require("../../pic/deadHomework1.jpg" )}/>*/}
-                            <CanvasDraw {...defaultProps}/>
+                            <CanvasDraw ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/>
                         </Card>
                     </Col>
                     <Col span={7}>
@@ -158,12 +194,12 @@ class Rating extends React.Component {
                                 this.state.studentHomeworkList[this.state.studentIndex].score === null ?
                                     <div>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
-                                            <InputNumber style={{marginLeft: '20px'}} id={'inputNumber'}min={0} max={100}/> /100</p>
+                                            <InputNumber style={{marginLeft: '20px'}} id={'inputNumber'} min={0} max={100}/> /100</p>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>
                                             <TextArea style={{height:'200px',marginTop:'15px'}} id={'textarea'}/></p>
                                     </div>
                                     :
-                                    <div>
+                                    <div style={{height:'320px'}}>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
                                             <span style={{fontSize: '20px', fontWeight: 'bold', color: 'blue'}}>已评分！</span>
                                             <p> {this.state.studentHomeworkList[this.state.studentIndex].score}/100</p>
@@ -178,6 +214,75 @@ class Rating extends React.Component {
 
                             }
 
+                            <div style={{height:'200px'}}>
+                                {
+                                    this.state.status === status.DRAWING?      <div>
+                                        <span style={{fontWeight:'bold'}}> 画笔大小</span>
+                                        <Row>
+                                        <Col span={12}>
+                                            <Slider
+                                                min={1}
+                                                max={50}
+                                                onChange={this.onChange}
+                                                value={typeof penSize === 'number' ? penSize : 0}
+                                            />
+                                        </Col>
+                                        <Col span={4}>
+                                            <InputNumber
+                                                min={1}
+                                                max={50}
+                                                style={{ margin: '0 16px' }}
+                                                value={penSize}
+                                                onChange={this.onChange}
+                                            />
+                                        </Col>
+                                    </Row>
+                                        <span style={{fontWeight:'bold'}}> 画笔延迟</span>
+                                        <Row>
+                                            <Col span={12}>
+                                                <Slider
+                                                    min={1}
+                                                    max={50}
+                                                    onChange={this.onChange2}
+                                                    value={typeof penLazy === 'number' ? penLazy : 0}
+                                                />
+                                            </Col>
+                                            <Col span={4}>
+                                                <InputNumber
+                                                    min={1}
+                                                    max={50}
+                                                    style={{ margin: '0 16px' }}
+                                                    value={penLazy}
+                                                    onChange={this.onChange2}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row style={{marginTop:'15px'}}>
+                                            <Col  span={3}>
+                                                <Button  onClick={()=>{this.saveableCanvas.undo()}} style={{fontWeight:'bold',marginLeft:'10px'}}> 撤销一笔 </Button>
+                                            </Col>
+                                            <Col  offset={3} span={3}>
+                                                <Button  onClick={()=>{this.saveableCanvas.clear()}} style={{fontWeight:'bold',marginLeft:'10px'}}> 清除画布 </Button>
+                                            </Col>
+                                            <Col offset={3} span={3}>
+                                                <Button  onClick={()=>{this.saveableCanvas.save()}} style={{fontWeight:'bold',marginLeft:'10px'}}> 保存画布 </Button>
+                                            </Col>
+                                        </Row>
+
+                                    </div>:null
+                                }
+                            </div>
+                            <Row>
+                                <Col offset={1} span={7}>
+                                    <img onClick={()=>{this.setState({status:status.DRAWING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/002-marker.svg" )}/>
+                                </Col>
+                                <Col offset={1} span={7}>
+                                    <img onClick={()=>{this.setState({status:status.NOTING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/001-exam.svg" )}/>
+                                </Col>
+                                <Col offset={1} span={7}>
+                                    <img onClick={()=>{this.setState({status:status.NOTING})}}style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/012-laptop.svg" )}/>
+                                </Col>
+                            </Row>
 
                         </Card>
                     </Col>
@@ -186,22 +291,7 @@ class Rating extends React.Component {
         )
     }
 }
-const defaultProps = {
-    onChange: null,
-    loadTimeOffset: 5,
-    brushRadius: 5,
-    brushColor: "red",
-    catenaryColor: "#0a0302",
-    gridColor: "rgba(150,150,150,0.17)",
-    hideGrid: false,
-    canvasWidth: 1000,
-    canvasHeight: 1000,
-    disabled: false,
-    imgSrc: require("../../pic/deadHomework1.jpg"),
-    saveData: null,
-    immediateLoading: false,
-    hideInterface: false
-};
+
 const styles = {
     listStyle: {
         width: '100%',

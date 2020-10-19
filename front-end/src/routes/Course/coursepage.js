@@ -128,6 +128,27 @@ class CoursePageDemo extends React.Component {
         let username = storage.getItem("username");
         this.getUserInfo(username);
     };
+    getHomeworkAllByCourse = async (courseId)=>{
+        let config = {
+            method: 'post',
+            url: 'http://106.13.209.140:8383/getTeacherHomeworkAll?courseId=' + courseId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            displayHomeworkList:hw,
+        })
+    };
     homeworkRender = () => {
         //TODO:传参给FormDemo1
         return (
@@ -395,7 +416,7 @@ class CoursePageDemo extends React.Component {
         modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
-    modifiedSyllabus = () => {
+    modifiedSyllabus =() => {
         let i = 1;
         let chapterList = [];
         while (1) {
@@ -464,7 +485,30 @@ class CoursePageDemo extends React.Component {
                 </Collapse>
                 <Row>
                     <Col offset={11}>
-                        <Button onClick={() => {
+                        <Button onClick={async () => {
+                            let courseJson = this.state.course.course;
+                            courseJson.detail = this.state.course.courseInfo.detail;
+                            courseJson.introduction = this.state.course.courseInfo.introduction;
+                            courseJson.syllabus= this.state.course.courseInfo.syllabus;
+                            courseJson.textbook = this.state.course.courseInfo.textbook;
+                            courseJson.modify = true;
+                            console.log(courseJson);
+                            let config = {
+                                method: 'post',
+                                data: courseJson,
+                                url: 'http://106.13.209.140:8787/course/addCourse',
+                                headers: {
+                                    withCredentials: true,
+                                }
+                            };
+                            const user = await axios(config)
+                                .then(function (response) {
+                                    console.log(response.data);
+                                    return response.data;
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
                             this.setState({
                                 modifySyllabus: false
                             })
@@ -476,7 +520,7 @@ class CoursePageDemo extends React.Component {
     };
     modifiedCourse = () => {
         const FormItem = Form.Item;
-        const {getFieldDecorator, getFieldValue} = this.props.form
+        const {getFieldDecorator, getFieldValue} = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
@@ -693,7 +737,6 @@ class CoursePageDemo extends React.Component {
         return (
             <RankData homework={this.state.homework}/>);
     };
-
     studentTableRender = () => {
         return (
             <div>
@@ -758,6 +801,7 @@ class CoursePageDemo extends React.Component {
                             this.setState({type: 2})
                         }}><Icon type="appstore"/>公告</Menu.Item>
                         <Menu.SubMenu key='app' onClick={() => {
+                            this.getHomeworkAllByCourse(this.state.course.course.id);
                             this.setState({type: 3})
                         }} title={<span><Icon type='setting'/><span>作业</span></span>}>
                             <Menu.Item>总览</Menu.Item>

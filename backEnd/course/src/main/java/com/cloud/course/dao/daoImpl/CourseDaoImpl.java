@@ -107,6 +107,18 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
+    public List<WholeCourse> getPageCourses(Pageable p){
+        Page<Course> coursesPages = courseRepository.findAll(p);
+        List<WholeCourse> wholeCourseList= new ArrayList<>();
+        for(int i=0;i<coursesPages.getContent().size();++i){
+            WholeCourse wholeCourse=new WholeCourse();
+            wholeCourse.setCourse(coursesPages.getContent().get(i));
+            wholeCourse.setCourseInfo(courseInfoRepository.findAllById(coursesPages.getContent().get(i).getId()));
+            wholeCourseList.add(wholeCourse);
+        }
+        return wholeCourseList;
+    }
+    @Override
     public List<WholeCourse> getCoursesByStudent(String id){
         List<Course> courseList = courseRepository.getCoursesByStudent(id);
         List<WholeCourse> wholeCourseList = new ArrayList<>();

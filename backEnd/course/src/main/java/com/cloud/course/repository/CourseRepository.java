@@ -1,6 +1,9 @@
 package com.cloud.course.repository;
 
 import com.cloud.course.entity.Course;
+import com.cloud.course.entity.CourseBulletin;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -29,4 +32,8 @@ public interface CourseRepository extends CrudRepository<Course,Integer> {
     @Modifying
     @Query(nativeQuery = true,value="insert into student_course(user_id,course_id,grade,status,join_date) values (?2,?1,0,0,?3)")
     void register(String courseId, String userId,Date join_date);
+
+
+    Page<Course> findAll(Pageable p);
+
 }

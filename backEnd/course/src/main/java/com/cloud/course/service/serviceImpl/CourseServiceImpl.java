@@ -70,9 +70,12 @@ public class CourseServiceImpl implements CourseService {
         String type = object.getString("type");
         String grade = object.getString("grade");
         String modify = object.getString("modify");
-
         Course course = new Course(userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
         CourseInfo courseInfo = new CourseInfo(courseDao.findMaxId(),detail,introduction,syllabus,textbook);
+        if(modify!=null&&!modify.equals("")){
+            int id = parseInt(object.getString("id"));
+            course = new Course(id,userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
+        }
         courseDao.save(course);
         courseDao.saveInfo(courseInfo);
     }
@@ -101,6 +104,10 @@ public class CourseServiceImpl implements CourseService {
         }
         CourseBulletin courseBulletin=new CourseBulletin(courseId,title,content,publish_date);
         courseDao.saveBulletin(courseBulletin);
+    }
+    @Override
+    public List<WholeCourse> getAllCourses(Pageable p){
+        return courseDao.getPageCourses(p);
     }
     @Override
     public void addNote(JSONObject object){

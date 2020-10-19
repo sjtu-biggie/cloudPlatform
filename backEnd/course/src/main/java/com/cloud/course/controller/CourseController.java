@@ -22,6 +22,11 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @GetMapping(path = "/course/getCourses")
+    public List<WholeCourse> getAllCourses(@RequestParam("page") int page, @RequestParam("size") int size) {
+        Pageable p = PageRequest.of(page,size);
+        return courseService.getAllCourses(p);
+    }
 
     @GetMapping(path = "/course/getCourseById")
     public WholeCourse getCourseById(@RequestParam("courseId") String id) {
@@ -58,7 +63,7 @@ public class CourseController {
 
     @GetMapping(path = "/course/getPageBulletin")
 //    @PreAuthorize("hasRole('ROLE_USER')")
-    public Page<CourseBulletin> getPages(@RequestParam("courseId") String id, @RequestParam("page") int page, @RequestParam("size") int size) {
+    public Page<CourseBulletin> getPageBulletins(@RequestParam("courseId") String id, @RequestParam("page") int page, @RequestParam("size") int size) {
         Pageable p = PageRequest.of(page,size);
         System.out.println("********** getWeibos **********");
         return courseService.getPageBulletin(id,p);

@@ -39,4 +39,6 @@ public interface CourseService {
     void register(JSONObject object);
 
     Page<CourseBulletin> getPageBulletin(String id, Pageable p);
+
+    List<WholeCourse> getAllCourses(Pageable p);
 }

@@ -43,4 +43,6 @@ public interface CourseDao {
     void register(String courseId, String string,Date join_date);
 
     Page<CourseBulletin> getPageBulletin(int courseId, Pageable p);
+
+    List<WholeCourse> getPageCourses(Pageable p);
 }

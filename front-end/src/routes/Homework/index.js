@@ -144,7 +144,7 @@ class HomeworkDemo extends React.Component {
     getHomeworkAll=async ()=>{
         let config = {
             method: 'get',
-            url: 'http://localhost:8080/getHomeworkAll',
+            url: 'http://106.13.209.140:8080/getHomeworkAll',
             headers: {
                 withCredentials: true,
             }

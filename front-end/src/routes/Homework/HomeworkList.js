@@ -49,6 +49,8 @@ class HomeworkList extends React.Component {
         });
         this.getData2();
 
+
+
     }
     getUserInfo=async (username)=>{
         let config = {
@@ -79,7 +81,7 @@ class HomeworkList extends React.Component {
     deleteTeacherHomeworkOne=async (homeworkId)=>{
         let config = {
             method: 'post',
-            url: 'http://localhost:8080/deleteTeacherHomeworkOne',
+            url: 'http://106.13.209.140:8080/deleteTeacherHomeworkOne',
             data:{
                 'homeworkId':homeworkId
             },

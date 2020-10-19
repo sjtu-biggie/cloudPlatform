@@ -1,16 +1,26 @@
 import React from 'react'
-import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker} from 'antd'
+import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Avatar} from 'antd'
 import PromptBox from "../../components/PromptBox";
 import {calculateWidth} from "../../utils/utils";
+import axios from "axios";
 
 const FormItem = Form.Item;
 
 @Form.create()
 class PersonalCenter extends React.Component {
     state = {
-        focusItem: -1
+        role: 'teacher',
+        userInfo: {
+            username:'加载中',
+            email:'email',
+            nickname:'nickname',
+            sid:'sid',
+            telephone:'tele',
+            theClass:'class',
+            theGrade:'grade'
+        }
     }
-    timer = 0;
+
     handleSubmit = (e) => {
         e.preventDefault();
         this.setState({
@@ -18,37 +28,96 @@ class PersonalCenter extends React.Component {
         })
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const users = this.props.appStore.users
-                // 检测用户名是否存在
-                const result = users.find(item => item.username === values.registerUsername)
-                if (result) {
-                    this.props.form.setFields({
-                        registerUsername: {
-                            value: values.registerUsername,
-                            errors: [new Error('用户名已存在')]
-                        }
-                    })
-                    return
-                }
+                // const users = this.props.appStore.users
+                // // 检测用户名是否存在
+                // const result = users.find(item => item.username === values.registerUsername)
+                // if (result) {
+                //     this.props.form.setFields({
+                //         registerUsername: {
+                //             value: values.registerUsername,
+                //             errors: [new Error('用户名已存在')]
+                //         }
+                //     })
+                //     return
+                // }
+                const obj =  {
+                    nickname: values.name,
+                    email:values.Email,
+                    telephone:values.Phonenumber,
+                };
 
-                const obj = [...this.props.appStore.users, {
-                    username: values.registerUsername,
-                    password: values.registerPassword
-                }]
-                localStorage.setItem('users', JSON.stringify(obj))
-                this.props.appStore.initUsers()
+                console.log("obj:"+obj.nickname+":"+obj.email+":"+obj.telephone);
+                this.updateUserInfo(obj);
+
                 message.success('提交成功')
             }
         });
     }
 
-    componentWillUnmount() {
-        clearInterval(this.timer)
+    getUserInfo=async (username)=>{
+
+        let config = {
+            method: 'post',
+            data :{
+                'username':username
+            },
+            url: 'http://106.13.209.140:8000/getUserMessage',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(user);
+        this.setState({
+            userInfo:user
+        })
+        console.log("ui:"+this.state.userInfo.username);
+
+    };
+
+    updateUserInfo = async (obj) => {
+        let config = {
+            method: 'post',
+            data: obj,
+            url: 'http://106.13.209.140:8000/updateUser',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        console.log("传入数据",obj);
+        const message1 = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        if (message1==='更新成功') {
+            message.success('更新成功',5);
+        }else{
+            message.error(message1);
+        }
+    };
+
+    componentWillMount() {
+        let storage = window.localStorage;
+        let r = storage.getItem("type");
+        let username = storage.getItem("username");
+        this.getUserInfo(username);
+        this.setState({
+            role: r
+        });
     }
 
     render() {
-        const {getFieldDecorator, getFieldValue, getFieldError} = this.props.form
-        const {focusItem} = this.state
+        const {getFieldDecorator, getFieldError} = this.props.form
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
@@ -57,16 +126,6 @@ class PersonalCenter extends React.Component {
             wrapperCol: {
                 xs: {span: 24},
                 sm: {span: 12},
-            },
-        };
-        const DraftLayout = {
-            labelCol: {
-                xs: {span: 24},
-                sm: {span: 4},
-            },
-            wrapperCol: {
-                xs: {span: 24},
-                sm: {span: 24},
             },
         };
         const tailFormItemLayout = {
@@ -81,13 +140,19 @@ class PersonalCenter extends React.Component {
                 },
             },
         }
-
+        const display2 = {
+            display:(this.state.role === 'teacher') ? 'block' : 'none',
+        }
         return (
             <div>
                 <Card bordered={false} title='个人信息'>
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
+                        <Form.Item label = '头像' style={display2} {...formItemLayout} >
+                            <Avatar size={64} src =""/>
+                        </Form.Item>
+
                         <Form.Item label = '用户名' {...formItemLayout}>
-                            <Input placeholder={'username'} disabled/>
+                            <Input placeholder={this.state.userInfo.username} disabled/>
                         </Form.Item>
 
                         <Form.Item label = '真实姓名' {...formItemLayout} help={getFieldError('name') && <PromptBox info={getFieldError('name')}
@@ -100,26 +165,19 @@ class PersonalCenter extends React.Component {
                                 ]
                             })(
                                 <Input
-                                    onFocus={() => this.setState({focusItem: 0})}
-                                    onBlur={() => this.setState({focusItem: -1})}
                                     maxLength={16}
-                                    placeholder='姓名'
-                                    addonBefore={<span className='iconfont icon-User' style={focusItem === 0 ? styles.focus : {}}/>}/>
+                                    placeholder={this.state.userInfo.nickname}
+                                  />
                             )}
                         </Form.Item>
 
-                        <Form.Item label = '学号' {...formItemLayout}>
-                            <Input placeholder={12345} disabled/>
-                        </Form.Item>
-
-                        <Form.Item label = '所在学校' {...formItemLayout}>
-                            <Input placeholder={'上海交通大学附属小学'} disabled/>
+                        <Form.Item label = { this.state.role === 'teacher' ?'工号':'学号'} {...formItemLayout}>
+                            <Input placeholder={this.state.userInfo.sid} disabled/>
                         </Form.Item>
 
                         <Form.Item label = '所在班级' {...formItemLayout}>
-                            <Input placeholder={'一年级(3)班'} disabled/>
+                            <Input placeholder={this.state.userInfo.theClass} disabled/>
                         </Form.Item>
-
 
                         <Form.Item label = '邮箱' {...formItemLayout} required help={getFieldError('Email') && <PromptBox info={getFieldError('Email')}
                                                                                       width={calculateWidth(getFieldError('Email'))}/>}>
@@ -134,8 +192,8 @@ class PersonalCenter extends React.Component {
                                     onFocus={() => this.setState({focusItem: 3})}
                                     onBlur={() => this.setState({focusItem: -1})}
                                     maxLength={30}
-                                    placeholder='邮箱'
-                                    addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 3 ? styles.focus : {}}/>}/>
+                                    placeholder={this.state.userInfo.email}
+                                />
                             )}
                         </Form.Item>
 
@@ -152,12 +210,12 @@ class PersonalCenter extends React.Component {
                                     onFocus={() => this.setState({focusItem: 5})}
                                     onBlur={() => this.setState({focusItem: -1})}
                                     maxLength={16}
-                                    placeholder='手机号'
-                                    addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 5 ? styles.focus : {}}/>}/>
+                                    placeholder={this.state.userInfo.telephone}
+                                />
                             )}
                         </Form.Item>
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" >提交</Button>
+                            <Button type="primary" htmlType="submit">提交</Button>
                         </FormItem>
                     </Form>
                 </Card>

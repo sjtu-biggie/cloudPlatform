@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Optional;
 
 @Repository
 public class LoginDao {
@@ -20,16 +19,15 @@ public class LoginDao {
 
 
     public User getUserMessageAndIcon(@RequestBody JSONObject obj){
+        userIconRepository.save(new UserIcon("tea","fashfah"));
+
         String username = obj.getString("username");
         User user1 = userMapper.getUserMessage(username);
-        Optional<UserIcon> icon= Optional.ofNullable(userIconRepository.findByUsername(username));
-        if (icon.isPresent()){
-            System.out.println("not null"+username);
-            user1.setIcon(icon.get());
-        }else {
-            user1.setIcon(null);
-            System.out.println("it is null");
-        }
+        UserIcon userIcon=userIconRepository.findByUsername(username);
+        user1.setIconBase64(userIcon.getIconBase64());
+        System.out.println(user1);
+        System.out.println(userIcon);
         return user1;
     }
+
 }

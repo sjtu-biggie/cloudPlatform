@@ -1,8 +1,8 @@
 package com.example.demo.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Transient;
 
-import java.beans.Transient;
 
 @Data
 public class User {
@@ -88,10 +88,9 @@ public class User {
         this.theClass = theClass;
     }
 
-
-    private UserIcon icon;
     @Transient
-    public UserIcon getIcon(){return icon;}
-    public void setIcon(UserIcon icon){this.icon=icon;}
-
+    private String iconBase64;
+    public String getIconBase64(){return iconBase64;}
+    public void setIconBase64(String iconBase64){
+        this.iconBase64=iconBase64;}
     }

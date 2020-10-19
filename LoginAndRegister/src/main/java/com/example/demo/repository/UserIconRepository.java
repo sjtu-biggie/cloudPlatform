@@ -3,7 +3,11 @@ package com.example.demo.repository;
 import com.example.demo.model.UserIcon;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-public interface UserIconRepository extends MongoRepository<UserIcon,Integer> {
-    UserIcon findByUsername(@Param("username") String username);
+import java.util.List;
+
+@RepositoryRestResource(collectionResourceRel = "userIcon")
+public interface UserIconRepository extends MongoRepository<UserIcon,String> {
+    UserIcon findByUsername(String username);
 }

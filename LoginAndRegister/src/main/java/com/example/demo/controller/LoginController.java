@@ -4,8 +4,8 @@ package com.example.demo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Mapper.UserMapper;
 import com.example.demo.model.User;
-import com.example.demo.model.UserIcon;
-import com.example.demo.repository.UserIconRepository;
+//import com.example.demo.model.UserIcon;
+//import com.example.demo.repository.UserIconRepository;
 import com.example.demo.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +21,8 @@ import java.util.Optional;
 public class LoginController {
     @Autowired(required = false)
     private UserMapper userMapper;
-    @Autowired(required = false)
-    private UserIconRepository userIconRepository;
+//    @Autowired(required = false)
+//    private UserIconRepository userIconRepository;
     @Autowired(required = false)
     private LoginService loginService;
 
@@ -46,21 +46,13 @@ public class LoginController {
     public User getUserMessage(@RequestBody JSONObject obj) {
         String username = obj.getString("username");
         User user1 = userMapper.getUserMessage(username);
-        Integer id=obj.getInteger("id");
-        Optional<UserIcon> icon=userIconRepository.findById(id);
-        if (icon.isPresent()){
-            System.out.println("not null"+id);
-            user1.setIcon(icon.get());
-        }else {
-            user1.setIcon(null);
-            System.out.println("it is null");
-        }
         return user1;
     }
 
-    @RequestMapping(value = "/getUserMessageAndIcon",method = RequestMethod.POST)
-    public User getUserMessageAndIcon(@RequestBody JSONObject obj){
-        System.out.println("进入函数");
-        return loginService.getUserMessageAndIcon(obj);
+    @RequestMapping(value = "/getUserMessageAndIcon", method = RequestMethod.POST)
+    public User getUserMessageAndIcon(@RequestBody JSONObject obj) {
+            return loginService.getUserMessageAndIcon(obj);
     }
+
+
 }

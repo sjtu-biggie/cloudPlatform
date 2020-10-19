@@ -1,15 +1,14 @@
 package com.example.demo.model;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-
-@Document(collection = "usericon")
+@Data
+@Document(collection = "userIcon")
 public class UserIcon {
-    @Id
     private String username;
-
     private String iconBase64;
 
     public UserIcon(String username,String iconBase64){

@@ -3,35 +3,6 @@ import {BackTop, Button, Card, Col, Dropdown, Form, Icon, List, Menu, Row, Spin,
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import Search from "antd/es/input/Search";
-
-const data3 = [];
-for (let i = 0; i < 6; i++) {
-    data3.push({
-        type: '数学',
-        course_name: `七年级数学 ${i}`,
-        pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        start_date: '1999-10-12',
-        end_date: '2020-10-10',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        nickname: "陈小红",
-        id: 1,
-        grade: "七年级上",
-        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
-    })
-}
-for (let i = 0; i < 6; i++) {
-    data3.push({
-        type: '语文',
-        course_name: `七年级语文 ${i}`,
-        pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        start_date: '1999-11-12',
-        end_date: '2020-10-12',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        nickname: "陈小绿",
-        id: 1,
-        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分"
-    })
-}
 const IconText = ({type, text}) => (
     <span>
     <Icon type={type} style={{marginRight: 8}}/>
@@ -75,12 +46,10 @@ class CourseDemo extends React.Component {
             displayCourses: modifiedList,
         });
     };
-
     componentWillMount() {
         this.setState({
             loading: true,
         });
-        this.getCourses(type);
         let storage = window.localStorage;
         let role = storage.getItem("type");
         this.setState({
@@ -99,17 +68,15 @@ class CourseDemo extends React.Component {
             type = 2;
             this.setState({type: 2});
         }
-
-
+        this.getCourses(type);
         this.setState({
             loading: false
         });
 
     }
-
     add0 = (m) => {
         return m < 10 ? '0' + m : m
-    }
+    };
     format = (shijianchuo) => {
         let time = new Date(shijianchuo);
         let y = time.getFullYear();
@@ -123,37 +90,66 @@ class CourseDemo extends React.Component {
     getCourses = (type) => {
         /*    console.log(this.state.displayCourses);*/
 
-        //TODO:fetch based on type
-        this.setState({
-            loadingMore: true
-        });
-        let storage = window.localStorage;
-        let username = storage.getItem("username");
-        this.getCoursesInfo(username).then((res) => {
-            if (res === null) {
-                message.success("failure loading courses!");
-                return;
+        switch (type){
+            case 0:{
+                this.getAllCourses(0).then((res)=>{
+                    if (res === null) {
+                        message.error("failure loading courses!");
+                        return;
+                    }
+                    for (let i = 0; i < res.length; ++i) {
+                        res[i].course.startDate = this.format(res[i].course.startDate);
+                        res[i].course.endDate = this.format(res[i].course.endDate);
+                        this.getUserInfo(res[i].course.userId).then(
+                            (username) => {
+                                res[i].course.nickname = username;
+                                this.setState({
+                                    courses: res,
+                                    displayCourses: res
+                                });
+                            }
+                        )
+                    }
+                    this.setState({
+                        courses: res,
+                        displayCourses: res
+                    });
+                });
             }
-            for (let i = 0; i < res.length; ++i) {
-                res[i].course.startDate = this.format(res[i].course.startDate);
-                res[i].course.endDate = this.format(res[i].course.endDate);
-                this.getUserInfo(res[i].course.userId).then(
-                    (username) => {
-                        /*             console.log(username)*/
-                        res[i].course.nickname = username;
+            case 1:{
+                if(this.state.role==='teacher'){
+                    let storage = window.localStorage;
+                    let username = storage.getItem("username");
+                    this.getCoursesInfo(username).then((res) => {
+                        if (res === null) {
+                            message.error("failure loading courses!");
+                            return;
+                        }
+                        for (let i = 0; i < res.length; ++i) {
+                            res[i].course.startDate = this.format(res[i].course.startDate);
+                            res[i].course.endDate = this.format(res[i].course.endDate);
+                            this.getUserInfo(res[i].course.userId).then(
+                                (username) => {
+                                    res[i].course.nickname = username;
+                                    this.setState({
+                                        courses: res,
+                                        displayCourses: res
+                                    });
+                                }
+                            )
+                        }
                         this.setState({
                             courses: res,
                             displayCourses: res
                         });
-                    }
-                )
+                        /*   console.log(this.state.displayCourses);*/
+                    });
+                }
             }
-            this.setState({
-                courses: res,
-                displayCourses: res
-            });
-            /*   console.log(this.state.displayCourses);*/
-        });
+            case 2:{
+
+            }
+        }
     };
     getUserInfo = async (username) => {
 
@@ -200,7 +196,24 @@ class CourseDemo extends React.Component {
                 /*   console.log(error);*/
             });
     };
-
+    getAllCourses = async (page) => {
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getCourses?page=' + page + '&size=3',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
     render() {
         const menu1 = (
             <Menu onClick={(e) => {
@@ -287,15 +300,6 @@ class CourseDemo extends React.Component {
             </Menu>
         );
         const {loadingMore} = this.state
-        const loadMore = (
-            <div style={styles.loadMore}>
-                {/*不知道为什么这种写法有问题，会报错*/}
-                {/*{loadingMore ? <Spin/> : <Button onClick={() => this.getData2()}>加载更多</Button>}*/}
-                <Spin style={loadingMore ? {} : {display: 'none'}}/>
-                <Button style={!loadingMore ? {} : {display: 'none'}} onClick={() => this.getData2()}>加载更多</Button>
-            </div>
-        );
-
         return (
             <div>
                 <CustomBreadcrumb
@@ -351,14 +355,13 @@ class CourseDemo extends React.Component {
                 <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={this.state.displayCourses}
                           itemLayout='vertical'
-                          pagination={{pageSize: 3}}
+                          pagination={{pageSize: 3,total:this.state.page*3}}
                           style={styles.listStyle}
                           renderItem={item => {
                               return (
                                   <List.Item style={{height: "210px"}}>
                                       <Row>
                                           <Col span={3} style={{fontSize: '15px'}}>
-
                                               <img width={120} height={120} alt="logo"
                                                    src={require('../../pic/teacher2.jpg')}
                                                    style={{marginBottom: '6px'}}/>

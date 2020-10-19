@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import javax.jws.soap.SOAPBinding;
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -33,5 +34,8 @@ public interface UserMapper {
 
     @Update("delete from userdemo where username=#{username}")
     public void delUser(String username);
+
+    @Select("select username,password,sid,email,telephone,nickname,type,theGrade,theClass from userdemo")
+    public List<User> getAllUsers();
 
 }

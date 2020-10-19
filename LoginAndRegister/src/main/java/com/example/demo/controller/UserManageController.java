@@ -3,10 +3,14 @@ package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Mapper.UserMapper;
+import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -19,5 +23,12 @@ public class UserManageController {
         String username=obj.getString("name");
         userMapper.delUser(username);
         return "Fsadf";
+    }
+
+    @RequestMapping(value = "/getAllUsers",method = RequestMethod.POST)
+    public List<User> getAllUsers(){
+        List<User> users=userMapper.getAllUsers();
+        System.out.println(users);
+        return users;
     }
 }

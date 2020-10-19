@@ -73,14 +73,13 @@ for(let i=0;i<3;i++){
 
 for(let i=0;i<3;i++){
     deathHomework.push({
-        type:'英语',
+        subject:'英语',
         grade:'八年级上',
         title: `八年级下英语作业 ${i}`,
         content: '同学们记得认真完成按时提交',
         startTime:'2020-10-11 12:12:12',
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
         score: '100',
         range:['八年级三班','八年级二班']
 
@@ -114,6 +113,7 @@ class HomeworkDemo extends React.Component {
         let storage = window.localStorage;
         let username = storage.getItem("username");
         this.getUserInfo(username);
+        this.getHomeworkAll();
     };
 
     getUserInfo = async (username)=>{
@@ -137,31 +137,33 @@ class HomeworkDemo extends React.Component {
             });
         this.setState({
             userInfo:user,
-            role:user.type
         })
     };
 
     getHomeworkAll=async ()=>{
         let config = {
             method: 'get',
-            url: 'http://localhost:8080/getHomeworkAll',
+            url: 'http://106.13.209.140:8383/getHomeworkAll',
             headers: {
                 withCredentials: true,
             }
         };
         const hw = await axios(config)
             .then(function (response) {
-                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(hw);
         this.setState({
             homework:hw,
+            displayHomework:hw,
+            subjectHomework:hw,
+            gradeHomework:hw
         })
+        console.log(this.state.homework);
     };
+
     changeSubject1=(subject)=>{
         let modifiedList1 = [];
         let modifiedList2 = [];
@@ -175,12 +177,12 @@ class HomeworkDemo extends React.Component {
             return null;
         }else{
             for(let homework of this.state.homework){
-                if(homework.type === subject){
+                if(homework.subject === subject){
                     modifiedList1.push(homework);
                 }
             }
             for(let homework of this.state.gradeHomework){
-                if(homework.type === subject){
+                if(homework.subject === subject){
                     modifiedList2.push(homework);
                 }
             }

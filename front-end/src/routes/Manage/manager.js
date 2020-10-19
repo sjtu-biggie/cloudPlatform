@@ -140,6 +140,10 @@ export default class StudentTable extends Component {
         };
         this.searchInput = createRef();
 
+
+
+
+
         columns.forEach(item => {
             const { dataIndex, title } = item;
             item.filterDropdown = ({ setSelectedKeys, selectedKeys, confirm }) => (
@@ -232,6 +236,18 @@ export default class StudentTable extends Component {
         }
     }
 
+    componentWillMount(){
+        axios({
+            method:'POST',
+            url:'http://106.13.209.140:8080/getAllUsers'
+        }).then(msg=>{
+            console.log(msg);
+            this.setState({orData:msg,renderData:msg})
+        }).catch(err=>{
+            console.log(err);
+            console.log("提取數據失敗");
+        })
+    }
 
 
     render() {
@@ -252,7 +268,8 @@ export default class StudentTable extends Component {
                                 </Col>
                                 <Col span={1} offset={11}>
                                     <div>
-                                        <Upload {...uploadProps} action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>
+                                        {/*<Upload {...uploadProps} action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>*/}
+                                          <Upload>
                                             <Button>
                                                 <Icon type="upload"/> 从excel中添加
                                             </Button>

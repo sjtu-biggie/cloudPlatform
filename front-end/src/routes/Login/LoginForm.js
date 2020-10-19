@@ -128,7 +128,7 @@ class LoginForm extends React.Component {
       storage.setItem("type",message1.type);
       storage.setItem("sid",message1.sid);
       this.props.appStore.toggleLogin(true, {username: username})
-      const {from} = this.props.location.state || {from: {pathname: '/'}}
+      const {from} = this.props.location.state || {from: {pathname: '/home'}}
       this.props.history.push(from)
     }else{
       message.error("密码错误!");

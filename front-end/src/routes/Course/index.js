@@ -1,6 +1,7 @@
 import React from 'react'
 import {BackTop, Button, Card, Col, Dropdown, Form, Icon, List, Menu, Row, Spin, message} from 'antd'
 import axios from 'axios'
+import { withRouter } from 'react-router'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import Search from "antd/es/input/Search";
 const IconText = ({type, text}) => (
@@ -46,7 +47,11 @@ class CourseDemo extends React.Component {
             displayCourses: modifiedList,
         });
     };
-    componentWillMount() {
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.componentWillMount(nextProps.location.pathname);
+    }
+
+    componentWillMount(param) {
         this.setState({
             loading: true,
         });
@@ -56,16 +61,26 @@ class CourseDemo extends React.Component {
             role: role
         });
         let type;
-        if (this.props.location.pathname === "/home/course/overall") {
+        let pathname;
+        if(param===undefined||param===null){
+            pathname = this.props.location.pathname;
+        }else{
+            pathname=param;
+        }
+
+        if (pathname=== "/home/course/overall") {
             type = 0;
+            console.log("overall");
             this.setState({type: 0});
         }
-        if (this.props.location.pathname === "/home/course/ongoing") {
+        if (pathname=== "/home/course/ongoing") {
             type = 1;
+            console.log("ongoing");
             this.setState({type: 1});
         }
-        if (this.props.location.pathname === "/home/course/end") {
+        if (pathname === "/home/course/end") {
             type = 2;
+            console.log("end");
             this.setState({type: 2});
         }
         this.getCourses(type);
@@ -115,12 +130,13 @@ class CourseDemo extends React.Component {
                         displayCourses: res
                     });
                 });
+                break;
             }
             case 1:{
                 if(this.state.role==='teacher'){
                     let storage = window.localStorage;
                     let username = storage.getItem("username");
-                    this.getCoursesInfo(username).then((res) => {
+                    this.getCoursesInfo(username,0).then((res) => {
                         if (res === null) {
                             message.error("failure loading courses!");
                             return;
@@ -144,7 +160,37 @@ class CourseDemo extends React.Component {
                         });
                         /*   console.log(this.state.displayCourses);*/
                     });
+                }else if (this.state.role==="student"){
+                    let storage = window.localStorage;
+                    let username = storage.getItem("username");
+                    this.getStudentCourses(username,0).then((res) => {
+                        if (res === null||res ===undefined) {
+                            message.error("failure loading courses!");
+                            return;
+                        }
+                        for (let i = 0; i < res.length; ++i) {
+                            res[i].course.startDate = this.format(res[i].course.startDate);
+                            res[i].course.endDate = this.format(res[i].course.endDate);
+                            this.getUserInfo(res[i].course.userId).then(
+                                (username) => {
+                                    res[i].course.nickname = username;
+                                    this.setState({
+                                        courses: res,
+                                        displayCourses: res
+                                    });
+                                }
+                            )
+                        }
+                        this.setState({
+                            courses: res,
+                            displayCourses: res
+                        });
+                        /*   console.log(this.state.displayCourses);*/
+                    });
+                }else{
+
                 }
+                break;
             }
             case 2:{
 
@@ -177,11 +223,32 @@ class CourseDemo extends React.Component {
         e.preventDefault();
         /* console.log(123);*/
     };
-    getCoursesInfo = async (username) => {
+    getStudentCourses = async (username,page) => {
+        console.log("getStudentCourses");
         const that = this;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId=' + username,
+            url: 'http://106.13.209.140:8787/course/getCoursesByStudent?userId=' + username+'&page='+page+'&size=3',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
+    getCoursesInfo = async (username,page) => {
+        console.log("getTeacherCourses");
+        const that = this;
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId=' + username+'&page='+page+'&size=3',
             headers: {
                 withCredentials: true,
             }
@@ -197,6 +264,7 @@ class CourseDemo extends React.Component {
             });
     };
     getAllCourses = async (page) => {
+        console.log("getAllcourses");
         let config = {
             method: 'get',
             url: 'http://106.13.209.140:8787/course/getCourses?page=' + page + '&size=3',
@@ -215,6 +283,7 @@ class CourseDemo extends React.Component {
             });
     };
     render() {
+        const { match, location, history } = this.props
         const menu1 = (
             <Menu onClick={(e) => {
                 this.changeSubject(e.item.props.children)
@@ -461,4 +530,4 @@ const styles = {
     }
 };
 
-export default CourseDemo
+export default withRouter(CourseDemo)

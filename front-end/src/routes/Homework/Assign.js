@@ -78,7 +78,7 @@ class Assign extends React.Component {
     addHomework=async (homework)=>{
         let config = {
             method: 'post',
-            url: 'http://localhost:8080//addTeacherHomework',
+            url: 'http://106.13.209.140:8383//addTeacherHomework',
             data:{
                 'homework':homework
             },

@@ -109,20 +109,19 @@ class Mistakes extends React.Component {
             loading: true,
         });
         this.getData2();
-        this.getMistakes();
+        let username=localStorage.getItem("username");
+        console.log(username);
+        this.getMistakes(username);
         this.setState({
             displayMistakes:this.state.mistakes,
             loading: false
         });
     }
 
-    getMistakes=async (id)=>{
+    getMistakes=async (username)=>{
         let config = {
             method: 'get',
-            url: 'http://localhost:8080/getStudentHomeworkAll',
-            data: {
-                'sid': id
-            },
+            url: 'http://106.13.209.140:8383/getStudentHomeworkAll?studentId='+username,
             headers: {
                 withCredentials: true,
             }
@@ -135,7 +134,6 @@ class Mistakes extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(hw);
         this.setState({
             mistakes:hw,
         })

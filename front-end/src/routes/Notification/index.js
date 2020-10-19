@@ -79,26 +79,30 @@ class Notification extends React.Component {
         });
     };
 
-    getNote=async (username)=>{
+    getNoteInfo=async (username)=>{
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8000/getNoteByUser?userId='+username,
+            url: 'http://106.13.209.140:8787/course/getNoteByUser?userId='+username,
             headers: {
                 withCredentials: true,
             }
         };
         const note = await axios(config)
             .then(function (response) {
+                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(note);
         this.setState({
             courses:note,
         })
     };
+
+    getNote=()=>{
+
+    }
 
     componentWillMount() {
         //TODO:get role from local storage
@@ -106,6 +110,9 @@ class Notification extends React.Component {
             loading: true,
         });
         this.getData2();
+        let username=localStorage.getItem("username");
+        console.log(username)
+        this.getNoteInfo(username);
         this.setState({
             displayCourses:this.state.courses,
             loading: false

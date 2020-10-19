@@ -23,10 +23,7 @@ class commitPage extends React.Component{
     getStudentHomeworkOne=async (sid,hid)=>{
         let config = {
             method: 'get',
-            url: 'http://localhost:8080/getStudentHomeworkOne',
-            data:{
-            'sid':sid,
-            'hid':hid},
+            url: 'http://106.13.209.140:8383/getStudentHomeworkOne?studentId='+sid+'&homeworkId='+hid,
             headers: {
                 withCredentials: true,
             }
@@ -45,6 +42,9 @@ class commitPage extends React.Component{
         })
     };
     componentWillMount() {
+        let username=localStorage.getItem("username");
+        console.log(username);
+        this.getStudentHomeworkOne(username,'0');
         this.setState({
             isCommit:this.props.isCommit
         })

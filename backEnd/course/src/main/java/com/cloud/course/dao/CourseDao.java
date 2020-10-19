@@ -45,4 +45,6 @@ public interface CourseDao {
     Page<CourseBulletin> getPageBulletin(int courseId, Pageable p);
 
     List<WholeCourse> getPageCourses(Pageable p);
+
+    Notification getNoteById(String id);
 }

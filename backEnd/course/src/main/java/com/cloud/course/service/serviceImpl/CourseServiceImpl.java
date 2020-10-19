@@ -117,6 +117,7 @@ public class CourseServiceImpl implements CourseService {
         String recId = object.getString("receiverId");
         String sendId= object.getString("senderId");
         String title= object.getString("title");
+        String _reading= object.getString("reading");
         String content= object.getString("content");
         Date publish_date = new Date();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -126,12 +127,18 @@ public class CourseServiceImpl implements CourseService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        boolean reading;
+        if(_reading==null||_reading.equals("")){
+            reading=false;
+        }else{
+            reading = parseBoolean(_reading);
+        }
         String notification_id = object.getString("id");
         Notification notification;
         if(notification_id==null||notification_id.equals("")){
-            notification=new Notification(recId,sendId,title,publish_date,false,content);
+            notification=new Notification(recId,sendId,title,publish_date,reading,content);
         }else{
-            notification=new Notification(parseInt(notification_id),recId,sendId,title,publish_date,false,content);
+            notification=new Notification(parseInt(notification_id),recId,sendId,title,publish_date,reading,content);
         }
         courseDao.saveNote(notification);
     }
@@ -145,7 +152,10 @@ public class CourseServiceImpl implements CourseService {
     public List<WholeCourse> getCourseByStudent(String id, Pageable p){
         return courseDao.getCoursesByStudent(id,p);
     }
-
+    @Override
+    public Notification getNoteById(String id){
+        return courseDao.getNoteById(id);
+    }
     @Override
     public List<Notification> getNoteByUser(String id){
         return courseDao.getNoteByUser(id);

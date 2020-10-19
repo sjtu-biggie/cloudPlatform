@@ -65,6 +65,10 @@ public class CourseDaoImpl implements CourseDao {
         return wholeCourseList;
     }
     @Override
+    public Notification getNoteById(String id){
+        return noteRepository.findAllByNotificationId(parseInt(id));
+    }
+    @Override
     public void deleteById(String id){
         int courseId = parseInt(id);
         courseRepository.deleteById(courseId);

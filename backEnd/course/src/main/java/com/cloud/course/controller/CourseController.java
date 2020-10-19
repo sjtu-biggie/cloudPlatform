@@ -51,6 +51,12 @@ public class CourseController {
         System.out.println("getNoteByUser");
         return courseService.getNoteByUser(id);
     }
+    @GetMapping(path = "/course/getNoteById")
+    //note that the modification will also come into this controller
+    public Notification getNoteById(@RequestParam("notificationId") String id) {
+        System.out.println("getNoteByUser");
+        return courseService.getNoteById(id);
+    }
     @PostMapping(path = "/course/addNote")
     public void addNote(@RequestBody JSONObject object) {
         System.out.println("note added");

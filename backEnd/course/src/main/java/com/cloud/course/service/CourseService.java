@@ -41,4 +41,6 @@ public interface CourseService {
     Page<CourseBulletin> getPageBulletin(String id, Pageable p);
 
     List<WholeCourse> getAllCourses(Pageable p);
+
+    Notification getNoteById(String id);
 }

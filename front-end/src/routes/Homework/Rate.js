@@ -1,4 +1,5 @@
 import React from 'react'
+import CanvasDraw from "react-canvas-draw"
 import {
     Card,
     Spin,
@@ -98,16 +99,19 @@ class Rating extends React.Component {
                                 textAlign: 'center',
                                 height: '90px'
                             }} hoverable={false}>
-                                <Statistic style={{color: 'white', fontWeight: 'bold'}} title="已批改/未批改" value={35}
+                                <p style={{fontSize:20,color: 'white', fontWeight: 'bold'}}  >已批/未批</p>
+                                <Statistic style={{marginBottom:'30px',transform:'translateY(-60%)'}} valueStyle={{color: 'white', fontWeight: 'bold'}}  value={35}
                                            suffix="/ 50"/>
                             </Card.Grid>
                             <Card.Grid style={{
                                 width: '10%',
                                 textAlign: 'center',
-                                height: '90px'
+                                height: '90px',
+                                color:'white'
                             }} hoverable={false}>
-                                <Statistic style={{color: 'white', fontWeight: 'bold', paddingBottom: '20px'}}
-                                           title="当前平均分" value={93} suffix="/ 100"/>
+                                <p style={{fontSize:20,color: 'white', fontWeight: 'bold'}}  >当前平均分</p>
+                                <Statistic style={{transform:'translateY(-40%)'}} valueStyle={{color: 'white', fontWeight: 'bold', paddingBottom: '20px'}}
+                                            value={93} suffix="/ 100"/>
                             </Card.Grid>
                             <Card.Grid style={{
                                 width: '29%',
@@ -138,8 +142,8 @@ class Rating extends React.Component {
                     </Col>
                     <Col span={17}>
                         <Card style={{height: '800px',overflow:'scroll'}}>
-                            <img style={{overflow:'scroll'}} width={800} alt="logo" src={require("../../pic/deadHomework1.jpg" )}/>
-
+                            {/*<img style={{overflow:'scroll'}} width={800} alt="logo" src={require("../../pic/deadHomework1.jpg" )}/>*/}
+                            <CanvasDraw {...defaultProps}/>
                         </Card>
                     </Col>
                     <Col span={7}>
@@ -182,7 +186,22 @@ class Rating extends React.Component {
         )
     }
 }
-
+const defaultProps = {
+    onChange: null,
+    loadTimeOffset: 5,
+    brushRadius: 5,
+    brushColor: "red",
+    catenaryColor: "#0a0302",
+    gridColor: "rgba(150,150,150,0.17)",
+    hideGrid: false,
+    canvasWidth: 1000,
+    canvasHeight: 1000,
+    disabled: false,
+    imgSrc: require("../../pic/deadHomework1.jpg"),
+    saveData: null,
+    immediateLoading: false,
+    hideInterface: false
+};
 const styles = {
     listStyle: {
         width: '100%',

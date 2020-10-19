@@ -20,6 +20,7 @@ class Home extends React.Component {
     let username = storage.getItem("username");
     this.getUserInfo(username);
   }
+
   getUserInfo=async (username)=>{
 
     let config = {
@@ -27,7 +28,7 @@ class Home extends React.Component {
       data :{
         'username':username
       },
-      url: 'http://106.13.209.140:8000/getUserMessage',
+      url: 'http://106.13.209.140:8000/getUserMessageAndIcon',
       headers: {
         withCredentials: true,
       }
@@ -43,7 +44,6 @@ class Home extends React.Component {
     console.log(user);
     this.setState({
       userInfo:user,
-      role:user.type
     })
   };
   beTeacher=async(data)=>{

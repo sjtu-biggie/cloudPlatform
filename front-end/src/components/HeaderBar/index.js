@@ -4,7 +4,7 @@ import screenfull from 'screenfull'
 import { inject, observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
 import { isAuthenticated } from '../../utils/Session'
-
+import  axios from 'axios'
 //withRouter一定要写在前面，不然路由变化不会反映到props中去
 @withRouter @inject('appStore') @observer
 class HeaderBar extends React.Component {
@@ -12,10 +12,12 @@ class HeaderBar extends React.Component {
     icon: 'arrows-alt',
     count: 29,
     visible: false,
-    avatar: require('./img/04.jpg')
+    // avatar: require('./img/04.jpg')
+    avatar: window.localStorage.getItem("iconBase64")
   };
 
   componentDidMount () {
+
     screenfull.onchange(() => {
       this.setState({
         icon: screenfull.isFullscreen ? 'shrink' : 'arrows-alt'
@@ -24,6 +26,11 @@ class HeaderBar extends React.Component {
   }
 
   componentWillUnmount () {
+    axios({
+
+    })
+
+
     screenfull.off('change')
   }
 

@@ -12,13 +12,13 @@ import java.util.List;
 
 @Repository
 public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
-    private TeacherHomeworkRepository teacher_homeworkRepository;
-    private TeacherHomeworkDetailRepository teacher_homeworkDetailRepository;
+    private TeacherHomeworkRepository teacherhomeworkRepository;
+    private TeacherHomeworkDetailRepository teacherhomeworkDetailRepository;
 
     @Autowired
-    public TeacherHomeworkDaoImpl(TeacherHomeworkRepository teacher_homeworkRepository, TeacherHomeworkDetailRepository teacher_homeworkDetailRepository){
-        this.teacher_homeworkRepository = teacher_homeworkRepository;
-        this.teacher_homeworkDetailRepository = teacher_homeworkDetailRepository;
+    public TeacherHomeworkDaoImpl(TeacherHomeworkRepository teacherhomeworkRepository, TeacherHomeworkDetailRepository teacherhomeworkDetailRepository){
+        this.teacherhomeworkRepository = teacherhomeworkRepository;
+        this.teacherhomeworkDetailRepository = teacherhomeworkDetailRepository;
     }
 
     @Override
@@ -28,38 +28,41 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homeworkDetail.setHomeworkId(h_id);
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
-        teacher_homeworkDetailRepository.save(homeworkDetail);
+        teacherhomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }
 
     @Override
     public TeacherHomework addOne(TeacherHomework homework){
-        teacher_homeworkRepository.save(homework);
+        teacherhomeworkRepository.save(homework);
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = homework.getHomeworkId();
         homeworkDetail.setHomeworkId(h_id);
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
-        teacher_homeworkDetailRepository.save(homeworkDetail);
+        teacherhomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }
 
     @Override
     public void deleteAll(int courseId) {
-        teacher_homeworkRepository.deleteByCourseId(courseId);
-        teacher_homeworkDetailRepository.deleteByCourseId(courseId);
+        String cId = Integer.toString(courseId);
+        teacherhomeworkRepository.deleteByCourseId(courseId);
+        teacherhomeworkDetailRepository.deleteByCourseId(cId);
     }
 
     @Override
     public void deleteOne(int homeworkId) {
-        teacher_homeworkRepository.deleteByHomeworkId(homeworkId);
-        teacher_homeworkDetailRepository.deleteByHomeworkId(homeworkId);
+        String hwId = Integer.toString(homeworkId);
+        teacherhomeworkRepository.deleteByHomeworkId(homeworkId);
+        teacherhomeworkDetailRepository.deleteByHomeworkId(hwId);
     }
 
     @Override
     public TeacherHomework findOne(int homeworkId){
-        TeacherHomework homework = teacher_homeworkRepository.findByHomeworkId(homeworkId);
-        TeacherHomeworkDetail detail =  teacher_homeworkDetailRepository.findByHomeworkId(homeworkId);
+        String hwId = Integer.toString(homeworkId);
+        TeacherHomework homework = teacherhomeworkRepository.findByHomeworkId(homeworkId);
+        TeacherHomeworkDetail detail =  teacherhomeworkDetailRepository.findByHomeworkId(hwId);
         homework.setContent(detail.getContent());
         homework.setAnswer(detail.getAnswer());
         return homework;
@@ -67,8 +70,8 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
 
     @Override
     public List<TeacherHomework> findAll() {
-        List<TeacherHomework> homeworkList = teacher_homeworkRepository.findAll();
-        List list1 = teacher_homeworkDetailRepository.findAll();
+        List<TeacherHomework> homeworkList = teacherhomeworkRepository.findAll();
+        List<TeacherHomeworkDetail> list1 = teacherhomeworkDetailRepository.findAll();
 
         for(int i = 0; i < homeworkList.size();++i){
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
@@ -80,8 +83,9 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
 
     @Override
     public List<TeacherHomework> findAllOfCourse(int courseId) {
-        List<TeacherHomework> homeworkList = teacher_homeworkRepository.findByCourseId(courseId);
-        List list1 = teacher_homeworkDetailRepository.findByCourseId(courseId);
+        String cId = Integer.toString(courseId);
+        List<TeacherHomework> homeworkList = teacherhomeworkRepository.findAllByCourseId(courseId);
+        List list1 = teacherhomeworkDetailRepository.findAllByCourseId(cId);
 
         for(int i = 0; i < homeworkList.size();++i){
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());

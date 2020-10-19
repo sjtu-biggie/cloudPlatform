@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,7 +16,9 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Transactional
 @IdClass(StudentHomeworkMultiKeys.class)
+
 public class StudentHomework {
     private static final long serialVersionUID = 1L;
     @Id

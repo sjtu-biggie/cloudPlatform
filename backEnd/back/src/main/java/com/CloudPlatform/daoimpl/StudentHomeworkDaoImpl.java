@@ -12,13 +12,13 @@ import java.util.List;
 
 @Repository
 public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
-    private StudentHomeworkRepository student_homeworkRepository;
-    private StudentHomeworkDetailRepository student_homeworkDetailRepository;
+    private StudentHomeworkRepository studenthomeworkRepository;
+    private StudentHomeworkDetailRepository studenthomeworkDetailRepository;
 
     @Autowired
-    public StudentHomeworkDaoImpl(StudentHomeworkRepository Student_homeworkRepository, StudentHomeworkDetailRepository Student_homeworkDetailRepository){
-        this.student_homeworkRepository = Student_homeworkRepository;
-        this.student_homeworkDetailRepository = Student_homeworkDetailRepository;
+    public StudentHomeworkDaoImpl(StudentHomeworkRepository studenthomeworkRepository, StudentHomeworkDetailRepository studenthomeworkDetailRepository){
+        this.studenthomeworkRepository = studenthomeworkRepository;
+        this.studenthomeworkDetailRepository = studenthomeworkDetailRepository;
     }
 
     @Override
@@ -31,13 +31,13 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setComment(homework.getComment());
         homeworkDetail.setRemarks(homework.getRemarks());
-        student_homeworkDetailRepository.save(homeworkDetail);
-        return student_homeworkRepository.save(homework);
+        studenthomeworkDetailRepository.save(homeworkDetail);
+        return studenthomeworkRepository.save(homework);
     }
 
     @Override
     public StudentHomework addOne(StudentHomework homework){
-        student_homeworkRepository.save(homework);
+        studenthomeworkRepository.save(homework);
         StudentHomeworkDetail homeworkDetail = new StudentHomeworkDetail();
         String t_id = homework.getStudentId();
         int h_id = homework.getHomeworkId();
@@ -46,26 +46,29 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setComment(homework.getComment());
         homeworkDetail.setRemarks(homework.getRemarks());
-        student_homeworkDetailRepository.save(homeworkDetail);
+        studenthomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }
 
     @Override
     public void deleteAll(String studentId, int courseId) {
-        student_homeworkRepository.deleteByStudentIdAndCourseId(studentId,courseId);
-        student_homeworkDetailRepository.deleteByStudentIdAndCourseId(studentId,courseId);
+        String cId = Integer.toString(courseId);
+        studenthomeworkRepository.deleteByStudentIdAndCourseId(studentId,courseId);
+        studenthomeworkDetailRepository.deleteByStudentIdAndCourseId(studentId,cId);
     }
 
     @Override
     public void deleteOne(String studentId, int homeworkId) {
-        student_homeworkRepository.deleteByStudentIdAndHomeworkId(studentId, homeworkId);
-        student_homeworkDetailRepository.deleteByStudentIdAndHomeworkId(studentId, homeworkId);
+        String hwId = Integer.toString(homeworkId);
+        studenthomeworkRepository.deleteByStudentIdAndHomeworkId(studentId, homeworkId);
+        studenthomeworkDetailRepository.deleteByStudentIdAndHomeworkId(studentId, hwId);
     }
 
     @Override
     public StudentHomework findOne(String studentId,  int homeworkId){
-        StudentHomework homework = student_homeworkRepository.findByStudentIdAndHomeworkId(studentId, homeworkId);
-        StudentHomeworkDetail detail =  student_homeworkDetailRepository.findByStudentIdAndHomeworkId(studentId, homeworkId);
+        StudentHomework homework = studenthomeworkRepository.findByStudentIdAndHomeworkId(studentId, homeworkId);
+        String hwId = Integer.toString(homeworkId);
+        StudentHomeworkDetail detail =  studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(studentId, hwId);
         homework.setContent(detail.getContent());
         homework.setComment(detail.getComment());
         homework.setRemarks(detail.getRemarks());
@@ -74,10 +77,8 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
 
     @Override
     public List<StudentHomework> findAll(String studentId) {
-        List<StudentHomework> homeworkList = student_homeworkRepository.findByStudentId(studentId);
-        List list1 = student_homeworkDetailRepository.findByStudentId(studentId);
-        List list2 = student_homeworkDetailRepository.findAll();
-        System.out.println(list2);
+        List<StudentHomework> homeworkList = studenthomeworkRepository.findByStudentId(studentId);
+        List list1 = studenthomeworkDetailRepository.findAllByStudentId(studentId);
 
         for(int i = 0; i < homeworkList.size();++i){
             (homeworkList.get(i)).setContent(((StudentHomeworkDetail)list1.get(i)).getContent());
@@ -90,8 +91,9 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
 
     @Override
     public List<StudentHomework> findAllOfCourse(String studentId, int courseId) {
-        List<StudentHomework> homeworkList = student_homeworkRepository.findByStudentIdAndCourseId(studentId, courseId);
-        List list1 = student_homeworkDetailRepository.findByStudentIdAndCourseId(studentId, courseId);
+        String cId = Integer.toString(courseId);
+        List<StudentHomework> homeworkList = studenthomeworkRepository.findByStudentIdAndCourseId(studentId, courseId);
+        List list1 = studenthomeworkDetailRepository.findAllByStudentIdAndCourseId(studentId, cId);
 
         for(int i = 0; i < homeworkList.size();++i){
             (homeworkList.get(i)).setContent(((StudentHomeworkDetail)list1.get(i)).getContent());
@@ -104,8 +106,9 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
 
     @Override
     public List<StudentHomework> findAllOfHomework(int homeworkId) {
-        List<StudentHomework> homeworkList = student_homeworkRepository.findByHomeworkId(homeworkId);
-        List list1 = student_homeworkDetailRepository.findByHomeworkId(homeworkId);
+        String hwId = Integer.toString(homeworkId);
+        List<StudentHomework> homeworkList = studenthomeworkRepository.findByHomeworkId(homeworkId);
+        List<StudentHomeworkDetail> list1 = studenthomeworkDetailRepository.findAllByHomeworkId(hwId);
         for(int i = 0; i < homeworkList.size();++i){
             (homeworkList.get(i)).setContent(((StudentHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setComment(((StudentHomeworkDetail)list1.get(i)).getComment());

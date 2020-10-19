@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Transactional
 
 public class TeacherHomework implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -40,14 +42,8 @@ public class TeacherHomework implements Serializable {
     @Column(name = "ENDTIME")
     private Date EndTime;
 
-    @Column(name = "TIMELIMIT")
-    private Date TimeLimit;
-
     @Column(name = "HANDINAMOUNT")
     private int HandinAmount;
-
-    @Column(name = "ASSESSMENTALGORITHMS")
-    private int AssessmentAlgorithms;
 
     @Transient
     @Column(name = "CONTENT")

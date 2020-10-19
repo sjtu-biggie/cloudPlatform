@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 
 @Entity
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Document(collection="STUDENTHOMEWORKDETAIL")
 @IdClass(StudentHomeworkMultiKeys.class)
+@Transactional
 
 public class StudentHomeworkDetail implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -12,7 +12,6 @@ import java.util.List;
 public class TeacherHomeworkController {
     @Autowired
     private TeacherHomeworkService teacherhomeworkService;
-    private StudentHomeworkService studenthomeworkService;
 
     //获取所有课课布置过的所有作业
     @RequestMapping(value = "/getHomeworkAll")
@@ -32,18 +31,6 @@ public class TeacherHomeworkController {
         return teacherhomeworkService.getTeacherHomeworkOne(homeworkId);
     }
 
-    //获取课程某次所有学生提交的的作业
-    @RequestMapping(value = "/getHomeworkOfStudents")
-    public List<StudentHomework> getHomeworkOfStudents(@RequestParam("homeworkId") int homeworkId) {
-        return studenthomeworkService.getStudentHomeworkAllOfHomework(homeworkId);
-    }
-
-    //批改同学提交的作业
-    @RequestMapping(value = "/CorrectHomework")
-    public @ResponseBody
-    StudentHomework CorrectHomework(StudentHomework homework){
-        return studenthomeworkService.editStudentHomework(homework);
-    }
 
     //修改发布的作业
     @RequestMapping(value = "/editTeacherHomework")

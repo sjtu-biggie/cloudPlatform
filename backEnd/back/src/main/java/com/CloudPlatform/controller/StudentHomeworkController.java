@@ -30,6 +30,20 @@ public class StudentHomeworkController {
         return studenthomeworkService.getStudentHomeworkOne(studentId, homeworkId);
     }
 
+
+    //批改同学提交的作业
+    @RequestMapping(value = "/CorrectHomework")
+    public @ResponseBody
+    StudentHomework CorrectHomework(StudentHomework homework){
+        return studenthomeworkService.editStudentHomework(homework);
+    }
+
+    //获取课程某次所有学生提交的的作业
+    @RequestMapping(value = "/getHomeworkOfStudents")
+    public List<StudentHomework> getHomeworkOfStudents(@RequestParam("homeworkId") int homeworkId) {
+        return studenthomeworkService.getStudentHomeworkAllOfHomework(homeworkId);
+    }
+
     //编辑作业
     @RequestMapping(value = "/editStudentHomework")
     public @ResponseBody

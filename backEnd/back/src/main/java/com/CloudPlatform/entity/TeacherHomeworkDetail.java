@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Transactional
 @Document(collection="TEACHERHOMEWORKDETAIL")
 
 public class TeacherHomeworkDetail implements Serializable {

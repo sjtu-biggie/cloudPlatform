@@ -15,6 +15,7 @@ public class LoginService {
     private LoginDao loginDao;
 
     public User getUserMessageAndIcon(@RequestBody JSONObject obj){
+        System.out.println("进入Service获取全部信息");
         return loginDao.getUserMessageAndIcon(obj);
     }
 }

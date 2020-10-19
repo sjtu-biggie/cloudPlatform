@@ -19,14 +19,15 @@ public class LoginDao {
 
 
     public User getUserMessageAndIcon(@RequestBody JSONObject obj){
-        userIconRepository.save(new UserIcon("tea","fashfah"));
-
+        userIconRepository.save(new UserIcon("fhasdh","gfajsgf"));
+        System.out.println("进入Dao获取全部信息");
         String username = obj.getString("username");
         User user1 = userMapper.getUserMessage(username);
+        System.out.println(username);
         UserIcon userIcon=userIconRepository.findByUsername(username);
+        System.out.println(userIcon);
         user1.setIconBase64(userIcon.getIconBase64());
         System.out.println(user1);
-        System.out.println(userIcon);
         return user1;
     }
 

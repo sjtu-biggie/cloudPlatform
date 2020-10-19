@@ -51,6 +51,7 @@ public class LoginController {
 
     @RequestMapping(value = "/getUserMessageAndIcon", method = RequestMethod.POST)
     public User getUserMessageAndIcon(@RequestBody JSONObject obj) {
+            System.out.println("进入Controller获取全部信息");
             return loginService.getUserMessageAndIcon(obj);
     }
 

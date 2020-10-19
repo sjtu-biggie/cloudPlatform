@@ -9,5 +9,5 @@ import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel = "userIcon")
 public interface UserIconRepository extends MongoRepository<UserIcon,String> {
-    UserIcon findByUsername(String username);
+    UserIcon findByUsername(String  username);
 }

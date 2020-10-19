@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, Badge, Dropdown, Menu, Modal } from 'antd'
+import {Icon, Badge, Dropdown, Menu, Modal, Button} from 'antd'
 import screenfull from 'screenfull'
 import { inject, observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
@@ -54,7 +54,7 @@ class HeaderBar extends React.Component {
         <Menu.ItemGroup title='用户中心' className='menu-group'>
           <Menu.Item>你好 - {isAuthenticated()}</Menu.Item>
           <Menu.Item onClick={()=>{this.props.history.push("/home/personalcenter")}}>个人信息</Menu.Item>
-          <Menu.Item><span onClick={this.logout}>退出登录</span></Menu.Item>
+          <Menu.Item><p onClick={this.logout}>退出登录</p></Menu.Item>
         </Menu.ItemGroup>
       </Menu>
     )

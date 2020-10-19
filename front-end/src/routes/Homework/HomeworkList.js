@@ -44,7 +44,8 @@ class HomeworkList extends React.Component {
 
     componentWillMount() {
         this.setState({
-            homeworkList:this.props.homeworkList
+            homeworkList:this.props.homeworkList,
+            delete:this.props.delete
         });
         this.getData2();
 
@@ -111,7 +112,8 @@ class HomeworkList extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            homeworkList:nextProps.homeworkList
+            homeworkList:nextProps.homeworkList,
+            delete:nextProps.delete
         });
     }
 

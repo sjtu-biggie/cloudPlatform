@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 import lombok.Data;
 
+import java.beans.Transient;
+
 @Data
 public class User {
     private String username;
@@ -85,5 +87,11 @@ public class User {
     public void setTheClass(String theClass) {
         this.theClass = theClass;
     }
+
+
+    private UserIcon icon;
+    @Transient
+    public UserIcon getIcon(){return icon;}
+    public void setIcon(UserIcon icon){this.icon=icon;}
 
     }

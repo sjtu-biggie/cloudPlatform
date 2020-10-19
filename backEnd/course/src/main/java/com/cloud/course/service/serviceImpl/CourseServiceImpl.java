@@ -34,8 +34,8 @@ public class CourseServiceImpl implements CourseService {
         return courseDao.getCourseById(id);
     }
     @Override
-    public List<WholeCourse> getCoursesByTeacher(String id){
-        return courseDao.getCoursesByTeacher(id);
+    public List<WholeCourse> getCoursesByTeacher(String id, Pageable p){
+        return courseDao.getCoursesByTeacher(id,p);
     }
     @Override
     public void deleteById(String id){
@@ -123,7 +123,13 @@ public class CourseServiceImpl implements CourseService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Notification notification=new Notification(recId,sendId,title,publish_date,false,content);
+        String notification_id = object.getString("id");
+        Notification notification;
+        if(notification_id==null||notification_id.equals("")){
+            notification=new Notification(recId,sendId,title,publish_date,false,content);
+        }else{
+            notification=new Notification(parseInt(notification_id),recId,sendId,title,publish_date,false,content);
+        }
         courseDao.saveNote(notification);
     }
     @Override
@@ -133,8 +139,8 @@ public class CourseServiceImpl implements CourseService {
         courseDao.deleteBulletin(courseBulletin);
     }
     @Override
-    public List<WholeCourse> getCourseByStudent(String id){
-        return courseDao.getCoursesByStudent(id);
+    public List<WholeCourse> getCourseByStudent(String id, Pageable p){
+        return courseDao.getCoursesByStudent(id,p);
     }
 
     @Override

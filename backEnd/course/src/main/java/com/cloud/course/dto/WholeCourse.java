@@ -16,4 +16,5 @@ public class WholeCourse {
     Course course;
     CourseInfo courseInfo;
     CoursePic coursePic;
+    Integer page;
 }

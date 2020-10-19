@@ -12,7 +12,7 @@ import java.util.List;
 public interface CourseDao {
     WholeCourse getCourseById(String id);
     int findMaxId();
-    List<WholeCourse> getCoursesByTeacher(String teacher_id);
+    List<WholeCourse> getCoursesByTeacher(String teacher_id, Pageable p);
     void deleteById(String id);
 
     void save(Course course);
@@ -29,7 +29,7 @@ public interface CourseDao {
 
     void deleteBulletin(CourseBulletin courseBulletin);
 
-    List<WholeCourse> getCoursesByStudent(String id);
+    List<WholeCourse> getCoursesByStudent(String id, Pageable p);
 
     List<Notification> getNoteByUser(String id);
 

@@ -16,7 +16,7 @@ public interface CourseService {
 
     WholeCourse getCourseById(String id);
 
-    List<WholeCourse> getCoursesByTeacher(String id);
+    List<WholeCourse> getCoursesByTeacher(String id, Pageable p);
 
     void deleteById(String id);
 
@@ -28,7 +28,7 @@ public interface CourseService {
 
     void deleteBulletin(String id);
 
-    List<WholeCourse> getCourseByStudent(String id);
+    List<WholeCourse> getCourseByStudent(String id, Pageable p);
 
     List<Notification> getNoteByUser(String id);
 

@@ -44,21 +44,22 @@ public class CourseDaoImpl implements CourseDao {
         }
 //        CoursePic coursePic = coursePicRepository.findAllById(course.getId());
         CourseInfo courseInfo = courseInfoRepository.findAllById(course.getId());
-        return new WholeCourse(course,courseInfo,null);
+        return new WholeCourse(course,courseInfo,null,3);
     }
-
     @Override
-    public List<WholeCourse> getCoursesByTeacher(String teacher_id){
+    public List<WholeCourse> getCoursesByTeacher(String teacher_id,Pageable p){
         List<Course> courseList = courseRepository.findAllByTeacher(teacher_id);
+        int size = p.getPageSize();
+        int number = p.getPageNumber();
+        int limit = (number+1)*size > courseList.size()?courseList.size():(number+1)*size;
+        if((size)*number>=courseList.size()){
+            return null;
+        }
+        courseList=courseList.subList(number*size,limit);
         List<WholeCourse> wholeCourseList = new ArrayList<>();
         for (Course course:courseList){
-//            if(course.getId()==null){
-//                System.out.println("course Id nonexist in getCoursesByTeacher");
-//                continue;
-//            }
-//            CoursePic  coursePic = coursePicRepository.findAllById(course.getId());
             CourseInfo courseInfo = courseInfoRepository.findAllById(course.getId());
-            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,null);
+            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,null,0);
             wholeCourseList.add(wholeCourse);
         }
         return wholeCourseList;
@@ -114,22 +115,26 @@ public class CourseDaoImpl implements CourseDao {
             WholeCourse wholeCourse=new WholeCourse();
             wholeCourse.setCourse(coursesPages.getContent().get(i));
             wholeCourse.setCourseInfo(courseInfoRepository.findAllById(coursesPages.getContent().get(i).getId()));
+            wholeCourse.setPage(coursesPages.getTotalPages());
             wholeCourseList.add(wholeCourse);
         }
         return wholeCourseList;
     }
     @Override
-    public List<WholeCourse> getCoursesByStudent(String id){
+    public List<WholeCourse> getCoursesByStudent(String id,Pageable p){
         List<Course> courseList = courseRepository.getCoursesByStudent(id);
+        int size = p.getPageSize();
+        int number = p.getPageNumber();
+        int limit = (number+1)*size > courseList.size()?courseList.size():(number+1)*size;
+        if((size)*number>=courseList.size()){
+            return null;
+        }
+        courseList=courseList.subList(number*size,limit);
         List<WholeCourse> wholeCourseList = new ArrayList<>();
         for (Course course:courseList){
-//            if(course.getId()==null){
-//                System.out.println("course Id nonexist in getCoursesByTeacher");
-//                continue;
-//            }
-//            CoursePic  coursePic = coursePicRepository.findAllById(course.getId());
             CourseInfo courseInfo = courseInfoRepository.findAllById(course.getId());
-            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,null);
+            //TODO:paging
+            WholeCourse wholeCourse = new WholeCourse(course,courseInfo,null,0);
             wholeCourseList.add(wholeCourse);
         }
         return wholeCourseList;

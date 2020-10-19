@@ -34,14 +34,16 @@ public class CourseController {
     }
 
     @GetMapping(path = "/course/getCoursesByTeacher")
-    public List<WholeCourse> getCoursesByTeacher(@RequestParam("userId") String id) {
-        return courseService.getCoursesByTeacher(id);
+    public List<WholeCourse> getCoursesByTeacher(@RequestParam("userId") String id,@RequestParam("page") int page, @RequestParam("size") int size) {
+        Pageable p = PageRequest.of(page,size);
+        return courseService.getCoursesByTeacher(id,p);
     }
     @GetMapping(path = "/course/getCoursesByUser")
     //note that the modification will also come into this controller
-    public List<WholeCourse> getCoursesByStudent(@RequestParam("userId") String id) {
+    public List<WholeCourse> getCoursesByStudent(@RequestParam("userId") String id,@RequestParam("page") int page, @RequestParam("size") int size) {
+        Pageable p = PageRequest.of(page,size);
         System.out.println("getCourseByStudent");
-        return courseService.getCourseByStudent(id);
+        return courseService.getCourseByStudent(id,p);
     }
     @GetMapping(path = "/course/getNoteByUser")
     //note that the modification will also come into this controller

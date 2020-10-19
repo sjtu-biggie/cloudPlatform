@@ -144,7 +144,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/manage/data' component={DataPage}/>
           <PrivateRoute exact path='/home/manage/classStudentManage' component={ClassStudentManage}/>
 
-          <Redirect exact from='/' to='/home'/>
+          <Redirect exact from='/' to='/login'/>
         </Switch>
       </div>
     )

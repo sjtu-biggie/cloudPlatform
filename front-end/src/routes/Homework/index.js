@@ -177,12 +177,12 @@ class HomeworkDemo extends React.Component {
             return null;
         }else{
             for(let homework of this.state.homework){
-                if(homework.subject === subject){
+                if(homework.subject.indexOf(subject) !== -1){
                     modifiedList1.push(homework);
                 }
             }
             for(let homework of this.state.gradeHomework){
-                if(homework.subject === subject){
+                if(homework.subject.indexOf(subject) !== -1){
                     modifiedList2.push(homework);
                 }
             }
@@ -207,12 +207,12 @@ class HomeworkDemo extends React.Component {
             return null;
         }else{
             for(let homework of this.state.subjectHomework){
-                if(homework.grade === subject){
+                if(homework.subject.indexOf(subject) !== -1){
                     modifiedList1.push(homework);
                 }
             }
             for(let homework of this.state.homework){
-                if(homework.grade === subject){
+                if(homework.subject.indexOf(subject) !== -1){
                     modifiedList2.push(homework);
                 }
             }

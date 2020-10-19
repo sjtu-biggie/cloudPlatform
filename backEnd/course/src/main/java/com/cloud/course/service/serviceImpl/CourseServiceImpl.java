@@ -71,10 +71,13 @@ public class CourseServiceImpl implements CourseService {
         String grade = object.getString("grade");
         String modify = object.getString("modify");
         Course course = new Course(userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
-        CourseInfo courseInfo = new CourseInfo(courseDao.findMaxId(),detail,introduction,syllabus,textbook);
+        CourseInfo courseInfo;
         if(modify!=null&&!modify.equals("")){
             int id = parseInt(object.getString("id"));
+            courseInfo = new CourseInfo(id,detail,introduction,syllabus,textbook);
             course = new Course(id,userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
+        }else{
+            courseInfo = new CourseInfo(courseDao.findMaxId(),detail,introduction,syllabus,textbook);
         }
         courseDao.save(course);
         courseDao.saveInfo(courseInfo);

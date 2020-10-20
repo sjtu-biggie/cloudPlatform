@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class LoginService {
-
     @Autowired(required = false)
     private LoginDao loginDao;
 

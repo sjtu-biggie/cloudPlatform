@@ -52,7 +52,7 @@ class ChangeHomework extends React.Component {
         text: '获取验证码',
         disabled: false,
         homework: Hw,
-        homeworkId: null,
+        homeworkId: 0,
         ableState: true,
         buttonName:'修改作业',
         userInfo: null,
@@ -63,7 +63,7 @@ class ChangeHomework extends React.Component {
         let storage = window.localStorage;
         let username = storage.getItem("username");
         this.getUserInfo(username);
-        this.getHomeworkOne(3);
+        this.getHomeworkOne(this.props.homeworkId);
     };
 
     getUserInfo = async (username)=>{
@@ -79,13 +79,11 @@ class ChangeHomework extends React.Component {
         };
         const user = await axios(config)
             .then(function (response) {
-                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(user);
         this.setState({
             userInfo:user,
         })

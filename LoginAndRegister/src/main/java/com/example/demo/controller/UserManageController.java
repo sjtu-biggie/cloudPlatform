@@ -37,7 +37,6 @@ public class UserManageController {
     public List<User> getAllStudentsByClass(@RequestBody JSONObject obj){
         String theClass = obj.getString("theClass");
         List<User> users=userMapper.getAllStudentsByClass(theClass);
-
         return  users;
     }
 }

@@ -79,6 +79,7 @@ export default class STable extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            data:null,
             search: '',
             search2: '',
             search3:'',
@@ -87,8 +88,9 @@ export default class STable extends Component {
             renderData: data1,
             modifyIds: [],
             homework: null,
-            studentHomewrok:null,
+            studentHomework:null,
             homeworkId:0,
+            studentInfo:null
         };
         this.searchInput = createRef();
 
@@ -165,10 +167,81 @@ export default class STable extends Component {
 
         this.deleteData=()=>{
         }
+
+        this.getStudentInfo = async (obj)=>{
+            let config = {
+                method: 'post',
+                data : obj,
+                url: 'http://106.13.209.140:8000/getAllStudentsByClass',
+                headers: {
+                    withCredentials: true,
+                }
+            };
+            const studentInfo = await axios(config)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            let list1 = Array.from(studentInfo);
+            let list2 = Array.from(this.props.studentHomework);
+            console.log(list2);
+            let data = [];
+            list1.map(item=>{
+                data.push({
+                    username: item.username,
+                    sid: item.sid,
+                    nickname: item.nickname,
+                    theClass: item.theClass,
+                    theGrade: null,
+                    commit: null,
+                    correct:null
+                })
+            });
+            console.log(data);
+            let i = 0;
+            // list2.map(item=>{
+            //     if (item.score !== null){
+            //         data[i].theGrade = item.score;
+            //         data[i].commit = '已提交';
+            //         data[i].correct= '已批改';
+            //     }
+            //     else {
+            //         if (item.handinTime !== null){
+            //             data[i].theGrade = null;
+            //             data[i].commit = '已提交';
+            //             data[i].correct= '未批改';
+            //         }
+            //         else{
+            //             data[i].theGrade = null;
+            //             data[i].commit = '未提交';
+            //             data[i].correct= '未批改';
+            //         }
+            //     }
+            //     i++;
+            // });
+            this.setState({
+                studentInfo:studentInfo,
+                data:data,
+            })
+        };
+
     }
 
     componentWillMount() {
+
     }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            studentHomework: this.props.studentHomework,
+            homework: this.props.homework,
+            homeworkId: this.props.homeworkId,
+        });
+        this.getStudentInfo(this.props.homework);
+    }
+
 
     render() {
         const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
@@ -191,7 +264,7 @@ export default class STable extends Component {
                                 <Button onClick={() => {
                                     this.setState({
                                         orData: orData.filter(item => item.id !== record.id),
-                                        delData:record.username,
+                                        delData: record.username,
                                         orData2: [record, ...orData2],
                                     }, () => {
                                         this.deleteData();

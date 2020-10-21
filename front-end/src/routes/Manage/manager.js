@@ -112,7 +112,6 @@ export default class StudentTable extends Component {
         this.searchInput = createRef();
 
 
-
         columns.forEach(item => {
             const { dataIndex, title } = item;
             item.filterDropdown = ({ setSelectedKeys, selectedKeys, confirm }) => (

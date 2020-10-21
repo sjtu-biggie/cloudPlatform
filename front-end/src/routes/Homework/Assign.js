@@ -71,7 +71,6 @@ class Assign extends React.Component {
         console.log(user);
         this.setState({
             userInfo:user,
-            role:user.type
         })
     };
 

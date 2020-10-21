@@ -130,13 +130,11 @@ class ListDemo extends React.Component {
     };
     const hw = await axios(config)
         .then(function (response) {
-          console.log(response.data);
           return response.data;
         })
         .catch(function (error) {
           console.log(error);
         });
-    console.log(hw);
     let list = Array.from(hw);
     let total = 0;
     list.map(item=>{

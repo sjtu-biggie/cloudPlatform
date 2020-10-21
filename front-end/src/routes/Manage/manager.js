@@ -6,33 +6,7 @@ import axios from 'axios'
 import * as XLSX from 'xlsx';
 
 import {Router} from "react-router-dom";
-
-let index = 0;
-const getMockData = () => {
-    const result = {
-        id: index,
-        username: 'username' + index,
-        sid:'sid'+index,
-        telephone: 'telephone' + index,
-        nickname: 'nickname' + index,
-        type:'type'+index,
-        theGrade:'theGrade'+index,
-        theClass:'theClass'+index,
-        email:"email"+index,
-
-    };
-    index += 1;
-    return result;
-};
-const getMockDatas = (num) => {
-    const data = [];
-    for (let i = 0; i < num; i++) {
-        data.push(getMockData());
-    }
-    return data;
-};
-const data1 = getMockDatas(10);
-const data2 = getMockDatas(100);
+import Search from "antd/es/input/Search";
 
 const columns = [
     { title: '用户名', dataIndex: 'username' },
@@ -45,8 +19,6 @@ const columns = [
     { title: '邮箱', dataIndex: 'email' },
 
 ];
-
-
 
 
 columns.map(item => {
@@ -84,6 +56,7 @@ const WageManage = () => {
         }
     }
 }
+
     const handleImpotedJson = (jsonArr, file) => {
         jsonArr.splice(0, 1); // 去掉表头
         const jsonArrData = jsonArr.map((item, index) => {
@@ -98,6 +71,7 @@ const WageManage = () => {
         setWageTableData(jsonArrData)
     }
 
+
 class EditText extends Component {
     constructor(props) {
         super(props);
@@ -107,10 +81,9 @@ class EditText extends Component {
         };
     }
 
-
     render() {
         const { edit, editValue } = this.state;
-        return (edit ? <Input autoFocus style={{ width: 100 }}
+        return (edit ? <Input autoFocus style={{ width: 120 }}
                               value={editValue}
                               onChange={event => this.setState({ editValue: event.target.value })}
                               onBlur={() => {
@@ -132,15 +105,11 @@ export default class StudentTable extends Component {
             search2: '',
             search3:'',
             delData:'',
-            orData: data1,
-            renderData: data1,
-            orData2: data2,
-            renderData2: data2,
+            orData: '',
+            renderData: '',
             modifyIds: [],
         };
         this.searchInput = createRef();
-
-
 
 
 
@@ -191,33 +160,6 @@ export default class StudentTable extends Component {
             this.setState({ renderData: filterData });
         };
 
-
-        this.handleSearch2 = () => {
-            const { orData2, search2 } = this.state;
-            const filterData = orData2.filter(row => {
-                if (!search2) return true;
-                const keys = columns.map(item => item.dataIndex);
-                for (let i = 0; i < keys.length; i++) {
-                    if (String(row[keys[i]] || '').toLowerCase().includes(search2.toLowerCase())) return true;
-                }
-                return false;
-            });
-            this.setState({ renderData2: filterData });
-        };
-
-        this.handleSearch3 = () => {
-            const { orData2, search3 } = this.state;
-            const filterData = orData2.filter(row => {
-                if (!search3) return true;
-                const keys = columns.map(item => item.dataIndex);
-                for (let i = 0; i < keys.length; i++) {
-                    if (String(row[keys[i]] || '').toLowerCase()===search3.toLowerCase()) return true;
-                }
-                return false;
-            });
-            this.setState({ renderData2: filterData });
-        };
-
         this.deleteData=()=>{
             const {delData} =this.state;
             console.log(delData);
@@ -239,19 +181,20 @@ export default class StudentTable extends Component {
     componentWillMount(){
         axios({
             method:'POST',
-            url:'http://106.13.209.140:8080/getAllUsers'
+            url:'http://106.13.209.140:8000/getAllUsers'
         }).then(msg=>{
             console.log(msg);
-            this.setState({orData:msg,renderData:msg})
+            this.setState({orData:msg.data});
+            this.setState({renderData:msg.data});
         }).catch(err=>{
             console.log(err);
-            console.log("提取數據失敗");
+            console.log("提取数据失败");
         })
     }
 
 
     render() {
-        const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
+        const { orData, search, renderData } = this.state;
         return (
             <div className={styles.normal}>
                     <Card title={<div style={{textAlign:"center"}}>管理后台名单</div>} >
@@ -261,7 +204,9 @@ export default class StudentTable extends Component {
                                     <Input style={{ width: 560, marginRight: 16 }}
                                            value={search}
                                            allowClear
-                                           onChange={event => this.setState({ search: event.target.value })}/>
+                                           onChange={event => this.setState({ search: event.target.value })}
+                                           onPressEnter={this.handleSearch}
+                                    />
                                 </Col>
                                 <Col span={1} offset={1}>
                                     <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -286,6 +231,8 @@ export default class StudentTable extends Component {
                                     render: (text, record) => <EditText onChange={value => {
                                         const newData = [...orData];
                                         newData.find(col => col.id === record.id)[item.dataIndex] = value;
+                                        console.log(text);
+                                        console.log(record);
                                         this.setState({ orData: newData });
                                     }}>{text}</EditText>,
                                 })), {
@@ -296,11 +243,9 @@ export default class StudentTable extends Component {
                                             this.setState({
                                                 orData: orData.filter(item => item.id !== record.id),
                                                 delData:record.username,
-                                                orData2: [record, ...orData2],
                                             }, () => {
                                                 this.deleteData();
                                                 this.handleSearch();
-                                                this.handleSearch2();
                                             });
                                         }}>删除</Button>),
                                 }]}

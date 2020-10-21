@@ -10,25 +10,21 @@ const Option = Select.Option;
 const options1 = [
     {
         label: '一年级3班',
-        value: '1-3',
-    },
-    {
-        label: '一年级4班',
-        value: '1-4',
+        value: 'F1803704',
     }
 ];
 
 const options2 = [
     {
-        value: '1',
+        value: '主观题',
         label: '主观题',
     },
     {
-        value: '2',
+        value: '选择题',
         label: '选择题',
     },
     {
-        value: '3',
+        value: '填空题',
         label: '填空题',
     }
 ];
@@ -36,11 +32,11 @@ const options2 = [
 @Form.create()
 class Assign extends React.Component {
     state = {
-        text: '获取验证码',
         disabled: false,
         homework: null,
         userInfo: null,
-        role: null
+        role: null,
+        text: null,
     };
 
     getData2 = () => {
@@ -99,7 +95,13 @@ class Assign extends React.Component {
         })
     };
 
-    timer = 0;
+    getText = (result, t) => {
+        console.log(t);
+        this.setState({
+            text: t
+        })
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -218,7 +220,7 @@ class Assign extends React.Component {
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
                         {
                             (
-                                <DraftDemo/>
+                                <DraftDemo parent={ this }/>
                             )
                         }
                     </FormItem>

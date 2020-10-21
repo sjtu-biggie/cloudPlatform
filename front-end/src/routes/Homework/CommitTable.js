@@ -186,45 +186,52 @@ export default class STable extends Component {
                 });
             let list1 = Array.from(studentInfo);
             let list2 = Array.from(this.props.studentHomework);
-            console.log(list2);
             let data = [];
-            list1.map(item=>{
-                data.push({
-                    username: item.username,
-                    sid: item.sid,
-                    nickname: item.nickname,
-                    theClass: item.theClass,
-                    theGrade: null,
-                    commit: null,
-                    correct:null
-                })
-            });
-            console.log(data);
-            let i = 0;
-            // list2.map(item=>{
-            //     if (item.score !== null){
-            //         data[i].theGrade = item.score;
-            //         data[i].commit = '已提交';
-            //         data[i].correct= '已批改';
-            //     }
-            //     else {
-            //         if (item.handinTime !== null){
-            //             data[i].theGrade = null;
-            //             data[i].commit = '已提交';
-            //             data[i].correct= '未批改';
-            //         }
-            //         else{
-            //             data[i].theGrade = null;
-            //             data[i].commit = '未提交';
-            //             data[i].correct= '未批改';
-            //         }
-            //     }
-            //     i++;
-            // });
+            for (let i = 0; i < list1.length; ++i){
+                if (list2[i].score !== null){
+                    data.push({
+                        username: list1[i].username,
+                        sid: list1[i].sid,
+                        nickname: list1[i].nickname,
+                        theClass: list1[i].theClass,
+                        theGrade: list2[i].score,
+                        commit: '已提交',
+                        correct:'已批改'
+                    })
+                }
+                else{
+                    if (list2[i].handinTime !== null){
+                        data.push({
+                            username: list1[i].username,
+                            sid: list1[i].sid,
+                            nickname: list1[i].nickname,
+                            theClass: list1[i].theClass,
+                            theGrade: null,
+                            commit: '已提交',
+                            correct:'未批改'
+                        })
+                    }
+                    else{
+                        data.push({
+                            username: list1[i].username,
+                            sid: list1[i].sid,
+                            nickname: list1[i].nickname,
+                            theClass: list1[i].theClass,
+                            theGrade: null,
+                            commit: '未提交',
+                            correct:'未批改'
+                        })
+                    }
+                }
+            }
+
             this.setState({
                 studentInfo:studentInfo,
                 data:data,
+                orData: data,
+                renderData: data
             })
+            console.log(this.state.data);
         };
 
     }
@@ -261,7 +268,7 @@ export default class STable extends Component {
                             name: '操作',
                             key: 'del',
                             render: record => (
-                                <Button onClick={() => {
+                                <Button type="danger" onClick={() => {
                                     this.setState({
                                         orData: orData.filter(item => item.id !== record.id),
                                         delData: record.username,

@@ -178,31 +178,13 @@ class ListDemo extends React.Component {
             </Card>
           </Col>
           <Col span = {24}>
-            <CommitTable homeworkId ={this.state.studentHomework.homeworkId}/>
+            <CommitTable homework={this.state.homework} studentHomework={this.state.studentHomework} homeworkId={this.state.homeworkId}/>
           </Col>
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>
       </div>
     )
   }
-}
-
-const styles = {
-  haveBorder: {
-    minHeight: 270,
-    width:'80%',
-    boxSizing: 'border-box'
-  },
-  noBorder: {
-    minHeight: 270,
-    width:'80%',
-    padding: '0 24px',
-    boxSizing: 'border-box',
-    border: '1px solid #fff'
-  },
-  listStyle:{
-    width:'100%'
-  },
 }
 
 export default ListDemo

@@ -49,7 +49,6 @@ const Hw = {
 @Form.create()
 class ChangeHomework extends React.Component {
     state = {
-        text: '获取验证码',
         disabled: false,
         homework: Hw,
         homeworkId: 0,

@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -47,4 +49,5 @@ public class ClassManageController {
         classManageMapper.updateClass(getId,n);
         return "成功增加学生人数";
     }
+
 }

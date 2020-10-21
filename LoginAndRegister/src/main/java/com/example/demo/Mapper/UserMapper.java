@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
@@ -37,5 +38,8 @@ public interface UserMapper {
 
     @Select("select username,password,sid,email,telephone,nickname,type,theGrade,theClass from userdemo")
     public List<User> getAllUsers();
+
+    @Select("select username,password,sid,email,telephone,nickname,type,theGrade,theClass from userdemo where theClass=#{theClaSS}")
+    public  List<User> getAllStudentsByClass(String theClass);
 
 }

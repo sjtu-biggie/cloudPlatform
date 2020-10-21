@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Mapper.UserMapper;
 import com.example.demo.model.User;
@@ -30,5 +31,13 @@ public class UserManageController {
         List<User> users=userMapper.getAllUsers();
         System.out.println(users);
         return users;
+    }
+
+    @RequestMapping(value = "/getAllStudentsByClass",method = RequestMethod.POST)
+    public List<User> getAllStudentsByClass(@RequestBody JSONObject obj){
+        String theClass = obj.getString("theClass");
+        List<User> users=userMapper.getAllStudentsByClass(theClass);
+
+        return  users;
     }
 }

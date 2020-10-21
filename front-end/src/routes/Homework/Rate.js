@@ -1,5 +1,6 @@
 import React from 'react'
 import CanvasDraw from "react-canvas-draw"
+// import LZString from "/node_modules/string"
 import {
     Card,
     Spin,
@@ -20,15 +21,6 @@ import {
 } from 'antd'
 import axios from 'axios'
 import TextArea from "antd/es/input/TextArea";
-
-const data3 = [];
-for (let i = 0; i < 23; i++) {
-    data3.push({
-        title: `七年级上数学作业 ${i}`,
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: '同学们记得认真完成按时提交',
-    })
-}
 const gridStyle = {
     width: '25%',
     textAlign: 'center',
@@ -39,6 +31,7 @@ const status = {
     NOTING: 2,
     READING: 3,
 };
+
 class Rating extends React.Component {
     state = {
         status:3,
@@ -87,7 +80,7 @@ class Rating extends React.Component {
             catenaryColor: "#0a0302",
             gridColor: "rgba(150,150,150,0.17)",
             hideGrid: false,
-            canvasWidth: 1000,
+            canvasWidth: 900,
             canvasHeight: 1000,
             disabled: false,
             imgSrc: require("../../pic/deadHomework1.jpg"),
@@ -178,8 +171,9 @@ class Rating extends React.Component {
                     </Col>
                     <Col span={17}>
                         <Card style={{height: '800px',overflow:'scroll'}}>
-                            {/*<img style={{overflow:'scroll'}} width={800} alt="logo" src={require("../../pic/deadHomework1.jpg" )}/>*/}
-                            <CanvasDraw ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/>
+                            {this.state.status === status.DRAWING? <CanvasDraw ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/>:this.state.status === status.NOTING?null:<img style={{overflow:'scroll'}} width={900} alt="logo" src={require("../../pic/deadHomework1.jpg" )}/>}
+                            {/**/}
+
                         </Card>
                     </Col>
                     <Col span={7}>
@@ -254,8 +248,8 @@ class Rating extends React.Component {
                                                     style={{ margin: '0 16px' }}
                                                     value={penLazy}
                                                     onChange={this.onChange2}
-                                                />
-                                            </Col>
+                                            />
+                                        </Col>
                                         </Row>
                                         <Row style={{marginTop:'15px'}}>
                                             <Col  span={3}>
@@ -265,7 +259,7 @@ class Rating extends React.Component {
                                                 <Button  onClick={()=>{this.saveableCanvas.clear()}} style={{fontWeight:'bold',marginLeft:'10px'}}> 清除画布 </Button>
                                             </Col>
                                             <Col offset={3} span={3}>
-                                                <Button  onClick={()=>{this.saveableCanvas.save()}} style={{fontWeight:'bold',marginLeft:'10px'}}> 保存画布 </Button>
+                                                <Button  onClick={()=>{console.log(this.saveableCanvas.getSaveData())}} style={{fontWeight:'bold',marginLeft:'10px'}}> 保存画布 </Button>
                                             </Col>
                                         </Row>
 
@@ -280,7 +274,7 @@ class Rating extends React.Component {
                                     <img onClick={()=>{this.setState({status:status.NOTING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/001-exam.svg" )}/>
                                 </Col>
                                 <Col offset={1} span={7}>
-                                    <img onClick={()=>{this.setState({status:status.NOTING})}}style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/012-laptop.svg" )}/>
+                                    <img onClick={()=>{this.setState({status:status.READING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/012-laptop.svg" )}/>
                                 </Col>
                             </Row>
 

@@ -37,6 +37,7 @@ columns.map(item => {
 
 
 
+
 class EditText extends Component {
     constructor(props) {
         super(props);

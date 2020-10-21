@@ -135,6 +135,7 @@ class HomeworkDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
+        console.log(user)
         this.setState({
             userInfo:user,
         })
@@ -155,6 +156,7 @@ class HomeworkDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
+        console.log(hw)
         this.setState({
             homework:hw,
             displayHomework:hw,

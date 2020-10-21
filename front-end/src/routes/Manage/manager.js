@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { Component, createRef ,useState} from 'react';
-import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, message,Upload} from 'antd';
 import styles from './index.css';
 import axios from 'axios'
 import * as XLSX from 'xlsx';
@@ -60,43 +60,7 @@ columns.map(item => {
     };
 });
 
-const WageManage = () => {
-    const [wageTableData, setWageTableData] = useState < any > ([]);
-    const uploadProps = {
-        accept: ".xls,.xlsx,application/vnd.ms-excel",
-        beforeUpload: (file) => {
-            const f = file;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const datas = e.target.result;
-                const workbook = XLSX.read(datas, {
-                    type: 'binary'
-                });
-                const first_worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonArr = XLSX.utils.sheet_to_json(first_worksheet, {header: 1});
-                handleImpotedJson(jsonArr, file);
-            };
-            reader.readAsBinaryString(f);
-            return false;
-        },
-        onRemove: () => {
-            setWageTableData([]);
-        }
-    }
-}
-    const handleImpotedJson = (jsonArr, file) => {
-        jsonArr.splice(0, 1); // 去掉表头
-        const jsonArrData = jsonArr.map((item, index) => {
-            let jsonObj = {};
-            jsonObj.index = index + 1;
-            jsonObj.key = 'user-wage-' + index;
-            item.forEach((im, i) => {
-                jsonObj[tableColumns[i].dataIndex] = im;
-            })
-            return jsonObj;
-        });
-        setWageTableData(jsonArrData)
-    }
+
 
 class EditText extends Component {
     constructor(props) {
@@ -249,9 +213,9 @@ export default class StudentTable extends Component {
         })
     }
 
-
     render() {
-        const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
+        const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds} = this.state;
+
         return (
             <div className={styles.normal}>
                     <Card title={<div style={{textAlign:"center"}}>管理后台名单</div>} >
@@ -268,12 +232,11 @@ export default class StudentTable extends Component {
                                 </Col>
                                 <Col span={1} offset={11}>
                                     <div>
-                                        {/*<Upload {...uploadProps} action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>*/}
-                                          <Upload>
+                                          <upload type='file' accept='.xlsx, .xls' onChange={this.onImportExcel}>
                                             <Button>
                                                 <Icon type="upload"/> 从excel中添加
                                             </Button>
-                                        </Upload>
+                                        </upload>
                                     </div>
                                 </Col>
                             </Row>
@@ -310,6 +273,5 @@ export default class StudentTable extends Component {
             </div>
         );
     }
-
 }
 

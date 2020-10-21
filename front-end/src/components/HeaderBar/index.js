@@ -1,5 +1,5 @@
 import React from 'react'
-import {Icon, Badge, Dropdown, Menu, Modal, Button} from 'antd'
+import {Icon, Badge, Dropdown, Menu, Modal, Button, message} from 'antd'
 import screenfull from 'screenfull'
 import { inject, observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
@@ -13,7 +13,8 @@ class HeaderBar extends React.Component {
     count: 29,
     visible: false,
     // avatar: require('./img/04.jpg')
-    avatar: window.localStorage.getItem("iconBase64")
+    // avatar: window.localStorage.getItem("iconBase64")
+    avatar:''
   };
 
   componentDidMount () {
@@ -25,12 +26,35 @@ class HeaderBar extends React.Component {
     })
   }
 
-  componentWillUnmount () {
+  componentDidMount(){
     axios({
+      url:'http://106.13.209.140:8000/getUserMessageAndIcon',
+      method:'POST',
+      data:{
+        'username':window.localStorage.getItem("username")
+      },
+      headers: {
+        withCredentials: true,
+      }
 
+    }).then(msg=>{
+      console.log("拿到数据");
+      console.log(msg);
+      this.setState({avatar:msg.data.iconBase64});
+    }).catch(err=>{
+      console.log(err);
     })
+  }
 
 
+
+  componentWillMount() {
+
+
+  }
+
+
+  componentWillUnmount () {
     screenfull.off('change')
   }
 

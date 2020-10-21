@@ -96,7 +96,9 @@ class HomeworkDemo extends React.Component {
         displayHomework: null,
         gradeHomework: null,
         subjectHomework: null,
-        userInfo: null,
+        userInfo: {
+            sid:1,
+        },
         role: null
     };
 
@@ -112,8 +114,18 @@ class HomeworkDemo extends React.Component {
     getData2 = () => {
         let storage = window.localStorage;
         let username = storage.getItem("username");
+        let r = storage.getItem("type");
         this.getUserInfo(username);
-        this.getHomeworkAll();
+        this.setState({
+            role: r
+        });
+        if (r === 'teacher'){
+            this.getTeacherHomeworkAll();
+        }
+        else if (r === 'student'){
+            this.getStudentHomeworkAll(this.state.userInfo.sid)
+        }
+
     };
 
     getUserInfo = async (username)=>{
@@ -139,9 +151,16 @@ class HomeworkDemo extends React.Component {
         this.setState({
             userInfo:user,
         })
+
+        if (this.state.role === 'teacher'){
+            this.getTeacherHomeworkAll();
+        }
+        else if (this.state.role === 'student'){
+            this.getStudentHomeworkAll(this.state.userInfo.sid)
+        }
     };
 
-    getHomeworkAll=async ()=>{
+    getTeacherHomeworkAll=async ()=>{
         let config = {
             method: 'get',
             url: 'http://106.13.209.140:8383/getHomeworkAll',
@@ -166,6 +185,31 @@ class HomeworkDemo extends React.Component {
         console.log(this.state.homework);
     };
 
+    getStudentHomeworkAll=async (studentId)=>{
+        let config = {
+            method: 'post',
+            url: 'http://106.13.209.140:8383/getStudentHomeworkAll?studentId=' + studentId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        this.setState({
+            homework:hw,
+            displayHomework:hw,
+            subjectHomework:hw,
+            gradeHomework:hw
+        })
+        console.log(this.state.homework);
+    };
+
     changeSubject1=(subject)=>{
         let modifiedList1 = [];
         let modifiedList2 = [];
@@ -179,12 +223,12 @@ class HomeworkDemo extends React.Component {
             return null;
         }else{
             for(let homework of this.state.homework){
-                if(homework.subject === subject){
+                if(homework.subject.indexOf(subject) !== -1){
                     modifiedList1.push(homework);
                 }
             }
             for(let homework of this.state.gradeHomework){
-                if(homework.subject === subject){
+                if(homework.subject.indexOf(subject) !== -1){
                     modifiedList2.push(homework);
                 }
             }
@@ -209,12 +253,12 @@ class HomeworkDemo extends React.Component {
             return null;
         }else{
             for(let homework of this.state.subjectHomework){
-                if(homework.grade === subject){
+                if(homework.subject.indexOf(subject) !== -1){
                     modifiedList1.push(homework);
                 }
             }
             for(let homework of this.state.homework){
-                if(homework.grade === subject){
+                if(homework.subject.indexOf(subject) !== -1){
                     modifiedList2.push(homework);
                 }
             }
@@ -227,12 +271,12 @@ class HomeworkDemo extends React.Component {
     };
 
     componentWillMount() {
+        this.getData2();
         this.setState({
             displayHomework: this.state.homework,
             subjectHomework: this.state.homework,
             gradeHomework: this.state.homework
         });
-        this.getData2();
 
 
         if(this.props.location.pathname==="/home/homework/overall"){
@@ -410,14 +454,11 @@ class HomeworkDemo extends React.Component {
                         </Dropdown>
                         <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft:'30px'}}>
                             <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}><span id="gradeButton">年级</span><Icon type="down"/></Button>
-
                         </Dropdown>
                     </Card>
                 </div>
                 <div>
-
                     <HomeworkList homeworkList={this.state.displayHomework}/>
-
                 </div>
             </div>
         )

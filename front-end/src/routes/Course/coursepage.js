@@ -69,7 +69,7 @@ class CoursePageDemo extends React.Component {
         addChapter: false,
         addContent: false,
         lookStudentData: false,
-        displayHomeworkList: deathHomework
+        displayHomeworkList: []
     };
 
     componentWillMount() {
@@ -954,84 +954,7 @@ const steps = [
         title: 'Last',
         content: 'Last-content',
     }];
-const deathHomework = [];
-for (let i = 0; i < 3; i++) {
-    deathHomework.push({
-        type: '数学',
-        grade: '七年级上',
-        title: `七年级上数学作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime: '2020-10-11 12:12:12',
-        handinTime: null,
-        endTime: '2020-10-12 12:12:13',
-        accessmentalgorithms: '0',
-        score: '100',
-        range: ['八年级三班', '八年级二班']
 
-    })
-}
 
-for (let i = 0; i < 3; i++) {
-    deathHomework.push({
-        type: '语文',
-        grade: '七年级上',
-        title: `七年级上语文作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime: '2020-10-11 12:12:12',
-        handinTime: null,
-        endTime: '2020-10-12 12:12:13',
-        accessmentalgorithms: '0',
-        score: '100',
-        range: ['八年级三班', '八年级二班']
-
-    })
-}
-
-for (let i = 0; i < 3; i++) {
-    deathHomework.push({
-        type: '英语',
-        grade: '七年级上',
-        title: `七年级上英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime: '2020-10-11 12:12:12',
-        handinTime: null,
-        endTime: '2020-10-12 12:12:13',
-        accessmentalgorithms: '0',
-        score: '100',
-        range: ['八年级三班', '八年级二班']
-
-    })
-}
-
-for (let i = 0; i < 3; i++) {
-    deathHomework.push({
-        type: '英语',
-        grade: '八年级上',
-        title: `八年级上英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime: '2020-10-11 12:12:12',
-        handinTime: null,
-        endTime: '2020-10-12 12:12:13',
-        accessmentalgorithms: '0',
-        score: '100',
-        range: ['八年级一班', '八年级四班']
-
-    })
-}
-
-for (let i = 0; i < 3; i++) {
-    deathHomework.push({
-        type: '英语',
-        grade: '八年级上',
-        title: `八年级下英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime: '2020-10-11 12:12:12',
-        handinTime: null,
-        endTime: '2020-10-12 12:12:13',
-        accessmentalgorithms: '0',
-        score: '100',
-        range: ['八年级一班', '八年级二班']
-    })
-}
 
 export default CoursePageDemo

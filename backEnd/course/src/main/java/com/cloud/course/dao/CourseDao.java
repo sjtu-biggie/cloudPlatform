@@ -40,7 +40,7 @@ public interface CourseDao {
     void deleteNote(String id);
 
 
-    void register(String courseId, String string,Date join_date);
+    void register(String courseId, String string,Date join_date,String nickname,String theClass,String sid);
 
     Page<CourseBulletin> getPageBulletin(int courseId, Pageable p);
 

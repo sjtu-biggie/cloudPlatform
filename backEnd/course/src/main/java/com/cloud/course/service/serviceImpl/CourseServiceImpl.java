@@ -168,7 +168,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void register(JSONObject object){
         String courseId = object.getString("courseId");
-        JSONArray studentId = object.getJSONArray("studentId");
+        JSONArray studentId = object.getJSONArray("student");
         Date join_date = new Date();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String _join_date = object.getString("joinDate");
@@ -178,7 +178,8 @@ public class CourseServiceImpl implements CourseService {
             e.printStackTrace();
         }
         for(int i=0;i<studentId.size();++i){
-            courseDao.register(courseId,studentId.getString(i),join_date);
+            JSONObject student = studentId.getJSONObject(i);
+            courseDao.register(courseId,student.getString("username"),join_date,student.getString("nickname"),student.getString("sid"),student.getString("theClass"));
         }
     }
 }

@@ -30,8 +30,8 @@ public interface CourseRepository extends CrudRepository<Course,Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value="insert into student_course(user_id,course_id,grade,status,join_date) values (?2,?1,0,0,?3)")
-    void register(String courseId, String userId,Date join_date);
+    @Query(nativeQuery = true,value="insert into student_course(user_id,course_id,grade,status,join_date,nickname,theClass,sid) values (?2,?1,0,0,?3,?4,?5,?6)")
+    void register(String courseId, String userId,Date join_date,String nickname,String theClass,String sid);
 
 
     Page<Course> findAll(Pageable p);

@@ -162,8 +162,8 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public void register(String courseId, String userId,Date join_date){
-        courseRepository.register(courseId,userId,join_date);
+    public void register(String courseId, String userId,Date join_date,String nickname,String theClass,String sid){
+        courseRepository.register(courseId,userId,join_date,nickname,theClass,sid);
     }
     @Override
     public Page<CourseBulletin> getPageBulletin(int courseId, Pageable p){

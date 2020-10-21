@@ -1,5 +1,6 @@
 package com.CloudPlatform.controller;
 import com.CloudPlatform.entity.StudentHomework;
+import com.CloudPlatform.entity.StudentStat;
 import com.CloudPlatform.service.StudentHomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -69,4 +70,11 @@ public class StudentHomeworkController {
     public @ResponseBody void deleteStudentHomeworkOne(@RequestParam("studentId") String studentId, @RequestParam("homeworkId") int homeworkId){
         studenthomeworkService.deleteStudentHomeworkOne(studentId, homeworkId);
     }
+    //获取学生在课程中的所有信息
+    @RequestMapping(value = "/getStudentStatistics")
+    public @ResponseBody
+    StudentStat getStudentStatistics(@RequestParam("studentId") String studentId, @RequestParam("courseId") int courseId){
+        return studenthomeworkService.getStudentStatistics(studentId, courseId);
+    }
+
 }

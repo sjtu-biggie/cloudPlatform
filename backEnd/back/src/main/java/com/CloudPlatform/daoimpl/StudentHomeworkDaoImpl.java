@@ -116,4 +116,17 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         }
         return homeworkList;
     }
+    @Override
+    public Integer getStudentHomeworkRank(String studentId,int homeworkId){
+        return studenthomeworkRepository.getStudentHomeworkRank(studentId,homeworkId);
+    }
+    @Override
+    public Integer getCourseHomeworkNum(int courseId){
+        return studenthomeworkRepository.getCourseHomeworkNum(courseId);
+    }
+    @Override
+    public Integer getStudentHomeworkNum(String studentId,int courseId){
+        return studenthomeworkRepository.getStudentHomeworkNum(studentId,courseId);
+    }
+
 }

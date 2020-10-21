@@ -1,6 +1,7 @@
 package com.CloudPlatform.service;
 
 import com.CloudPlatform.entity.StudentHomework;
+import com.CloudPlatform.entity.StudentStat;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface StudentHomeworkService {
     StudentHomework addStudentHomework(StudentHomework homework);
     void deleteStudentHomeworkAll(String studentId, int courseId);
     void deleteStudentHomeworkOne(String studentId, int homeworkId);
+
+    StudentStat getStudentStatistics(String studentId, int courseId);
 }

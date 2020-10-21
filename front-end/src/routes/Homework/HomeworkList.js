@@ -77,13 +77,11 @@ class HomeworkList extends React.Component {
         };
         const user = await axios(config)
             .then(function (response) {
-                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(user);
         this.setState({
             userInfo:user,
         })
@@ -120,6 +118,10 @@ class HomeworkList extends React.Component {
         });
         let storage = window.localStorage;
         let username = storage.getItem("username");
+        let r = storage.getItem("type");
+        this.setState({
+            role: r
+        });
         this.getUserInfo(username);
     };
 
@@ -174,8 +176,7 @@ class HomeworkList extends React.Component {
                                                   <IconText type="calendar" text={"截止："+ this.format(item.endTime)} />,
                                                   <IconText type="schedule" text ={ item.handinTime === null ? "未提交":"已提交"} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />,
-                                                  <IconText type="profile" text={"布置范围："+item.range} />
-                                                  ]
+                                              ]
                                           : [<IconText type="file-text" text="暂无" />,
                                                   <IconText type="calendar" text={"截止："+ this.format(item.endTime)} />,
                                                   <IconText type="pie-chart" text = {this.state.homeworkList.length +"/" + this.state.allAmount} />,
@@ -183,12 +184,12 @@ class HomeworkList extends React.Component {
                                                   <IconText type="profile" text={"布置范围："+item.range} />
                                               ]}
 
-                                          extra={(this.state.delete === false ? []:[<Button type="danger" onClick={()=>{
+                                          extra={((this.state.delete === false && this.state.role === 'teacher')? [<Button type="danger" onClick={()=>{
                                               //delete
-                                          }}>删除</Button>])}
+                                          }}>删除</Button>]:[])}
                                           >
                                           <List.Item.Meta
-                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit"}>{item.title}</a> : <a href={"/home/homework/General"}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
+                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit?homeworkId="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General?homeworkId="+item.homeworkId}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
                                               description={item.description}
                                           />
                                           {item.content}

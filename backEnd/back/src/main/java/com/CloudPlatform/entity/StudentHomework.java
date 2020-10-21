@@ -47,6 +47,12 @@ public class StudentHomework {
     @Column(name = "SCORE")
     private Double Score;
 
+    @Column(name = "TITLE")
+    private String Title;
+
+    @Column(name = "SUBJECT")
+    private String Subject;
+
     @Transient
     @Column(name = "CONTENT")
     private String Content;

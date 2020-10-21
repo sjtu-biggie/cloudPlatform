@@ -42,6 +42,12 @@ public class TeacherHomework implements Serializable {
     @Column(name = "ENDTIME")
     private Date EndTime;
 
+    @Column(name = "TYPE")
+    private String Type;
+
+    @Column(name = "SUBJECT")
+    private String Subject;
+
     @Column(name = "HANDINAMOUNT")
     private int HandinAmount;
 

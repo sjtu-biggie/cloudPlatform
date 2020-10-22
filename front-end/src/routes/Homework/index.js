@@ -123,7 +123,7 @@ class HomeworkDemo extends React.Component {
             this.getTeacherHomeworkAll();
         }
         else if (r === 'student'){
-            this.getStudentHomeworkAll(this.state.userInfo.sid)
+            this.getStudentHomeworkAll(this.state.userInfo.username)
         }
 
     };

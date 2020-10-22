@@ -36,7 +36,8 @@ class Assign extends React.Component {
         homework: null,
         userInfo: null,
         role: null,
-        text: null,
+        content: null,
+        answer:null
     };
 
     getData2 = () => {
@@ -95,10 +96,10 @@ class Assign extends React.Component {
         })
     };
 
-    getText = (result, t) => {
+    getContent = (result, t) => {
         console.log(t);
         this.setState({
-            text: t
+            content: t
         })
     }
 
@@ -234,7 +235,7 @@ class Assign extends React.Component {
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
                             {
                                 (
-                                    <DraftDemo/>
+                                    <DraftDemo parent={ this }/>
                                 )
                             }
                         </FormItem>

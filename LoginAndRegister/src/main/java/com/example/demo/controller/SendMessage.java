@@ -34,7 +34,7 @@ public class SendMessage {
         request.putQueryParameter("SignName", "云作业平台");
         request.putQueryParameter("TemplateCode", "SMS_202823359");
         String code=getCode();
-        request.putQueryParameter("TemplateParam","{\"code\":\"code\"}");
+        request.putQueryParameter("TemplateParam","{\"code\":"+code+"}" );
         try {
             CommonResponse response = client.getCommonResponse(request);
             System.out.println(response.getData());
@@ -55,5 +55,4 @@ public class SendMessage {
         }
         return result;
     }
-
 }

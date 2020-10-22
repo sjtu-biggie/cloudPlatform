@@ -36,7 +36,22 @@ class Assign extends React.Component {
         homework: null,
         userInfo: null,
         role: null,
-        text: null,
+        content: null,
+        answer:null
+    };
+
+    add0=(m)=>{return m<10?'0'+m:m };
+
+    format=(shijianchuo)=>
+    {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth()+1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
     };
 
     getData2 = () => {
@@ -95,12 +110,20 @@ class Assign extends React.Component {
         })
     };
 
-    getText = (result, t) => {
+    getContent = (result, t) => {
         console.log(t);
         this.setState({
-            text: t
+            content: t
         })
     }
+
+    getAnswer = (result, t) => {
+        console.log(t);
+        this.setState({
+            answer: t
+        })
+    }
+
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -108,17 +131,22 @@ class Assign extends React.Component {
             if (err) {
                 message.warning('请先填写正确的表单')
             } else {
-                message.success('提交成功');
-                values.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
-                values.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
-                this.setState({homework:values});
-                console.log(values);
+                values.startDate = this.format(values.startDate);
+                values.endDate = this.format(values.endDate);
+                if (values.startDate > values.endDate){
+                    console.log(values);
+                    message.error('开始时间不能晚于结束时间');
+                }
+                else{
+                    this.setState({homework:values});
+                    message.success('提交成功');
+                    console.log(values);
+                }
             }
         });
     }
 
     componentWillUnmount() {
-        clearInterval(this.timer);
         this.getData2();
     }
 
@@ -163,7 +191,7 @@ class Assign extends React.Component {
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                         <FormItem label='作业名称' {...formItemLayout} required>
                             {
-                                getFieldDecorator('homework_name', {
+                                getFieldDecorator('title', {
                                     rules: [
                                         {
                                             required: true,
@@ -203,24 +231,42 @@ class Assign extends React.Component {
                                 )
                             }
                         </FormItem>
-                        <FormItem label='起止时间' {...formItemLayout} required>
+                        <FormItem label='开始时间' {...formItemLayout} required>
                             {
-                                getFieldDecorator('time', {
+                                getFieldDecorator('startDate', {
                                     rules: [
                                         {
                                             required: true,
-                                            message: '请选择起止时间'
+                                            message: '请选择开始时间'
                                         }
                                     ]
                                 })(
-                                    <DatePicker.RangePicker/>
+                                    <DatePicker onChange={() => {
+
+                                    }}> </DatePicker>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem label='结束时间' {...formItemLayout} required>
+                            {
+                                getFieldDecorator('endDate', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请选择结束时间'
+                                        }
+                                    ]
+                                })(
+                                    <DatePicker onChange={() => {
+
+                                    }}> </DatePicker>
                                 )
                             }
                         </FormItem>
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
                         {
                             (
-                                <DraftDemo parent={ this }/>
+                                <DraftDemo parent={ this } flag = 'content'/>
                             )
                         }
                     </FormItem>
@@ -234,7 +280,7 @@ class Assign extends React.Component {
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
                             {
                                 (
-                                    <DraftDemo/>
+                                    <DraftDemo parent={ this } flag = 'answer'/>
                                 )
                             }
                         </FormItem>

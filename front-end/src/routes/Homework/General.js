@@ -135,6 +135,7 @@ class ListDemo extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
+    console.log(hw);
     let list = Array.from(hw);
     let total = 0;
     list.map(item=>{

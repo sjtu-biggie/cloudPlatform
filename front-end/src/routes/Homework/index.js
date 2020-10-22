@@ -119,13 +119,6 @@ class HomeworkDemo extends React.Component {
         this.setState({
             role: r
         });
-        if (r === 'teacher'){
-            this.getTeacherHomeworkAll();
-        }
-        else if (r === 'student'){
-            this.getStudentHomeworkAll(this.state.userInfo.username)
-        }
-
     };
 
     getUserInfo = async (username)=>{
@@ -156,7 +149,7 @@ class HomeworkDemo extends React.Component {
             this.getTeacherHomeworkAll();
         }
         else if (this.state.role === 'student'){
-            this.getStudentHomeworkAll(this.state.userInfo.sid)
+            this.getStudentHomeworkAll(this.state.userInfo.username)
         }
     };
 
@@ -186,6 +179,7 @@ class HomeworkDemo extends React.Component {
     };
 
     getStudentHomeworkAll=async (studentId)=>{
+        console.log(studentId)
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/getStudentHomeworkAll?studentId=' + studentId,

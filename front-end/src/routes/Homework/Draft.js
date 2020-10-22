@@ -19,7 +19,12 @@ class Draft extends React.Component{
             editorState,
         });
         let editorContent = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
-        this.props.parent.getContent(this, editorContent);
+        if (this.props.flag === 'content'){
+            this.props.parent.getContent(this, editorContent);
+        }
+        else if (this.props.flag === 'answer'){
+            this.props.parent.getAnswer(this, editorContent);
+        }
         console.log(editorContent);
     };
     onContentStateChange =  (contentState) => {

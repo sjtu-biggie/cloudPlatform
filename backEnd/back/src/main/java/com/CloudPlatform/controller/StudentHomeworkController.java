@@ -73,8 +73,8 @@ public class StudentHomeworkController {
     //获取学生在课程中的所有信息
     @RequestMapping(value = "/getStudentStatistics")
     public @ResponseBody
-    StudentStat getStudentStatistics(@RequestParam("studentId") String studentId, @RequestParam("courseId") int courseId){
-        return studenthomeworkService.getStudentStatistics(studentId, courseId);
+    StudentStat getStudentStatistics(@RequestParam("studentId") String studentId, @RequestParam("courseId") int courseId, @RequestParam("times") int times){
+        return studenthomeworkService.getStudentStatistics(studentId, courseId,times);
     }
 
 }

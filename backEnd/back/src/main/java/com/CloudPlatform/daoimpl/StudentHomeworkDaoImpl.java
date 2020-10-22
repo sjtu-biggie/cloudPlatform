@@ -93,14 +93,15 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
     public List<StudentHomework> findAllOfCourse(String studentId, int courseId) {
         String cId = Integer.toString(courseId);
         List<StudentHomework> homeworkList = studenthomeworkRepository.findByStudentIdAndCourseId(studentId, courseId);
-        List list1 = studenthomeworkDetailRepository.findAllByStudentIdAndCourseId(studentId, cId);
-
         for(int i = 0; i < homeworkList.size();++i){
-            (homeworkList.get(i)).setContent(((StudentHomeworkDetail)list1.get(i)).getContent());
-            (homeworkList.get(i)).setComment(((StudentHomeworkDetail)list1.get(i)).getComment());
-            (homeworkList.get(i)).setRemarks(((StudentHomeworkDetail)list1.get(i)).getRemarks());
+            StudentHomeworkDetail studentHomeworkDetail = studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(studentId,Integer.toString(homeworkList.get(i).getHomeworkId()));
+            if(studentHomeworkDetail!=null){
+                System.out.println(1);
+                (homeworkList.get(i)).setContent(studentHomeworkDetail.getContent());
+                (homeworkList.get(i)).setContent(studentHomeworkDetail.getComment());
+                (homeworkList.get(i)).setContent(studentHomeworkDetail.getRemarks());
+            }
         }
-
         return homeworkList;
     }
 

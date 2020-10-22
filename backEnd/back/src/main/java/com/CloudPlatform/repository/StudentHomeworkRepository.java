@@ -10,6 +10,8 @@ import java.util.List;
 public interface StudentHomeworkRepository extends JpaRepository<StudentHomework,String> {
     List<StudentHomework> findByStudentId(String studentId);
     List<StudentHomework> findByHomeworkId(int homeworkId);
+
+    @Query(nativeQuery = true,value="select * from studenthomework where courseid=?2 and studentid=?1 order by starttime desc ")
     List<StudentHomework> findByStudentIdAndCourseId(String studentId, int courseId);
     StudentHomework findByStudentIdAndHomeworkId(String studentId, int homeworkId);
     @Transactional
@@ -17,7 +19,7 @@ public interface StudentHomeworkRepository extends JpaRepository<StudentHomework
     @Transactional
     void deleteByStudentIdAndCourseId(String studentId, int courseId);
 
-    @Query(nativeQuery = true,value = "select count(*) from studenthomework where score > (select score from studenthomework where studentid = ?1) and homeworkid=?2")
+    @Query(nativeQuery = true,value = "select count(*) from studenthomework where score > (select score from studenthomework where studentid = ?1 and homeworkid=?2) and homeworkid=?2")
     Integer getStudentHomeworkRank(String studentId,int homeworkId);
 
     @Query(nativeQuery = true,value = "select count(distinct homeworkid) from studenthomework where courseid=?1")

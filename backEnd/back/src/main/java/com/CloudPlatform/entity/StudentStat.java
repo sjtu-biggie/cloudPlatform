@@ -18,15 +18,12 @@ import java.util.List;
 
 public class StudentStat {
     private int finishHomework;
+    private int ongoingHomework;
     private int failedHomework;
     private float meanScore;
     private float recentMeanScore;
-    private int rank;
-    private int studentNum;
-    private List<Integer> courseRankChange;
-    private List<Integer> courseScoreChange;
     private List<Integer> homeworkRankChange;
-    private List<Integer> homeworkScoreChange;
+    private List<Double> homeworkScoreChange;
     private List<Integer> handinChange;
     private List<Integer> ddlChange;
 }

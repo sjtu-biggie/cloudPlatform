@@ -7,9 +7,12 @@ import com.CloudPlatform.service.StudentHomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
+import java.util.Date;
+import java.util.Random;
 
 @Service
 public class StudentHomeworkServiceImpl implements StudentHomeworkService {
@@ -56,17 +59,54 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         student_homeworkDao.deleteOne(studentId, homeworkId);
     }
     @Override
-    public StudentStat getStudentStatistics(String studentId, int courseId){
+    public StudentStat getStudentStatistics(String studentId, int courseId,int time){
         int finishHomework= student_homeworkDao.getStudentHomeworkNum(studentId,courseId);
         int courseHomeworkNum = student_homeworkDao.getCourseHomeworkNum(courseId);
-        int failedHomework = courseHomeworkNum-finishHomework;
-        List<StudentHomework> studentHomeworkList = student_homeworkDao.findAll(studentId);
-        float meanScore=0;
+        int ongoingHomework=0;
+        int failedHomework =0;
+        List<StudentHomework> studentHomeworkList = student_homeworkDao.findAllOfCourse(studentId,courseId);
+        float meanScore=0,recentMeanScore=0;
+        int recentMeanScoreNum=0;
+        List <Integer> homeworkRankChange=new ArrayList<>();
+        List <Double> homeworkScoreChange=new ArrayList<>();
+        List <Integer> handinChange=new ArrayList<>();
+        List <Integer> ddlChange=new ArrayList<>();
         for (StudentHomework studentHomework : studentHomeworkList){
-            if(studentHomework.getScore()==-1) studentHomework.setScore(parseDouble("0"));
+            //还未批改的作业不进入统计
+            if(studentHomework.getScore()==null){
+                if(studentHomework.getHandinTime()==null){
+                    finishHomework--;
+                }
+                courseHomeworkNum--;
+                ongoingHomework++;
+                continue;
+            }
+            //处理缺交的作业
+            if(studentHomework.getScore()==-1){
+                System.out.println("sad");
+                failedHomework++;
+                studentHomework.setScore(parseDouble("0"));
+            }
             meanScore +=studentHomework.getScore();
+            if(recentMeanScoreNum<time){
+                recentMeanScoreNum++;
+                recentMeanScore+=studentHomework.getScore();
+                Integer rank=student_homeworkDao.getStudentHomeworkRank(studentId,studentHomework.getHomeworkId())+1;
+                homeworkRankChange.add(rank);
+                homeworkScoreChange.add(studentHomework.getScore());
+                Date handinTime = studentHomework.getHandinTime();
+                Date startTime = studentHomework.getStartTime();
+                Date endTime = studentHomework.getEndTime();
+                int start2hand = (handinTime.getYear() - startTime.getYear()) * 24 * 60*30*12+(handinTime.getMonth() - startTime.getMonth()) * 24 * 60*30+(handinTime.getDay() - startTime.getDay()) * 24 * 60 + (handinTime.getHours() - startTime.getHours()) * 60 + (handinTime.getMinutes() - startTime.getMinutes());
+                if(start2hand<0) start2hand = 299;
+                handinChange.add(start2hand);
+                int hand2end =(endTime.getYear() - handinTime.getYear()) * 24 * 60*30*12+(endTime.getMonth() - handinTime.getMonth()) * 24 * 60*30+(endTime.getDay() - handinTime.getDay()) * 24 * 60 + (endTime.getHours() - handinTime.getHours()) * 60 + (endTime.getMinutes() - handinTime.getMinutes());
+                if(hand2end<0) hand2end = 299;
+                ddlChange.add(hand2end);
+            }
         }
         meanScore = meanScore / courseHomeworkNum;
-        return null;
+        recentMeanScore = recentMeanScore/recentMeanScoreNum;
+        return new StudentStat(finishHomework,ongoingHomework,failedHomework,meanScore,recentMeanScore,homeworkRankChange,homeworkScoreChange,handinChange,ddlChange);
     }
 }

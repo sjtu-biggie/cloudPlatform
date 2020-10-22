@@ -17,5 +17,5 @@ public interface StudentHomeworkService {
     void deleteStudentHomeworkAll(String studentId, int courseId);
     void deleteStudentHomeworkOne(String studentId, int homeworkId);
 
-    StudentStat getStudentStatistics(String studentId, int courseId);
+    StudentStat getStudentStatistics(String studentId, int courseId,int time);
 }

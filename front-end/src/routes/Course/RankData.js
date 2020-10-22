@@ -128,6 +128,8 @@ class RankData extends React.Component {
             this.setState({
                 times: value
             });
+            let stat=this.state.stat;
+            let rec=0;
             let handinChange = this.state.handinChange;
             let ddlChange = this.state.ddlChange;
             let homeworkRankChange = this.state.homeworkRankChange;
@@ -135,12 +137,20 @@ class RankData extends React.Component {
             handinChange.splice(0, savetime - value);
             ddlChange.splice(0, savetime - value);
             homeworkScoreChange.splice(0, savetime - value);
+            for(let homeworkScore of homeworkScoreChange){
+                console.log(stat.recentMeanScore);
+                rec+=homeworkScore.value;
+            }
+            console.log(rec / homeworkScoreChange.length);
+            stat.recentMeanScore = rec / homeworkScoreChange.length;
+            console.log(stat.recentMeanScore);
             homeworkRankChange.splice(0, savetime - value);
             this.setState({
                 homeworkRankChange: homeworkRankChange,
                 homeworkScoreChange: homeworkScoreChange,
                 handinChange: handinChange,
-                ddlChange: ddlChange
+                ddlChange: ddlChange,
+                stat:stat
             });
 
         }
@@ -204,7 +214,7 @@ class RankData extends React.Component {
                                        value={this.state.stat.failedHomework}/>
                             <Statistic style={{marginTop: '10px', float: "left", marginLeft: '30px'}} title="平均得分"
                                        value={this.state.stat.meanScore}/>
-                            <Statistic style={{marginTop: '10px', float: "left", marginLeft: '30px'}} title="近两周平均得分"
+                            <Statistic style={{marginTop: '10px', float: "left", marginLeft: '30px'}} title="近來平均得分"
                                        value={this.state.stat.recentMeanScore}/>
                             <Statistic style={{marginTop: '10px', float: "left", marginLeft: '30px'}} title="综合评级"
                                        value={'良'}/>

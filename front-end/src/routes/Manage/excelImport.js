@@ -38,8 +38,9 @@ class excelImport extends React.Component {
                 //上传成功啦,data为上传后的数据
                 this.setState({
 
-                    data:data.Sheet1[0]
+                    data:data.Sheet1
                 });
+                console.log(this.state.data)
                 // 最终获取到并且格式化后的 json 数据
                 message.success('上传成功！')
             } catch (e) {
@@ -58,14 +59,7 @@ class excelImport extends React.Component {
                 }
             });
             columns.push( {
-                title: '操作',
                 key: 'action',
-                render: (text, record) => (
-                    <span>
-                  <a style={{ marginRight: 16 }}>Invite {record.name}</a>
-                  <a>Delete</a>
-                </span>
-                ),
             },)
             dataSource = this.state.data.map((item,index)=>{
                 return {

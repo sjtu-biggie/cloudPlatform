@@ -67,8 +67,10 @@ export default class StudentTable extends Component {
             delData:'',
             orData: '',
             renderData: '',
+            data:{}
         };
         this.searchInput = createRef();
+
 
 
         columns.forEach(item => {
@@ -164,6 +166,50 @@ export default class StudentTable extends Component {
         }
     }
 
+    uploadFilesChange(file) {
+        // 通过FileReader对象读取文件
+        const fileReader = new FileReader();
+        fileReader.onload = event => {
+            console.log("01")
+            try {
+                const { result } = event.target;
+                // 以二进制流方式读取得到整份excel表格对象
+                const workbook = XLSX.read(result, { type: 'binary' });
+                // 存储获取到的数据
+                let data = {
+                };
+                // 遍历每张工作表进行读取（这里默认只读取第一张表）
+                for (const sheet in workbook.Sheets) {
+                    let tempData = [];
+                    // esline-disable-next-line
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        // 利用 sheet_to_json 方法将 excel 转成 json 数据
+                        data[sheet] = tempData.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                        console.log(data[sheet]);
+                    }
+                }
+                //上传成功啦,data为上传后的数据
+                this.setState({
+
+                    data:data.Sheet1
+                });
+                console.log(this.state.data)
+                // 最终获取到并且格式化后的 json 数据
+                message.success('上传成功！')
+            } catch (e) {
+                // 这里可以抛出文件类型错误不正确的相关提示
+                message.error('文件类型不正确！');
+            }
+            console.log(this.state.data);
+            let tData=[...this.state.renderData,...this.state.data]
+            console.log(tData)
+            this.setState({renderData:tData});
+        };
+
+        // 以二进制方式打开文件
+        fileReader.readAsBinaryString(file.file);
+    }
+
     componentWillMount(){
         axios({
             method:'POST',
@@ -180,10 +226,9 @@ export default class StudentTable extends Component {
 
     render() {
         const { orData, search, renderData,} = this.state;
-
         return (
 
-            <div className={styles.normal}>   <ExcelImport/>
+            <div className={styles.normal}>
                     <Card title={<div style={{textAlign:"center"}}>管理后台名单</div>} >
                         <Card className={styles.control} bordered={false} style={{ marginBottom: 10 }}>
                             <Row>
@@ -199,13 +244,14 @@ export default class StudentTable extends Component {
                                     <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </Col>
                                 <Col span={1} offset={11}>
-                                    <div>
-                                          <upload type='file' accept='.xlsx, .xls' onChange={this.onImportExcel}>
-                                            <Button>
-                                                <Icon type="upload"/> 从excel中添加
+
+                                    <Upload  action='https://www.mocky.io/v2/5cc8019d300000980a055e76' beforeUpload={function () {
+                                        return false;
+                                    }} onChange={this.uploadFilesChange.bind(this)} showUploadList={false}>
+                                            <Button icon={<Upload/>} >
+                                                 从excel中添加
                                             </Button>
-                                        </upload>
-                                    </div>
+                                    </Upload>
                                 </Col>
                             </Row>
                         </Card>
@@ -215,6 +261,8 @@ export default class StudentTable extends Component {
                                 columns={[...columns.map(item => ({
                                     ...item,
                                     render: (text, record) => <EditText onChange={value => {
+                                        console.log(columns)
+                                        console.log(renderData)
                                         const newData = [...renderData];
                                         // newData.find(col => col.id === record.id)[item.dataIndex] = value;
                                         record[item.dataIndex]=value;
@@ -236,7 +284,6 @@ export default class StudentTable extends Component {
                                             })
                                             console.log(newOrData);
                                             console.log(newRenderData);
-
                                             this.setState({
                                                 renderData:newRenderData,
                                                 orData: newOrData,
@@ -250,7 +297,6 @@ export default class StudentTable extends Component {
                                 dataSource={renderData}/>
                         </Card>
                     </Card>
-
             </div>
 
         );

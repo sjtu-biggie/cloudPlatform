@@ -735,7 +735,7 @@ class CoursePageDemo extends React.Component {
     };
     rankRender = () => {
         return (
-            <RankData homework={this.state.homework}/>);
+            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id} />);
     };
     studentTableRender = () => {
         return (

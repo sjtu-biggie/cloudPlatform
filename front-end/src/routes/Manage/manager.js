@@ -20,7 +20,6 @@ const columns = [
 
 ];
 
-
 columns.map(item => {
     item.sorter = (a, b) => {
         if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
@@ -31,10 +30,6 @@ columns.map(item => {
         return String(aa).localeCompare(String(bb));
     };
 });
-
-
-
-
 
 
 
@@ -68,12 +63,9 @@ export default class StudentTable extends Component {
         super(props);
         this.state = {
             search: '',
-            search2: '',
-            search3:'',
             delData:'',
             orData: '',
             renderData: '',
-            modifyIds: [],
         };
         this.searchInput = createRef();
 
@@ -89,7 +81,7 @@ export default class StudentTable extends Component {
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={confirm}
-                        style={{ width: 188, marginBottom: 8, display: 'block' }}
+                        style={{ width: 180, marginBottom: 8, display: 'block' }}
                     />
                     <Button
                         type="primary"
@@ -141,6 +133,34 @@ export default class StudentTable extends Component {
             })
             console.log("测试发送");
         }
+
+        this.updateUser=(record)=>{
+            console.log(record);
+            axios({
+                method: 'POST',
+                url: 'http://106.13.209.140:8000/updateUser',
+                data: record,
+            }).then(msg=>{
+                console.log("更新数据库的数据");
+                console.log(msg);
+            }).catch(err=>{
+                console.log(err);
+            })
+        }
+
+        this.getAlLUsers=()=>{
+            axios({
+                method:'POST',
+                url:'http://106.13.209.140:8000/getAllUsers'
+            }).then(msg=>{
+                console.log(msg);
+                this.setState({orData:msg.data});
+                this.setState({renderData:msg.data});
+            }).catch(err=>{
+                console.log(err);
+                console.log("提取数据失败");
+            })
+        }
     }
 
     componentWillMount(){
@@ -158,7 +178,7 @@ export default class StudentTable extends Component {
     }
 
     render() {
-        const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds} = this.state;
+        const { orData, search, renderData,} = this.state;
 
         return (
             <div className={styles.normal}>
@@ -193,19 +213,31 @@ export default class StudentTable extends Component {
                                 columns={[...columns.map(item => ({
                                     ...item,
                                     render: (text, record) => <EditText onChange={value => {
-                                        const newData = [...orData];
-                                        newData.find(col => col.id === record.id)[item.dataIndex] = value;
-                                        console.log(text);
-                                        console.log(record);
-                                        this.setState({ orData: newData });
+                                        const newData = [...renderData];
+                                        // newData.find(col => col.id === record.id)[item.dataIndex] = value;
+                                        record[item.dataIndex]=value;
+                                        this.updateUser(record);
+                                        this.setState({ orData: newData,renderData:newData });
                                     }}>{text}</EditText>,
                                 })), {
                                     name: '操作',
                                     key: 'del',
                                     render: record => (
                                         <Button onClick={() => {
+                                            var newOrData=orData.filter(item=>item.username!==record.username);
+                                            console.log(record);
+                                            var newRenderData=renderData.filter(item=>item.username!==record.username);
+
+                                            var newDa=orData.filter(item=>{
+                                                console.log(item);
+                                                return true;
+                                            })
+                                            console.log(newOrData);
+                                            console.log(newRenderData);
+
                                             this.setState({
-                                                orData: orData.filter(item => item.id !== record.id),
+                                                renderData:newRenderData,
+                                                orData: newOrData,
                                                 delData:record.username,
                                             }, () => {
                                                 this.deleteData();

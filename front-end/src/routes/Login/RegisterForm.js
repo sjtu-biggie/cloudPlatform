@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react/index'
 import { calculateWidth } from '../../utils/utils'
 import PromptBox from '../../components/PromptBox'
 import {values} from "mobx";
+import input from "eslint-plugin-jsx-a11y/lib/util/implicitRoles/input";
 
 
 @inject('appStore') @observer @Form.create()
@@ -14,36 +15,42 @@ class RegisterForm extends React.Component {
     this.state = {
       focusItem: -1,
       isPhone:false,
+      to:'',
     };
 
-    this.sendVeriCode=(to)=>{
-      console.log(values.registerEmail);
-      var url=this.state.isPhone?'http://106.13.209.140:8000/sendMessage':'http://106.13.209.140:8000/sendEmail';
-      console.log(url);
-      console.log(to);
-      axios({
-        method:'POST',
-        url:url,
-        params:{
-          to:to,
-        }
-      }).then(msg=>{
-        console.log(msg.data)
-        window.localStorage.setItem("veriCode",msg.data);
-      }).catch(err=>{
-        console.log(err);
-      })
-    };
   }
 
+  handleGetTo=(event)=>{
 
+    this.setState({
+      to:event.target.value,
+      focusItem:-1
+    })
+  };
+
+
+  sendVeriCode=()=>{
+    console.log(this.state.to);
+    var url=this.state.isPhone?'http://106.13.209.140:8000/sendMessage':'http://106.13.209.140:8000/sendEmail';
+    axios({
+      method:'POST',
+      url:url,
+      params:{
+        to:this.state.to,
+      }
+    }).then(msg=>{
+      console.log(msg.data)
+      window.localStorage.setItem("veriCode",msg.data);
+    }).catch(err=>{
+      console.log(err);
+    })
+  };
 
   registerSubmit = async (e) => {
     e.preventDefault();
     this.setState({
       focusItem: -1
     });
-
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // const users = this.props.appStore.users;
@@ -61,7 +68,10 @@ class RegisterForm extends React.Component {
         // if (values.===window.localStorage.getItem("veriCode")){  }
 
           // console.log(values.registerVeriCode)
-
+        if (values.registerVeriCode!=window.localStorage.getItem("veriCode")){
+          alert("验证码错误");
+          return null;
+        }
           const obj =  {
             username: values.registerUsername,
             password: values.registerPassword,
@@ -165,8 +175,9 @@ class RegisterForm extends React.Component {
               ]
             })(
               <Input
-                onFocus={() => this.setState({focusItem: 1})}
-                onBlur={() => this.setState({focusItem: -1})}
+                onFocus={() =>
+                {this.setState({focusItem: 1})}}
+                onBlur={() => {this.setState({focusItem: -1})}}
                 type='password'
                 maxLength={16}
                 placeholder='密码'
@@ -209,8 +220,11 @@ class RegisterForm extends React.Component {
               ]
             })(
                 <Input
+                    value={this.state.to}
                     onFocus={() => this.setState({focusItem: 3})}
-                    onBlur={() => this.setState({focusItem: -1})}
+                    onBlur={this.handleGetTo
+                      // this.setState({focusItem: -1});
+                    }
                     maxLength={20}
                     placeholder='邮箱'
                     addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 3 ? styles.focus : {}}/>}/>
@@ -227,8 +241,9 @@ class RegisterForm extends React.Component {
               ]
             })(
                 <Input
+                    value={this.state.to}
                     onFocus={() => this.setState({focusItem: 5})}
-                    onBlur={() => this.setState({focusItem: -1})}
+                    onBlur={this.handleGetTo}
                     maxLength={16}
                     placeholder='手机号'
                     addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 5 ? styles.focus : {}}/>}/>
@@ -264,7 +279,8 @@ class RegisterForm extends React.Component {
             </Row>
           <Row className="bottom">
             <Col span={6}>
-              <span className='registerBtn' onClick={this.sendVeriCode("hfaks")}>发送验证码</span>
+              {/*<span className='registerBtn' onClick={()=>{this.sendVeriCode("1921209391@qq.com")}}>发送验证码</span>*/}
+              <span className='registerBtn' onClick={()=>{this.sendVeriCode()}}>发送验证码</span>
             </Col>
               <Col span={6}>
                 <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>

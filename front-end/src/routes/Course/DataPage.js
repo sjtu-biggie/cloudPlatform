@@ -64,12 +64,12 @@ class DataPage extends React.Component {
       })
     })
   };
-
+//TODO:add student info into rankData
   render=()=> {
     const {size, bordered, loading, data2, loadingMore} = this.state
     return (
       <div>
-        <RankData homework={this.state.homework}/>
+        <RankData/>
 
       </div>
 

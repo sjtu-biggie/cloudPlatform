@@ -6,6 +6,7 @@ import com.cloud.course.dto.WholeCourse;
 import com.cloud.course.entity.Course;
 import com.cloud.course.entity.CourseBulletin;
 import com.cloud.course.entity.Notification;
+import com.cloud.course.entity.StudentCourseStat;
 import com.cloud.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -67,6 +68,11 @@ public class CourseController {
         System.out.println("note deleted");
         String id = params.get("notificationId");
         courseService.deleteNote(id);
+    }
+
+    @GetMapping(path = "/course/getRank")
+    public StudentCourseStat getRank(@RequestParam("courseId") String courseId , @RequestParam("userId") String userId) {
+        return courseService.getRank(courseId,userId);
     }
 
     @GetMapping(path = "/course/getPageBulletin")

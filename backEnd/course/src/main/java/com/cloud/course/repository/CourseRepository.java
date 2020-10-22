@@ -36,4 +36,9 @@ public interface CourseRepository extends CrudRepository<Course,Integer> {
 
     Page<Course> findAll(Pageable p);
 
+    @Query(nativeQuery = true,value="select count(*) from student_course where grade >= (select grade from student_course where user_id=?2 and course_id=?1) and course_id=?1")
+    Integer getRank(String courseId, String userId);
+
+    @Query(nativeQuery = true,value="select count(*) from student_course where course_id=?1")
+    int getCourseStudentNum(String courseId);
 }

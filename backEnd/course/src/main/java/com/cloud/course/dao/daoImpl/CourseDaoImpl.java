@@ -169,4 +169,12 @@ public class CourseDaoImpl implements CourseDao {
     public Page<CourseBulletin> getPageBulletin(int courseId, Pageable p){
         return courseBulletinRepository.findAllByCourseId(courseId,p);
     }
+    @Override
+    public Integer getRank(String courseId, String userId){
+        return courseRepository.getRank(courseId,userId);
+    }
+    @Override
+    public int getCourseStudent(String courseId){
+        return courseRepository.getCourseStudentNum(courseId);
+    }
 }

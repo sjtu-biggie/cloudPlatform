@@ -47,4 +47,8 @@ public interface CourseDao {
     List<WholeCourse> getPageCourses(Pageable p);
 
     Notification getNoteById(String id);
+
+    Integer getRank(String courseId, String userId);
+
+    int getCourseStudent(String courseId);
 }

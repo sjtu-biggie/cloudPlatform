@@ -182,4 +182,10 @@ public class CourseServiceImpl implements CourseService {
             courseDao.register(courseId,student.getString("username"),join_date,student.getString("nickname"),student.getString("sid"),student.getString("theClass"));
         }
     }
+    @Override
+    public StudentCourseStat getRank(String courseId, String userId){
+        int rank = courseDao.getRank(courseId,userId);
+        int altogether = courseDao.getCourseStudent(courseId);
+        return new StudentCourseStat(rank,altogether);
+    }
 }

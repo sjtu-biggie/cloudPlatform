@@ -4,19 +4,46 @@ import { Form, Input, message,Row,Col } from 'antd'
 import { inject, observer } from 'mobx-react/index'
 import { calculateWidth } from '../../utils/utils'
 import PromptBox from '../../components/PromptBox'
+import {values} from "mobx";
 
 
 @inject('appStore') @observer @Form.create()
 class RegisterForm extends React.Component {
-  state = {
-    focusItem: -1,
-    isPhone:false,
-  };
+  constructor(props) {
+    super();
+    this.state = {
+      focusItem: -1,
+      isPhone:false,
+    };
+
+    this.sendVeriCode=(to)=>{
+      console.log(values.registerEmail);
+      var url=this.state.isPhone?'http://106.13.209.140:8000/sendMessage':'http://106.13.209.140:8000/sendEmail';
+      console.log(url);
+      console.log(to);
+      axios({
+        method:'POST',
+        url:url,
+        params:{
+          to:to,
+        }
+      }).then(msg=>{
+        console.log(msg.data)
+        window.localStorage.setItem("veriCode",msg.data);
+      }).catch(err=>{
+        console.log(err);
+      })
+    };
+  }
+
+
+
   registerSubmit = async (e) => {
     e.preventDefault();
     this.setState({
       focusItem: -1
     });
+
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // const users = this.props.appStore.users;
@@ -31,17 +58,25 @@ class RegisterForm extends React.Component {
         //   });
         //   return
         // }
-        const obj =  {
-          username: values.registerUsername,
-          password: values.registerPassword,
-          sid:values.registerStudentNumber,
-          email:values.registerEmail,
-          telephone:values.registerPhoneNumber,
-        };
-        this.register(obj);
+        // if (values.===window.localStorage.getItem("veriCode")){  }
+
+          // console.log(values.registerVeriCode)
+
+          const obj =  {
+            username: values.registerUsername,
+            password: values.registerPassword,
+            sid:values.registerStudentNumber,
+            email:values.registerEmail,
+            telephone:values.registerPhoneNumber,
+          };
+          this.register(obj);
+
       }
     })
   };
+
+
+
   register = async (obj) => {
     let config = {
       method: 'post',
@@ -67,6 +102,7 @@ class RegisterForm extends React.Component {
       message.error(message1);
     }
   };
+
   gobackLogin = () => {
     let storage = window.localStorage;
     let tt = storage.getItem("user");
@@ -199,14 +235,37 @@ class RegisterForm extends React.Component {
             )}
           </Form.Item>}
 
+          <Form.Item help={getFieldError('registerVeriCode') && <PromptBox info={getFieldError('registerVeriCode')}
+                                                                              width={calculateWidth(getFieldError('registerVeriCode'))}/>}>
+            {getFieldDecorator('registerVeriCode', {
+              validateFirst: true,
+              rules: [
+                {required: true, message: '请输入验证码'},
+                {pattern: '^[^ ]+$', message: '不能输入空格'},
+              ]
+            })(
+                <Input
+                    onFocus={() => this.setState({focusItem: 5})}
+                    onBlur={() => this.setState({focusItem: -1})}
+                    maxLength={16}
+                    placeholder='验证码'
+                    addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 5 ? styles.focus : {}}/>}/>
+            )}
+          </Form.Item>
+
 
             <Row className="bottom">
-              <Col span={12}>
-                <input className='loginBtn' type="submit" value='注册'/>
+              <Col span={6}>
+                <input className='registerBtn' type="submit" value='注册'/>
               </Col>
               <Col span={6}>
                 <span className='registerBtn' onClick={()=>this.setState({isPhone:!this.state.isPhone})}>{this.state.isPhone===false?"手机注册":"邮箱注册"}</span>
               </Col>
+            </Row>
+          <Row className="bottom">
+            <Col span={6}>
+              <span className='registerBtn' onClick={this.sendVeriCode("hfaks")}>发送验证码</span>
+            </Col>
               <Col span={6}>
                 <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>
               </Col>

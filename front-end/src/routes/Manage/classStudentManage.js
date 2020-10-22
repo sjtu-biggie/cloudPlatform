@@ -3,32 +3,8 @@ import React, { Component, createRef } from 'react';
 import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
 import styles from './index.css';
 import {Router} from "react-router-dom";
+import axios from "axios";
 
-let index = 0;
-const getMockData = () => {
-    const result = {
-        id: index,
-        username: 'username' + index,
-        sid:'sid'+index,
-        telephone: 'telephone' + index,
-        nickname: 'nickname' + index,
-        type:'type'+index,
-        theGrade:'theGrade'+index,
-        email:"email"+index,
-
-    };
-    index += 1;
-    return result;
-};
-const getMockDatas = (num) => {
-    const data = [];
-    for (let i = 0; i < num; i++) {
-        data.push(getMockData());
-    }
-    return data;
-};
-const data1 = getMockDatas(10);
-const data2 = getMockDatas(100);
 
 const columns = [
     { title: '用户名', dataIndex: 'username' },
@@ -40,9 +16,6 @@ const columns = [
     { title: '邮箱', dataIndex: 'email' },
 
 ];
-
-
-
 
 columns.map(item => {
     item.sorter = (a, b) => {
@@ -84,16 +57,14 @@ export default class ClassManage extends Component {
         super(props);
         this.state = {
             search: '',
-            search2: '',
-            search3:'',
             delData:'',
-            orData: data1,
-            renderData: data1,
-            orData2: data2,
-            renderData2: data2,
+            orData: '',
+            renderData: '',
             modifyIds: [],
         };
         this.searchInput = createRef();
+
+
 
         columns.forEach(item => {
             const { dataIndex, title } = item;
@@ -150,39 +121,57 @@ export default class ClassManage extends Component {
                 renderData:getData
             });
         }
+        //
+        // this.getStudentsByClass
 
-        this.handleSearch2 = () => {
-            const { orData2, search2 } = this.state;
-            const filterData = orData2.filter(row => {
-                if (!search2) return true;
-                const keys = columns.map(item => item.dataIndex);
-                for (let i = 0; i < keys.length; i++) {
-                    if (String(row[keys[i]] || '').toLowerCase().includes(search2.toLowerCase())) return true;
-                }
-                return false;
-            });
-            this.setState({ renderData2: filterData });
-        };
-
-
-        this.handleSearch3 = () => {
-            const { orData2, search3 } = this.state;
-            const filterData = orData2.filter(row => {
-                if (!search3) return true;
-                const keys = columns.map(item => item.dataIndex);
-                for (let i = 0; i < keys.length; i++) {
-                    if (String(row[keys[i]] || '').toLowerCase()===search3.toLowerCase()) return true;
-                }
-                return false;
-            });
-            this.setState({ renderData2: filterData });
-        };
-
+        // this.handleSearch2 = () => {
+        //     const { orData2, search2 } = this.state;
+        //     const filterData = orData2.filter(row => {
+        //         if (!search2) return true;
+        //         const keys = columns.map(item => item.dataIndex);
+        //         for (let i = 0; i < keys.length; i++) {
+        //             if (String(row[keys[i]] || '').toLowerCase().includes(search2.toLowerCase())) return true;
+        //         }
+        //         return false;
+        //     });
+        //     this.setState({ renderData2: filterData });
+        // };
+        //
+        //
+        // this.handleSearch3 = () => {
+        //     const { orData2, search3 } = this.state;
+        //     const filterData = orData2.filter(row => {
+        //         if (!search3) return true;
+        //         const keys = columns.map(item => item.dataIndex);
+        //         for (let i = 0; i < keys.length; i++) {
+        //             if (String(row[keys[i]] || '').toLowerCase()===search3.toLowerCase()) return true;
+        //         }
+        //         return false;
+        //     });
+        //     this.setState({ renderData2: filterData });
+        // };
 
     }
 
+    componentWillMount(){
+        axios({
+            method:'POST',
+            url:'http://106.13.209.140:8000/getAllUsers'
+        }).then(msg=>{
+            console.log(msg);
+            this.setState({orData:msg.data});
+            this.setState({renderData:msg.data});
+        }).catch(err=>{
+            console.log(err);
+            console.log("提取数据失败");
+        })
+    }
+
+
+
+
     render() {
-        const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
+        const { orData, search, renderData, modifyIds } = this.state;
         return (
             <div className={styles.normal}>
                 <Card title={<div style={{textAlign:"center"}}>管理班级名单</div>} >
@@ -199,17 +188,6 @@ export default class ClassManage extends Component {
                             </Col>
                             <Col span={4} offset={10}>
                                 <div>
-                                    {/*<Upload action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>*/}
-                                    {/*    <Button>*/}
-                                    {/*        <Icon type="upload"/> 从excel中添加*/}
-                                    {/*    </Button>*/}
-                                    {/*</Upload>*/}
-                                    {/*<Row>*/}
-                                    {/*    <Col span={}>*/}
-                                    {/*        */}
-                                    {/*    </Col>*/}
-                                    {/*</Row>*/}
-
                                     <Dropdown  overlay={menu} placement="bottomCenter">
                                         <Button >班级选择</Button>
                                     </Dropdown>
@@ -221,36 +199,80 @@ export default class ClassManage extends Component {
                         </Row>
                     </Card>
                     <Card bordered={false} style={{ marginBottom: 10, height: 800 }}>
+
+                        {/*<Table*/}
+                        {/*    rowKey={'id'}*/}
+                        {/*    columns={[...columns.map(item => ({*/}
+                        {/*        ...item,*/}
+                        {/*        render: (text, record) => <EditText onChange={value => {*/}
+                        {/*            const newData = [...orData];*/}
+                        {/*            newData.find(col => col.username === record.username)[item.dataIndex] = value;*/}
+                        {/*            console.log(col.username);*/}
+                        {/*            console.log("Fsadf");*/}
+                        {/*            this.setState({ orData: newData });*/}
+                        {/*        }}>{text}</EditText>,*/}
+                        {/*    })), {*/}
+                        {/*        name: '操作',*/}
+                        {/*        key: 'del',*/}
+                        {/*        render: record => (*/}
+                        {/*            <Button onClick={() => {*/}
+                        {/*                this.setState({*/}
+                        {/*                    orData: orData.filter(item => item.id !== record.id),*/}
+                        {/*                }, () => {*/}
+                        {/*                    this.handleSearch();*/}
+                        {/*                    this.handleSearch2();*/}
+                        {/*                });*/}
+                        {/*            }}>删除</Button>),*/}
+                        {/*    }]}*/}
+                        {/*    dataSource={renderData}/>*/}
+
                         <Table
                             rowKey={'id'}
                             columns={[...columns.map(item => ({
                                 ...item,
                                 render: (text, record) => <EditText onChange={value => {
                                     const newData = [...orData];
-                                    newData.find(col => col.id === record.id)[item.dataIndex] = value;
-                                    this.setState({ orData: newData });
+                                    // newData.find(col => col.id === record.id)[item.dataIndex] = value;
+                                    record[item.dataIndex]=value;
+                                    this.updateUser(record);
+                                    this.setState({ orData: newData,renderData:newData });
                                 }}>{text}</EditText>,
                             })), {
                                 name: '操作',
                                 key: 'del',
                                 render: record => (
                                     <Button onClick={() => {
+                                        var newOrData=orData.filter(item=>item.username!==record.username);
+                                        console.log(record);
+                                        var newRenderData=renderData.filter(item=>item.username!==record.username);
+
+                                        var newDa=orData.filter(item=>{
+                                            console.log(item);
+                                            return true;
+                                        })
+                                        console.log(newOrData);
+                                        console.log(newRenderData);
+
                                         this.setState({
-                                            orData: orData.filter(item => item.id !== record.id),
-                                            orData2: [record, ...orData2],
+                                            renderData:newRenderData,
+                                            orData: newOrData,
+                                            delData:record.username,
                                         }, () => {
+                                            this.deleteData();
                                             this.handleSearch();
-                                            this.handleSearch2();
                                         });
                                     }}>删除</Button>),
                             }]}
                             dataSource={renderData}/>
+
+
                     </Card>
                 </Card>
             </div>
         );
     }
 }
+
 const menu = (
     <Menu>
         <Menu.Item>

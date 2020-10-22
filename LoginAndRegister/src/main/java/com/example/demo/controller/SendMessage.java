@@ -19,8 +19,8 @@ import java.util.Random;
 @CrossOrigin(origins = "*")
 @RestController
 public class SendMessage {
-    @RequestMapping(value = "sendMessage",method = RequestMethod.POST)
-    public String sendMessage(String telephone){
+    @RequestMapping(value = "/sendMessage",method = RequestMethod.POST)
+    public String sendMessage(String to){
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4G4H6Qdjm6tE3PW3bpL9", "e8Y5IUcTAG5wRlXD3OXMssePWug5Au");
         IAcsClient client = new DefaultAcsClient(profile);
 
@@ -30,11 +30,11 @@ public class SendMessage {
         request.setSysVersion("2017-05-25");
         request.setSysAction("SendSms");
         request.putQueryParameter("RegionId", "cn-hangzhou");
-        request.putQueryParameter("PhoneNumbers", telephone);
+        request.putQueryParameter("PhoneNumbers", to);
         request.putQueryParameter("SignName", "云作业平台");
         request.putQueryParameter("TemplateCode", "SMS_202823359");
         String code=getCode();
-        request.putQueryParameter("TemplateParam","{code:code}");
+        request.putQueryParameter("TemplateParam","{\"code\":\"code\"}");
         try {
             CommonResponse response = client.getCommonResponse(request);
             System.out.println(response.getData());
@@ -43,7 +43,6 @@ public class SendMessage {
         } catch (ClientException e) {
             e.printStackTrace();
         }
-
         return  code;
     }
 

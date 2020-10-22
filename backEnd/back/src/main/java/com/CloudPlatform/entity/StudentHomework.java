@@ -64,4 +64,9 @@ public class StudentHomework {
     @Transient
     @Column(name = "REMARKS")
     private String Remarks;
+
+    @Transient
+    private int finishHomework;
+    @Transient
+    private int handinRank;
 }

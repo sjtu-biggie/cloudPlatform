@@ -44,7 +44,7 @@ public class SendMessage {
             e.printStackTrace();
         }
 
-        return "短信已发送"+ code;
+        return  code;
     }
 
     private String getCode(){

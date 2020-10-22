@@ -12,7 +12,7 @@ class HomeworkCommit extends React.Component{
     state={
         title:"作业0",
         isCommit:false,
-};
+    };
 
     render(){
         const { editorState,contentState } = this.state;

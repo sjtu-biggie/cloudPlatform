@@ -4,6 +4,7 @@ import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, message,Uplo
 import styles from './index.css';
 import axios from 'axios'
 import * as XLSX from 'xlsx';
+import ExcelImport from "./excelImport";
 
 import {Router} from "react-router-dom";
 import Search from "antd/es/input/Search";
@@ -160,7 +161,8 @@ export default class StudentTable extends Component {
         const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds} = this.state;
 
         return (
-            <div className={styles.normal}>
+
+            <div className={styles.normal}>   <ExcelImport/>
                     <Card title={<div style={{textAlign:"center"}}>管理后台名单</div>} >
                         <Card className={styles.control} bordered={false} style={{ marginBottom: 10 }}>
                             <Row>
@@ -215,7 +217,9 @@ export default class StudentTable extends Component {
                                 dataSource={renderData}/>
                         </Card>
                     </Card>
+
             </div>
+
         );
     }
 }

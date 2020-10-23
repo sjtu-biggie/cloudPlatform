@@ -29,18 +29,7 @@ class PersonalCenter extends React.Component {
         })
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // const users = this.props.appStore.users
-                // // 检测用户名是否存在
-                // const result = users.find(item => item.username === values.registerUsername)
-                // if (result) {
-                //     this.props.form.setFields({
-                //         registerUsername: {
-                //             value: values.registerUsername,
-                //             errors: [new Error('用户名已存在')]
-                //         }
-                //     })
-                //     return
-                // }
+
                 const obj =  {
                     nickname: values.name,
                     email:values.Email,

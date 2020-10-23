@@ -155,7 +155,7 @@ class CoursePageDemo extends React.Component {
                 {this.state.role === 'teacher' ?
                     <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
                         <Row/>
-                        <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
+                        <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large'  onClick={() => {
                             this.setState({addHomework: true})
                         }}>创建新的一次作业</Button>
 
@@ -176,7 +176,7 @@ class CoursePageDemo extends React.Component {
                     </Card> : null}
 
                 {
-                    this.state.addHomework ? <FormDemo1 datas={this.state.type}/> :
+                    this.state.addHomework ? <FormDemo1 datas={this.state.type} course ={this.state.course}/> :
                         <HomeworkList homeworkList={this.state.displayHomeworkList} delete={!this.state.deleteHomework}/>
                 }
 

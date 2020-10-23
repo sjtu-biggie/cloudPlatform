@@ -75,4 +75,5 @@ public class RegisterController {
         userMapper.updateUser(user);
         return  "更新成功";
     }
+
 }

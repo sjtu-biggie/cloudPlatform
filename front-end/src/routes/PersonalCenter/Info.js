@@ -17,7 +17,8 @@ class PersonalCenter extends React.Component {
             sid:'sid',
             telephone:'tele',
             theClass:'class',
-            theGrade:'grade'
+            theGrade:'grade',
+            iconBase64:0,
         }
     }
 
@@ -46,7 +47,7 @@ class PersonalCenter extends React.Component {
                     telephone:values.Phonenumber,
                 };
 
-                console.log("obj:"+obj.nickname+":"+obj.email+":"+obj.telephone);
+                console.log(obj);
                 this.updateUserInfo(obj);
 
                 message.success('提交成功')
@@ -61,7 +62,7 @@ class PersonalCenter extends React.Component {
             data :{
                 'username':username
             },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            url: 'http://106.13.209.140:8000/getUserMessageAndIcon',
             headers: {
                 withCredentials: true,
             }
@@ -77,7 +78,6 @@ class PersonalCenter extends React.Component {
         this.setState({
             userInfo:user
         })
-        console.log("ui:"+this.state.userInfo.username);
 
     };
 
@@ -148,7 +148,7 @@ class PersonalCenter extends React.Component {
                 <Card bordered={false} title='个人信息'>
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                         <Form.Item label = '头像' style={display2} {...formItemLayout} >
-                            <Avatar size={64} src =""/>
+                            <Avatar size={64} src ={this.state.userInfo.iconBase64}/>
                         </Form.Item>
 
                         <Form.Item label = '用户名' {...formItemLayout}>

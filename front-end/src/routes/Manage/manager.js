@@ -227,7 +227,6 @@ export default class StudentTable extends Component {
     render() {
         const { orData, search, renderData,} = this.state;
         return (
-
             <div className={styles.normal}>
                     <Card title={<div style={{textAlign:"center"}}>管理后台名单</div>} >
                         <Card className={styles.control} bordered={false} style={{ marginBottom: 10 }}>

@@ -8,41 +8,27 @@ import axios from "axios";
 let index = 0;
 const getMockData = () => {
     const result = {
-        username:'student',
-        id: index,
-        name: 'name' + index,
-        no: 'no.' + index,
-        cls: 'class' + index,
-        point: (Math.random()*100).toFixed(2),
+        nickname:'student',
+        sid: index,
+        theClass: 'class' + index,
+        grade: (Math.random()*100).toFixed(2),
     };
     index += 1;
     return result;
 };
 
-const getMockDatas = (num) => {
-    const data = [];
-    for (let i = 0; i < num; i++) {
-        data.push(getMockData());
-    }
-    return data;
-};
-
-
-const data1 = getMockDatas(10);
-const data2 = getMockDatas(100);
-
 
 const columns = [
-    { title: '姓名', dataIndex: 'name' },
-    { title: '学号', dataIndex: 'no' },
-    { title: '班级', dataIndex: 'cls' },
-    { title: '分数', dataIndex: 'point'},
+    { title: '姓名', dataIndex: 'nickname' },
+    { title: '学号', dataIndex: 'sid' },
+    { title: '班级', dataIndex: 'theClass' },
+    { title: '分数', dataIndex: 'grade'},
 ];
 
 const columns1=[
-    {title:'姓名',dataIndex:'name'},
-    {title:'学号',dataIndex:'no'},
-    {title:'班级',dataIndex:'cls'},
+    {title:'姓名',dataIndex:'nickname'},
+    {title:'学号',dataIndex:'sid'},
+    {title:'班级',dataIndex:'theClass'},
 ];
 
 
@@ -59,6 +45,16 @@ columns.map(item => {
     };
 });
 
+columns1.map(item=>{
+    item.sorter=(a,b)=>{
+        if(!isNaN(a[item.dataIndex])&&!isNan(b[item.dataIndex])){
+            return a[item.dataIndex]-b[item.dataIndex];
+        }
+        const aa=a[item.dataIndex]||'';
+        const bb=b[item.dataIndex]||'';
+        return String(aa).localeCompare(String(bb));
+    }
+})
 
 //编辑单元格使用
 class EditText extends Component {
@@ -96,11 +92,13 @@ export default class Manager extends Component {
             search: '',
             search2: '',
             search3:'',
-            orData: data1,
-            renderData: data1,
-            orData2: data2,
-            renderData2: data2,
+            orData: '',
+            renderData: '',
+            orData2: '',
+            renderData2: '',
             modifyIds: [],
+            courseId:'1',
+            sids:[],
         };
         this.searchInput = createRef();
 
@@ -141,6 +139,8 @@ export default class Manager extends Component {
 
         this.handleSearch = () => {
             const { orData, search } = this.state;
+            console.log(this.state.orData);
+            console.log(this.state.orData2);
             const filterData = orData.filter(row => {
                 if (!search) return true;
                 const keys = columns.map(item => item.dataIndex);
@@ -177,20 +177,50 @@ export default class Manager extends Component {
             });
             this.setState({ renderData2: filterData });
         };
+
+        this.registerClass=(students)=>{
+            axios({
+                method:'POST',
+                url:'http://106.13.209.140:8787/course/register',
+            })
+
+        }
     }
 
     componentDidMount() {
         axios({
             method:'GET',
-            url:'http://106.13.209.140:8787/course/getCourseById',
+            url:'http://106.13.209.140:8787/course/getCourseStudent',
             params:{
                 courseId:1
             }
         }).then(msg=>{
             console.log(msg.data)
+            this.setState({
+                orData:msg.data,
+                renderData:msg.data,
+            })
         }).catch(err=>{
             console.log(err)
         })
+
+        axios({
+            method:'POST',
+            url:'http://106.13.209.140:8000/getAllUsers'
+        }).then(msg=>{
+            console.log(msg.data);
+
+            this.setState({
+                orData2:msg.data,
+                renderData2:msg.data
+            })
+        }).catch(err=>{
+            console.log(err)
+        })
+
+        console.log(this.state.orData);
+        console.log(this.state.ordata2);
+
     }
 
 
@@ -249,15 +279,25 @@ export default class Manager extends Component {
                             <div className={styles.control}>
                                 <Button
                                     type={'primary'}
-                                    onClick={() => {
-                                        const selectData = orData2.filter(item => modifyIds.includes(item.id));
-                                        const notSelectData = orData2.filter(item => !modifyIds.includes(item.id));
+                                    onClick={item => {
+                                        var newData=[...orData2];
+                                        console.log(orData2);
+                                        console.log(this.state.modifyIds)
+                                        const selectData=newData.filter(item => {
+                                            console.log(item);
+                                           if ( modifyIds.includes(item.sid))
+                                           {return item;}
+                                        return null;});
+                                        const notSelectData = newData.filter(item => !modifyIds.includes(item.sid));
+                                        console.log(selectData);
+                                        console.log(notSelectData);
                                         this.setState({
                                             orData: [...selectData, ...orData],
                                             orData2: notSelectData,
                                         }, () => {
                                             this.handleSearch();
                                             this.handleSearch2();
+
                                         });
                                     }}
                                 >添加到上课表</Button>
@@ -278,7 +318,7 @@ export default class Manager extends Component {
                         </Card>
                         <Card bordered={false} style={{ marginBottom: 10, height: 770 }}>
                             <Table
-                                rowKey={'id'}
+                                rowKey={'sid'}
                                 columns={columns1}
                                 dataSource={renderData2}
                                 rowSelection={{

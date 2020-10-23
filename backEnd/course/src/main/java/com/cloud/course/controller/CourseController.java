@@ -108,9 +108,9 @@ public class CourseController {
 
     @PostMapping(path = "/course/addCourse")
     //note that the modification will also come into this controller
-    public void addCourse(@RequestBody JSONObject object) {
+    public Integer addCourse(@RequestBody JSONObject object) {
         System.out.println("course added");
-        courseService.addcourse(object);
+        return courseService.addcourse(object);
     }
 
     @PostMapping(path = "/course/register")

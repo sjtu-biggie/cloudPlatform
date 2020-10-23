@@ -42,7 +42,7 @@ public class CourseServiceImpl implements CourseService {
         courseDao.deleteById(id);
     }
     @Override
-    public void addcourse(JSONObject object){
+    public Integer addcourse(JSONObject object){
         String name = object.getString("courseName");
         String userId = object.getString("userId");
         String _start_date = object.getString("startDate");
@@ -72,15 +72,19 @@ public class CourseServiceImpl implements CourseService {
         String modify = object.getString("modify");
         Course course = new Course(userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
         CourseInfo courseInfo;
+        Integer _id = 0;
         if(modify!=null&&!modify.equals("")){
             int id = parseInt(object.getString("id"));
+            _id = id;
             courseInfo = new CourseInfo(id,detail,introduction,syllabus,textbook);
             course = new Course(id,userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
         }else{
-            courseInfo = new CourseInfo(courseDao.findMaxId(),detail,introduction,syllabus,textbook);
+            _id= courseDao.findMaxId();
+            courseInfo = new CourseInfo(_id,detail,introduction,syllabus,textbook);
         }
         courseDao.save(course);
         courseDao.saveInfo(courseInfo);
+        return _id;
     }
     @Override
     public Page<CourseBulletin> getPageBulletin(String id, Pageable p){

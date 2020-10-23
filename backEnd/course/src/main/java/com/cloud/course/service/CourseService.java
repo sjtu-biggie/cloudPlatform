@@ -21,7 +21,7 @@ public interface CourseService {
 
     void deleteById(String id);
 
-    void addcourse(JSONObject object);
+    Integer addcourse(JSONObject object);
 
     List<CourseBulletin> getBulletin(String id);
 

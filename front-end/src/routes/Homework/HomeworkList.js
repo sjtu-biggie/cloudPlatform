@@ -232,7 +232,7 @@ class HomeworkList extends React.Component {
                                 this.setState({
                                     homeworkList: this.state.homeworkList
                                 });
-                            }}>按时间升序</Button>
+                            }}>按开始时间升序</Button>
                             <Button style={{marginLeft:'30px'}} onClick={() => {
                                 this.state.homeworkList.sort(function(a,b){
                                     return Date.parse(b.startTime) - Date.parse(a.startTime)
@@ -240,7 +240,23 @@ class HomeworkList extends React.Component {
                                 this.setState({
                                     homeworkList: this.state.homeworkList
                                 });
-                            }}>按时间降序</Button>
+                            }}>按开始时间降序</Button>
+                            <Button style={{marginLeft:'30px'}} onClick={() => {
+                                this.state.homeworkList.sort(function(a,b){
+                                    return Date.parse(a.endTime) - Date.parse(b.endTime)
+                                });
+                                this.setState({
+                                    homeworkList: this.state.homeworkList
+                                });
+                            }}>按结束时间升序</Button>
+                            <Button style={{marginLeft:'30px'}} onClick={() => {
+                                this.state.homeworkList.sort(function(a,b){
+                                    return Date.parse(b.endTime) - Date.parse(a.endTime)
+                                });
+                                this.setState({
+                                    homeworkList: this.state.homeworkList
+                                });
+                            }}>按结束时间降序</Button>
                         </div>
                         <List dataSource={this.state.homeworkList}
                               itemLayout='vertical'

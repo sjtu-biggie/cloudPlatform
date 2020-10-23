@@ -17,7 +17,6 @@ const getMockData = () => {
     return result;
 };
 
-
 const columns = [
     { title: '姓名', dataIndex: 'nickname' },
     { title: '学号', dataIndex: 'sid' },
@@ -30,8 +29,6 @@ const columns1=[
     {title:'学号',dataIndex:'sid'},
     {title:'班级',dataIndex:'theClass'},
 ];
-
-
 
 //排序使用
 columns.map(item => {
@@ -81,8 +78,6 @@ class EditText extends Component {
     }
 };
 
-
-
 export default class Manager extends Component {
     //props里有 courseId(课程id),class(课程班级),newCourse(为true时是刚创建的课程，不能访问学生数据)
     //左边已上课学生应从后端拿到存在state里，右边未上课学生应先拿到班级所有学生，再减去已上课学生
@@ -98,7 +93,7 @@ export default class Manager extends Component {
             renderData2: '',
             modifyIds: [],
             courseId:'1',
-            sids:[],
+            sids:["518021910814"],
         };
         this.searchInput = createRef();
 
@@ -139,8 +134,7 @@ export default class Manager extends Component {
 
         this.handleSearch = () => {
             const { orData, search } = this.state;
-            console.log(this.state.orData);
-            console.log(this.state.orData2);
+            console.log(this.state.sids);
             const filterData = orData.filter(row => {
                 if (!search) return true;
                 const keys = columns.map(item => item.dataIndex);
@@ -182,9 +176,36 @@ export default class Manager extends Component {
             axios({
                 method:'POST',
                 url:'http://106.13.209.140:8787/course/register',
+                data:{
+                    "courseId":this.state.courseId,
+                    "student":students,
+                    "joinDate":"2020-10-01 12:12:12"
+                }
+            }).then(msg=>{
+                console.log(msg)
+            }).catch(err=>{
+                console.log(err)
+            })
+            console.log("注册学生");
+        };
+
+        this.deleteRegister=()=>{
+            console.log("调用从班级删除学生")
+            axios({
+                method:'POST',
+                url:'http://106.13.209.140:8787/course/deleteRegister',
+                data:{
+                    "courseId":this.state.courseId,
+                    "sids":["12","321"]
+                }
+            }).then(msg=>{
+                console.log(msg)
+            }).catch(err=>{
+                console.log(err)
             })
 
         }
+
     }
 
     componentDidMount() {
@@ -196,30 +217,40 @@ export default class Manager extends Component {
             }
         }).then(msg=>{
             console.log(msg.data)
+            console.log(msg.data.length)
+            var len=msg.data.lenth;
+            var mosid=[];
+            msg.data.map(item=>{
+                // console.log(item.sid);
+                // mosid.push(item.sid);
+                // return item;
+            })
+            console.log(mosid);
             this.setState({
                 orData:msg.data,
                 renderData:msg.data,
+                // sids:[...this.state.sids,...mosid],
             })
         }).catch(err=>{
             console.log(err)
         })
+
 
         axios({
             method:'POST',
             url:'http://106.13.209.140:8000/getAllUsers'
         }).then(msg=>{
             console.log(msg.data);
-
+            var newData=msg.data;
+            var tryData=newData.filter(item=>!this.state.sids.includes(item.sid));
+            console.log(tryData);
             this.setState({
-                orData2:msg.data,
-                renderData2:msg.data
+                orData2:tryData,
+                renderData2:tryData,
             })
         }).catch(err=>{
             console.log(err)
         })
-
-        console.log(this.state.orData);
-        console.log(this.state.ordata2);
 
     }
 
@@ -246,13 +277,13 @@ export default class Manager extends Component {
                         </Card>
                         <Card bordered={false} style={{ marginBottom: 10, height: 770 }}>
                             <Table
-                                rowKey={'id'}
+                                rowKey={'sid'}
                                 columns={[...columns.map((item,idx) => ({
                                     ...item,
                                     render: (text, record) => {
                                         return(idx!==0||this.props.newCourse?<EditText onChange={value => {
                                         const newData = [...orData];
-                                        newData.find(col => col.id === record.id)[item.dataIndex] = value;
+                                        newData.find(col => col.sid === record.sid)[item.dataIndex] = value;
                                         this.setState({ orData: newData });
                                     }}>{text}</EditText>:<a href={"/home/manage/data/"+record.username+"/"+this.props.courseId+"/"}>{text}</a>)},
                                 })), {
@@ -260,12 +291,15 @@ export default class Manager extends Component {
                                     key: 'del',
                                     render: record => (
                                         <a size={"small"} onClick={() => {
+                                            // console.log(item.sid);
+                                            console.log(record);
                                             this.setState({
-                                                orData: orData.filter(item => item.id !== record.id),
+                                                orData: orData.filter(item => item.sid !== record.sid),
                                                 orData2: [record, ...orData2],
                                             }, () => {
                                                 this.handleSearch();
                                                 this.handleSearch2();
+                                                this.deleteRegister();
                                             });
                                         }}>删除</a>),
                                 }]}
@@ -297,6 +331,7 @@ export default class Manager extends Component {
                                         }, () => {
                                             this.handleSearch();
                                             this.handleSearch2();
+                                            this.registerClass(selectData);
 
                                         });
                                     }}

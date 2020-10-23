@@ -3,6 +3,7 @@ import React, { Component, createRef } from 'react';
 import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
 import styles from './index.css';
 import {Router} from "react-router-dom";
+import  {axios} from 'axios'
 
 let index = 0;
 const getMockData = () => {
@@ -175,9 +176,15 @@ export default class Manager extends Component {
         };
     }
 
+    // componentDidMount() {
+    //     axios({
+    //         method:'POST',
+    //
+    //     })
+    // }
 
 
-        render=()=> {
+    render=()=> {
         const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
         return (
             <div className={styles.normal}>

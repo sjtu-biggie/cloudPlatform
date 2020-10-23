@@ -2,26 +2,85 @@ import React from 'react'
 import {Card, Button, List, Icon,} from 'antd'
 import axios from 'axios'
 
+const deathHomework = [];
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'数学',
+        grade:'七年级上',
+        title: `七年级上数学作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100',
+        range:['八年级三班','八年级二班']
 
-const test = [
-    {
-        id:'1',
-        handinTime:'2020-10-01 16:12:12'
-    },
-    {
-        id:'2',
-        handinTime:'2020-10-03 16:12:12'
-    },
-    {
-        id:'3',
-        handinTime:'2020-10-02 16:12:12'
-    },
-    {
-        id:'4',
-        handinTime:'2020-10-04 16:12:12'
-    },
+    })
+}
 
-];
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'语文',
+        grade:'七年级上',
+        title: `七年级上语文作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100',
+        range:['八年级三班','八年级二班']
+
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'英语',
+        grade:'七年级上',
+        title: `七年级上英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100',
+        range:['八年级三班','八年级二班']
+
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        type:'英语',
+        grade:'八年级上',
+        title: `八年级上英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        accessmentalgorithms:'0',
+        score: '100',
+        range:['八年级三班','八年级二班']
+
+    })
+}
+
+for(let i=0;i<3;i++){
+    deathHomework.push({
+        subject:'英语',
+        grade:'八年级上',
+        title: `八年级下英语作业 ${i}`,
+        content: '同学们记得认真完成按时提交',
+        startTime:'2020-10-11 12:12:12',
+        handinTime: null,
+        endTime:'2020-10-12 12:12:13',
+        score: '100',
+        range:['八年级三班','八年级二班']
+
+    })
+}
 
 const IconText = ({ type, text }) => (
     <span>
@@ -37,18 +96,26 @@ class HomeworkList extends React.Component {
         bordered: true,
         delete: true,
         role: 'teacher',
-        homeworkList: test,
+        homeworkList: deathHomework,
         allAmount: 40,
-        t: test
     };
 
     componentWillMount() {
+        console.log(this.props.homeworkList);
         this.setState({
             homeworkList:this.props.homeworkList,
             delete:this.props.delete
         });
         this.getData2();
     }
+
+    // formatTime = (list)=>{
+    //     let l = new Array.from(list);
+    //     l.map(item=>{
+    //         item.startTime = this.format(item.startTime);
+    //         item.endTime = this.format(item.endTime);
+    //     })
+    // }
 
     add0=(m)=>{return m<10?'0'+m:m };
 
@@ -126,6 +193,11 @@ class HomeworkList extends React.Component {
     };
 
     componentWillReceiveProps(nextProps) {
+        nextProps.homeworkList.map(item=>{
+            item.startTime = this.format(item.startTime);
+            item.endTime = this.format(item.endTime);
+        });
+        console.log(nextProps.homeworkList);
         this.setState({
             homeworkList:nextProps.homeworkList,
             delete:nextProps.delete
@@ -154,15 +226,37 @@ class HomeworkList extends React.Component {
                         <div>
                             <span style={{height:'15px'}}>所有作业</span>
                             <Button style={{marginLeft:'30px'}} onClick={() => {
-                                this.state.t.sort(function(a,b){
-                                    return Date.parse(a.handinTime) - Date.parse(b.handinTime)
+                                this.state.homeworkList.sort(function(a,b){
+                                    return Date.parse(a.startTime) - Date.parse(b.startTime)
                                 });
-                            }}>按时间升序</Button>
+                                this.setState({
+                                    homeworkList: this.state.homeworkList
+                                });
+                            }}>按开始时间升序</Button>
                             <Button style={{marginLeft:'30px'}} onClick={() => {
-                                this.state.t.sort(function(a,b){
-                                    return Date.parse(b.handinTime) - Date.parse(a.handinTime)
+                                this.state.homeworkList.sort(function(a,b){
+                                    return Date.parse(b.startTime) - Date.parse(a.startTime)
                                 });
-                            }}>按时间降序</Button>
+                                this.setState({
+                                    homeworkList: this.state.homeworkList
+                                });
+                            }}>按开始时间降序</Button>
+                            <Button style={{marginLeft:'30px'}} onClick={() => {
+                                this.state.homeworkList.sort(function(a,b){
+                                    return Date.parse(a.endTime) - Date.parse(b.endTime)
+                                });
+                                this.setState({
+                                    homeworkList: this.state.homeworkList
+                                });
+                            }}>按结束时间升序</Button>
+                            <Button style={{marginLeft:'30px'}} onClick={() => {
+                                this.state.homeworkList.sort(function(a,b){
+                                    return Date.parse(b.endTime) - Date.parse(a.endTime)
+                                });
+                                this.setState({
+                                    homeworkList: this.state.homeworkList
+                                });
+                            }}>按结束时间降序</Button>
                         </div>
                         <List dataSource={this.state.homeworkList}
                               itemLayout='vertical'

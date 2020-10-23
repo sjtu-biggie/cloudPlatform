@@ -33,11 +33,24 @@ const options2 = [
 class Assign extends React.Component {
     state = {
         disabled: false,
-        homework: null,
+        homework: {
+            courseId:0,
+            homeworkId:0,
+            teacherId:0,
+            endTime:0,
+            startTime:0,
+            handinAmount:0,
+            title:0,
+            range:0,
+            type:0,
+            content:0,
+            answer:0
+        },
         userInfo: null,
         role: null,
         content: null,
-        answer:null
+        answer:null,
+        courseId:null
     };
 
     add0=(m)=>{return m<10?'0'+m:m };
@@ -58,6 +71,7 @@ class Assign extends React.Component {
         let storage = window.localStorage;
         let username = storage.getItem("username");
         this.getUserInfo(username);
+
     };
 
     getUserInfo = async (username)=>{
@@ -134,11 +148,16 @@ class Assign extends React.Component {
                 values.startDate = this.format(values.startDate);
                 values.endDate = this.format(values.endDate);
                 if (values.startDate > values.endDate){
-                    console.log(values);
                     message.error('开始时间不能晚于结束时间');
                 }
                 else{
-                    this.setState({homework:values});
+                    console.log(this.props);
+                    values.courseId = this.props.course.course.id;
+                    values.content = this.state.content;
+                    values.answer = this.state.answer;
+                    this.setState({
+                        homework:values,
+                    });
                     message.success('提交成功');
                     console.log(values);
                 }
@@ -147,6 +166,10 @@ class Assign extends React.Component {
     }
 
     componentWillUnmount() {
+
+        this.setState({
+            courseId: this.props.course.id
+        })
         this.getData2();
     }
 

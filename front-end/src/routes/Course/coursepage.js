@@ -36,7 +36,6 @@ import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import FormDemo1 from '../../routes/Homework/Assign';
 import HomeworkList from '../Homework/HomeworkList';
 import AddBulletin from './AddBulletin'
-import {Axis, Chart, Geom, Tooltip} from "bizcharts";
 import StudenTable from "../Manage/studentTable";
 import TextArea from "antd/es/input/TextArea";
 import Search from "antd/es/input/Search";
@@ -46,7 +45,7 @@ import RankData from "./RankData";
 @Form.create()
 class CoursePageDemo extends React.Component {
     state = {
-        totalPages:3,
+        totalPages: 3,
         //type indicate which content to render
         //parameter is detailed content of one type
         type: 1,
@@ -89,6 +88,7 @@ class CoursePageDemo extends React.Component {
         });
 
     }
+
     getCourse = async (courseId, role, username) => {
 
         let config = {
@@ -113,9 +113,8 @@ class CoursePageDemo extends React.Component {
         } else {
             this.setState({role: "watcher"})
         }
-        course.course.startDate = this.format(course.course.startDate)
-        course.course.endDate = this.format(course.course.endDate)
-
+        course.course.startDate = this.format(course.course.startDate);
+        course.course.endDate = this.format(course.course.endDate);
         this.setState({
             course: course
         });
@@ -128,7 +127,7 @@ class CoursePageDemo extends React.Component {
         let username = storage.getItem("username");
         this.getUserInfo(username);
     };
-    getHomeworkAllByCourse = async (courseId)=>{
+    getHomeworkAllByCourse = async (courseId) => {
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/getTeacherHomeworkAll?courseId=' + courseId,
@@ -146,46 +145,50 @@ class CoursePageDemo extends React.Component {
             });
         console.log(hw);
         this.setState({
-            displayHomeworkList:hw,
+            displayHomeworkList: hw,
         })
     };
     homeworkRender = () => {
         //TODO:传参给FormDemo1
         return (
             <div>
-                <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
-                    <Row/>
-                    <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
-                        this.setState({addHomework: true})
-                    }}>创建新的一次作业</Button>
+                {this.state.role === 'teacher' ?
+                    <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
+                        <Row/>
+                        <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
+                            this.setState({addHomework: true})
+                        }}>创建新的一次作业</Button>
 
-                    <Button onClick={()=>{this.setState({addHomework:false,deleteHomework:true})}} style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
-                            size='large'>删除现有一次作业</Button>
-                    <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
-                        this.setState({
-                            addHomework: false,
-                            deleteHomework: false,
-                            addBulletin: false,
-                            deleteBulletin: false,
-                            modifyCourse: false,
-                            modifySyllabus: false
-                        })
-                    }}>返回</Button>
-                </Card>
+                        <Button onClick={() => {
+                            this.setState({addHomework: false, deleteHomework: true})
+                        }} style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
+                                size='large'>删除现有一次作业</Button>
+                        <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
+                            this.setState({
+                                addHomework: false,
+                                deleteHomework: false,
+                                addBulletin: false,
+                                deleteBulletin: false,
+                                modifyCourse: false,
+                                modifySyllabus: false
+                            })
+                        }}>返回</Button>
+                    </Card> : null}
+
                 {
                     this.state.addHomework ? <FormDemo1 datas={this.state.type}/> :
-                        <HomeworkList homeworkList={this.state.displayHomeworkList} delete={this.state.deleteHomework}/>
+                        <HomeworkList homeworkList={this.state.displayHomeworkList} delete={!this.state.deleteHomework}/>
                 }
 
             </div>
         )
 
     };
-    deleteBulletin=async (index)=>{
+    deleteBulletin = async (index) => {
         let config = {
             method: 'post',
-            data:{
-                bulletinId:this.state.bulletins[index].bulletinId
+            data: {
+                bulletinId: this.state.bulletins[index].bulletinId
             },
             url: 'http://106.13.209.140:8787/course/deleteBulletin',
             headers: {
@@ -199,16 +202,16 @@ class CoursePageDemo extends React.Component {
                 console.log(error);
             });
         let modifyBulletins = this.state.bulletins;
-        modifyBulletins.splice(index,1);
+        modifyBulletins.splice(index, 1);
         this.setState({
-            bulletins:modifyBulletins
+            bulletins: modifyBulletins
         })
     };
     getPageBulletin = async (page, pageSize) => {
         let config = {
             method: 'get',
             url: 'http://106.13.209.140:8787/course/getPageBulletin?courseId='
-                + this.state.course.course.id + "&page="+(page-1)+"&size="+pageSize,
+                + this.state.course.course.id + "&page=" + (page - 1) + "&size=" + pageSize,
             headers: {
                 withCredentials: true,
             }
@@ -221,12 +224,12 @@ class CoursePageDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        for(let bulletin of data.content){
+        for (let bulletin of data.content) {
             bulletin.publishDate = this.format(bulletin.publishDate);
         }
         this.setState({
-            bulletins:data.content,
-            totalPages:data.totalPages
+            bulletins: data.content,
+            totalPages: data.totalPages
         })
     };
     mainRender = () => {
@@ -312,7 +315,7 @@ class CoursePageDemo extends React.Component {
 
         )
     };
-    handleSubmit = async(e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (err) {
@@ -330,7 +333,7 @@ class CoursePageDemo extends React.Component {
                 let courseJson = modifiedCourse.course;
                 courseJson.detail = modifiedCourse.courseInfo.detail;
                 courseJson.introduction = modifiedCourse.courseInfo.introduction;
-                courseJson.syllabus= modifiedCourse.courseInfo.syllabus;
+                courseJson.syllabus = modifiedCourse.courseInfo.syllabus;
                 courseJson.textbook = modifiedCourse.courseInfo.textbook;
                 courseJson.modify = true;
                 console.log(courseJson);
@@ -416,7 +419,7 @@ class CoursePageDemo extends React.Component {
         modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
-    modifiedSyllabus =() => {
+    modifiedSyllabus = () => {
         let i = 1;
         let chapterList = [];
         while (1) {
@@ -428,7 +431,7 @@ class CoursePageDemo extends React.Component {
         }
         return (<div>
             <Card bordered={false} className='card-item' title="设计课程大纲">
-                <Collapse  onChange={() => {
+                <Collapse onChange={() => {
                     this.setState({addChapter: false, addContent: false})
                 }}>{chapterList.map((value, index) => {
                     return (<Collapse.Panel header={value.title} key={index}>
@@ -489,7 +492,7 @@ class CoursePageDemo extends React.Component {
                             let courseJson = this.state.course.course;
                             courseJson.detail = this.state.course.courseInfo.detail;
                             courseJson.introduction = this.state.course.courseInfo.introduction;
-                            courseJson.syllabus= this.state.course.courseInfo.syllabus;
+                            courseJson.syllabus = this.state.course.courseInfo.syllabus;
                             courseJson.textbook = this.state.course.courseInfo.textbook;
                             courseJson.modify = true;
                             console.log(courseJson);
@@ -711,22 +714,26 @@ class CoursePageDemo extends React.Component {
                         this.setState({addBulletin: false, deleteBulletin: false,})
                     }}>返回</Button>
                 </Card> : null}
-                {this.state.addBulletin ? <AddBulletin course_id={this.state.course.course.id}/> :this.state.bulletins.length===0?
-                    <Empty style={{marginTop:'80px'}} description={"暂无公告"}/>:
-                    <div>
-                        <Collapse style={{marginBottom: "10px"}}
-                                >{this.state.bulletins.map((value, index) => {
-                            return (<Collapse.Panel header={value.title} key={index}>
-                                <p>{value.content}</p>
-                                <span style={{fontWeight: 'bold'}}>发布时间：</span>{value.publishDate}
-                                {this.state.deleteBulletin ?
-                                    <Button onClick = {()=>{this.deleteBulletin(index)}}type="danger" size={'small'} style={{float: 'right'}}>删除</Button> : null}
-                            </Collapse.Panel>)
-                        })}</Collapse>
-                        <Pagination defaultCurrent={1} total={this.state.totalPages*10} onChange={(page, pageSize) => {
-                            this.getPageBulletin(page, pageSize)
-                        }}/>
-                    </div>
+                {this.state.addBulletin ?
+                    <AddBulletin course_id={this.state.course.course.id}/> : this.state.bulletins.length === 0 ?
+                        <Empty style={{marginTop: '80px'}} description={"暂无公告"}/> :
+                        <div>
+                            <Collapse style={{marginBottom: "10px"}}
+                            >{this.state.bulletins.map((value, index) => {
+                                return (<Collapse.Panel header={value.title} key={index}>
+                                    <p>{value.content}</p>
+                                    <span style={{fontWeight: 'bold'}}>发布时间：</span>{value.publishDate}
+                                    {this.state.deleteBulletin ?
+                                        <Button onClick={() => {
+                                            this.deleteBulletin(index)
+                                        }} type="danger" size={'small'} style={{float: 'right'}}>删除</Button> : null}
+                                </Collapse.Panel>)
+                            })}</Collapse>
+                            <Pagination defaultCurrent={1} total={this.state.totalPages * 10}
+                                        onChange={(page, pageSize) => {
+                                            this.getPageBulletin(page, pageSize)
+                                        }}/>
+                        </div>
                 }
             </div>);
     };
@@ -735,7 +742,7 @@ class CoursePageDemo extends React.Component {
     };
     rankRender = () => {
         return (
-            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id} />);
+            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id}/>);
     };
     studentTableRender = () => {
         return (
@@ -770,19 +777,21 @@ class CoursePageDemo extends React.Component {
 
 
     };
-    add0=(m)=>{return m<10?'0'+m:m };
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
+    };
 
-    format=(shijianchuo)=>
-    {
+    format = (shijianchuo) => {
         let time = new Date(shijianchuo);
         let y = time.getFullYear();
-        let m = time.getMonth()+1;
+        let m = time.getMonth() + 1;
         let d = time.getDate();
         let h = time.getHours();
         let mm = time.getMinutes();
         let s = time.getSeconds();
-        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
     };
+
     render() {
         const {loadingMore} = this.state
         return (
@@ -791,13 +800,18 @@ class CoursePageDemo extends React.Component {
                     arr={['课程', this.state.course.course_name]}/>
                 <Card bordered={false} style={{marginBottom: '10px'}}>
                     <Menu mode="horizontal" onSelect={() => {
-                        this.setState({addHomework: false, deleteHomework: false,addBulletin:false,deleteBulletin:false})
+                        this.setState({
+                            addHomework: false,
+                            deleteHomework: false,
+                            addBulletin: false,
+                            deleteBulletin: false
+                        })
                     }}>
                         <Menu.Item onClick={() => {
                             this.setState({type: 1})
                         }}>主页</Menu.Item>
                         <Menu.Item key="bulletin" onClick={() => {
-                            this.getPageBulletin(1,10);
+                            this.getPageBulletin(1, 10);
                             this.setState({type: 2})
                         }}><Icon type="appstore"/>公告</Menu.Item>
                         <Menu.SubMenu key='app' onClick={() => {
@@ -822,10 +836,10 @@ class CoursePageDemo extends React.Component {
                             this.state.role === 'student' ?
                                 <Menu.Item onClick={() => {
                                     this.setState({type: 5})
-                                }} key="rank"><Icon type="appstore"/>数据</Menu.Item> :
+                                }} key="rank"><Icon type="appstore"/>数据</Menu.Item> :this.state.role==='teacher'?
                                 <Menu.Item onClick={() => {
                                     this.setState({type: 6})
-                                }} key="set"><Icon type="setting"/>管理</Menu.Item>
+                                }} key="set"><Icon type="setting"/>管理</Menu.Item>:null
                         }
                     </Menu>
                 </Card>
@@ -954,7 +968,6 @@ const steps = [
         title: 'Last',
         content: 'Last-content',
     }];
-
 
 
 export default CoursePageDemo

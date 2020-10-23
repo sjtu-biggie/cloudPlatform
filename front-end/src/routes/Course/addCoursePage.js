@@ -38,6 +38,7 @@ const genExtra = () => (
 @Form.create()
 class AddCourse extends React.Component {
     state = {
+        courseId:0,
         classes: null,
         courseJson: null,
         grade: '一年级上',
@@ -699,6 +700,11 @@ class AddCourse extends React.Component {
                                     courseValue['syllabus'] = this.state.syllabus;
                                     this.setState({step: 2, courseJson: courseValue});
                                     console.log(this.state.courseJson);
+                                    this.sendCourseMessage().then((res)=>{
+                                        this.setState({
+                                            courseId:res,
+                                        })
+                                    });
                                 }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>下一步</Button>
                             </Col>
                         </Row>
@@ -716,7 +722,7 @@ class AddCourse extends React.Component {
                             <Steps.Step status="wait" title="完成" icon={<Icon type="check"/>}/>
                         </Steps>
                     </Card>
-                    <StudenTable/>;
+                    <StudenTable courseId={this.state.courseId}/>;
                     <Row>
                         <Col offset={10}>
                             <Button onClick={() => {
@@ -724,7 +730,6 @@ class AddCourse extends React.Component {
                             }} style={{marginTop: '20px', size: 'large'}}>上一步</Button>
                             <Button onClick={() => {
                                 this.setState({step: 3});
-                                this.sendCourseMessage();
                             }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>确认</Button>
                         </Col>
                     </Row>

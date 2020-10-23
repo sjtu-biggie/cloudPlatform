@@ -41,7 +41,7 @@ const columns1=[
     {title:'姓名',dataIndex:'name'},
     {title:'学号',dataIndex:'no'},
     {title:'班级',dataIndex:'cls'},
-]
+];
 
 
 
@@ -206,7 +206,7 @@ export default class Manager extends Component {
                                         const newData = [...orData];
                                         newData.find(col => col.id === record.id)[item.dataIndex] = value;
                                         this.setState({ orData: newData });
-                                    }}>{text}</EditText>:<a href={"/home/manage/data"}>{text}</a>)},
+                                    }}>{text}</EditText>:<a href={"/home/manage/data?userId="+text+"courseId="+this.props.courseId}>{text}</a>)},
                                 })), {
                                     name: '操作',
                                     key: 'del',

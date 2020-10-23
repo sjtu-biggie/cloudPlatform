@@ -126,6 +126,7 @@ class CourseDemo extends React.Component {
                         )
                     }
                     this.setState({
+                        page:res.length===0?0:(res.length-1)/3+1,
                         courses: res,
                         displayCourses: res
                     });
@@ -148,6 +149,7 @@ class CourseDemo extends React.Component {
                                 (username) => {
                                     res[i].course.nickname = username;
                                     this.setState({
+                                        page:res.length===0?0:(res.length-1)/3+1,
                                         courses: res,
                                         displayCourses: res
                                     });
@@ -175,6 +177,7 @@ class CourseDemo extends React.Component {
                                 (username) => {
                                     res[i].course.nickname = username;
                                     this.setState({
+                                        page:res.length===0?0:(res.length-1)/3+1,
                                         courses: res,
                                         displayCourses: res
                                     });
@@ -198,7 +201,6 @@ class CourseDemo extends React.Component {
         }
     };
     getUserInfo = async (username) => {
-
         let config = {
             method: 'post',
             data: {

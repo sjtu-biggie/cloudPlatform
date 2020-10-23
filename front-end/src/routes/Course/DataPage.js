@@ -69,7 +69,7 @@ class DataPage extends React.Component {
     const {size, bordered, loading, data2, loadingMore} = this.state
     return (
       <div>
-        <RankData/>
+        {/*<RankData/>*/}
 
       </div>
 

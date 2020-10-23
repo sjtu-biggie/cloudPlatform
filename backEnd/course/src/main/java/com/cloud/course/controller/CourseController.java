@@ -3,10 +3,7 @@ package com.cloud.course.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cloud.course.dto.WholeCourse;
-import com.cloud.course.entity.Course;
-import com.cloud.course.entity.CourseBulletin;
-import com.cloud.course.entity.Notification;
-import com.cloud.course.entity.StudentCourseStat;
+import com.cloud.course.entity.*;
 import com.cloud.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.Integer.parseInt;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -118,5 +117,11 @@ public class CourseController {
     public void register(@RequestBody JSONObject object) {
         System.out.println("register student");
         courseService.register(object);
+    }
+    @GetMapping(path = "/course/getCourseStudent")
+    //note that the modification will also come into this controller
+    public List<StudentCourseInfo> register(@RequestParam("courseId") String id) {
+        System.out.println("register student");
+        return courseService.getCourseStudent(parseInt(id));
     }
 }

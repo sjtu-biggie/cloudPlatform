@@ -3,10 +3,7 @@ package com.cloud.course.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cloud.course.dto.WholeCourse;
-import com.cloud.course.entity.Course;
-import com.cloud.course.entity.CourseBulletin;
-import com.cloud.course.entity.Notification;
-import com.cloud.course.entity.StudentCourseStat;
+import com.cloud.course.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -46,4 +43,6 @@ public interface CourseService {
     Notification getNoteById(String id);
 
     StudentCourseStat getRank(String courseId, String userId);
+
+    List<StudentCourseInfo> getCourseStudent(int parseInt);
 }

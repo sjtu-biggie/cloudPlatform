@@ -50,5 +50,7 @@ public interface CourseDao {
 
     Integer getRank(String courseId, String userId);
 
-    int getCourseStudent(String courseId);
+    int getCourseStudentNum(String courseId);
+
+    List<StudentCourseInfo> getCourseStudent(int courseId);
 }

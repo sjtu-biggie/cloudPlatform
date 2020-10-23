@@ -189,7 +189,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public StudentCourseStat getRank(String courseId, String userId){
         int rank = courseDao.getRank(courseId,userId);
-        int altogether = courseDao.getCourseStudent(courseId);
+        int altogether = courseDao.getCourseStudentNum(courseId);
         return new StudentCourseStat(rank,altogether);
+    }
+    @Override
+    public List<StudentCourseInfo> getCourseStudent(int parseInt){
+        return courseDao.getCourseStudent(parseInt);
     }
 }

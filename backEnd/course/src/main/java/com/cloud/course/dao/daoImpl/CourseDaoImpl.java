@@ -20,6 +20,8 @@ import static java.lang.Integer.parseInt;
 public class CourseDaoImpl implements CourseDao {
 
     @Autowired
+    private StudentCourseRepository studentCourseRepository;
+    @Autowired
     private CourseInfoRepository courseInfoRepository;
 
     @Autowired
@@ -163,7 +165,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public void register(String courseId, String userId,Date join_date,String nickname,String theClass,String sid){
-        courseRepository.register(courseId,userId,join_date,nickname,theClass,sid);
+        studentCourseRepository.register(courseId,userId,join_date,nickname,theClass,sid);
     }
     @Override
     public Page<CourseBulletin> getPageBulletin(int courseId, Pageable p){
@@ -174,7 +176,11 @@ public class CourseDaoImpl implements CourseDao {
         return courseRepository.getRank(courseId,userId);
     }
     @Override
-    public int getCourseStudent(String courseId){
-        return courseRepository.getCourseStudentNum(courseId);
+    public int getCourseStudentNum(String courseId){
+        return studentCourseRepository.getCourseStudentNum(courseId);
+    }
+    @Override
+    public List<StudentCourseInfo> getCourseStudent(int courseId){
+        return studentCourseRepository.getCourseStudent(courseId);
     }
 }

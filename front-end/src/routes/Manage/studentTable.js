@@ -3,7 +3,7 @@ import React, { Component, createRef } from 'react';
 import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
 import styles from './index.css';
 import {Router} from "react-router-dom";
-import  {axios} from 'axios'
+import axios from "axios";
 
 let index = 0;
 const getMockData = () => {
@@ -176,12 +176,19 @@ export default class Manager extends Component {
         };
     }
 
-    // componentDidMount() {
-    //     axios({
-    //         method:'POST',
-    //
-    //     })
-    // }
+    componentDidMount() {
+        axios({
+            method:'GET',
+            url:'http://106.13.209.140:8787/course/getCourseById',
+            params:{
+                courseId:1
+            }
+        }).then(msg=>{
+            console.log(msg.data)
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
 
 
     render=()=> {

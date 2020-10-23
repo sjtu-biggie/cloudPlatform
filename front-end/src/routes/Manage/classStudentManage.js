@@ -61,10 +61,9 @@ export default class ClassManage extends Component {
             orData: '',
             renderData: '',
             modifyIds: [],
+            record:'',
         };
         this.searchInput = createRef();
-
-
 
         columns.forEach(item => {
             const { dataIndex, title } = item;
@@ -113,6 +112,10 @@ export default class ClassManage extends Component {
             this.setState({ renderData: filterData });
         };
 
+        // this.updateUser=()=>{
+        //
+        // }
+
         this.addStudent=()=>{
             const {orData} =this.state;
             const getData=[getMockData(),...this.state.orData];
@@ -120,6 +123,19 @@ export default class ClassManage extends Component {
                 orData:getData,
                 renderData:getData
             });
+        }
+
+        this.updateUser=(record)=>{
+            axios({
+                method:'POST',
+                url:'http://106.13.209.140:8000/updateUser',
+                data:record
+            }).then(msg=>{
+                console.log(msg)
+            }).catch(err=>{
+                console.log(er)
+            })
+            console.log(record);
         }
         //
         // this.getStudentsByClass
@@ -136,7 +152,7 @@ export default class ClassManage extends Component {
         //     });
         //     this.setState({ renderData2: filterData });
         // };
-        //
+
         //
         // this.handleSearch3 = () => {
         //     const { orData2, search3 } = this.state;
@@ -227,16 +243,31 @@ export default class ClassManage extends Component {
                         {/*    dataSource={renderData}/>*/}
 
                         <Table
-                            rowKey={'id'}
+                            rowKey={'sid'}
                             columns={[...columns.map(item => ({
                                 ...item,
-                                render: (text, record) => <EditText onChange={value => {
+                                render: (text, record) =>
+                                    <EditText
+                                    onChange={value => {
                                     const newData = [...orData];
                                     // newData.find(col => col.id === record.id)[item.dataIndex] = value;
+                                        console.log(value);
+                                        console.log(record);
                                     record[item.dataIndex]=value;
+                                        this.setState({ orData: newData,renderData:newData});
+
+
+                                    console.log(record);
+                                    this.setState({record:record});
+                                    console.log(this.state.record);
                                     this.updateUser(record);
-                                    this.setState({ orData: newData,renderData:newData });
-                                }}>{text}</EditText>,
+
+
+
+                                }}
+                                    onBlur={this.updateUser}
+                                    >{text}
+                                    </EditText>,
                             })), {
                                 name: '操作',
                                 key: 'del',
@@ -252,7 +283,7 @@ export default class ClassManage extends Component {
                                         })
                                         console.log(newOrData);
                                         console.log(newRenderData);
-
+                                        console.log(this.state.record);
                                         this.setState({
                                             renderData:newRenderData,
                                             orData: newOrData,

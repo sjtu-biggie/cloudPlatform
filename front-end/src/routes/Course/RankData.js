@@ -107,6 +107,8 @@ class RankData extends React.Component {
             })
         }
         console.log(data1, data2);
+        data.meanScore = data.meanScore.toFixed(2);
+        data.recentMeanScore = data.recentMeanScore.toFixed(2);
         this.setState({
             stat: data,
             homeworkRankChange: data1,
@@ -116,7 +118,7 @@ class RankData extends React.Component {
         });
     };
     onChange = value => {
-        console.log(value)
+        console.log(value);
         let savetime = this.state.times;
         if (value > this.state.times) {
             this.setState({
@@ -142,7 +144,7 @@ class RankData extends React.Component {
                 rec+=homeworkScore.value;
             }
             console.log(rec / homeworkScoreChange.length);
-            stat.recentMeanScore = rec / homeworkScoreChange.length;
+            stat.recentMeanScore = (rec / homeworkScoreChange.length).toFixed(2);
             console.log(stat.recentMeanScore);
             homeworkRankChange.splice(0, savetime - value);
             this.setState({

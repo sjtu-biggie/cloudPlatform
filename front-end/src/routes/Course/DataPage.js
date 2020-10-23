@@ -43,33 +43,23 @@ class DataPage extends React.Component {
     homework : deadHomework
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({
       loading: true,
     });
-    this.getData2();
+    console.log(this.props.match);
     this.setState({
       loading: false
     })
   }
 
-  getData2 = () => {
-    this.setState({
-      loadingMore: true
-    });
-    axios.get('https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo').then(res => {
-      this.setState({
-        data2: this.state.data2.concat(res.data.results),
-        loadingMore: false
-      })
-    })
-  };
+
 //TODO:add student info into rankData
   render=()=> {
     const {size, bordered, loading, data2, loadingMore} = this.state
     return (
       <div>
-        {/*<RankData/>*/}
+        <RankData courseId={this.props.match.params.courseId} userId={this.props.match.params.userId}/>
 
       </div>
 

@@ -7,6 +7,7 @@ import {Router} from "react-router-dom";
 let index = 0;
 const getMockData = () => {
     const result = {
+        username:'student',
         id: index,
         name: 'name' + index,
         no: 'no.' + index,
@@ -86,6 +87,8 @@ class EditText extends Component {
 
 
 export default class Manager extends Component {
+    //props里有 courseId(课程id),class(课程班级),newCourse(为true时是刚创建的课程，不能访问学生数据)
+    //左边已上课学生应从后端拿到存在state里，右边未上课学生应先拿到班级所有学生，再减去已上课学生
     constructor(props) {
         super(props);
         this.state = {
@@ -202,11 +205,12 @@ export default class Manager extends Component {
                                 rowKey={'id'}
                                 columns={[...columns.map((item,idx) => ({
                                     ...item,
-                                    render: (text, record) => {return(idx!==0?<EditText onChange={value => {
+                                    render: (text, record) => {
+                                        return(idx!==0||this.props.newCourse?<EditText onChange={value => {
                                         const newData = [...orData];
                                         newData.find(col => col.id === record.id)[item.dataIndex] = value;
                                         this.setState({ orData: newData });
-                                    }}>{text}</EditText>:<a href={"/home/manage/data?userId="+text+"courseId="+this.props.courseId}>{text}</a>)},
+                                    }}>{text}</EditText>:<a href={"/home/manage/data/"+record.username+"/"+this.props.courseId+"/"}>{text}</a>)},
                                 })), {
                                     name: '操作',
                                     key: 'del',

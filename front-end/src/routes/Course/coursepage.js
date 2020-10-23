@@ -751,7 +751,7 @@ class CoursePageDemo extends React.Component {
                     点击学生名字，可以看到学生在该门课程中的具体数据！
                 </Card>
 
-                <StudenTable courseId={this.state.course.id} getChildValue={this.childValue}/>
+                <StudenTable courseId={this.state.course.course.id} getChildValue={this.childValue} newCourse={false}/>
 
             </div>
         )

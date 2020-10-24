@@ -31,4 +31,16 @@ public class LoginDao {
         return user1;
     }
 
+    public String getUserIcon(String username) {
+        System.out.println("进入Dao获取头像通过用户名"+username);
+        UserIcon userIcon=userIconRepository.findByUsername(username);
+        System.out.println("打印获取的头像的信息"+userIcon);
+        return userIcon.getIconBase64();
+    }
+
+    public boolean setUserIcon(UserIcon userIcon) {
+        System.out.println("进入Dao设置用户头像"+userIcon);
+        userIconRepository.save(userIcon);
+        return true;
+    }
 }

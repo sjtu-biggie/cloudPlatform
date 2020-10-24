@@ -55,5 +55,11 @@ public class LoginController {
             return loginService.getUserMessageAndIcon(obj);
     }
 
+    @RequestMapping(value = "/getUserIcon",method = RequestMethod.POST)
+    public String getUserIcon(@RequestBody JSONObject obj){
+        String username=obj.getString("username");
+        System.out.println("进入controller获取用户头像");
+        return loginService.getUserIcon(username);
 
+    }
 }

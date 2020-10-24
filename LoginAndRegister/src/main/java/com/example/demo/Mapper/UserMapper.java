@@ -24,6 +24,9 @@ public interface UserMapper {
     @Update("update userdemo set password=#{password},sid=#{sid},email=#{email},telephone=#{telephone},nickname=#{nickname},theGrade=#{theGrade},theClass=#{theClass},type=#{type} where username=#{username}")
     public void updateUser(User user);
 
+    @Update("update userdemo set sid=#{sid},email=#{email},telephone=#{telephone},nickname=#{nickname},theGrade=#{theGrade},theClass=#{theClass},type=#{type} where username=#{username}")
+    public void updateUserByTeacher(User user);
+
     @Select("select * from userdemo where username=#{username}")
     public User testUsername(String username);
 
@@ -41,5 +44,6 @@ public interface UserMapper {
 
     @Select("select username,password,sid,email,telephone,nickname,type,theGrade,theClass from userdemo where theClass=#{theClaSS}")
     public  List<User> getAllStudentsByClass(String theClass);
+
 
 }

@@ -209,6 +209,8 @@ export default class Manager extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props.class);
+
         axios({
             method:'GET',
             url:'http://106.13.209.140:8787/course/getCourseStudent',
@@ -218,14 +220,11 @@ export default class Manager extends Component {
         }).then(msg=>{
             console.log(msg.data)
             console.log(msg.data.length)
-            var len=msg.data.lenth;
-            var mosid=[];
             msg.data.map(item=>{
-                // console.log(item.sid);
-                // mosid.push(item.sid);
-                // return item;
+                this.state.sids.push(item.sid);
+                return item;
             })
-            console.log(mosid);
+            console.log(this.state.sids);
             this.setState({
                 orData:msg.data,
                 renderData:msg.data,

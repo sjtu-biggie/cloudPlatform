@@ -21,8 +21,6 @@ import java.util.Optional;
 public class LoginController {
     @Autowired(required = false)
     private UserMapper userMapper;
-//    @Autowired(required = false)
-//    private UserIconRepository userIconRepository;
     @Autowired(required = false)
     private LoginService loginService;
 

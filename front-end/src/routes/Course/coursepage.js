@@ -68,7 +68,8 @@ class CoursePageDemo extends React.Component {
         addChapter: false,
         addContent: false,
         lookStudentData: false,
-        displayHomeworkList: []
+        displayHomeworkList: [],
+        teacher:{}
     };
 
     componentWillMount() {
@@ -80,8 +81,27 @@ class CoursePageDemo extends React.Component {
         let role = storage.getItem("type");
         let username = storage.getItem("username");
         let courseId = this.props.match.params[0].substr(1);
-        this.getCourse(courseId, role, username).then(() => {
-
+        this.getCourse(courseId, role, username).then(async(ans) => {
+            console.log(ans);
+            let config = {
+                method: 'post',
+                data: {
+                    'username': ans
+                },
+                url: 'http://106.13.209.140:8000/getUserMessageAndIcon',
+                headers: {
+                    withCredentials: true,
+                }
+            };
+            const user = await axios(config)
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            this.setState({teacher:user})
         });
         this.setState({
             loading: false
@@ -118,6 +138,7 @@ class CoursePageDemo extends React.Component {
         this.setState({
             course: course
         });
+        return course.course.userId;
     };
     getData2 = () => {
         this.setState({
@@ -155,7 +176,7 @@ class CoursePageDemo extends React.Component {
                 {this.state.role === 'teacher' ?
                     <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
                         <Row/>
-                        <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large'  onClick={() => {
+                        <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
                             this.setState({addHomework: true})
                         }}>创建新的一次作业</Button>
 
@@ -176,8 +197,9 @@ class CoursePageDemo extends React.Component {
                     </Card> : null}
 
                 {
-                    this.state.addHomework ? <FormDemo1 datas={this.state.type} course ={this.state.course}/> :
-                        <HomeworkList homeworkList={this.state.displayHomeworkList} delete={!this.state.deleteHomework}/>
+                    this.state.addHomework ? <FormDemo1 datas={this.state.type} course={this.state.course}/> :
+                        <HomeworkList homeworkList={this.state.displayHomeworkList}
+                                      delete={!this.state.deleteHomework}/>
                 }
 
             </div>
@@ -252,20 +274,35 @@ class CoursePageDemo extends React.Component {
                 {this.state.modifyCourse ? this.modifiedCourse() : this.state.modifySyllabus ? this.modifiedSyllabus() :
                     <div>
                         <Card bordered={false} style={{marginBottom: 10}} id="howUse">
-                            <Row style={{height: "200px"}}>
-                                <Col span={18}>
+                            <Row style={{height: "170px"}}>
+                                <Col span={21}>
                                     <p style={{
-                                        fontSize: '20px',
+                                        fontSize: '25px',
                                         fontWeight: 'bold',
                                         display: 'block'
                                     }}>课程名 : {this.state.course.course.courseName}</p>
                                     <p style={{
                                         marginTop: '10px',
-                                        height: '90px'
+                                        height: '90px',
+                                        fontSize:'18px'
                                     }}>{this.state.course.courseInfo.introduction}</p>
-                                    <p style={{height: '10px'}}>开始时间：{this.state.course.course.startDate} 结束时间：{this.state.course.course.endDate}</p>
+
                                 </Col>
-                                <Col span={6}>
+                                <Col span={3}>
+                                    <p style={{height: '10px'}}><span style={{
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                        display: 'block'
+                                    }}>开始时间：</span>{this.state.course.course.startDate} <span style={{
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                        display: 'block'
+                                    }}>结束时间：</span>{this.state.course.course.endDate}<span style={{
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                        display: 'block'
+                                    }}>授课班级：</span>{this.state.course.course.classes}
+                                    </p>
                                 </Col>
                             </Row>
 
@@ -278,22 +315,24 @@ class CoursePageDemo extends React.Component {
                                         fontSize: '20px',
                                         fontWeight: 'bold',
                                         display: 'block'
-                                    }}>授课教师 : {this.state.course.nickname}</p>
+                                    }}>授课教师 : {this.state.teacher.nickname}</p>
                                     <img alt="logo"
-                                         src={require('../../pic/teacher2.jpg')}
-                                         style={{height: '190px', weight: '160px'}}/>
+                                         src={this.state.teacher.iconBase64}
+                                         style={{height: '190px', width: '210px'}}/>
                                 </Card>
                             </Col>
                             <Col span={19}>
                                 <Card bordered={false} style={{marginBottom: 10, height: "300px", marginLeft: 10}}
                                       id="howUse">
                                     <p style={{
-                                        fontSize: '20px',
+                                        fontSize: '25px',
                                         fontWeight: 'bold',
                                         display: 'block',
                                         paddingRight: '50px'
                                     }}>老师有话说 ：</p>
-                                    <p>
+                                    <p style={{
+                                        fontSize: '18px',
+                                    }}>
                                         {this.state.course.courseInfo.detail}
                                     </p>
                                 </Card>
@@ -751,7 +790,7 @@ class CoursePageDemo extends React.Component {
                     点击学生名字，可以看到学生在该门课程中的具体数据！
                 </Card>
 
-                <StudenTable courseId={this.state.course.course.id} getChildValue={this.childValue} newCourse={false}/>
+                <StudenTable class = {this.state.course.classes} courseId={this.state.course.course.id} getChildValue={this.childValue} newCourse={false}/>
 
             </div>
         )
@@ -799,7 +838,7 @@ class CoursePageDemo extends React.Component {
                 <CustomBreadcrumb
                     arr={['课程', this.state.course.course_name]}/>
                 <Card bordered={false} style={{marginBottom: '10px'}}>
-                    <Menu mode="horizontal" onSelect={() => {
+                    <Menu style={{fontSize: '20px', fontWeight: 'bold'}} mode="horizontal" onSelect={() => {
                         this.setState({
                             addHomework: false,
                             deleteHomework: false,
@@ -809,13 +848,15 @@ class CoursePageDemo extends React.Component {
                     }}>
                         <Menu.Item onClick={() => {
                             this.setState({type: 1})
-                        }}>主页</Menu.Item>
+                        }}><Icon type="appstore"/>主页</Menu.Item>
                         <Menu.Item key="bulletin" onClick={() => {
                             this.getPageBulletin(1, 10);
                             this.setState({type: 2})
-                        }}><Icon type="appstore"/>公告</Menu.Item>
+                        }}><Icon type="align-left"/>公告</Menu.Item>
                         <Menu.SubMenu key='app' onClick={() => {
-                            this.getHomeworkAllByCourse(this.state.course.course.id);
+                            if(this.state.displayHomeworkList.length===0){
+                                this.getHomeworkAllByCourse(this.state.course.course.id);
+                            }
                             this.setState({type: 3})
                         }} title={<span><Icon type='setting'/><span>作业</span></span>}>
                             <Menu.Item>总览</Menu.Item>
@@ -824,22 +865,14 @@ class CoursePageDemo extends React.Component {
                             <Menu.Item>已截止</Menu.Item>
                             <Menu.Item>未截止</Menu.Item>
                         </Menu.SubMenu>
-                        <Menu.SubMenu key='exam' onClick={() => {
-                            this.setState({type: 4})
-                        }} title={<span><Icon type='bar-chart'/><span>考试</span></span>}>
-                            <Menu.Item>总览</Menu.Item>
-                            <Menu.Item>进行中</Menu.Item>
-                            <Menu.Item>已截止</Menu.Item>
-                            <Menu.Item>已批改</Menu.Item>
-                        </Menu.SubMenu>
                         {
                             this.state.role === 'student' ?
                                 <Menu.Item onClick={() => {
                                     this.setState({type: 5})
-                                }} key="rank"><Icon type="appstore"/>数据</Menu.Item> :this.state.role==='teacher'?
+                                }} key="rank"><Icon type="appstore"/>数据</Menu.Item> : this.state.role === 'teacher' ?
                                 <Menu.Item onClick={() => {
                                     this.setState({type: 6})
-                                }} key="set"><Icon type="setting"/>管理</Menu.Item>:null
+                                }} key="set"><Icon type="setting"/>管理</Menu.Item> : null
                         }
                     </Menu>
                 </Card>

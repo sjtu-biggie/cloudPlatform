@@ -39,7 +39,7 @@ class RegisterForm extends React.Component {
         to:this.state.to,
       }
     }).then(msg=>{
-      console.log(msg.data)
+      console.log(msg.data);
       window.localStorage.setItem("veriCode",msg.data);
     }).catch(err=>{
       console.log(err);

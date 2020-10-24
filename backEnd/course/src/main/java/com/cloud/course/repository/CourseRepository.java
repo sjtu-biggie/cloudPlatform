@@ -21,7 +21,7 @@ public interface CourseRepository extends CrudRepository<Course,Integer> {
     @Modifying
     void deleteById(int id);
 
-    @Query(nativeQuery = true,value = "from course where user_id=?1 and end_date > CURRENT_TIME ")
+    @Query(nativeQuery = true,value = "select * from course where user_id=?1 and end_date > CURRENT_TIME ")
     List<Course> findAllByTeacher(String teacher_id);
 
     @Query(nativeQuery = true,value="select * from course where end_date > CURRENT_TIME and id in (select course_id from student_course where user_id = ?1)")
@@ -41,6 +41,6 @@ public interface CourseRepository extends CrudRepository<Course,Integer> {
     @Query(nativeQuery = true,value="select * from course where end_date <= CURRENT_TIME and id in (select course_id from student_course where user_id = ?1)")
     List<Course> getStudentEndCourses(String student_id);
 
-    @Query(nativeQuery = true,value = "from course where userId=?1 and end_date <= CURRENT_TIME ")
+    @Query(nativeQuery = true,value = "select * from course where userId=?1 and end_date <= CURRENT_TIME ")
     List<Course> getTeacherEndCourses(String teacher_id);
 }

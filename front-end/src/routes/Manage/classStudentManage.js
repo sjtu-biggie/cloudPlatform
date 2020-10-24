@@ -125,10 +125,24 @@ export default class ClassManage extends Component {
             });
         }
 
+        this.deleteStudent=()=>{
+            axios({
+                method:'POST',
+                url:'http://106.13.209.140:8000/deleteStudentFromClass',
+                data:{
+                    "username":this.state.delData
+                }
+            }).then(msg=>{
+                console.log("删除学生用户"+this.state.delData)
+            }).catch(err=>{
+                console.log(err)
+            })
+        }
+
         this.updateUser=(record)=>{
             axios({
                 method:'POST',
-                url:'http://106.13.209.140:8000/updateUser',
+                url:'http://106.13.209.140:8000/updateUserByTeacher',
                 data:record
             }).then(msg=>{
                 console.log(msg)
@@ -289,7 +303,7 @@ export default class ClassManage extends Component {
                                             orData: newOrData,
                                             delData:record.username,
                                         }, () => {
-                                            this.deleteData();
+                                            this.deleteStudent();
                                             this.handleSearch();
                                         });
                                     }}>删除</Button>),

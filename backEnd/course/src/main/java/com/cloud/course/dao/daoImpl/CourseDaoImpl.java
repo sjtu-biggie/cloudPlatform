@@ -183,4 +183,12 @@ public class CourseDaoImpl implements CourseDao {
     public List<StudentCourseInfo> getCourseStudent(int courseId){
         return studentCourseRepository.getCourseStudent(courseId);
     }
+    @Override
+    public void deleteCourseStudent(String courseId, String userId){
+        studentCourseRepository.deleteByCourseIdAndUserId(parseInt(courseId),userId);
+    }
+    @Override
+    public void updateCourseStudent(String courseId, String userId, String grade){
+        studentCourseRepository.updateCourseStudent(courseId,userId,grade);
+    }
 }

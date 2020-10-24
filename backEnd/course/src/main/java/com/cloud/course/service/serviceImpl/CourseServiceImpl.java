@@ -196,4 +196,12 @@ public class CourseServiceImpl implements CourseService {
     public List<StudentCourseInfo> getCourseStudent(int parseInt){
         return courseDao.getCourseStudent(parseInt);
     }
+    @Override
+    public void deleteCourseStudent(String courseId, String userId){
+        courseDao.deleteCourseStudent(courseId,userId);
+    }
+    @Override
+    public void updateCourseStudent(String courseId, String userId, String grade){
+        courseDao.updateCourseStudent(courseId,userId,grade);
+    }
 }

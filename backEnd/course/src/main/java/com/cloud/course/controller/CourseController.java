@@ -84,6 +84,7 @@ public class CourseController {
 
     @GetMapping(path = "/course/getBulletin")
     public List<CourseBulletin> getBulletin(@RequestParam("courseId") String id) {
+        System.out.println("bulletin get");
         return courseService.getBulletin(id);
     }
 
@@ -120,8 +121,23 @@ public class CourseController {
     }
     @GetMapping(path = "/course/getCourseStudent")
     //note that the modification will also come into this controller
-    public List<StudentCourseInfo> register(@RequestParam("courseId") String id) {
-        System.out.println("register student");
+    public List<StudentCourseInfo> getCourseStudent(@RequestParam("courseId") String id) {
+        System.out.println("getCourseStudent");
         return courseService.getCourseStudent(parseInt(id));
+    }
+    @PostMapping(path = "/course/deleteCourseStudent")
+    public void deleteCourseStudent(@RequestBody Map<String, String> params) {
+        System.out.println("deleteCourseStudent");
+        String courseId = params.get("courseId");
+        String userId = params.get("userId");
+        courseService.deleteCourseStudent(courseId,userId);
+    }
+    @PostMapping(path = "/course/updateCourseStudent")
+    public void updateCourseStudent(@RequestBody Map<String, String> params) {
+        System.out.println("deleteCourseStudent");
+        String courseId = params.get("courseId");
+        String userId = params.get("userId");
+        String grade = params.get("grade");
+        courseService.updateCourseStudent(courseId,userId,grade);
     }
 }

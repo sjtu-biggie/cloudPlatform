@@ -53,4 +53,8 @@ public interface CourseDao {
     int getCourseStudentNum(String courseId);
 
     List<StudentCourseInfo> getCourseStudent(int courseId);
+
+    void deleteCourseStudent(String courseId, String userId);
+
+    void updateCourseStudent(String courseId, String userId, String grade);
 }

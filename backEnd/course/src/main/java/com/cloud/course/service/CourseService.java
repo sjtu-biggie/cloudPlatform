@@ -45,4 +45,8 @@ public interface CourseService {
     StudentCourseStat getRank(String courseId, String userId);
 
     List<StudentCourseInfo> getCourseStudent(int parseInt);
+
+    void deleteCourseStudent(String courseId, String userId);
+
+    void updateCourseStudent(String courseId, String userId, String grade);
 }

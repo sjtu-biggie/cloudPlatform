@@ -113,7 +113,7 @@ class Home extends React.Component {
                                             <Row>
                                                 <Col span={6}>
                                                     <img /*width={275}*/ alt="logo" height={530}
-                                                                         src={require("../../pic/teacher.png")}/>
+                                                                         src={require("../../pic/student.png")}/>
                                                 </Col>
                                                 <Col span={18}>
 

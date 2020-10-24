@@ -26,24 +26,59 @@ class CourseDemo extends React.Component {
         loadingMore: false,
         deleteCourses: false,
     };
+    changeGrade = (grade) => {
+        let modifiedList = [];
+        let modifiedCoursesList = [];
+        let courseButton = document.getElementById("courseButton");
+        if (grade === "所有") {
+            this.setState({
+                displayCourses: this.state.typeCourses,
+            });
+            courseButton.innerText = "年级";
+            return null;
+        } else {
+            for (let course of this.state.typeCourses) {
+                if (course.course.grade === grade) {
+                    modifiedList.push(course);
+                }
+            }
+            for (let course of this.state.courses) {
+                if (course.course.grade === grade) {
+                    modifiedCoursesList.push(course);
+                }
+            }
+        }
+        courseButton.innerText = grade;
+        this.setState({
+            gradeCourses:modifiedCoursesList,
+            displayCourses: modifiedList,
+        });
+    };
     changeSubject = (subject) => {
         let modifiedList = [];
+        let modifiedCoursesList = [];
         let courseButton = document.getElementById("courseButton");
         if (subject === "所有") {
             this.setState({
-                displayCourses: this.state.courses,
+                displayCourses: this.state.gradeCourses,
             });
             courseButton.innerText = "学科";
             return null;
         } else {
-            for (let course of this.state.courses) {
+            for (let course of this.state.gradeCourses) {
                 if (course.course.type === subject) {
                     modifiedList.push(course);
+                }
+            }
+            for (let course of this.state.courses) {
+                if (course.course.type === subject) {
+                    modifiedCoursesList.push(course);
                 }
             }
         }
         courseButton.innerText = subject;
         this.setState({
+            typeCourses:modifiedCoursesList,
             displayCourses: modifiedList,
         });
     };
@@ -83,7 +118,7 @@ class CourseDemo extends React.Component {
             console.log("end");
             this.setState({type: 2});
         }
-        this.getCourses(type);
+        this.getCourses(type,0);
         this.setState({
             loading: false
         });
@@ -102,12 +137,12 @@ class CourseDemo extends React.Component {
         let s = time.getSeconds();
         return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
     };
-    getCourses = (type) => {
+    getCourses = (type,page) => {
         /*    console.log(this.state.displayCourses);*/
 
         switch (type){
             case 0:{
-                this.getAllCourses(0).then((res)=>{
+                this.getAllCourses(page).then((res)=>{
                     if (res === null) {
                         message.error("failure loading courses!");
                         return;
@@ -119,17 +154,15 @@ class CourseDemo extends React.Component {
                             (username) => {
                                 res[i].course.nickname = username;
                                 this.setState({
+                                    page:res.length===0?0:(res.length-1)/3+1,
                                     courses: res,
-                                    displayCourses: res
+                                    displayCourses: res,
+                                    typeCourses:res,
+                                    gradeCourses:res,
                                 });
                             }
                         )
                     }
-                    this.setState({
-                        page:res.length===0?0:(res.length-1)/3+1,
-                        courses: res,
-                        displayCourses: res
-                    });
                 });
                 break;
             }
@@ -137,7 +170,7 @@ class CourseDemo extends React.Component {
                 if(this.state.role==='teacher'){
                     let storage = window.localStorage;
                     let username = storage.getItem("username");
-                    this.getCoursesInfo(username,0).then((res) => {
+                    this.getCoursesInfo(username,page).then((res) => {
                         if (res === null) {
                             message.error("failure loading courses!");
                             return;
@@ -151,21 +184,18 @@ class CourseDemo extends React.Component {
                                     this.setState({
                                         page:res.length===0?0:(res.length-1)/3+1,
                                         courses: res,
-                                        displayCourses: res
+                                        displayCourses: res,
+                                        typeCourses:res,
+                                        gradeCourses:res,
                                     });
                                 }
                             )
                         }
-                        this.setState({
-                            courses: res,
-                            displayCourses: res
-                        });
-                        /*   console.log(this.state.displayCourses);*/
                     });
                 }else if (this.state.role==="student"){
                     let storage = window.localStorage;
                     let username = storage.getItem("username");
-                    this.getStudentCourses(username,0).then((res) => {
+                    this.getStudentCourses(username,page).then((res) => {
                         if (res === null||res ===undefined) {
                             message.error("failure loading courses!");
                             return;
@@ -179,19 +209,21 @@ class CourseDemo extends React.Component {
                                     this.setState({
                                         page:res.length===0?0:(res.length-1)/3+1,
                                         courses: res,
-                                        displayCourses: res
+                                        displayCourses: res,
+                                        typeCourses:res,
+                                        gradeCourses:res,
                                     });
                                 }
                             )
                         }
-                        this.setState({
-                            courses: res,
-                            displayCourses: res
-                        });
-                        /*   console.log(this.state.displayCourses);*/
                     });
                 }else{
-
+                    this.setState({
+                        courses: [],
+                        displayCourses: [],
+                        typeCourses:[],
+                        gradeCourses:[],
+                    });
                 }
                 break;
             }
@@ -330,7 +362,7 @@ class CourseDemo extends React.Component {
             </Menu>
         );
         const menu2 = (
-            <Menu>
+            <Menu onClick={(e)=>this.changeGrade(e.item.props.children)}>
                 <Menu.Item title="所有">所有</Menu.Item>
                 <Menu.SubMenu title="一年级">
                     <Menu.Item>一年级上</Menu.Item>
@@ -426,7 +458,9 @@ class CourseDemo extends React.Component {
                 <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={this.state.displayCourses}
                           itemLayout='vertical'
-                          pagination={{pageSize: 3,total:this.state.page*3}}
+                          pagination={{pageSize: 3,total:this.state.page*3,onChange:(page, pageSize) => {
+                              this.getPageBulletin(page, pageSize)
+                          }}}
                           style={styles.listStyle}
                           renderItem={item => {
                               return (

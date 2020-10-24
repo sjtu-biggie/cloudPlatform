@@ -858,7 +858,7 @@ class CoursePageDemo extends React.Component {
                                 this.getHomeworkAllByCourse(this.state.course.course.id);
                             }
                             this.setState({type: 3})
-                        }} title={<span><Icon type='setting'/><span>作业</span></span>}>
+                        }} title={<span><Icon type='snippets'/><span>作业</span></span>}>
                             <Menu.Item>总览</Menu.Item>
                             <Menu.Item>已提交</Menu.Item>
                             <Menu.Item>未提交</Menu.Item>

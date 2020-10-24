@@ -29,10 +29,11 @@ class CourseDemo extends React.Component {
     changeGrade = (grade) => {
         let modifiedList = [];
         let modifiedCoursesList = [];
-        let courseButton = document.getElementById("courseButton");
+        let courseButton = document.getElementById("gradeButton");
         if (grade === "所有") {
             this.setState({
                 displayCourses: this.state.typeCourses,
+                gradeCourses:this.state.courses
             });
             courseButton.innerText = "年级";
             return null;
@@ -61,6 +62,7 @@ class CourseDemo extends React.Component {
         if (subject === "所有") {
             this.setState({
                 displayCourses: this.state.gradeCourses,
+                typeCourses:this.state.courses
             });
             courseButton.innerText = "学科";
             return null;
@@ -138,7 +140,7 @@ class CourseDemo extends React.Component {
         return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
     };
     getCourses = (type,page) => {
-        /*    console.log(this.state.displayCourses);*/
+        console.log(type);
 
         switch (type){
             case 0:{
@@ -154,7 +156,6 @@ class CourseDemo extends React.Component {
                             (username) => {
                                 res[i].course.nickname = username;
                                 this.setState({
-                                    page:res.length===0?0:(res.length-1)/3+1,
                                     courses: res,
                                     displayCourses: res,
                                     typeCourses:res,
@@ -182,7 +183,6 @@ class CourseDemo extends React.Component {
                                 (username) => {
                                     res[i].course.nickname = username;
                                     this.setState({
-                                        page:res.length===0?0:(res.length-1)/3+1,
                                         courses: res,
                                         displayCourses: res,
                                         typeCourses:res,
@@ -207,7 +207,6 @@ class CourseDemo extends React.Component {
                                 (username) => {
                                     res[i].course.nickname = username;
                                     this.setState({
-                                        page:res.length===0?0:(res.length-1)/3+1,
                                         courses: res,
                                         displayCourses: res,
                                         typeCourses:res,
@@ -228,7 +227,63 @@ class CourseDemo extends React.Component {
                 break;
             }
             case 2:{
-
+                if(this.state.role==='teacher'){
+                    let storage = window.localStorage;
+                    let username = storage.getItem("username");
+                    this.getEndCoursesTeacher(username,page).then((res) => {
+                        if (res === null) {
+                            message.error("failure loading courses!");
+                            return;
+                        }
+                        for (let i = 0; i < res.length; ++i) {
+                            res[i].course.startDate = this.format(res[i].course.startDate);
+                            res[i].course.endDate = this.format(res[i].course.endDate);
+                            this.getUserInfo(res[i].course.userId).then(
+                                (username) => {
+                                    res[i].course.nickname = username;
+                                    this.setState({
+                                        courses: res,
+                                        displayCourses: res,
+                                        typeCourses:res,
+                                        gradeCourses:res,
+                                    });
+                                }
+                            )
+                        }
+                    });
+                }else if (this.state.role==="student"){
+                    let storage = window.localStorage;
+                    let username = storage.getItem("username");
+                    this.getEndCoursesStudent(username,page).then((res) => {
+                        if (res === null||res ===undefined) {
+                            message.error("failure loading courses!");
+                            return;
+                        }
+                        for (let i = 0; i < res.length; ++i) {
+                            res[i].course.startDate = this.format(res[i].course.startDate);
+                            res[i].course.endDate = this.format(res[i].course.endDate);
+                            this.getUserInfo(res[i].course.userId).then(
+                                (username) => {
+                                    res[i].course.nickname = username;
+                                    this.setState({
+                                        courses: res,
+                                        displayCourses: res,
+                                        typeCourses:res,
+                                        gradeCourses:res,
+                                    });
+                                }
+                            )
+                        }
+                    });
+                }else{
+                    this.setState({
+                        courses: [],
+                        displayCourses: [],
+                        typeCourses:[],
+                        gradeCourses:[],
+                    });
+                }
+                break;
             }
         }
     };
@@ -262,7 +317,7 @@ class CourseDemo extends React.Component {
         const that = this;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCoursesByStudent?userId=' + username+'&page='+page+'&size=3',
+            url: 'http://106.13.209.140:8787/course/getCoursesByUser?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -282,7 +337,47 @@ class CourseDemo extends React.Component {
         const that = this;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId=' + username+'&page='+page+'&size=3',
+            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
+    getEndCoursesTeacher = async (username,page) => {
+        console.log("getTeacherCourses");
+        const that = this;
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getEndCoursesByTeacher?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
+    getEndCoursesStudent = async (username,page) => {
+        console.log("getTeacherCourses");
+        const that = this;
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getEndCoursesByUser?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -301,7 +396,7 @@ class CourseDemo extends React.Component {
         console.log("getAllcourses");
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCourses?page=' + page + '&size=3',
+            url: 'http://106.13.209.140:8787/course/getCourses',
             headers: {
                 withCredentials: true,
             }
@@ -431,7 +526,7 @@ class CourseDemo extends React.Component {
                             type="down"/></Button>
                     </Dropdown>
                     <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
-                        <Button style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
+                        <Button  id="gradeButton" style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
                             type="down"/></Button>
                     </Dropdown>
                 </Card>
@@ -458,9 +553,7 @@ class CourseDemo extends React.Component {
                 <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={this.state.displayCourses}
                           itemLayout='vertical'
-                          pagination={{pageSize: 3,total:this.state.page*3,onChange:(page, pageSize) => {
-                              this.getPageBulletin(page, pageSize)
-                          }}}
+                          pagination={{pageSize: 3}}
                           style={styles.listStyle}
                           renderItem={item => {
                               return (

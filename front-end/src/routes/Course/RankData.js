@@ -240,8 +240,9 @@ class RankData extends React.Component {
                     </Col>
                     <Col span={4}>
                         <Card style={{height: '130px'}}>
-                            <Statistic style={{marginTop: '10px', display: 'block'}} title="总排名"
+                            <Statistic style={{marginTop: '10px',float:'left'}} title="总排名"
                                        value={this.state.rank.rank} suffix={"/ " + this.state.rank.altogether}/>
+                            <img style={{float:'left',marginLeft:'30px'}} width={80} alt="logo" src={require("../../pic/school-svg/037-medal.svg" )}/>
                         </Card>
                     </Col>
                 </Row>

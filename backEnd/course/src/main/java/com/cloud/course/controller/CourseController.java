@@ -22,10 +22,14 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping(path = "/course/getCourses")
+    @GetMapping(path = "/course/getCoursesPage")
     public List<WholeCourse> getAllCourses(@RequestParam("page") int page, @RequestParam("size") int size) {
         Pageable p = PageRequest.of(page,size);
         return courseService.getAllCourses(p);
+    }
+    @GetMapping(path = "/course/getCourses")
+    public List<WholeCourse> getAllCourses() {
+        return courseService.getAllCoursesN();
     }
 
     @GetMapping(path = "/course/getCourseById")
@@ -33,17 +37,36 @@ public class CourseController {
         return courseService.getCourseById(id);
     }
 
-    @GetMapping(path = "/course/getCoursesByTeacher")
+    @GetMapping(path = "/course/getCoursesByTeacherPage")
     public List<WholeCourse> getCoursesByTeacher(@RequestParam("userId") String id,@RequestParam("page") int page, @RequestParam("size") int size) {
         Pageable p = PageRequest.of(page,size);
         return courseService.getCoursesByTeacher(id,p);
     }
-    @GetMapping(path = "/course/getCoursesByUser")
+    @GetMapping(path = "/course/getCoursesByUserPage")
     //note that the modification will also come into this controller
     public List<WholeCourse> getCoursesByStudent(@RequestParam("userId") String id,@RequestParam("page") int page, @RequestParam("size") int size) {
         Pageable p = PageRequest.of(page,size);
         System.out.println("getCourseByStudent");
         return courseService.getCourseByStudent(id,p);
+    }
+    @GetMapping(path = "/course/getCoursesByTeacher")
+    public List<WholeCourse> getCoursesByTeacherN(@RequestParam("userId") String teacher_id) {
+        return courseService.getCoursesByTeacherN(teacher_id);
+    }
+    @GetMapping(path = "/course/getCoursesByUser")
+    //note that the modification will also come into this controller
+    public List<WholeCourse> getCoursesByStudentN(@RequestParam("userId") String student_id) {
+        return courseService.getCoursesByStudentN(student_id);
+    }
+    @GetMapping(path = "/course/getEndCoursesByUser")
+    //note that the modification will also come into this controller
+    public List<WholeCourse> getStudentEndCourses(@RequestParam("userId") String student_id) {
+        return courseService.getStudentEndCourses(student_id);
+    }
+    @GetMapping(path = "/course/getEndCoursesByTeacher")
+    //note that the modification will also come into this controller
+    public List<WholeCourse> getTeacherEndCourses(@RequestParam("userId") String teacher_id) {
+        return courseService.getTeacherEndCourses(teacher_id);
     }
     @GetMapping(path = "/course/getNoteByUser")
     //note that the modification will also come into this controller

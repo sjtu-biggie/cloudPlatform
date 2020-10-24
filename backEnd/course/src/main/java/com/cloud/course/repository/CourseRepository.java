@@ -21,10 +21,10 @@ public interface CourseRepository extends CrudRepository<Course,Integer> {
     @Modifying
     void deleteById(int id);
 
-    @Query(value = "from Course where userId=?1")
+    @Query(nativeQuery = true,value = "from Course where userId=?1 and end_date > CURRENT_TIME ")
     List<Course> findAllByTeacher(String teacher_id);
 
-    @Query(nativeQuery = true,value="select * from course where id in (select course_id from student_course where user_id = ?1)")
+    @Query(nativeQuery = true,value="select * from course where end_date > CURRENT_TIME and id in (select course_id from student_course where user_id = ?1)")
     List<Course> getCoursesByStudent(String id);
 
     @Query(nativeQuery = true,value="select id from course where id >= all (select id from course)")
@@ -36,5 +36,11 @@ public interface CourseRepository extends CrudRepository<Course,Integer> {
     @Query(nativeQuery = true,value="select count(*) from student_course where grade >= (select grade from student_course where user_id=?2 and course_id=?1) and course_id=?1")
     Integer getRank(String courseId, String userId);
 
+    List<Course> findAll();
 
+    @Query(nativeQuery = true,value="select * from course where end_date <= CURRENT_TIME and id in (select course_id from student_course where user_id = ?1)")
+    List<Course> getStudentEndCourses(String student_id);
+
+    @Query(nativeQuery = true,value = "from Course where userId=?1 and end_date <= CURRENT_TIME ")
+    List<Course> getTeacherEndCourses(String teacher_id);
 }

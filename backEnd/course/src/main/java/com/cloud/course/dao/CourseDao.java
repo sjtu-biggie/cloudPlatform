@@ -39,6 +39,8 @@ public interface CourseDao {
 
     void deleteNote(String id);
 
+    List<WholeCourse> getCoursesByTeacherN(String teacher_id);
+    List<WholeCourse> getCoursesByStudentN(String student_id);
 
     void register(String courseId, String string,Date join_date,String nickname,String theClass,String sid);
 
@@ -57,4 +59,10 @@ public interface CourseDao {
     void deleteCourseStudent(String courseId, String userId);
 
     void updateCourseStudent(String courseId, String userId, String grade);
+
+    List<WholeCourse> getAllCourses();
+
+    List<WholeCourse> getStudentEndCourses(String student_id);
+
+    List<WholeCourse> getTeacherEndCourses(String teacher_id);
 }

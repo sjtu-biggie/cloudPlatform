@@ -112,7 +112,18 @@ public class CourseDaoImpl implements CourseDao {
     public void deleteBulletin(CourseBulletin courseBulletin){
         courseBulletinRepository.delete(courseBulletin);
     }
-
+    @Override
+    public List<WholeCourse> getAllCourses(){
+        List<Course> courseList = courseRepository.findAll();
+        List<WholeCourse> wholeCourseList= new ArrayList<>();
+        for(int i=0;i<courseList.size();++i){
+            WholeCourse wholeCourse=new WholeCourse();
+            wholeCourse.setCourse(courseList.get(i));
+            wholeCourse.setCourseInfo(courseInfoRepository.findAllById(courseList.get(i).getId()));
+            wholeCourseList.add(wholeCourse);
+        }
+        return wholeCourseList;
+    }
     @Override
     public List<WholeCourse> getPageCourses(Pageable p){
         Page<Course> coursesPages = courseRepository.findAll(p);
@@ -122,6 +133,30 @@ public class CourseDaoImpl implements CourseDao {
             wholeCourse.setCourse(coursesPages.getContent().get(i));
             wholeCourse.setCourseInfo(courseInfoRepository.findAllById(coursesPages.getContent().get(i).getId()));
             wholeCourse.setPage(coursesPages.getTotalPages());
+            wholeCourseList.add(wholeCourse);
+        }
+        return wholeCourseList;
+    }
+    @Override
+    public List<WholeCourse> getCoursesByStudentN(String id){
+        List<Course> courseList = courseRepository.getCoursesByStudent(id);
+        List<WholeCourse> wholeCourseList= new ArrayList<>();
+        for(int i=0;i<courseList.size();++i){
+            WholeCourse wholeCourse=new WholeCourse();
+            wholeCourse.setCourse(courseList.get(i));
+            wholeCourse.setCourseInfo(courseInfoRepository.findAllById(courseList.get(i).getId()));
+            wholeCourseList.add(wholeCourse);
+        }
+        return wholeCourseList;
+    }
+    @Override
+    public List<WholeCourse> getCoursesByTeacherN(String teacher_id){
+        List<Course> courseList = courseRepository.findAllByTeacher(teacher_id);
+        List<WholeCourse> wholeCourseList= new ArrayList<>();
+        for(int i=0;i<courseList.size();++i){
+            WholeCourse wholeCourse=new WholeCourse();
+            wholeCourse.setCourse(courseList.get(i));
+            wholeCourse.setCourseInfo(courseInfoRepository.findAllById(courseList.get(i).getId()));
             wholeCourseList.add(wholeCourse);
         }
         return wholeCourseList;
@@ -190,5 +225,29 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void updateCourseStudent(String courseId, String userId, String grade){
         studentCourseRepository.updateCourseStudent(courseId,userId,grade);
+    }
+    @Override
+    public List<WholeCourse> getStudentEndCourses(String student_id){
+        List<Course> courseList = courseRepository.getStudentEndCourses(student_id);
+        List<WholeCourse> wholeCourseList= new ArrayList<>();
+        for(int i=0;i<courseList.size();++i){
+            WholeCourse wholeCourse=new WholeCourse();
+            wholeCourse.setCourse(courseList.get(i));
+            wholeCourse.setCourseInfo(courseInfoRepository.findAllById(courseList.get(i).getId()));
+            wholeCourseList.add(wholeCourse);
+        }
+        return wholeCourseList;
+    }
+    @Override
+    public List<WholeCourse> getTeacherEndCourses(String teacher_id){
+        List<Course> courseList = courseRepository.getTeacherEndCourses(teacher_id);
+        List<WholeCourse> wholeCourseList= new ArrayList<>();
+        for(int i=0;i<courseList.size();++i){
+            WholeCourse wholeCourse=new WholeCourse();
+            wholeCourse.setCourse(courseList.get(i));
+            wholeCourse.setCourseInfo(courseInfoRepository.findAllById(courseList.get(i).getId()));
+            wholeCourseList.add(wholeCourse);
+        }
+        return wholeCourseList;
     }
 }

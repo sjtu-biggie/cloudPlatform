@@ -204,4 +204,24 @@ public class CourseServiceImpl implements CourseService {
     public void updateCourseStudent(String courseId, String userId, String grade){
         courseDao.updateCourseStudent(courseId,userId,grade);
     }
+    @Override
+    public List<WholeCourse> getAllCoursesN(){
+        return courseDao.getAllCourses();
+    }
+    @Override
+    public List<WholeCourse> getCoursesByStudentN(String id){
+        return courseDao.getCoursesByStudentN(id);
+    }
+    @Override
+    public List<WholeCourse> getCoursesByTeacherN(String teacher_id){
+        return courseDao.getCoursesByTeacherN(teacher_id);
+    }
+    @Override
+    public List<WholeCourse> getStudentEndCourses(String student_id){
+        return courseDao.getStudentEndCourses(student_id);
+    }
+    @Override
+    public List<WholeCourse> getTeacherEndCourses(String teacher_id){
+        return courseDao.getTeacherEndCourses(teacher_id);
+    }
 }

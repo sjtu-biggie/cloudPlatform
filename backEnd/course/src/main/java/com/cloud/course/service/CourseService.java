@@ -49,4 +49,12 @@ public interface CourseService {
     void deleteCourseStudent(String courseId, String userId);
 
     void updateCourseStudent(String courseId, String userId, String grade);
+
+    List<WholeCourse> getAllCoursesN();
+    List<WholeCourse> getCoursesByStudentN(String id);
+    List<WholeCourse> getCoursesByTeacherN(String teacher_id);
+
+    List<WholeCourse> getStudentEndCourses(String student_id);
+
+    List<WholeCourse> getTeacherEndCourses(String teacher_id);
 }

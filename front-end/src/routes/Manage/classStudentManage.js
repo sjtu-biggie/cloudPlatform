@@ -13,8 +13,8 @@ const columns = [
     { title: '昵称', dataIndex: 'nickname' },
     { title: '用户类型', dataIndex: 'type' },
     { title: '年级', dataIndex: 'theGrade' },
+    { title: '班级',dataIndex: 'theClass'},
     { title: '邮箱', dataIndex: 'email' },
-
 ];
 
 columns.map(item => {

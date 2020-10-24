@@ -1,9 +1,10 @@
 import React from 'react'
 import {BackTop, Button, Card, Col, Dropdown, Form, Icon, List, Menu, Row, Spin, message} from 'antd'
 import axios from 'axios'
-import { withRouter } from 'react-router'
+import {withRouter} from 'react-router'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import Search from "antd/es/input/Search";
+
 const IconText = ({type, text}) => (
     <span>
     <Icon type={type} style={{marginRight: 8}}/>
@@ -33,7 +34,7 @@ class CourseDemo extends React.Component {
         if (grade === "所有") {
             this.setState({
                 displayCourses: this.state.typeCourses,
-                gradeCourses:this.state.courses
+                gradeCourses: this.state.courses
             });
             courseButton.innerText = "年级";
             return null;
@@ -51,7 +52,7 @@ class CourseDemo extends React.Component {
         }
         courseButton.innerText = grade;
         this.setState({
-            gradeCourses:modifiedCoursesList,
+            gradeCourses: modifiedCoursesList,
             displayCourses: modifiedList,
         });
     };
@@ -62,7 +63,7 @@ class CourseDemo extends React.Component {
         if (subject === "所有") {
             this.setState({
                 displayCourses: this.state.gradeCourses,
-                typeCourses:this.state.courses
+                typeCourses: this.state.courses
             });
             courseButton.innerText = "学科";
             return null;
@@ -80,10 +81,11 @@ class CourseDemo extends React.Component {
         }
         courseButton.innerText = subject;
         this.setState({
-            typeCourses:modifiedCoursesList,
+            typeCourses: modifiedCoursesList,
             displayCourses: modifiedList,
         });
     };
+
     componentWillReceiveProps(nextProps, nextContext) {
         this.componentWillMount(nextProps.location.pathname);
     }
@@ -99,18 +101,18 @@ class CourseDemo extends React.Component {
         });
         let type;
         let pathname;
-        if(param===undefined||param===null){
+        if (param === undefined || param === null) {
             pathname = this.props.location.pathname;
-        }else{
-            pathname=param;
+        } else {
+            pathname = param;
         }
 
-        if (pathname=== "/home/course/overall") {
+        if (pathname === "/home/course/overall") {
             type = 0;
             console.log("overall");
             this.setState({type: 0});
         }
-        if (pathname=== "/home/course/ongoing") {
+        if (pathname === "/home/course/ongoing") {
             type = 1;
             console.log("ongoing");
             this.setState({type: 1});
@@ -120,12 +122,13 @@ class CourseDemo extends React.Component {
             console.log("end");
             this.setState({type: 2});
         }
-        this.getCourses(type,0);
+        this.getCourses(type, 0);
         this.setState({
             loading: false
         });
 
     }
+
     add0 = (m) => {
         return m < 10 ? '0' + m : m
     };
@@ -139,17 +142,24 @@ class CourseDemo extends React.Component {
         let s = time.getSeconds();
         return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
     };
-    getCourses = (type,page) => {
+    getCourses = (type, page) => {
         console.log(type);
 
-        switch (type){
-            case 0:{
-                this.getAllCourses(page).then((res)=>{
+        switch (type) {
+            case 0: {
+                this.getAllCourses(page).then((res) => {
                     if (res === null) {
                         message.error("failure loading courses!");
                         return;
                     }
                     for (let i = 0; i < res.length; ++i) {
+                        if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                            console.log(new Date(res[i].course.endDate));
+                            console.log(new Date());
+                            res[i].course.end = false;
+                        } else {
+                            res[i].course.end = true;
+                        }
                         res[i].course.startDate = this.format(res[i].course.startDate);
                         res[i].course.endDate = this.format(res[i].course.endDate);
                         this.getUserInfo(res[i].course.userId).then(
@@ -158,8 +168,8 @@ class CourseDemo extends React.Component {
                                 this.setState({
                                     courses: res,
                                     displayCourses: res,
-                                    typeCourses:res,
-                                    gradeCourses:res,
+                                    typeCourses: res,
+                                    gradeCourses: res,
                                 });
                             }
                         )
@@ -167,16 +177,23 @@ class CourseDemo extends React.Component {
                 });
                 break;
             }
-            case 1:{
-                if(this.state.role==='teacher'){
+            case 1: {
+                if (this.state.role === 'teacher') {
                     let storage = window.localStorage;
                     let username = storage.getItem("username");
-                    this.getCoursesInfo(username,page).then((res) => {
+                    this.getCoursesInfo(username, page).then((res) => {
                         if (res === null) {
                             message.error("failure loading courses!");
                             return;
                         }
                         for (let i = 0; i < res.length; ++i) {
+                            if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                                console.log(new Date(res[i].course.endDate));
+                                console.log(new Date());
+                                res[i].course.end = false;
+                            } else {
+                                res[i].course.end = true;
+                            }
                             res[i].course.startDate = this.format(res[i].course.startDate);
                             res[i].course.endDate = this.format(res[i].course.endDate);
                             this.getUserInfo(res[i].course.userId).then(
@@ -185,22 +202,29 @@ class CourseDemo extends React.Component {
                                     this.setState({
                                         courses: res,
                                         displayCourses: res,
-                                        typeCourses:res,
-                                        gradeCourses:res,
+                                        typeCourses: res,
+                                        gradeCourses: res,
                                     });
                                 }
                             )
                         }
                     });
-                }else if (this.state.role==="student"){
+                } else if (this.state.role === "student") {
                     let storage = window.localStorage;
                     let username = storage.getItem("username");
-                    this.getStudentCourses(username,page).then((res) => {
-                        if (res === null||res ===undefined) {
+                    this.getStudentCourses(username, page).then((res) => {
+                        if (res === null || res === undefined) {
                             message.error("failure loading courses!");
                             return;
                         }
                         for (let i = 0; i < res.length; ++i) {
+                            if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                                console.log(new Date(res[i].course.endDate));
+                                console.log(new Date());
+                                res[i].course.end = false;
+                            } else {
+                                res[i].course.end = true;
+                            }
                             res[i].course.startDate = this.format(res[i].course.startDate);
                             res[i].course.endDate = this.format(res[i].course.endDate);
                             this.getUserInfo(res[i].course.userId).then(
@@ -209,33 +233,40 @@ class CourseDemo extends React.Component {
                                     this.setState({
                                         courses: res,
                                         displayCourses: res,
-                                        typeCourses:res,
-                                        gradeCourses:res,
+                                        typeCourses: res,
+                                        gradeCourses: res,
                                     });
                                 }
                             )
                         }
                     });
-                }else{
+                } else {
                     this.setState({
                         courses: [],
                         displayCourses: [],
-                        typeCourses:[],
-                        gradeCourses:[],
+                        typeCourses: [],
+                        gradeCourses: [],
                     });
                 }
                 break;
             }
-            case 2:{
-                if(this.state.role==='teacher'){
+            case 2: {
+                if (this.state.role === 'teacher') {
                     let storage = window.localStorage;
                     let username = storage.getItem("username");
-                    this.getEndCoursesTeacher(username,page).then((res) => {
+                    this.getEndCoursesTeacher(username, page).then((res) => {
                         if (res === null) {
                             message.error("failure loading courses!");
                             return;
                         }
                         for (let i = 0; i < res.length; ++i) {
+                            if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                                console.log(new Date(res[i].course.endDate));
+                                console.log(new Date());
+                                res[i].course.end = false;
+                            } else {
+                                res[i].course.end = true;
+                            }
                             res[i].course.startDate = this.format(res[i].course.startDate);
                             res[i].course.endDate = this.format(res[i].course.endDate);
                             this.getUserInfo(res[i].course.userId).then(
@@ -244,22 +275,29 @@ class CourseDemo extends React.Component {
                                     this.setState({
                                         courses: res,
                                         displayCourses: res,
-                                        typeCourses:res,
-                                        gradeCourses:res,
+                                        typeCourses: res,
+                                        gradeCourses: res,
                                     });
                                 }
                             )
                         }
                     });
-                }else if (this.state.role==="student"){
+                } else if (this.state.role === "student") {
                     let storage = window.localStorage;
                     let username = storage.getItem("username");
-                    this.getEndCoursesStudent(username,page).then((res) => {
-                        if (res === null||res ===undefined) {
+                    this.getEndCoursesStudent(username, page).then((res) => {
+                        if (res === null || res === undefined) {
                             message.error("failure loading courses!");
                             return;
                         }
                         for (let i = 0; i < res.length; ++i) {
+                            if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                                console.log(new Date(res[i].course.endDate));
+                                console.log(new Date());
+                                res[i].course.end = false;
+                            } else {
+                                res[i].course.end = true;
+                            }
                             res[i].course.startDate = this.format(res[i].course.startDate);
                             res[i].course.endDate = this.format(res[i].course.endDate);
                             this.getUserInfo(res[i].course.userId).then(
@@ -268,19 +306,19 @@ class CourseDemo extends React.Component {
                                     this.setState({
                                         courses: res,
                                         displayCourses: res,
-                                        typeCourses:res,
-                                        gradeCourses:res,
+                                        typeCourses: res,
+                                        gradeCourses: res,
                                     });
                                 }
                             )
                         }
                     });
-                }else{
+                } else {
                     this.setState({
                         courses: [],
                         displayCourses: [],
-                        typeCourses:[],
-                        gradeCourses:[],
+                        typeCourses: [],
+                        gradeCourses: [],
                     });
                 }
                 break;
@@ -312,7 +350,7 @@ class CourseDemo extends React.Component {
         e.preventDefault();
         /* console.log(123);*/
     };
-    getStudentCourses = async (username,page) => {
+    getStudentCourses = async (username, page) => {
         console.log("getStudentCourses");
         const that = this;
         let config = {
@@ -332,7 +370,7 @@ class CourseDemo extends React.Component {
                 /*   console.log(error);*/
             });
     };
-    getCoursesInfo = async (username,page) => {
+    getCoursesInfo = async (username, page) => {
         console.log("getTeacherCourses");
         const that = this;
         let config = {
@@ -352,7 +390,7 @@ class CourseDemo extends React.Component {
                 /*   console.log(error);*/
             });
     };
-    getEndCoursesTeacher = async (username,page) => {
+    getEndCoursesTeacher = async (username, page) => {
         console.log("getTeacherCourses");
         const that = this;
         let config = {
@@ -372,7 +410,7 @@ class CourseDemo extends React.Component {
                 /*   console.log(error);*/
             });
     };
-    getEndCoursesStudent = async (username,page) => {
+    getEndCoursesStudent = async (username, page) => {
         console.log("getTeacherCourses");
         const that = this;
         let config = {
@@ -411,8 +449,9 @@ class CourseDemo extends React.Component {
                 /*   console.log(error);*/
             });
     };
+
     render() {
-        const { match, location, history } = this.props
+        const {match, location, history} = this.props
         const menu1 = (
             <Menu onClick={(e) => {
                 this.changeSubject(e.item.props.children)
@@ -457,7 +496,7 @@ class CourseDemo extends React.Component {
             </Menu>
         );
         const menu2 = (
-            <Menu onClick={(e)=>this.changeGrade(e.item.props.children)}>
+            <Menu onClick={(e) => this.changeGrade(e.item.props.children)}>
                 <Menu.Item title="所有">所有</Menu.Item>
                 <Menu.SubMenu title="一年级">
                     <Menu.Item>一年级上</Menu.Item>
@@ -526,7 +565,7 @@ class CourseDemo extends React.Component {
                             type="down"/></Button>
                     </Dropdown>
                     <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
-                        <Button  id="gradeButton" style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
+                        <Button id="gradeButton" style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
                             type="down"/></Button>
                     </Dropdown>
                 </Card>
@@ -548,8 +587,24 @@ class CourseDemo extends React.Component {
                         </Card>
                 }
                 <Card>
+                    <Row>
+                        <Col span={18}>
                     <span style={{float: 'left'}}>课程列表</span>
-                </Card>
+                        </Col>
+                        <Col span={6}>
+                            <img style={{ marginLeft: '80px'}}
+                                 width={30} alt="logo"
+                                 src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
+                            <span style={{ marginLeft: '5px'}}>正在进行</span>
+
+                            <img style={{ marginLeft: '80px'}}
+                                 width={30} alt="logo"
+                                 src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
+                            <span  style={{ marginLeft: '5px'}}>已截止</span>
+
+                        </Col>
+                        </Row>
+                    </Card>
                 <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
                     <List dataSource={this.state.displayCourses}
                           itemLayout='vertical'
@@ -599,14 +654,24 @@ class CourseDemo extends React.Component {
                                               </p>
                                           </Col>
                                           <Col span={4}>
-                                              <p ><IconText type={'calendar'}
-                                                            text={'开始时间：'}/>
+                                              {item.course.end === true ?
+                                                  <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
+                                                       width={80} alt="logo"
+                                                       src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
+                                                  :
+                                                  <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
+                                                       width={80} alt="logo"
+                                                       src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
+                                              }
+                                              <p style={{marginTop: '30px'}}><IconText type={'calendar'}
+                                                                                       text={'开始时间：'}/>
                                                   <span
                                                       style={{marginRight: '30px'}}>{item.course.startDate}</span>
                                               </p><p><IconText type={'calendar'}
                                                                style={{marginLeft: '30px'}}
                                                                text={'结束时间：'}/>
                                               {item.course.endDate}</p>
+
                                           </Col>
                                       </Row>
 

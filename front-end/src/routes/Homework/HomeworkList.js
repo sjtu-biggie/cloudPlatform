@@ -193,10 +193,12 @@ class HomeworkList extends React.Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        nextProps.homeworkList.map(item=>{
-            item.startTime = this.format(item.startTime);
-            item.endTime = this.format(item.endTime);
-        });
+        if (nextProps.homeworkList !== null){
+            nextProps.homeworkList.map(item=>{
+                item.startTime = this.format(item.startTime);
+                item.endTime = this.format(item.endTime);
+            });
+        }
         console.log(nextProps.homeworkList);
         this.setState({
             homeworkList:nextProps.homeworkList,

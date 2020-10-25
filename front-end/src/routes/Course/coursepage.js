@@ -141,16 +141,36 @@ class CoursePageDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
+        let config3 = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getEndCoursesByUser?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const courseList2 = await axios(config3)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         if (course.course.userId === username) {
             this.setState({role: "teacher"})
-        } else if (1) {
+        } else  {
             for(let _course of courseList){
-                if(_course.course.id === courseId){
+                if(_course.course.id.toString() === courseId.toString()){
                     this.setState({role: "student"})
                 }
             }
-        } else {
-            this.setState({role: "watcher"})
+            for(let _course of courseList2){
+
+
+                if(_course.course.id.toString() === courseId.toString()){
+                    this.setState({role: "student"})
+                }
+            }
         }
         course.course.startDate = this.format(course.course.startDate);
         course.course.endDate = this.format(course.course.endDate);

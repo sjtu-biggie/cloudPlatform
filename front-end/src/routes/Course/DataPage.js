@@ -59,7 +59,7 @@ class DataPage extends React.Component {
     const {size, bordered, loading, data2, loadingMore} = this.state
     return (
       <div>
-        <RankData courseId={this.props.match.params.courseId} userId={this.props.match.params.userId}/>
+        <RankData courseId={this.props.match.params.courseId} userId={this.props.match.params.userId} seeCourseAverage={true} seeHomeworkAverage = {true} />
 
       </div>
 

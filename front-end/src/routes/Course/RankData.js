@@ -130,8 +130,8 @@ class RankData extends React.Component {
             this.setState({
                 times: value
             });
-            let stat=this.state.stat;
-            let rec=0;
+            let stat = this.state.stat;
+            let rec = 0;
             let handinChange = this.state.handinChange;
             let ddlChange = this.state.ddlChange;
             let homeworkRankChange = this.state.homeworkRankChange;
@@ -139,9 +139,9 @@ class RankData extends React.Component {
             handinChange.splice(0, savetime - value);
             ddlChange.splice(0, savetime - value);
             homeworkScoreChange.splice(0, savetime - value);
-            for(let homeworkScore of homeworkScoreChange){
+            for (let homeworkScore of homeworkScoreChange) {
                 console.log(stat.recentMeanScore);
-                rec+=homeworkScore.value;
+                rec += homeworkScore.value;
             }
             console.log(rec / homeworkScoreChange.length);
             stat.recentMeanScore = (rec / homeworkScoreChange.length).toFixed(2);
@@ -152,7 +152,7 @@ class RankData extends React.Component {
                 homeworkScoreChange: homeworkScoreChange,
                 handinChange: handinChange,
                 ddlChange: ddlChange,
-                stat:stat
+                stat: stat
             });
 
         }
@@ -234,34 +234,48 @@ class RankData extends React.Component {
                     <Col span={4}>
                         <Card style={{height: '130px'}}>
                             位次比例
-                            <Progress style={{marginLeft: '10px'}} width={80} type="circle"
-                                      percent={Math.floor(this.state.rank.rank * 100 / this.state.rank.altogether)}/>
+                            {this.props.seeCourseAverage ? <div>
+                                <Progress style={{marginLeft: '10px'}} width={80} type="circle"
+                                          percent={Math.floor(this.state.rank.rank * 100 / this.state.rank.altogether)}/>
+                            </div> : <img style={{marginLeft: '30px'}} width={80} alt="logo"
+                                          src={require("../../pic/market-svg/031-lock.svg")}/>
+                            }
+
                         </Card>
                     </Col>
                     <Col span={4}>
                         <Card style={{height: '130px'}}>
-                            <Statistic style={{marginTop: '10px',float:'left'}} title="总排名"
-                                       value={this.state.rank.rank} suffix={"/ " + this.state.rank.altogether}/>
-                            <img style={{float:'left',marginLeft:'30px'}} width={80} alt="logo" src={require("../../pic/school-svg/037-medal.svg" )}/>
+                            {this.props.seeCourseAverage ?
+                                <div>
+                                    <Statistic style={{marginTop: '10px', float: 'left'}} title="总排名"
+                                               value={this.state.rank.rank} suffix={"/ " + this.state.rank.altogether}/>
+                                    < img style={{float: 'left', marginLeft: '30px'}} width={80} alt="logo"
+                                          src={require("../../pic/school-svg/037-medal.svg")}/>
+                                </div> : <div>总排名 <img style={{marginLeft: '30px'}} width={80} alt="logo"
+                                                       src={require("../../pic/market-svg/031-lock.svg")}/></div>
+                            }
                         </Card>
                     </Col>
                 </Row>
                 <Row gutter={10} style={{marginTop: '10px'}}>
                     <Col span={12}>
                         <Card title='作业排名变化' bordered={false} className='card-item' style={{width: '833px'}}>
-                            <Chart height={400} data={this.state.homeworkRankChange} scale={cols} forceFit>
-                                <Axis name="num" title={"作业"}/>
-                                <Axis name="value" title={"排名"} label={{
-                                    formatter(text, item, index) {
-                                        if (text === '0') return (null);
-                                        else return '第' + text + '名'
-                                    }
-                                }}/>
-                                <Tooltip crosshairs={{type: 'y'}}/>
-                                <Geom type="line" position="num*value" size={2}/>
-                                <Geom type='point' position="num*value" size={4} shape={'circle'}
-                                      style={{stroke: '#fff', lineWidth: 1}}/>
-                            </Chart>
+                            {this.props.seeHomeworkAverage ?
+                                <Chart height={400} data={this.state.homeworkRankChange} scale={cols} forceFit>
+                                    <Axis name="num" title={"作业"}/>
+                                    <Axis name="value" title={"排名"} label={{
+                                        formatter(text, item, index) {
+                                            if (text === '0') return (null);
+                                            else return '第' + text + '名'
+                                        }
+                                    }}/>
+                                    <Tooltip crosshairs={{type: 'y'}}/>
+                                    <Geom type="line" position="num*value" size={2}/>
+                                    <Geom type='point' position="num*value" size={4} shape={'circle'}
+                                          style={{stroke: '#fff', lineWidth: 1}}/>
+                                </Chart> :<div style={{height:'405px'}}><img style={{marginLeft: '340px',marginTop:'150px'}} width={80} alt="logo"
+                                               src={require("../../pic/market-svg/031-lock.svg")}/></div>}
+
                         </Card>
                     </Col>
                     <Col span={12}>

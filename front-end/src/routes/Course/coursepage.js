@@ -165,8 +165,6 @@ class CoursePageDemo extends React.Component {
                 }
             }
             for(let _course of courseList2){
-
-
                 if(_course.course.id.toString() === courseId.toString()){
                     this.setState({role: "student"})
                 }
@@ -820,7 +818,7 @@ class CoursePageDemo extends React.Component {
     };
     rankRender = () => {
         return (
-            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id}/>);
+            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id} seeCourseAverage = {this.state.course.seeCourseAverage} seeHomeworkAverage ={this.state.course.seeHomeworkAverage}/>);
     };
     studentTableRender = () => {
         return (

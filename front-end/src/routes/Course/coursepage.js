@@ -57,7 +57,7 @@ class CoursePageDemo extends React.Component {
         loadingMore: false,
         course: deadCourse,
         bulletins: bulletin,
-        role: 'student',
+        role: 'watcher',
         addHomework: false,
         deleteHomework: false,
         addBulletin: false,
@@ -125,11 +125,30 @@ class CoursePageDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(course)
+        console.log(course);
+        let config2 = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getCoursesByUser?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const courseList = await axios(config2)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         if (course.course.userId === username) {
             this.setState({role: "teacher"})
         } else if (1) {
-            //TODO:student in the class
+            for(let _course of courseList){
+                if(_course.course.id === courseId){
+                    this.setState({role: "student"})
+                }
+            }
         } else {
             this.setState({role: "watcher"})
         }

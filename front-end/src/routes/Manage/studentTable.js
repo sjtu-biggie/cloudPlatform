@@ -284,7 +284,7 @@ export default class Manager extends Component {
                                         const newData = [...orData];
                                         newData.find(col => col.sid === record.sid)[item.dataIndex] = value;
                                         this.setState({ orData: newData });
-                                    }}>{text}</EditText>:<a href={"/home/manage/data/"+record.username+"/"+this.props.courseId+"/"}>{text}</a>)},
+                                    }}>{text}</EditText>:<a href={"/home/manage/data/"+record.userId+"/"+this.props.courseId+"/"}>{text}</a>)},
                                 })), {
                                     name: '操作',
                                     key: 'del',

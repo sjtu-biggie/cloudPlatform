@@ -634,6 +634,7 @@ class CourseDemo extends React.Component {
                                               }}
                                                  href={"/home/course/class=" + item.course.id}>{item.course.courseName}</a>
                                               <p style={{
+                                                  fontSize:'18px',
                                                   marginTop: '10px',
                                                   height: '90px'
                                               }}>{item.courseInfo.introduction}</p>

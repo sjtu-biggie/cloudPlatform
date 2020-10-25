@@ -193,10 +193,12 @@ class HomeworkList extends React.Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        nextProps.homeworkList.map(item=>{
-            item.startTime = this.format(item.startTime);
-            item.endTime = this.format(item.endTime);
-        });
+        if (nextProps.homeworkList !== null){
+            nextProps.homeworkList.map(item=>{
+                item.startTime = this.format(item.startTime);
+                item.endTime = this.format(item.endTime);
+            });
+        }
         console.log(nextProps.homeworkList);
         this.setState({
             homeworkList:nextProps.homeworkList,
@@ -266,7 +268,7 @@ class HomeworkList extends React.Component {
                                   return (
                                       <List.Item
                                           actions={this.state.role === 'student' ?
-                                              [<IconText type="file-text" text= {item.score} />,
+                                              [<IconText type="file-text" text= {item.score === null ? '暂无': item.score} />,
                                                   <IconText type="calendar" text={"截止："+ this.format(item.endTime)} />,
                                                   <IconText type="schedule" text ={ item.handinTime === null ? "未提交":"已提交"} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />,

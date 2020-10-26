@@ -43,6 +43,7 @@ class ListDemo extends React.Component {
     average:0,
     handinAmount:0,
     handinAlready:0,
+    isLoading:false,
   };
 
   getUserInfo = async (username)=>{
@@ -134,7 +135,6 @@ class ListDemo extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
-    console.log(hw);
     let list = Array.from(hw);
     let total = 0;
     list.map(item=>{
@@ -155,7 +155,8 @@ class ListDemo extends React.Component {
     this.setState({
       studentHomework:hw,
       average:total/hw.length,
-      handinAmount:hw.length
+      handinAmount:hw.length,
+      isLoading:true,
     })
   };
 

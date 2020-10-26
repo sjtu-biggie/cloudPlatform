@@ -227,7 +227,7 @@ export default class STable extends Component {
             homework: this.props.homework,
             homeworkId: this.props.homeworkId,
         });
-        this.getStudentInfo(this.props.homework);
+        //this.getStudentInfo(this.props.homework);
     }
 
     componentWillReceiveProps(nextProps){
@@ -236,7 +236,7 @@ export default class STable extends Component {
             homework: this.props.homework,
             homeworkId: this.props.homeworkId,
         });
-        this.getStudentInfo(this.props.homework);
+        //this.getStudentInfo(this.props.homework);
     }
 
 

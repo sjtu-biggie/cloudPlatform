@@ -122,7 +122,7 @@ class ListDemo extends React.Component {
   getHomeworkOfStudents=async (homeworkId)=>{
     let config = {
       method: 'post',
-      url: 'http://106.13.209.140:8383/getHomeworkOfStudents?homeworkId='+homeworkId,
+      url: 'http://106.13.209.140:8383/getHomeworkOfStudentsNoMongo?homeworkId='+homeworkId,
       headers: {
         withCredentials: true,
       }

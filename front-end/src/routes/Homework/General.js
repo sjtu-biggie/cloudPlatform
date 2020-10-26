@@ -88,6 +88,7 @@ class ListDemo extends React.Component {
     console.log(hw);
     this.setState({
       homework:hw,
+      isLoading:true,
     })
   };
 
@@ -156,7 +157,7 @@ class ListDemo extends React.Component {
       studentHomework:hw,
       average:total/hw.length,
       handinAmount:hw.length,
-      isLoading:true,
+
     })
   };
 
@@ -184,9 +185,9 @@ class ListDemo extends React.Component {
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="结束时间" value={this.format(this.state.homework.endTime)} />
             </Card>
           </Col>
-          <Col span = {24}>
+          {this.state.isLoading === true ? <Col span = {24}>
             <CommitTable homework={this.state.homework} studentHomework={this.state.studentHomework} homeworkId={this.state.homeworkId}/>
-          </Col>
+          </Col> : null}
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>
       </div>

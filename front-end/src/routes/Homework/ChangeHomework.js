@@ -4,8 +4,6 @@ import DraftDemo from './Draft'
 import UploadDemo from './upload'
 import axios from "axios";
 
-const dateFormat = 'YYYY-MM-DD HH:mm:ss';
-
 const FormItem = Form.Item;
 
 const options = [

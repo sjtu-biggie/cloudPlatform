@@ -148,6 +148,7 @@ export default class STable extends Component {
         }
 
         this.getStudentInfo = async (obj)=>{
+            console.log(obj);
             let config = {
                 method: 'post',
                 data : obj,
@@ -165,6 +166,7 @@ export default class STable extends Component {
                 });
 
             let list1 = Array.from(studentInfo);
+
             for(let i = 0; i < list1.length; ++i){
                 if (list1[i].type === 'teacher')
                     list1.splice(i,1);
@@ -215,19 +217,20 @@ export default class STable extends Component {
                 orData: data,
                 renderData: data
             })
-            console.log(this.props);
+
             console.log(this.state.data);
         };
 
     }
 
     componentWillMount() {
+        console.log(this.props);
         this.setState({
             studentHomework: this.props.studentHomework,
             homework: this.props.homework,
             homeworkId: this.props.homeworkId,
         });
-        //this.getStudentInfo(this.props.homework);
+        this.getStudentInfo(this.props.homework);
     }
 
     componentWillReceiveProps(nextProps){

@@ -67,7 +67,7 @@ class RatePage extends React.Component {
       <div>
         <CustomBreadcrumb arr={['作业', '批改']}/>
         <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
-          <Rating homework = {this.state.homework} index={this.props.match.params.index}/>
+          <Rating homework = {this.state.homework} index={this.props.match.params.index} handinAlready={this.props.match.params.handinAlready}/>
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>
       </div>

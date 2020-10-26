@@ -186,7 +186,7 @@ class ListDemo extends React.Component {
             </Card>
           </Col>
           {this.state.isLoading === true ? <Col span = {24}>
-            <CommitTable homework={this.state.homework} studentHomework={this.state.studentHomework} homeworkId={this.state.homeworkId}/>
+            <CommitTable homework={this.state.homework} studentHomework={this.state.studentHomework} homeworkId={this.state.homeworkId} handinAlready={this.state.handinAlready}/>
           </Col> : null}
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>

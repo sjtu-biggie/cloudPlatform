@@ -11,7 +11,7 @@ import {
     Dropdown,
     Input,
     Menu,
-    Col, Row, Statistic, InputNumber, Slider
+    Col, Row, Statistic, InputNumber, Slider, Modal
 } from 'antd'
 import axios from 'axios'
 import TextArea from "antd/es/input/TextArea";
@@ -31,6 +31,9 @@ const status = {
 
 class Rating extends React.Component {
     state = {
+        visibleHomework:false,
+        visibleAnswer:false,
+        handinAlready: 10000,
         status: 3,
         type: 0,
         size: 'default',
@@ -45,6 +48,7 @@ class Rating extends React.Component {
         penLazy: 1,
         index: 0,
         average: 0,
+        assignHomework:{}
     };
     add0 = (m) => {
         return m < 10 ? '0' + m : m
@@ -70,6 +74,7 @@ class Rating extends React.Component {
         });
     };
     getAverageScore = async (homework) => {
+        if(homework===undefined) return;
         let config = {
             method: 'get',
             url: 'http://106.13.209.140:8383/getAverage?homeworkId=' + homework,
@@ -92,11 +97,33 @@ class Rating extends React.Component {
             average: data,
         })
     };
+    getHomework = async(homeworkId)=>{
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        let data = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        this.setState({
+            assignHomework:data,
+        })
+    };
     componentWillMount = () => {
         this.setState({
+            handinAlready: this.props.handinAlready,
             loading: true,
             homework: this.props.homework,
             index: this.props.index,
+
         });
         console.log(this.props.homework);
         this.setState({
@@ -107,11 +134,13 @@ class Rating extends React.Component {
     componentWillReceiveProps(nextProps, nextContext) {
         this.setState({
             loading: true,
+            handinAlready: nextProps.handinAlready,
             homework: nextProps.homework,
             index: nextProps.index
         });
         console.log(nextProps.homework);
         this.getAverageScore(nextProps.homework.homeworkId);
+        this.getHomework(nextProps.homework.homeworkId);
         this.setState({
             loading: false
         });
@@ -154,16 +183,20 @@ class Rating extends React.Component {
                             <Card.Grid style={{
                                 width: '10%',
                                 textAlign: 'center',
-                                height: '90px'
+                                height: '90px',
                             }}>
-                                查看作业
+                                <p id={"seeHomework"} onClick={this.showModalHomework}>
+                                    查看作业
+                                </p>
                             </Card.Grid>
                             <Card.Grid style={{
                                 width: '10%',
                                 textAlign: 'center',
                                 height: '90px'
                             }}>
-                                查看答案
+                                <p id={"seeAnswer"} onClick={this.showModalAnswer}>
+                                    查看答案
+                                </p>
                             </Card.Grid>
                             <Card.Grid style={{
                                 width: '30%',
@@ -199,14 +232,14 @@ class Rating extends React.Component {
                                 {this.state.index == 0 ? null :
                                     <Icon type={'left'} onClick={
                                         () => {
-                                            this.getNewHomework(parseInt(this.state.index) - 1,-1);
+                                            this.getNewHomework(Number(this.state.index) - 1, -1);
                                         }
                                     } style={{float: 'left', marginTop: '5px'}}/>}
                                 {this.state.homework.nickName}
-                                {0 ? null :
+                                {this.state.index == (this.state.handinAlready - 1) ? null :
                                     <Icon type={'right'} onClick={
                                         () => {
-                                            this.getNewHomework(parseInt(this.state.index) + 1,1);
+                                            this.getNewHomework(Number(this.state.index) + 1, 1);
                                         }
                                     } style={{float: 'right', marginTop: '5px'}}/>}
 
@@ -223,6 +256,32 @@ class Rating extends React.Component {
                             {/**/}
 
                         </Card>
+                        <Modal
+                            title="作业内容"
+                            visible={this.state.visibleHomework}
+                            onOk={this.handleOk}
+                            onCancel={this.handleOk}
+                            footer={[
+                                <Button key="back" onClick={this.handleOk}>
+                                    关闭
+                                </Button>,
+                            ]}
+                        >
+                            <p>Some contents...</p>
+                        </Modal>
+                        <Modal
+                            title="作业答案"
+                            visible={this.state.visibleAnswer}
+                            onOk={this.handleOk}
+                            onCancel={this.handleOk}
+                            footer={[
+                                <Button key="back" onClick={this.handleOk}>
+                                    关闭
+                                </Button>,
+                            ]}
+                        >
+                            <p>{this.state.assignHomework.answer}</p>
+                        </Modal>
                     </Col>
                     <Col span={7}>
                         <Card style={{height: '800px'}}>
@@ -249,8 +308,8 @@ class Rating extends React.Component {
                                                 fontWeight: 'bold',
                                                 color: 'blue'
                                             }}>已评分！</span>
-                                            <p style={{marginTop:'10px'}}> {this.state.homework.score}/100</p>
-                                            <div style={{height:'30px'}}/>
+                                            <p style={{marginTop: '10px'}}> {this.state.homework.score}/100</p>
+                                            <div style={{height: '30px'}}/>
                                         </p>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>
                                             <span style={{
@@ -259,12 +318,12 @@ class Rating extends React.Component {
                                                 color: 'blue'
                                             }}>已评价！</span>
                                             <p>{this.state.homework.comment}</p>
-                                            <Button onClick={()=>{
+                                            <Button onClick={() => {
                                                 let homework = this.state.homework;
                                                 homework.score = null;
                                                 homework.comment = "";
                                                 this.setState({
-                                                    homework:homework
+                                                    homework: homework
                                                 })
                                             }} style={{fontWeight: 'bold', marginLeft: '10px'}}> 重新评价 </Button>
                                         </p>
@@ -361,12 +420,30 @@ class Rating extends React.Component {
                 </Row>
             </div>
         )
-    }
+    };
+    showModalHomework = () => {
+        this.setState({
+            visibleHomework: true,
+        });
+    };
+    showModalAnswer = () => {
+        this.setState({
+            visibleAnswer: true,
+        });
+    };
 
-    getNewHomework = async(index,value)=> {
+
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visibleHomework: false,
+            visibleAnswer: false,
+        });
+    };
+    getNewHomework = async (newIndex, value) => {
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getPageHomeworkOfStudents?homeworkId='+this.state.homework.homeworkId+'&page='+index+'&size=1',
+            url: 'http://106.13.209.140:8383/getPageHomeworkOfStudents?homeworkId=' + this.state.homework.homeworkId + '&page=' + newIndex + '&size=1',
             headers: {
                 withCredentials: true,
             }
@@ -379,8 +456,8 @@ class Rating extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        this.props.history.push("/home/homework/rate/" + this.state.homework.homeworkId + "/" + data[0].studentId + "/" + index + "/");
-        this.setState({homework:data[0],index:this.state.index+value})
+        this.props.history.push("/home/homework/rate/" + this.state.handinAlready + "/" + this.state.homework.homeworkId + "/" + data[0].studentId + "/" + newIndex + "/");
+        this.setState({homework: data[0], index: newIndex})
     }
 }
 

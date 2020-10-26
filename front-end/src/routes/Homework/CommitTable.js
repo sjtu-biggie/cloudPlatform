@@ -58,6 +58,7 @@ export default class STable extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            handinAlready:10000,
             data:null,
             search: '',
             search2: '',
@@ -145,9 +146,13 @@ export default class STable extends Component {
         };
 
         this.deleteData=()=>{
-        }
+        };
 
-        this.getStudentInfo = async (obj)=>{
+        this.getStudentInfo = async (obj,indexStudentHomeworks)=>{
+            if(indexStudentHomeworks.length===0){
+                // message.error("fuck!");
+                return null;
+            }
             console.log(obj);
             let config = {
                 method: 'post',
@@ -171,16 +176,25 @@ export default class STable extends Component {
                 if (list1[i].type === 'teacher')
                     list1.splice(i,1);
             }
-            let list2 = Array.from(this.props.studentHomework);
+            let list2 = Array.from(indexStudentHomeworks);
+            console.log(list1);
+            console.log(list2);
             let data = [];
             for (let i = 0; i < list1.length; ++i){
-                if (list2[i].score !== null){
+                let j;
+                for(j =0;j<list2.length;++j){
+                    if(list2[j].studentId===list1[i].username){
+                        break;
+                    }
+                }
+                if (list2[j].score !== null){
                     data.push({
+                        _index:list2[j]._index,
                         username: list1[i].username,
                         sid: list1[i].sid,
                         nickname: list1[i].nickname,
                         theClass: list1[i].theClass,
-                        theGrade: list2[i].score,
+                        theGrade: list2[j].score,
                         commit: '已提交',
                         correct:'已批改'
                     })
@@ -188,6 +202,7 @@ export default class STable extends Component {
                 else{
                     if (list2[i].handinTime !== null){
                         data.push({
+                            _index:list2[j]._index,
                             username: list1[i].username,
                             sid: list1[i].sid,
                             nickname: list1[i].nickname,
@@ -199,6 +214,7 @@ export default class STable extends Component {
                     }
                     else{
                         data.push({
+                            _index:list2[j]._index,
                             username: list1[i].username,
                             sid: list1[i].sid,
                             nickname: list1[i].nickname,
@@ -216,7 +232,7 @@ export default class STable extends Component {
                 data:data,
                 orData: data,
                 renderData: data
-            })
+            });
 
             console.log(this.state.data);
         };
@@ -225,12 +241,35 @@ export default class STable extends Component {
 
     componentWillMount() {
         console.log(this.props);
+        let indexStudentHomeworks=[];
+        for(let i =0;i<this.props.studentHomework.length;++i){
+            let indexStudentHomework = this.props.studentHomework[i];
+            indexStudentHomework._index  = i;
+            indexStudentHomeworks.push(indexStudentHomework);
+        }
         this.setState({
-            studentHomework: this.props.studentHomework,
+            studentHomework: indexStudentHomeworks,
             homework: this.props.homework,
             homeworkId: this.props.homeworkId,
+            handinAlready:this.props.handinAlready,
         });
-        this.getStudentInfo(this.props.homework);
+        this.getStudentInfo(this.props.homework,indexStudentHomeworks);
+    }
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log(nextProps);
+        let indexStudentHomeworks=[];
+        for(let i =0;i<nextProps.studentHomework.length;++i){
+            let indexStudentHomework = nextProps.studentHomework[i];
+            indexStudentHomework._index  = i;
+            indexStudentHomeworks.push(indexStudentHomework);
+        }
+        this.setState({
+            studentHomework: indexStudentHomeworks,
+            homework: nextProps.homework,
+            homeworkId: nextProps.homeworkId,
+            handinAlready:nextProps.handinAlready,
+        });
+        this.getStudentInfo(nextProps.homework,indexStudentHomeworks);
     }
 
 
@@ -267,7 +306,7 @@ export default class STable extends Component {
                             name: '操作',
                             key: 'cor',
                             render: (text,record,index) => (
-                                <a href={"/home/homework/rate/"+this.state.homeworkId+"/"+record.username+"/"+index+"/"}>批改</a>),
+                                <a href={"/home/homework/rate/"+this.state.handinAlready+"/"+this.state.homeworkId+"/"+record.username+"/"+record._index+"/"}>批改</a>),
                         }]}
                         dataSource={renderData}/>
                 </Card>

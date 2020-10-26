@@ -94,7 +94,7 @@ export default class Manager extends Component {
             modifyIds: [],
             classIds:[],
             courseId:'',
-            sids:["518021910814"],
+            sids:[],
         };
         this.searchInput = createRef();
 
@@ -217,7 +217,10 @@ export default class Manager extends Component {
     componentDidMount() {
         console.log(this.props.class);
         console.log(this.props.class.split(','));
+        const tmp=this.props.class.split(',');
+        console.log(tmp);
         console.log(this.props.courseId);
+        console.log(typeof (this.props.classIds));
         this.setState({
             courseId:this.props.courseId,
             classIds:this.props.class.split(',')
@@ -247,11 +250,27 @@ export default class Manager extends Component {
 
         axios({
             method:'POST',
-            url:'http://106.13.209.140:8000/getAllUsers'
+            url:'http://106.13.209.140:8000/getAllUsersByClassIds',
+            data:{
+                classIds:this.props.class.split(',')
+            }
         }).then(msg=>{
+            console.log(typeof(this.props.classIds));
+            const aa=this.props.class.split(',');
+            console.log(typeof(aa));
             console.log(msg.data);
+            console.log("fsda");
             var newData=msg.data;
-            var tryData=newData.filter(item=>!this.state.sids.includes(item.sid));
+            console.log(this.state.sids);
+            var tryData=newData.filter(item=>
+            {
+                console.log(item.sid);
+                console.log(this.state.sids.indexOf(item.sid));
+                if (this.state.sids.indexOf(item.sid)==-1){
+                    return item;
+                }
+            }
+            );
             console.log(tryData);
             this.setState({
                 orData2:tryData,

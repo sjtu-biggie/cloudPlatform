@@ -42,6 +42,19 @@ class Rating extends React.Component {
         penLazy:1,
         index:0,
     };
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
+    };
+    format = (shijianchuo) => {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth() + 1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
+    };
     onChange = value => {
         this.setState({
             penSize: value,
@@ -52,13 +65,30 @@ class Rating extends React.Component {
             penLazy: value,
         });
     };
+    getAverageScore =async()=>{
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8383/getStudentStatistics?studentId=' + this.props.userId + '&courseId=' + this.props.courseId + '&times=' + 0,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const data = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+}
     componentWillMount=()=> {
         this.setState({
             loading: true,
             homework: this.props.homework,
             index:this.props.index,
         });
-        console.log(this.props.homework)
+        console.log(this.props.homework);
         this.setState({
             loading: false
         });
@@ -69,7 +99,7 @@ class Rating extends React.Component {
             homework: nextProps.homework,
             index:nextProps.index
         });
-        console.log(this.props.homework)
+        console.log(this.props.homework);
 
         this.setState({
             loading: false
@@ -187,9 +217,9 @@ class Rating extends React.Component {
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>作业类型 : </span>
                                 {this.state.homework.accessmentalgorithms}</p>
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>截止时间 : </span>
-                                {this.state.homework.endtime}</p>
+                                {this.format(this.state.homework.endTime)}</p>
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>提交时间 : </span>
-                                {this.state.homework.handintime}</p>
+                                {this.format(this.state.homework.handinTime)}</p>
                             {
                                 this.state.homework.score === null ?
                                     <div>

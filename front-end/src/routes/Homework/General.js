@@ -22,17 +22,16 @@ import ChangeHomework from './ChangeHomework'
 
 const deadHomework = {
   homeworkId:1,
-  type:'数学',
-  grade:'七年级上',
-  title: `七年级上数学作业 `,
-  content: '同学们记得认真完成按时提交',
+  type:'加载中',
+  grade:'加载中',
+  title: `加载中 `,
+  content: '加载中',
   startTime:'2020-10-11 12:12:12',
   handinTime: null,
   endTime:'2020-10-12 12:12:13',
-  score: '100',
-  range:['八年级三班','八年级二班']
-
+  range:'加载中'
 };
+
 class ListDemo extends React.Component {
   state = {
     homeworkId:0,
@@ -41,7 +40,9 @@ class ListDemo extends React.Component {
     userInfo:null,
     role:null,
     cNum:0,
-    average:0
+    average:0,
+    handinAmount:0,
+    handinAlready:0,
   };
 
   getUserInfo = async (username)=>{
@@ -100,8 +101,6 @@ class ListDemo extends React.Component {
     this.setState({
       role: r,
       homeworkId: hwId,
-      cNum:0,
-      average:0
     });
     this.getUserInfo(username);
   };
@@ -146,9 +145,17 @@ class ListDemo extends React.Component {
         })
       }
     });
+    list.map(item=>{
+      if (item.handinTime !== null){
+        this.setState({
+          handinAlready: this.state.handinAlready+1,
+        })
+      }
+    });
     this.setState({
       studentHomework:hw,
-      average:total/hw.length
+      average:total/hw.length,
+      handinAmount:hw.length
     })
   };
 
@@ -166,10 +173,10 @@ class ListDemo extends React.Component {
         <Card bordered={false} title='提交情况' style={{marginBottom: 15}} id='verticalStyle'>
           <Col span={24}>
             <Card style={{height:'130px'}}>
-              <Statistic style={{marginTop:'10px',float:"left"}} title="总人数" value={this.state.homework.handinAmount} />
-              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已提交作业数" value={this.state.studentHomework.length} suffix={"/ "+this.state.homework.handinAmount}/>
-              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="缺交作业数" value={this.state.homework.handinAmount-this.state.studentHomework.length} suffix={"/ "+this.state.homework.handinAmount}/>
-              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已批改作业数" value={this.state.cNum} suffix={"/ "+this.state.homework.handinAmount}/>
+              <Statistic style={{marginTop:'10px',float:"left"}} title="总人数" value={this.state.handinAmount} />
+              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已提交作业数" value={this.state.handinAlready} suffix={"/ "+this.state.handinAmount}/>
+              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="缺交作业数" value={this.state.handinAmount-this.state.handinAlready} />
+              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已批改作业数" value={this.state.cNum} suffix={"/ "+this.state.handinAmount}/>
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="平均得分" value={this.state.average} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="适用人群" value={this.state.homework.range} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="开始时间" value={this.format(this.state.homework.startTime)} />

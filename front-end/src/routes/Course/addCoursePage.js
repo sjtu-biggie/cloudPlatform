@@ -722,7 +722,7 @@ class AddCourse extends React.Component {
                             <Steps.Step status="wait" title="完成" icon={<Icon type="check"/>}/>
                         </Steps>
                     </Card>
-                    <StudenTable courseId={this.state.courseId} newCourse={true}/>;
+                    <StudenTable class = {this.state.courseJson.classes} courseId={this.state.courseId} newCourse={true}/>;
                     <Row>
                         <Col offset={10}>
                             <Button onClick={() => {

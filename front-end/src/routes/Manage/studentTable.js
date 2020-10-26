@@ -92,7 +92,8 @@ export default class Manager extends Component {
             orData2: '',
             renderData2: '',
             modifyIds: [],
-            courseId:'1',
+            classIds:[],
+            courseId:'',
             sids:["518021910814"],
         };
         this.searchInput = createRef();
@@ -135,6 +136,11 @@ export default class Manager extends Component {
         this.handleSearch = () => {
             const { orData, search } = this.state;
             console.log(this.state.sids);
+            console.log(this.props.class);
+            var classIds=this.props.class.split(',');
+            console.log(classIds[1]);
+            console.log(classIds[0]);
+            console.log(classIds);
             const filterData = orData.filter(row => {
                 if (!search) return true;
                 const keys = columns.map(item => item.dataIndex);
@@ -210,12 +216,17 @@ export default class Manager extends Component {
 
     componentDidMount() {
         console.log(this.props.class);
-
+        console.log(this.props.class.split(','));
+        console.log(this.props.courseId);
+        this.setState({
+            courseId:this.props.courseId,
+            classIds:this.props.class.split(',')
+        })
         axios({
             method:'GET',
             url:'http://106.13.209.140:8787/course/getCourseStudent',
             params:{
-                courseId:1
+                courseId:this.props.courseId
             }
         }).then(msg=>{
             console.log(msg.data)
@@ -228,7 +239,6 @@ export default class Manager extends Component {
             this.setState({
                 orData:msg.data,
                 renderData:msg.data,
-                // sids:[...this.state.sids,...mosid],
             })
         }).catch(err=>{
             console.log(err)

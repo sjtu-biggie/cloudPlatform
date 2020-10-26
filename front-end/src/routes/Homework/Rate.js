@@ -205,7 +205,6 @@ class Rating extends React.Component {
                                             <Button  style={{fontWeight:'bold',marginLeft:'10px'}}> 重新评价 </Button>
                                         </p>
                                     </div>
-
                             }
 
                             <div style={{height:'200px'}}>

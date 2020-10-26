@@ -36,7 +36,7 @@ const gridStyle = {
 
 class RankData extends React.Component {
     state = {
-        times: 5,
+        times: 1,
         type: 0,
         step: 0,
         size: 'default',
@@ -107,8 +107,14 @@ class RankData extends React.Component {
             })
         }
         console.log(data1, data2);
-        data.meanScore = data.meanScore.toFixed(2);
-        data.recentMeanScore = data.recentMeanScore.toFixed(2);
+        if(data.finishHomework===0 &&data.failedHomework===0 ){
+            data.meanScore = "";
+            data.recentMeanScore = "";
+        }else{
+            data.meanScore = data.meanScore.toFixed(2);
+            data.recentMeanScore = data.recentMeanScore.toFixed(2);
+        }
+
         this.setState({
             stat: data,
             homeworkRankChange: data1,
@@ -160,8 +166,8 @@ class RankData extends React.Component {
     getRankStat = async () => {
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getRank?courseId=' + this.props.courseId + '&userId=' + this.props.userId,
-            headers: {
+                url: 'http://106.13.209.140:8787/course/getRank?courseId=' + this.props.courseId + '&userId=' + this.props.userId,
+                headers: {
                 withCredentials: true,
             }
         };
@@ -186,22 +192,10 @@ class RankData extends React.Component {
             'value': {min: 0, alias: '提交时间'},
             'num': {alias: '作业'},
         };
-
-        const data2 = [
-            {num: '1951 年', value: 38},
-            {num: '1952 年', value: 52},
-            {num: '1956 年', value: 61},
-            {num: '1957 年', value: 145},
-            {num: '1958 年', value: 48},
-            {num: '1959 年', value: 38},
-            {num: '1960 年', value: 38},
-            {num: '1962 年', value: 38},
-        ];
         const cols2 = {
             'value': {min: 0, alias: '成绩', tickInterval: 20, max: 100},
             'num': {alias: '作业'},
         };
-        const {times} = this.state
         return (
             <div>
                 <Row>
@@ -233,13 +227,18 @@ class RankData extends React.Component {
                     </Col>
                     <Col span={4}>
                         <Card style={{height: '130px'}}>
-                            位次比例
-                            {this.props.seeCourseAverage ? <div>
+                            <Row>
+                                <Col style={{marginTop:'30px'}} span={8}>
+
+                                位次比例
+                                </Col>
+                            {this.props.seeCourseAverage&&this.state.stat.meanScore!=="" ? <div>
                                 <Progress style={{marginLeft: '10px'}} width={80} type="circle"
                                           percent={Math.floor(this.state.rank.rank * 100 / this.state.rank.altogether)}/>
                             </div> : <img style={{marginLeft: '30px'}} width={80} alt="logo"
                                           src={require("../../pic/market-svg/031-lock.svg")}/>
                             }
+                            </Row>
 
                         </Card>
                     </Col>
@@ -249,10 +248,12 @@ class RankData extends React.Component {
                                 <div>
                                     <Statistic style={{marginTop: '10px', float: 'left'}} title="总排名"
                                                value={this.state.rank.rank} suffix={"/ " + this.state.rank.altogether}/>
+                                    {this.state.rank.rank ===1?
                                     < img style={{float: 'left', marginLeft: '30px'}} width={80} alt="logo"
-                                          src={require("../../pic/school-svg/037-medal.svg")}/>
+                                          src={require("../../pic/school-svg/037-medal.svg")}/>:<img style={{marginLeft: '30px'}} width={80} alt="logo"
+                                                                                                     src={require("../../pic/market-svg/001-dislike.svg")}/>}
                                 </div> : <div>总排名 <img style={{marginLeft: '30px'}} width={80} alt="logo"
-                                                       src={require("../../pic/market-svg/031-lock.svg")}/></div>
+                                                                                  src={require("../../pic/market-svg/031-lock.svg")}/></div>
                             }
                         </Card>
                     </Col>

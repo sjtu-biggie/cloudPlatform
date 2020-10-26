@@ -7,27 +7,6 @@ import * as XLSX from 'xlsx';
 
 import {Router} from "react-router-dom";
 
-let index = 0;
-const getMockData = () => {
-    const result = {
-        username: 'username' + index,
-        sid:'sid'+index,
-        nickname: 'nickname' + index,
-        theGrade:'theGrade'+index,
-        theClass:'theClass'+index,
-    };
-    index += 1;
-    return result;
-};
-const getMockDatas = (num) => {
-    const data = [];
-    for (let i = 0; i < num; i++) {
-        data.push(getMockData());
-    }
-    return data;
-};
-const data1 = getMockDatas(10);
-
 const columns = [
     { title: '用户名', dataIndex: 'username' },
     { title: '学号', dataIndex: 'sid' },
@@ -86,8 +65,6 @@ export default class STable extends Component {
             delData:'',
             orData: null,
             renderData: null,
-            // orData: data1,
-            // renderData: data1,
             modifyIds: [],
             homework: null,
             studentHomework:null,
@@ -188,13 +165,10 @@ export default class STable extends Component {
                 });
 
             let list1 = Array.from(studentInfo);
-            console.log(list1);
             for(let i = 0; i < list1.length; ++i){
                 if (list1[i].type === 'teacher')
                     list1.splice(i,1);
             }
-            console.log(list1);
-            console.log(this.props.studentHomework);
             let list2 = Array.from(this.props.studentHomework);
             let data = [];
             for (let i = 0; i < list1.length; ++i){
@@ -241,13 +215,19 @@ export default class STable extends Component {
                 orData: data,
                 renderData: data
             })
+            console.log(this.props);
             console.log(this.state.data);
         };
 
     }
 
     componentWillMount() {
-
+        this.setState({
+            studentHomework: this.props.studentHomework,
+            homework: this.props.homework,
+            homeworkId: this.props.homeworkId,
+        });
+        this.getStudentInfo(this.props.homework);
     }
 
     componentWillReceiveProps(nextProps){

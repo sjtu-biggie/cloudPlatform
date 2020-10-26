@@ -7,82 +7,15 @@ import HomeworkList from './HomeworkList'
 const { Search } = Input;
 
 const deathHomework = [];
-for(let i=0;i<3;i++){
+for(let i=0;i<1;i++){
     deathHomework.push({
-        type:'数学',
-        grade:'七年级上',
-        title: `七年级上数学作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
+        subject:'加载中',
+        grade:'加载中',
+        content: '加载中',
         startTime:'2020-10-11 12:12:12',
         handinTime: null,
         endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'语文',
-        grade:'七年级上',
-        title: `七年级上语文作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'英语',
-        grade:'七年级上',
-        title: `七年级上英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'英语',
-        grade:'八年级上',
-        title: `八年级上英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        subject:'英语',
-        grade:'八年级上',
-        title: `八年级下英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
+        score: '加载中',
     })
 }
 
@@ -170,13 +103,13 @@ class HomeworkDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(hw)
+        console.log(hw);
         this.setState({
             homework:hw,
             displayHomework:hw,
             subjectHomework:hw,
             gradeHomework:hw
-        })
+        });
         console.log(this.state.homework);
     };
 

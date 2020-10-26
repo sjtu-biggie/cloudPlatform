@@ -93,4 +93,11 @@ public class StudentHomeworkController {
         return studenthomeworkService.getStudentStatistics(studentId, courseId,times);
     }
 
+    //获取当前平均分
+    @RequestMapping(value = "/getAverage")
+    public @ResponseBody
+    double getStudentStatistics(@RequestParam("homeworkId") int homeworkId){
+        return studenthomeworkService.getAverage(homeworkId);
+    }
+
 }

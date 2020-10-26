@@ -64,6 +64,23 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     public List<StudentHomework> getStudentHomeworkAllOfHomeworkPage(int homeworkId, Pageable p){
         return studenthomeworkDao.findByHomeworkId(homeworkId,p);
     }
+
+    @Override
+    public double getAverage(int homeworkId) {
+        double ave;
+        double count = 0;
+        double score = 0;
+        List<StudentHomework> studentHomeworkList = studenthomeworkDao.findAllOfHomework(homeworkId);
+        for (StudentHomework studentHomework : studentHomeworkList){
+            if(studentHomework.getScore() != null){
+                score += studentHomework.getScore();
+                count++;
+            }
+        }
+        ave = score/count;
+        return ave;
+    }
+
     @Override
     public void deleteStudentHomeworkOne(String studentId, int homeworkId){
         studenthomeworkDao.deleteOne(studentId, homeworkId);

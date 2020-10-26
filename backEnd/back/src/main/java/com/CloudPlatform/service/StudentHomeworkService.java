@@ -22,4 +22,6 @@ public interface StudentHomeworkService {
     StudentStat getStudentStatistics(String studentId, int courseId,int time);
 
     List<StudentHomework> getStudentHomeworkAllOfHomeworkPage(int homeworkId, Pageable p);
+
+    double getAverage(int homeworkId);
 }

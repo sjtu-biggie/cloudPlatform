@@ -166,8 +166,8 @@ class RankData extends React.Component {
     getRankStat = async () => {
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getRank?courseId=' + this.props.courseId + '&userId=' + this.props.userId,
-            headers: {
+                url: 'http://106.13.209.140:8787/course/getRank?courseId=' + this.props.courseId + '&userId=' + this.props.userId,
+                headers: {
                 withCredentials: true,
             }
         };
@@ -192,22 +192,10 @@ class RankData extends React.Component {
             'value': {min: 0, alias: '提交时间'},
             'num': {alias: '作业'},
         };
-
-        const data2 = [
-            {num: '1951 年', value: 38},
-            {num: '1952 年', value: 52},
-            {num: '1956 年', value: 61},
-            {num: '1957 年', value: 145},
-            {num: '1958 年', value: 48},
-            {num: '1959 年', value: 38},
-            {num: '1960 年', value: 38},
-            {num: '1962 年', value: 38},
-        ];
         const cols2 = {
             'value': {min: 0, alias: '成绩', tickInterval: 20, max: 100},
             'num': {alias: '作业'},
         };
-        const {times} = this.state
         return (
             <div>
                 <Row>

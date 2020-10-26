@@ -4,6 +4,7 @@ import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from
 import styles from './index.css';
 import {Router} from "react-router-dom";
 import axios from "axios";
+import {createAtom} from "mobx";
 
 let index = 0;
 const getMockData = () => {
@@ -214,34 +215,52 @@ export default class Manager extends Component {
 
     }
 
+
+
     componentDidMount() {
-        console.log(this.props.class);
-        console.log(this.props.class.split(','));
-        const tmp=this.props.class.split(',');
-        console.log(tmp);
-        console.log(this.props.courseId);
-        console.log(typeof (this.props.classIds));
-        this.setState({
-            courseId:this.props.courseId,
-            classIds:this.props.class.split(',')
+
+        const myCourseId=this.props.courseId;
+        const mySids=new Array();
+        const myclassIds=this.props.class.split(',');
+        console.log(myclassIds);
+        console.log(myCourseId);
+
+        axios.all([
+            axios.get('http://106.13.209.140:8787/course/getCourseStudent',{params:{courseId:myCourseId}}),
+            axios.post('http://106.13.209.140:8000/getAllUsersByClassIds',{data:{courseId:'1'}}),
+        ]).then(
+            axios.spread(function (res1){
+                console.log(res1);
+                // console.log(res2);
+            })
+        ).catch(err=>{
+            console.log(err);
         })
+
+
+
+
+
         axios({
             method:'GET',
             url:'http://106.13.209.140:8787/course/getCourseStudent',
             params:{
-                courseId:this.props.courseId
+                courseId:myCourseId
             }
         }).then(msg=>{
             console.log(msg.data)
-            console.log(msg.data.length)
             msg.data.map(item=>{
-                this.state.sids.push(item.sid);
+                console.log(item);
+                mySids.push(item.sid);
                 return item;
             })
-            console.log(this.state.sids);
+            console.log(mySids);
             this.setState({
                 orData:msg.data,
                 renderData:msg.data,
+                sid:mySids,
+                courseId:myCourseId,
+                classIds:myclassIds,
             })
         }).catch(err=>{
             console.log(err)
@@ -252,34 +271,31 @@ export default class Manager extends Component {
             method:'POST',
             url:'http://106.13.209.140:8000/getAllUsersByClassIds',
             data:{
-                classIds:this.props.class.split(',')
+                classIds:myclassIds
             }
         }).then(msg=>{
-            console.log(typeof(this.props.classIds));
-            const aa=this.props.class.split(',');
-            console.log(typeof(aa));
             console.log(msg.data);
-            console.log("fsda");
-            var newData=msg.data;
-            console.log(this.state.sids);
-            var tryData=newData.filter(item=>
+            console.log(mySids);
+            var filterData=msg.data.filter(item=>
             {
+
+
                 console.log(item.sid);
-                console.log(this.state.sids.indexOf(item.sid));
-                if (this.state.sids.indexOf(item.sid)==-1){
+                console.log(mySids.indexOf(item.sid.toLocaleString()));
+                console.log(mySids.includes(item.sid));
+                if (!mySids.includes(item.sid)){
                     return item;
                 }
             }
             );
-            console.log(tryData);
+            console.log(filterData);
             this.setState({
-                orData2:tryData,
-                renderData2:tryData,
+                orData2:filterData,
+                renderData2:filterData,
             })
         }).catch(err=>{
             console.log(err)
         })
-
     }
 
 

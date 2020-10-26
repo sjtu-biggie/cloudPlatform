@@ -11,6 +11,7 @@ import {
     Dropdown,
     Input,
     Menu,
+    message,
     Col, Row, Statistic, InputNumber, Slider, Modal
 } from 'antd'
 import axios from 'axios'
@@ -31,6 +32,7 @@ const status = {
 
 class Rating extends React.Component {
     state = {
+        saveableCanvas:"",
         visibleHomework:false,
         visibleAnswer:false,
         handinAlready: 10000,
@@ -139,6 +141,9 @@ class Rating extends React.Component {
             index: nextProps.index
         });
         console.log(nextProps.homework);
+        if(nextProps.homework===undefined){
+            return;
+        }
         this.getAverageScore(nextProps.homework.homeworkId);
         this.getHomework(nextProps.homework.homeworkId);
         this.setState({
@@ -386,7 +391,10 @@ class Rating extends React.Component {
                                             </Col>
                                             <Col offset={3} span={3}>
                                                 <Button onClick={() => {
-                                                    console.log(this.saveableCanvas.getSaveData())
+                                                    this.setState({
+                                                        saveableCanvas:this.saveableCanvas.getSaveData()
+                                                    });
+                                                    console.log(this.saveableCanvas.getSaveData());
                                                 }} style={{fontWeight: 'bold', marginLeft: '10px'}}> 保存画布 </Button>
                                             </Col>
                                         </Row>
@@ -409,7 +417,8 @@ class Rating extends React.Component {
                                 </Col>
                                 <Col offset={1} span={7}>
                                     <img onClick={() => {
-                                        this.setState({status: status.NOTING})
+                                        this.setState({status: status.READING})
+                                        this.submitRate();
                                     }} style={{float: 'left'}} width={80} alt="logo"
                                          src={require("../../pic/market-svg/013-backup.svg")}/>
                                 </Col>
@@ -420,6 +429,21 @@ class Rating extends React.Component {
                 </Row>
             </div>
         )
+    };
+    submitRate=()=>{
+        if(!(this.state.homework.score === null)){
+            message.error("请先点击重新评价，再提交批改");
+            return 1;
+        }
+        let score = document.getElementById("inputNumber").value;
+        let comment = document.getElementById("textarea").value;
+        let drawing = this.state.saveableCanvas;
+        // score = score.value;
+        // comment = comment.value;
+        if (score===""||score===null||comment===""||comment===null){
+            message.error("请填写正确的分数和评语！");
+            return 1;
+        }
     };
     showModalHomework = () => {
         this.setState({
@@ -457,7 +481,7 @@ class Rating extends React.Component {
                 console.log(error);
             });
         this.props.history.push("/home/homework/rate/" + this.state.handinAlready + "/" + this.state.homework.homeworkId + "/" + data[0].studentId + "/" + newIndex + "/");
-        this.setState({homework: data[0], index: newIndex})
+        this.setState({homework: data[0], index: newIndex,saveableCanvas:""})
     }
 }
 

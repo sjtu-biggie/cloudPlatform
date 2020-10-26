@@ -30,7 +30,7 @@ class RatePage extends React.Component {
     homework:{}
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({
       loading: true,
     });

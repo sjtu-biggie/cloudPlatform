@@ -536,7 +536,6 @@ class CourseDemo extends React.Component {
                 </Menu.SubMenu>
             </Menu>
         );
-        const {loadingMore} = this.state
         return (
             <div>
                 <CustomBreadcrumb

@@ -292,8 +292,8 @@ export default class STable extends Component {
                         },{
                             name: '操作',
                             key: 'cor',
-                            render: record => (
-                                <a href={"/home/homework/rate?homeworkId="+this.state.homeworkId}>批改</a>),
+                            render: (text,record,index) => (
+                                <a href={"/home/homework/rate/"+this.state.homeworkId+"/"+record.username+"/"+index+"/"}>批改</a>),
                         }]}
                         dataSource={renderData}/>
                 </Card>

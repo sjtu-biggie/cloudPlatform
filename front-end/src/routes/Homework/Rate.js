@@ -6,12 +6,6 @@ import {
     Spin,
     Button,
     Radio,
-    List,
-    Switch,
-    Avatar,
-    BackTop,
-    Anchor,
-    Affix,
     Icon,
     Form,
     Dropdown,
@@ -43,10 +37,10 @@ class Rating extends React.Component {
         delete: false,
         role: 'teacher',
         studentIndex: 0,
-        studentHomeworkList: null,
-        homework: null,
+        homework: {},
         penSize:5,
-        penLazy:1
+        penLazy:1,
+        index:0,
     };
     onChange = value => {
         this.setState({
@@ -59,12 +53,24 @@ class Rating extends React.Component {
         });
     };
     componentWillMount=()=> {
-
         this.setState({
             loading: true,
-            studentHomeworkList: this.props.studentHomeworkList,
-            homework: this.props.homework
+            homework: this.props.homework,
+            index:this.props.index,
         });
+        console.log(this.props.homework)
+        this.setState({
+            loading: false
+        });
+    };
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.setState({
+            loading: true,
+            homework: nextProps.homework,
+            index:nextProps.index
+        });
+        console.log(this.props.homework)
+
         this.setState({
             loading: false
         });
@@ -155,8 +161,8 @@ class Rating extends React.Component {
                                             })
                                         }
                                     } style={{float: 'left', marginTop: '5px'}}/>}
-                                {this.state.studentHomeworkList[this.state.studentIndex].nickname}
-                                {this.state.studentIndex >= (this.state.studentHomeworkList.length - 1) ? null :
+                                {this.state.homework.nickName}
+                                {0 ? null :
                                     <Icon type={'right'} onClick={
                                         () => {
                                             this.setState({
@@ -183,9 +189,9 @@ class Rating extends React.Component {
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>截止时间 : </span>
                                 {this.state.homework.endtime}</p>
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>提交时间 : </span>
-                                {this.state.studentHomeworkList[this.state.studentIndex].handintime}</p>
+                                {this.state.homework.handintime}</p>
                             {
-                                this.state.studentHomeworkList[this.state.studentIndex].score === null ?
+                                this.state.homework.score === null ?
                                     <div>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
                                             <InputNumber style={{marginLeft: '20px'}} id={'inputNumber'} min={0} max={100}/> /100</p>
@@ -196,12 +202,12 @@ class Rating extends React.Component {
                                     <div style={{height:'320px'}}>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
                                             <span style={{fontSize: '20px', fontWeight: 'bold', color: 'blue'}}>已评分！</span>
-                                            <p> {this.state.studentHomeworkList[this.state.studentIndex].score}/100</p>
+                                            <p> {this.state.homework.score}/100</p>
                                             <Button  style={{fontWeight:'bold',marginLeft:'10px'}}> 重新评分 </Button>
                                           </p>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>
                                             <span style={{fontSize: '20px', fontWeight: 'bold', color: 'blue'}}>已评价！</span>
-                                            <p>{this.state.studentHomeworkList[this.state.studentIndex].comment}</p>
+                                            <p>{this.state.homework.comment}</p>
                                             <Button  style={{fontWeight:'bold',marginLeft:'10px'}}> 重新评价 </Button>
                                         </p>
                                     </div>
@@ -270,10 +276,10 @@ class Rating extends React.Component {
                                     <img onClick={()=>{this.setState({status:status.DRAWING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/002-marker.svg" )}/>
                                 </Col>
                                 <Col offset={1} span={7}>
-                                    <img onClick={()=>{this.setState({status:status.NOTING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/001-exam.svg" )}/>
+                                    <img onClick={()=>{this.setState({status:status.READING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/012-laptop.svg" )}/>
                                 </Col>
                                 <Col offset={1} span={7}>
-                                    <img onClick={()=>{this.setState({status:status.READING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/school-svg/012-laptop.svg" )}/>
+                                    <img onClick={()=>{this.setState({status:status.NOTING})}} style={{float:'left'}} width={80} alt="logo" src={require("../../pic/market-svg/013-backup.svg" )}/>
                                 </Col>
                             </Row>
 
@@ -285,10 +291,5 @@ class Rating extends React.Component {
     }
 }
 
-const styles = {
-    listStyle: {
-        width: '100%',
-    }
-};
 
 export default Rating

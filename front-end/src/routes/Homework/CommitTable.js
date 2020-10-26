@@ -84,8 +84,10 @@ export default class STable extends Component {
             search2: '',
             search3:'',
             delData:'',
-            orData: data1,
-            renderData: data1,
+            orData: null,
+            renderData: null,
+            // orData: data1,
+            // renderData: data1,
             modifyIds: [],
             homework: null,
             studentHomework:null,
@@ -184,7 +186,15 @@ export default class STable extends Component {
                 .catch(function (error) {
                     console.log(error);
                 });
+
             let list1 = Array.from(studentInfo);
+            console.log(list1);
+            for(let i = 0; i < list1.length; ++i){
+                if (list1[i].type === 'teacher')
+                    list1.splice(i,1);
+            }
+            console.log(list1);
+            console.log(this.props.studentHomework);
             let list2 = Array.from(this.props.studentHomework);
             let data = [];
             for (let i = 0; i < list1.length; ++i){

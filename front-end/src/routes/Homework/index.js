@@ -93,6 +93,7 @@ class HomeworkDemo extends React.Component {
         size: 'default',
         bordered: true,
         homework: deathHomework,
+        //homework: null,
         displayHomework: null,
         gradeHomework: null,
         subjectHomework: null,

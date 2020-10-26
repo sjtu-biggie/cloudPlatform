@@ -51,6 +51,7 @@ class ChangeHomework extends React.Component {
     state = {
         disabled: false,
         homework: Hw,
+       // homework: null,
         homeworkId: 0,
         ableState: true,
         buttonName:'修改作业',
@@ -203,7 +204,7 @@ class ChangeHomework extends React.Component {
                         <FormItem label='作业名称' {...formItemLayout} required>
                             {
                                 getFieldDecorator('homework_name', {
-                                    initialValue:this.state.homework.title,
+                                    initialValue:this.state.homework === null ? '暂无': this.state.homework.title,
                                     rules: [
                                         {
                                             required: true,

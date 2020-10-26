@@ -93,6 +93,7 @@ class HomeworkDemo extends React.Component {
         size: 'default',
         bordered: true,
         homework: deathHomework,
+        //homework: null,
         displayHomework: null,
         gradeHomework: null,
         subjectHomework: null,
@@ -146,17 +147,18 @@ class HomeworkDemo extends React.Component {
         })
 
         if (this.state.role === 'teacher'){
-            this.getTeacherHomeworkAll();
+            this.getTeacherHomeworkAll(this.state.userInfo.username);
         }
         else if (this.state.role === 'student'){
             this.getStudentHomeworkAll(this.state.userInfo.username)
         }
     };
 
-    getTeacherHomeworkAll=async ()=>{
+    getTeacherHomeworkAll=async (teacherId)=>{
+        console.log(teacherId);
         let config = {
-            method: 'get',
-            url: 'http://106.13.209.140:8383/getHomeworkAll',
+            method: 'post',
+            url: 'http://106.13.209.140:8383/getHomeworkAll?teacherId='+teacherId,
             headers: {
                 withCredentials: true,
             }

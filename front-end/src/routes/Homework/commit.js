@@ -5,8 +5,13 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import TypingCard from '../../components/TypingCard'
 import {Editor} from "react-draft-wysiwyg";
 import  CommitPage from "./commitPage"
+import RichText from "./RichText"
 
 const { Text, Link } = Typography;
+
+
+
+
 class HomeworkCommit extends React.Component{
 
     state={
@@ -25,22 +30,8 @@ class HomeworkCommit extends React.Component{
 
 
                     <Card bordered={false} className='card-item'>
-                        <Editor
-                            editorState={editorState}
-                            onEditorStateChange={this.onEditorStateChange}
-                            onContentStateChange={this.onContentStateChange}
-                            wrapperClassName="wrapper-class"
-                            editorClassName="editor-class"
-                            toolbarClassName="toolbar-class"
-                            localization={{ locale: 'zh'}}
-                            toolbar={{
-                                image: { uploadCallback: this.uploadImageCallBack, alt: { present: true, mandatory: true }},
-                            }}
-                        />
+                        <RichText></RichText>
                     </Card>
-                    <Upload>
-                        <Button><Icon type="upload"/>上传作业</Button>
-                    </Upload>
                     <br></br>
                     <Button type="primary"  onClick={()=>this.setState({isCommit:!this.state.isCommit})} size={this.state.size}>{this.state.isCommit===true?"重新提交":"提交"}</Button>&emsp;
                 </Card>

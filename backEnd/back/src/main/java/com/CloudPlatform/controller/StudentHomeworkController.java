@@ -3,6 +3,8 @@ import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
 import com.CloudPlatform.service.StudentHomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +46,13 @@ public class StudentHomeworkController {
     @RequestMapping(value = "/getHomeworkOfStudents")
     public List<StudentHomework> getHomeworkOfStudents(@RequestParam("homeworkId") int homeworkId) {
         return studenthomeworkService.getStudentHomeworkAllOfHomework(homeworkId);
+    }
+
+    //分页获取课程某次所有学生提交的的作业
+    @RequestMapping(value = "/getPageHomeworkOfStudents")
+    public List<StudentHomework> getPageHomeworkOfStudents(@RequestParam("homeworkId") int homeworkId,@RequestParam("page") int page, @RequestParam("size") int size) {
+        Pageable p = PageRequest.of(page,size);
+        return studenthomeworkService.getStudentHomeworkAllOfHomeworkPage(homeworkId,p);
     }
 
     //获取课程某次所有学生提交的的作业没有mongo

@@ -6,6 +6,8 @@ import com.CloudPlatform.entity.StudentHomeworkDetail;
 import com.CloudPlatform.repository.StudentHomeworkDetailRepository;
 import com.CloudPlatform.repository.StudentHomeworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -145,5 +147,20 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
     public Integer getStudentHomeworkNum(String studentId,int courseId){
         return studenthomeworkRepository.getStudentHomeworkNum(studentId,courseId);
     }
+    @Override
+    public List<StudentHomework> findByHomeworkId(int homeworkId, Pageable p){
+        String hwId = Integer.toString(homeworkId);
+        List<StudentHomework> homeworkList = studenthomeworkRepository.findAllByHomeworkId(homeworkId,p).getContent();
+        for(int i = 0; i < homeworkList.size();++i){
+            StudentHomeworkDetail studentHomeworkDetail = studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(homeworkList.get(i).getStudentId(),Integer.toString(homeworkList.get(i).getHomeworkId()));
+            if(studentHomeworkDetail!=null){
+                (homeworkList.get(i)).setContent(studentHomeworkDetail.getContent());
+                (homeworkList.get(i)).setComment(studentHomeworkDetail.getComment());
+                (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
+                (homeworkList.get(i)).setCorrect(studentHomeworkDetail.getCorrect());
+            }
+        }
 
+        return homeworkList;
+    }
 }

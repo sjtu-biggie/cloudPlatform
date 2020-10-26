@@ -1,6 +1,8 @@
 package com.CloudPlatform.dao;
 
 import com.CloudPlatform.entity.StudentHomework;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -20,4 +22,5 @@ public interface StudentHomeworkDao {
     Integer getStudentHomeworkNum(String studentId,int courseId);
 
 
+    List<StudentHomework> findByHomeworkId(int homeworkId, Pageable p);
 }

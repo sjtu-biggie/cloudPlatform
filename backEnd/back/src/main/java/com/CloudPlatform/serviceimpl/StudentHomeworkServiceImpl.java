@@ -5,6 +5,8 @@ import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
 import com.CloudPlatform.service.StudentHomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,7 +60,10 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     public void deleteStudentHomeworkAll(String studentId, int courseId){
         studenthomeworkDao.deleteAll(studentId, courseId);
     }
-
+    @Override
+    public List<StudentHomework> getStudentHomeworkAllOfHomeworkPage(int homeworkId, Pageable p){
+        return studenthomeworkDao.findByHomeworkId(homeworkId,p);
+    }
     @Override
     public void deleteStudentHomeworkOne(String studentId, int homeworkId){
         studenthomeworkDao.deleteOne(studentId, homeworkId);

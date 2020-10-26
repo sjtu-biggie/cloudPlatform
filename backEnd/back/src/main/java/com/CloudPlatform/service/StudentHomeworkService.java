@@ -2,6 +2,7 @@ package com.CloudPlatform.service;
 
 import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface StudentHomeworkService {
 
     StudentStat getStudentStatistics(String studentId, int courseId,int time);
 
+    List<StudentHomework> getStudentHomeworkAllOfHomeworkPage(int homeworkId, Pageable p);
 }

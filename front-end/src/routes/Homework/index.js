@@ -12,9 +12,6 @@ for(let i=0;i<1;i++){
         subject:'加载中',
         grade:'加载中',
         content: '加载中',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
         score: '加载中',
     })
 }

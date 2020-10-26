@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Mapper.UserMapper;
 import com.example.demo.model.User;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -46,6 +50,23 @@ public class UserManageController {
         System.out.println("从班级中删除学生"+username);
         userMapper.delUser(username);
         return "已经删除用户";
+    }
+
+
+    @RequestMapping(value="/getAllUsersByClassIds",method=RequestMethod.POST)
+    public List<User> getAllUsersByClassIds(@RequestBody JSONObject obj){
+
+        JSONArray classIds=obj.getJSONArray("classIds");
+        System.out.println(classIds);
+        List<User> users=new ArrayList<>();
+        for(Object s:classIds){
+            String classId=s.toString();
+            List<User> tmp=userMapper.getAllStudentsByClass(classId);
+            System.out.println(tmp);
+            users.addAll(tmp);
+        }
+        System.out.println(users);
+        return users;
     }
 
 }

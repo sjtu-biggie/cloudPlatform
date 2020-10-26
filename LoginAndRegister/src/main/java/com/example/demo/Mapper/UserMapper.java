@@ -1,10 +1,8 @@
 package com.example.demo.Mapper;
 
+import com.alibaba.fastjson.JSONArray;
 import com.example.demo.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.omg.CORBA.PUBLIC_MEMBER;
 
 import javax.jws.soap.SOAPBinding;
@@ -42,8 +40,10 @@ public interface UserMapper {
     @Select("select username,password,sid,email,telephone,nickname,type,theGrade,theClass from userdemo")
     public List<User> getAllUsers();
 
-    @Select("select username,password,sid,email,telephone,nickname,type,theGrade,theClass from userdemo where theClass=#{theClaSS}")
+    @Select("select username,password,sid,email,telephone,nickname,type,theGrade,theClass from userdemo where theClass=#{theClass}")
     public  List<User> getAllStudentsByClass(String theClass);
 
+    @Select("select * from userdemo where theClass IN classIds")
+    public List<User> getAllUsersByClassIds(@Param("classIds") String[] classIds);
 
 }

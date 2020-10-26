@@ -199,7 +199,6 @@ export default class ClassManage extends Component {
 
 
 
-
     render() {
         const { orData, search, renderData, modifyIds } = this.state;
         return (

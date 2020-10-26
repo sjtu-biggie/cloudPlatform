@@ -233,15 +233,6 @@ export default class STable extends Component {
         this.getStudentInfo(this.props.homework);
     }
 
-    componentWillReceiveProps(nextProps){
-        this.setState({
-            studentHomework: this.props.studentHomework,
-            homework: this.props.homework,
-            homeworkId: this.props.homeworkId,
-        });
-        //this.getStudentInfo(this.props.homework);
-    }
-
 
     render() {
         const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;

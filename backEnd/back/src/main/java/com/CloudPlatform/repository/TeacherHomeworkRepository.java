@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface TeacherHomeworkRepository extends JpaRepository<TeacherHomework,String> {
-    List<TeacherHomework> findAll();
+    List<TeacherHomework> findAllByTeacherId(String teacherId);
     List<TeacherHomework> findAllByCourseId(int courseId);
     TeacherHomework findByHomeworkId(int homeworkId);
     @Transactional

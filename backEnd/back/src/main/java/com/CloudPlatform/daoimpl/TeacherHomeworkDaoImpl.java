@@ -69,9 +69,9 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
     }
 
     @Override
-    public List<TeacherHomework> findAll() {
-        List<TeacherHomework> homeworkList = teacherhomeworkRepository.findAll();
-        List<TeacherHomeworkDetail> list1 = teacherhomeworkDetailRepository.findAll();
+    public List<TeacherHomework> findAllByTeacherId(String teacherId) {
+        List<TeacherHomework> homeworkList = teacherhomeworkRepository.findAllByTeacherId(teacherId);
+        List<TeacherHomeworkDetail> list1 = teacherhomeworkDetailRepository.findAllByTeacherId(teacherId);
 
         for(int i = 0; i < homeworkList.size();++i){
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());

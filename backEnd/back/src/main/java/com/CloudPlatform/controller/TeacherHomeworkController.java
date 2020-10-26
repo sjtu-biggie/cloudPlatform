@@ -15,8 +15,8 @@ public class TeacherHomeworkController {
 
     //获取所有课课布置过的所有作业
     @RequestMapping(value = "/getHomeworkAll")
-    public List<TeacherHomework> getHomeworkAll() {
-        return teacherhomeworkService.getHomeworkAll();
+    public List<TeacherHomework> getHomeworkAll(@RequestParam("teacherId") String teacherId) {
+        return teacherhomeworkService.getHomeworkAll(teacherId);
     }
 
     //获取该门课布置过的所有作业

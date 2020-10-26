@@ -14,8 +14,8 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
     private TeacherHomeworkDao teacher_homeworkDao;
 
     @Override
-    public List<TeacherHomework> getHomeworkAll() {
-        return teacher_homeworkDao.findAll();
+    public List<TeacherHomework> getHomeworkAll(String teacherId) {
+        return teacher_homeworkDao.findAllByTeacherId(teacherId);
     }
 
     @Override

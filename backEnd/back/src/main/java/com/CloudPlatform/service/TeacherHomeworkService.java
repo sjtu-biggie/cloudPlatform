@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public interface TeacherHomeworkService {
-    List<TeacherHomework> getHomeworkAll();
+    List<TeacherHomework> getHomeworkAll(String teacherId);
     List<TeacherHomework> getTeacherHomeworkAll(int courseId);
     TeacherHomework getTeacherHomeworkOne(int homeworkId);
     TeacherHomework editTeacherHomework(TeacherHomework homework);

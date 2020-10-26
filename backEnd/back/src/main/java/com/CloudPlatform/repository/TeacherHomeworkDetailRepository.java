@@ -10,7 +10,7 @@ import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel="TeacherHomeworkDetail",path="TeacherHomeworkDetail")
 public interface TeacherHomeworkDetailRepository extends MongoRepository<TeacherHomeworkDetail, String>  {
-    List<TeacherHomeworkDetail> findAll();
+    List<TeacherHomeworkDetail> findAllByTeacherId(String teacherId);
     List<TeacherHomeworkDetail> findAllByCourseId(String courseId);
     TeacherHomeworkDetail findByHomeworkId(String homeworkId);
     @Transactional

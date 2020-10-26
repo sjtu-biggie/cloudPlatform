@@ -27,7 +27,8 @@ public class StudentHomeworkController {
 
     //同学课程的某次提交的作业
     @RequestMapping(value = "/getStudentHomeworkOne")
-    public StudentHomework getStudentHomeworkOne(@RequestParam("studentId") String studentId, @RequestParam("homeworkId") int homeworkId) {
+    public StudentHomework getStudentHomeworkOne(@RequestParam("studentId") String studentId,
+                                                 @RequestParam("homeworkId") int homeworkId) {
         return studenthomeworkService.getStudentHomeworkOne(studentId, homeworkId);
     }
 
@@ -43,6 +44,12 @@ public class StudentHomeworkController {
     @RequestMapping(value = "/getHomeworkOfStudents")
     public List<StudentHomework> getHomeworkOfStudents(@RequestParam("homeworkId") int homeworkId) {
         return studenthomeworkService.getStudentHomeworkAllOfHomework(homeworkId);
+    }
+
+    //获取课程某次所有学生提交的的作业没有mongo
+    @RequestMapping(value = "/getHomeworkOfStudentsNoMongo")
+    public List<StudentHomework> getHomeworkOfStudentsNoMongo(@RequestParam("homeworkId") int homeworkId) {
+        return studenthomeworkService.getStudentHomeworkAllOfHomeworkNoMongo(homeworkId);
     }
 
     //编辑作业

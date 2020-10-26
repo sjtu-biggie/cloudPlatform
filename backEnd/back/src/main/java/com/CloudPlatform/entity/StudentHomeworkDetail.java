@@ -38,6 +38,10 @@ public class StudentHomeworkDetail implements Serializable {
     private String Content;
 
     @Transient
+    @Column(name = "CORRECT")
+    private String Correct;
+
+    @Transient
     @Column(name = "COMMENT")
     private String Comment;
 

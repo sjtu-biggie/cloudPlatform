@@ -11,6 +11,7 @@ public interface StudentHomeworkService {
     List<StudentHomework> getStudentHomeworkAll(String studentId);
     List<StudentHomework> getStudentHomeworkAllOfCourse(String studentId, int courseId);
     List<StudentHomework> getStudentHomeworkAllOfHomework(int homeworkId);
+    List<StudentHomework> getStudentHomeworkAllOfHomeworkNoMongo(int homeworkId);
     StudentHomework getStudentHomeworkOne(String studentId, int homeworkId);
     StudentHomework editStudentHomework(StudentHomework homework);
     StudentHomework addStudentHomework(StudentHomework homework);
@@ -18,4 +19,5 @@ public interface StudentHomeworkService {
     void deleteStudentHomeworkOne(String studentId, int homeworkId);
 
     StudentStat getStudentStatistics(String studentId, int courseId,int time);
+
 }

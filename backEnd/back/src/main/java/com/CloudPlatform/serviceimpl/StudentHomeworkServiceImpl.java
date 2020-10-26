@@ -17,54 +17,59 @@ import java.util.Random;
 @Service
 public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Autowired
-    private StudentHomeworkDao student_homeworkDao;
+    private StudentHomeworkDao studenthomeworkDao;
 
     @Override
     public List<StudentHomework> getStudentHomeworkAll(String studentId) {
-        return student_homeworkDao.findAll(studentId);
+        return studenthomeworkDao.findAll(studentId);
     }
 
     @Override
     public List<StudentHomework> getStudentHomeworkAllOfCourse(String studentId, int courseId){
-        return student_homeworkDao.findAllOfCourse(studentId, courseId);
+        return studenthomeworkDao.findAllOfCourse(studentId, courseId);
     }
 
     @Override
     public List<StudentHomework> getStudentHomeworkAllOfHomework(int homeworkId) {
-        return student_homeworkDao.findAllOfHomework(homeworkId);
+        return studenthomeworkDao.findAllOfHomework(homeworkId);
+    }
+
+    @Override
+    public List<StudentHomework> getStudentHomeworkAllOfHomeworkNoMongo(int homeworkId) {
+        return studenthomeworkDao.findAllOfHomeworkNoMongo(homeworkId);
     }
 
     @Override
     public StudentHomework getStudentHomeworkOne(String studentId, int homeworkId){
-        return student_homeworkDao.findOne(studentId, homeworkId);
+        return studenthomeworkDao.findOne(studentId, homeworkId);
     }
 
     @Override
     public StudentHomework editStudentHomework(StudentHomework homework){
-        return student_homeworkDao.editOne(homework);
+        return studenthomeworkDao.editOne(homework);
     }
 
     @Override
     public StudentHomework addStudentHomework(StudentHomework homework){
-        return student_homeworkDao.addOne(homework);
+        return studenthomeworkDao.addOne(homework);
     }
 
     @Override
     public void deleteStudentHomeworkAll(String studentId, int courseId){
-        student_homeworkDao.deleteAll(studentId, courseId);
+        studenthomeworkDao.deleteAll(studentId, courseId);
     }
 
     @Override
     public void deleteStudentHomeworkOne(String studentId, int homeworkId){
-        student_homeworkDao.deleteOne(studentId, homeworkId);
+        studenthomeworkDao.deleteOne(studentId, homeworkId);
     }
     @Override
     public StudentStat getStudentStatistics(String studentId, int courseId,int time){
-        int finishHomework= student_homeworkDao.getStudentHomeworkNum(studentId,courseId);
-        int courseHomeworkNum = student_homeworkDao.getCourseHomeworkNum(courseId);
+        int finishHomework= studenthomeworkDao.getStudentHomeworkNum(studentId,courseId);
+        int courseHomeworkNum = studenthomeworkDao.getCourseHomeworkNum(courseId);
         int ongoingHomework=0;
         int failedHomework =0;
-        List<StudentHomework> studentHomeworkList = student_homeworkDao.findAllOfCourse(studentId,courseId);
+        List<StudentHomework> studentHomeworkList = studenthomeworkDao.findAllOfCourse(studentId,courseId);
         float meanScore=0,recentMeanScore=0;
         int recentMeanScoreNum=0;
         List <Integer> homeworkRankChange=new ArrayList<>();
@@ -91,7 +96,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
             if(recentMeanScoreNum<time){
                 recentMeanScoreNum++;
                 recentMeanScore+=studentHomework.getScore();
-                Integer rank=student_homeworkDao.getStudentHomeworkRank(studentId,studentHomework.getHomeworkId())+1;
+                Integer rank=studenthomeworkDao.getStudentHomeworkRank(studentId,studentHomework.getHomeworkId())+1;
                 homeworkRankChange.add(rank);
                 homeworkScoreChange.add(studentHomework.getScore());
                 Date handinTime = studentHomework.getHandinTime();

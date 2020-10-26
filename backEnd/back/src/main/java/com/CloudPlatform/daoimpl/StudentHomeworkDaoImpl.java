@@ -31,6 +31,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setComment(homework.getComment());
         homeworkDetail.setRemarks(homework.getRemarks());
+        homeworkDetail.setCorrect(homework.getCorrect());
         studenthomeworkDetailRepository.save(homeworkDetail);
         return studenthomeworkRepository.save(homework);
     }
@@ -46,6 +47,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setComment(homework.getComment());
         homeworkDetail.setRemarks(homework.getRemarks());
+        homeworkDetail.setCorrect(homework.getCorrect());
         studenthomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }
@@ -72,6 +74,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homework.setContent(detail.getContent());
         homework.setComment(detail.getComment());
         homework.setRemarks(detail.getRemarks());
+        homework.setCorrect(detail.getCorrect());
         return homework;
     }
 
@@ -84,6 +87,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
             (homeworkList.get(i)).setContent(((StudentHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setComment(((StudentHomeworkDetail)list1.get(i)).getComment());
             (homeworkList.get(i)).setRemarks(((StudentHomeworkDetail)list1.get(i)).getRemarks());
+            (homeworkList.get(i)).setCorrect(((StudentHomeworkDetail)list1.get(i)).getCorrect());
         }
 
         return homeworkList;
@@ -96,10 +100,10 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         for(int i = 0; i < homeworkList.size();++i){
             StudentHomeworkDetail studentHomeworkDetail = studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(studentId,Integer.toString(homeworkList.get(i).getHomeworkId()));
             if(studentHomeworkDetail!=null){
-                System.out.println(1);
                 (homeworkList.get(i)).setContent(studentHomeworkDetail.getContent());
-                (homeworkList.get(i)).setContent(studentHomeworkDetail.getComment());
-                (homeworkList.get(i)).setContent(studentHomeworkDetail.getRemarks());
+                (homeworkList.get(i)).setComment(studentHomeworkDetail.getComment());
+                (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
+                (homeworkList.get(i)).setCorrect(studentHomeworkDetail.getCorrect());
             }
         }
         return homeworkList;
@@ -114,9 +118,17 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
             (homeworkList.get(i)).setContent(((StudentHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setComment(((StudentHomeworkDetail)list1.get(i)).getComment());
             (homeworkList.get(i)).setRemarks(((StudentHomeworkDetail)list1.get(i)).getRemarks());
+            (homeworkList.get(i)).setCorrect(((StudentHomeworkDetail)list1.get(i)).getCorrect());
         }
         return homeworkList;
     }
+
+    @Override
+    public List<StudentHomework> findAllOfHomeworkNoMongo(int homeworkId) {
+        List<StudentHomework> homeworkList = studenthomeworkRepository.findByHomeworkId(homeworkId);
+        return homeworkList;
+    }
+
     @Override
     public Integer getStudentHomeworkRank(String studentId,int homeworkId){
         return studenthomeworkRepository.getStudentHomeworkRank(studentId,homeworkId);

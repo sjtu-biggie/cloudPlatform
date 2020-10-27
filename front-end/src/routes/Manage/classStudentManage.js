@@ -112,10 +112,6 @@ export default class ClassManage extends Component {
             this.setState({ renderData: filterData });
         };
 
-        // this.updateUser=()=>{
-        //
-        // }
-
         this.addStudent=()=>{
             const {orData} =this.state;
             const getData=[getMockData(),...this.state.orData];
@@ -147,10 +143,27 @@ export default class ClassManage extends Component {
             }).then(msg=>{
                 console.log(msg)
             }).catch(err=>{
-                console.log(er)
+                console.log(err)
             })
             console.log(record);
         }
+
+    }
+        // this.setClass=(clas)=>{
+        //     axios({
+        //         method:'POST',
+        //         url:'http://106.13.209.140:8000/getAllUsersByStudent',
+        //         data:{
+        //             theClass:clas
+        //         }
+        //     }).then(msg=>{
+        //         this.setState({
+        //             orData:msg.data,
+        //             renderData:msg.data
+        //         })
+        //     })
+
+
         //
         // this.getStudentsByClass
 
@@ -181,7 +194,7 @@ export default class ClassManage extends Component {
         //     this.setState({ renderData2: filterData });
         // };
 
-    }
+
 
     componentWillMount(){
         axios({
@@ -309,7 +322,6 @@ export default class ClassManage extends Component {
                             }]}
                             dataSource={renderData}/>
 
-
                     </Card>
                 </Card>
             </div>
@@ -320,14 +332,15 @@ export default class ClassManage extends Component {
 const menu = (
     <Menu>
         <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-                七年级三班
+            <a target="_blank" rel="noopener noreferrer">
+                F1803702
             </a>
         </Menu.Item>
         <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-                七年级四班
+            <a target="_blank" rel="noopener noreferrer">
+                F1803704
             </a>
         </Menu.Item>
     </Menu>
 );
+

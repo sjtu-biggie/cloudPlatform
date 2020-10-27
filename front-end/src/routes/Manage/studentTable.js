@@ -96,6 +96,7 @@ export default class Manager extends Component {
             classIds: [],
             courseId: '',
             sids: [],
+            delUserId:'',
         };
         this.searchInput = createRef();
 
@@ -196,20 +197,40 @@ export default class Manager extends Component {
             console.log("注册学生");
         };
 
-        this.deleteRegister = (userId) => {
-            console.log("调用从班级删除学生")
+        this.deleteRegister = (record) => {
+            console.log("调用从班级删除学生");
+            console.log(record);
+            console.log(this.state.delUserId);
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8787/course/deleteCourseStudent',
                 data: {
                     "courseId": this.state.courseId,
-                    "userId": userId
+                    "userId": this.state.delUserId
                 }
             }).then(msg => {
                 console.log(msg)
             }).catch(err => {
                 console.log(err)
             })
+        }
+
+        this.updateCourseStudent=(record)=>{
+            console.log(record);
+            axios({
+                method:'POST',
+                url:'http://106.13.209.140:8787/course/updateCourseStudent',
+                data:{
+                    "courseId":this.state.courseId,
+                    "userId":record.userId,
+                    "grade":record.grade
+                }
+            }).then(msg=>{
+                console.log(msg);
+            }).catch(err=>{
+                console.log(err)
+            })
+            console.log("完成分数更新");
         }
     }
 
@@ -398,6 +419,7 @@ export default class Manager extends Component {
                                             return (idx !== 0 || this.props.newCourse ? <EditText onChange={value => {
                                                     const newData = [...orData];
                                                     newData.find(col => col.sid === record.sid)[item.dataIndex] = value;
+                                                    this.updateCourseStudent(record);
                                                     this.setState({orData: newData});
                                                 }}>{text}</EditText> :
                                                 <a href={"/home/manage/data/" + record.userId + "/" + this.props.courseId + "/"}>{text}</a>)
@@ -415,10 +437,11 @@ export default class Manager extends Component {
                                                     renderData:fileterData,
                                                     orData2: [record, ...orData2],
                                                     renderData2:[record, ...orData2],
+                                                    delUserId:record.userId
                                                 }, () => {
                                                     this.handleSearch();
                                                     this.handleSearch2();
-                                                    this.deleteRegister(record.userId);
+                                                    this.deleteRegister(record);
                                                 });
                                             }}>删除</a>),
                                     }]}

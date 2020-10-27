@@ -181,6 +181,7 @@ export default class Manager extends Component {
         };
 
         this.registerClass = (students) => {
+            console.log(students);
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8787/course/register',

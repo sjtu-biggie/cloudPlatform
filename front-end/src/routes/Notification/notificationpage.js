@@ -202,6 +202,7 @@ class NotificationPage extends React.Component {
         this.setState({
             loading: true,
         });
+        console.log(this.props.match.params)
         let notificationId = this.props.match.params[0].substr(1);
         console.log(notificationId);
         this.getNote(notificationId);

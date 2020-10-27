@@ -239,7 +239,7 @@ class HomeworkList extends React.Component {
                                           }}>删除</Button>]:[])}
                                           >
                                           <List.Item.Meta
-                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit?homeworkId="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General?homeworkId="+item.homeworkId}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
+                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General="+item.homeworkId}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
                                               description={item.description}
                                           />
                                           {item.content}

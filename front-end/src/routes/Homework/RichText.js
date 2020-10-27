@@ -147,3 +147,4 @@ export default class extends React.Component{
         return <RichText onEditorChange={this.onEditorChange.bind(this)} editorContent={editorContent}/>
     }
 }
+

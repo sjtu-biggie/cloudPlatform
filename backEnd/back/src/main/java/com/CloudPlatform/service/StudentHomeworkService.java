@@ -2,6 +2,7 @@ package com.CloudPlatform.service;
 
 import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,8 @@ public interface StudentHomeworkService {
     List<StudentHomework> getStudentHomeworkAllOfHomework(int homeworkId);
     List<StudentHomework> getStudentHomeworkAllOfHomeworkNoMongo(int homeworkId);
     StudentHomework getStudentHomeworkOne(String studentId, int homeworkId);
-    StudentHomework editStudentHomework(StudentHomework homework);
-    StudentHomework addStudentHomework(StudentHomework homework);
+    StudentHomework editStudentHomework(JSONObject object);
+    StudentHomework addStudentHomework(JSONObject object);
     void deleteStudentHomeworkAll(String studentId, int courseId);
     void deleteStudentHomeworkOne(String studentId, int homeworkId);
 

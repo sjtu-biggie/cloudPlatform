@@ -18,10 +18,14 @@ import java.io.Serializable;
 
 public class TeacherHomeworkDetail implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
+
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "HOMEWORKID")
     private int homeworkId;
+
+    @Id
+    @Column(name = "_ID")
+    private String id;
 
     @Column(name = "COURSEID")
     private int courseId;

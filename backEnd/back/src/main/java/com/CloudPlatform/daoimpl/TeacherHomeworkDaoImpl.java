@@ -25,6 +25,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
     public TeacherHomework editOne(TeacherHomework homework){
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = homework.getHomeworkId();
+        homeworkDetail.setId(homework.getId());
         homeworkDetail.setHomeworkId(h_id);
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
@@ -37,6 +38,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         teacherhomeworkRepository.save(homework);
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = homework.getHomeworkId();
+        homeworkDetail.setId(homework.getId());
         homeworkDetail.setHomeworkId(h_id);
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
@@ -63,6 +65,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         String hwId = Integer.toString(homeworkId);
         TeacherHomework homework = teacherhomeworkRepository.findByHomeworkId(homeworkId);
         TeacherHomeworkDetail detail =  teacherhomeworkDetailRepository.findByHomeworkId(hwId);
+        homework.setId(detail.getId());
         homework.setContent(detail.getContent());
         homework.setAnswer(detail.getAnswer());
         return homework;
@@ -74,6 +77,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         List<TeacherHomeworkDetail> list1 = teacherhomeworkDetailRepository.findAllByTeacherId(teacherId);
 
         for(int i = 0; i < homeworkList.size();++i){
+            (homeworkList.get(i)).setId(((TeacherHomeworkDetail)list1.get(i)).getId());
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setAnswer(((TeacherHomeworkDetail)list1.get(i)).getAnswer());
         }
@@ -88,6 +92,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         List list1 = teacherhomeworkDetailRepository.findAllByCourseId(cId);
 
         for(int i = 0; i < homeworkList.size();++i){
+            (homeworkList.get(i)).setId(((TeacherHomeworkDetail)list1.get(i)).getId());
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setAnswer(((TeacherHomeworkDetail)list1.get(i)).getAnswer());
         }

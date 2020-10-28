@@ -4,6 +4,7 @@ import com.CloudPlatform.dao.StudentHomeworkDao;
 import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
 import com.CloudPlatform.service.StudentHomeworkService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,13 +48,53 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     }
 
     @Override
-    public StudentHomework editStudentHomework(StudentHomework homework){
-        return studenthomeworkDao.editOne(homework);
+    public StudentHomework editStudentHomework(JSONObject object){
+        String Id = object.getString("id");
+        int homeworkId= object.getInteger("homeworkId");
+        int courseId= object.getInteger("courseId");
+        String studentId= object.getString("studentId");
+        String title= object.getString("title");
+        String comment= object.getString("comment");
+        String content= object.getString("content");
+        int finishHomework= object.getInteger("finishHomework");
+        int handinRank= object.getInteger("handinRank");
+        String nickName= object.getString("nickName");
+        String remarks = object.getString("remarks");
+        String subject= object.getString("subject");
+        String correct= object.getString("correct");
+        double score = object.getDouble("score");
+        Date startTime = object.getDate("startTime");
+        Date endTime = object.getDate("endTime");
+        Date handinTime = object.getDate("handinTime");
+        StudentHomework hw = new StudentHomework(studentId,homeworkId,courseId,nickName,handinTime,
+                startTime,endTime,score,title,subject,content,correct,comment,remarks,Id,
+                finishHomework,handinRank);
+        return studenthomeworkDao.editOne(hw);
     }
 
     @Override
-    public StudentHomework addStudentHomework(StudentHomework homework){
-        return studenthomeworkDao.addOne(homework);
+    public StudentHomework addStudentHomework(JSONObject object){
+        String Id = object.getString("id");
+        int homeworkId= object.getInteger("homeworkId");
+        int courseId= object.getInteger("courseId");
+        String studentId= object.getString("studentId");
+        String title= object.getString("title");
+        String comment= object.getString("comment");
+        String content= object.getString("content");
+        int finishHomework= object.getInteger("finishHomework");
+        int handinRank= object.getInteger("handinRank");
+        String nickName= object.getString("nickName");
+        String remarks = object.getString("remarks");
+        String subject= object.getString("subject");
+        String correct= object.getString("correct");
+        double score = object.getDouble("score");
+        Date startTime = object.getDate("startTime");
+        Date endTime = object.getDate("endTime");
+        Date handinTime = object.getDate("handinTime");
+        StudentHomework hw = new StudentHomework(studentId,homeworkId,courseId,nickName,handinTime,
+                startTime,endTime,score,title,subject,content,correct,comment,remarks,Id,
+                finishHomework,handinRank);
+        return studenthomeworkDao.editOne(hw);
     }
 
     @Override

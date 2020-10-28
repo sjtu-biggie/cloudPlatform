@@ -1,11 +1,14 @@
 package com.CloudPlatform.serviceimpl;
 
 import com.CloudPlatform.dao.TeacherHomeworkDao;
+import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.TeacherHomework;
 import com.CloudPlatform.service.TeacherHomeworkService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,13 +32,44 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
     }
 
     @Override
-    public TeacherHomework editTeacherHomework(TeacherHomework homework){
-        return teacher_homeworkDao.editOne(homework);
+    public TeacherHomework editTeacherHomework(JSONObject object){
+        String Id = object.getString("id");
+        int homeworkId= object.getInteger("homeworkId");
+        int courseId= object.getInteger("courseId");
+        String teacherId= object.getString("teacherId");
+        String title= object.getString("title");
+        String range= object.getString("range");
+        String content= object.getString("content");
+        String answer= object.getString("answer");
+        String subject= object.getString("subject");
+        String type= object.getString("type");
+        int handinAmount = object.getInteger("handinAmount");
+        Date startTime = object.getDate("startTime");
+        Date endTime = object.getDate("endTime");
+
+        TeacherHomework hw = new TeacherHomework(homeworkId,courseId,teacherId,title,range,
+                startTime,endTime,type,subject,handinAmount,content,answer,Id);
+        return teacher_homeworkDao.editOne(hw);
     }
 
     @Override
-    public TeacherHomework addTeacherHomework(TeacherHomework homework){
-        return teacher_homeworkDao.addOne(homework);
+    public TeacherHomework addTeacherHomework(JSONObject object){
+        String Id = object.getString("id");
+        int courseId= object.getInteger("courseId");
+        String teacherId= object.getString("teacherId");
+        String title= object.getString("title");
+        String range= object.getString("range");
+        String content= object.getString("content");
+        String answer= object.getString("answer");
+        String subject= object.getString("subject");
+        String type= object.getString("type");
+        int handinAmount = object.getInteger("handinAmount");
+        Date startTime = object.getDate("startTime");
+        Date endTime = object.getDate("endTime");
+
+        TeacherHomework hw = new TeacherHomework(courseId,teacherId,title,range,
+                startTime,endTime,type,subject,handinAmount,content,answer,Id);
+        return teacher_homeworkDao.editOne(hw);
     }
 
     @Override

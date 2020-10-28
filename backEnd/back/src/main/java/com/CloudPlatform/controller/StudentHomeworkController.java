@@ -2,6 +2,7 @@ package com.CloudPlatform.controller;
 import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
 import com.CloudPlatform.service.StudentHomeworkService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.PageRequest;
@@ -44,9 +45,9 @@ public class StudentHomeworkController {
     //批改同学提交的作业
     @RequestMapping(value = "/CorrectHomework")
     public @ResponseBody
-    StudentHomework CorrectHomework(StudentHomework homework){
-        System.out.println(homework);
-        return studenthomeworkService.editStudentHomework(homework);
+    StudentHomework CorrectHomework(@RequestBody JSONObject object){
+        System.out.println(object);
+        return studenthomeworkService.editStudentHomework(object);
     }
 
     @InitBinder
@@ -79,15 +80,15 @@ public class StudentHomeworkController {
     //编辑作业
     @RequestMapping(value = "/editStudentHomework")
     public @ResponseBody
-    StudentHomework editStudentHomework(StudentHomework homework){
-        return studenthomeworkService.editStudentHomework(homework);
+    StudentHomework editStudentHomework(@RequestBody JSONObject object){
+        return studenthomeworkService.editStudentHomework(object);
     }
 
     //提交作业
     @RequestMapping(value = "/addStudentHomework")
     public @ResponseBody
-    StudentHomework addStudentHomework(StudentHomework homework){
-        return studenthomeworkService.addStudentHomework(homework);
+    StudentHomework addStudentHomework(@RequestBody JSONObject object){
+        return studenthomeworkService.addStudentHomework(object);
     }
 
     //删除某课程的所有作业

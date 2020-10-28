@@ -36,17 +36,17 @@ const deadHomework = {
 @withRouter
 class ListDemo extends React.Component {
   state = {
-    homeworkId:0,
-    homework:deadHomework,
-    studentHomework:deadHomework,
-    userInfo:null,
-    role:null,
-    cNum:0,
-    average:0,
-    handinAmount:0,
-    handinAlready:0,
-    isLoading:false,
-  };
+    homeworkId: 0,
+    homework: deadHomework,
+    studentHomework: deadHomework,
+    userInfo: null,
+    role: null,
+    cNum: 0,
+    average: 0,
+    handinAmount: 0,
+    handinAlready: 0,
+    isLoading: false,
+  }
 
   getUserInfo = async (username)=>{
     let config = {

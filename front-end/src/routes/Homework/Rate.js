@@ -446,10 +446,12 @@ class Rating extends React.Component {
             return 1;
         }
         let homework = this.state.homework;
+        homework.id = homework.homeworkId;
         homework.score = score;
         homework.comment = comment;
         homework.correct = drawing;
-        console.log(homework)
+        homework.studentid = homework.studentId;
+        console.log(homework);
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/CorrectHomework',

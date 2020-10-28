@@ -28,6 +28,9 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         StudentHomeworkDetail homeworkDetail = new StudentHomeworkDetail();
         String t_id = homework.getStudentId();
         int h_id = homework.getHomeworkId();
+        int c_id = homework.getCourseId();
+        homeworkDetail.setId(homework.getId());
+        homeworkDetail.setCourseId(c_id);
         homeworkDetail.setStudentId(t_id);
         homeworkDetail.setHomeworkId(h_id);
         homeworkDetail.setContent(homework.getContent());
@@ -44,6 +47,9 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         StudentHomeworkDetail homeworkDetail = new StudentHomeworkDetail();
         String t_id = homework.getStudentId();
         int h_id = homework.getHomeworkId();
+        int c_id = homework.getCourseId();
+        homeworkDetail.setId(homework.getId());
+        homeworkDetail.setCourseId(c_id);
         homeworkDetail.setStudentId(t_id);
         homeworkDetail.setHomeworkId(h_id);
         homeworkDetail.setContent(homework.getContent());
@@ -73,6 +79,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         StudentHomework homework = studenthomeworkRepository.findByStudentIdAndHomeworkId(studentId, homeworkId);
         String hwId = Integer.toString(homeworkId);
         StudentHomeworkDetail detail =  studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(studentId, hwId);
+        homework.setId(detail.getId());
         homework.setContent(detail.getContent());
         homework.setComment(detail.getComment());
         homework.setRemarks(detail.getRemarks());
@@ -86,6 +93,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         List list1 = studenthomeworkDetailRepository.findAllByStudentId(studentId);
 
         for(int i = 0; i < homeworkList.size();++i){
+            (homeworkList.get(i)).setId(((StudentHomeworkDetail)list1.get(i)).getId());
             (homeworkList.get(i)).setContent(((StudentHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setComment(((StudentHomeworkDetail)list1.get(i)).getComment());
             (homeworkList.get(i)).setRemarks(((StudentHomeworkDetail)list1.get(i)).getRemarks());
@@ -102,6 +110,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         for(int i = 0; i < homeworkList.size();++i){
             StudentHomeworkDetail studentHomeworkDetail = studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(studentId,Integer.toString(homeworkList.get(i).getHomeworkId()));
             if(studentHomeworkDetail!=null){
+                (homeworkList.get(i)).setId(studentHomeworkDetail.getId());
                 (homeworkList.get(i)).setContent(studentHomeworkDetail.getContent());
                 (homeworkList.get(i)).setComment(studentHomeworkDetail.getComment());
                 (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
@@ -117,6 +126,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         List<StudentHomework> homeworkList = studenthomeworkRepository.findByHomeworkId(homeworkId);
         List<StudentHomeworkDetail> list1 = studenthomeworkDetailRepository.findAllByHomeworkId(hwId);
         for(int i = 0; i < homeworkList.size();++i){
+            (homeworkList.get(i)).setId(((StudentHomeworkDetail)list1.get(i)).getId());
             (homeworkList.get(i)).setContent(((StudentHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setComment(((StudentHomeworkDetail)list1.get(i)).getComment());
             (homeworkList.get(i)).setRemarks(((StudentHomeworkDetail)list1.get(i)).getRemarks());
@@ -154,6 +164,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         for(int i = 0; i < homeworkList.size();++i){
             StudentHomeworkDetail studentHomeworkDetail = studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(homeworkList.get(i).getStudentId(),Integer.toString(homeworkList.get(i).getHomeworkId()));
             if(studentHomeworkDetail!=null){
+                (homeworkList.get(i)).setId(studentHomeworkDetail.getId());
                 (homeworkList.get(i)).setContent(studentHomeworkDetail.getContent());
                 (homeworkList.get(i)).setComment(studentHomeworkDetail.getComment());
                 (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());

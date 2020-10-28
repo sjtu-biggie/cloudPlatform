@@ -3,6 +3,7 @@ package com.CloudPlatform.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -36,9 +37,11 @@ public class TeacherHomework implements Serializable {
     @Column(name = "RANGE")
     private String Range;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "STARTTIME")
     private Date StartTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "ENDTIME")
     private Date EndTime;
 

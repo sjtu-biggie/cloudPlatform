@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -21,26 +22,30 @@ import java.util.Date;
 
 public class StudentHomework {
     private static final long serialVersionUID = 1L;
+
     @Id
-    @Column(name = "STUDENTID",length = 16)
+    @Column(name = "STUDENTID")
     private String studentId;
 
     @Id
-    @Column(name = "HOMEWORKID",length = 16)
+    @Column(name = "HOMEWORKID")
     private int homeworkId;
 
-    @Column(name = "COURSEID",length = 16)
+    @Column(name = "COURSEID")
     private int courseId;
 
     @Column(name = "NICKNAME")
     private String nickName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "HANDINTIME")
     private Date HandinTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "STARTTIME")
     private Date StartTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "ENDTIME")
     private Date EndTime;
 
@@ -68,6 +73,10 @@ public class StudentHomework {
     @Transient
     @Column(name = "REMARKS")
     private String Remarks;
+
+    @Transient
+    @Column(name = "_ID")
+    private String id;
 
     @Transient
     private int finishHomework;

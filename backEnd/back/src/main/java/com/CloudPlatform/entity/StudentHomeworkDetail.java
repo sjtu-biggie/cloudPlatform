@@ -16,17 +16,19 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection="STUDENTHOMEWORKDETAIL")
-@IdClass(StudentHomeworkMultiKeys.class)
+//@IdClass(StudentHomeworkMultiKeys.class)
 @Transactional
 
 public class StudentHomeworkDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "_ID")
+    private String id;
+
     @Column(name = "STUDENTID")
     private String studentId;
 
-    @Id
     @Column(name = "HOMEWORKID")
     private int homeworkId;
 

@@ -125,7 +125,6 @@ class Rating extends React.Component {
             loading: true,
             homework: this.props.homework,
             index: this.props.index,
-
         });
         console.log(this.props.homework);
         this.setState({
@@ -207,7 +206,7 @@ class Rating extends React.Component {
                                 width: '30%',
                                 textAlign: 'center',
                                 height: '90px'
-                            }}>{this.props.homework.title}</Card.Grid>
+                            }}>{this.state.homework.title}</Card.Grid>
                             <Card.Grid style={{
                                 width: '11%',
                                 textAlign: 'center',
@@ -405,6 +404,10 @@ class Rating extends React.Component {
                             <Row>
                                 <Col offset={1} span={7}>
                                     <img onClick={() => {
+                                        if(!(this.state.homework.score === null)){
+                                            message.error("请先点击重新评价，再做批注");
+                                            return 1;
+                                        }
                                         this.setState({status: status.DRAWING})
                                     }} style={{float: 'left'}} width={80} alt="logo"
                                          src={require("../../pic/school-svg/002-marker.svg")}/>
@@ -430,7 +433,7 @@ class Rating extends React.Component {
             </div>
         )
     };
-    submitRate=()=>{
+    submitRate= async()=>{
         if(!(this.state.homework.score === null)){
             message.error("请先点击重新评价，再提交批改");
             return 1;
@@ -438,12 +441,31 @@ class Rating extends React.Component {
         let score = document.getElementById("inputNumber").value;
         let comment = document.getElementById("textarea").value;
         let drawing = this.state.saveableCanvas;
-        // score = score.value;
-        // comment = comment.value;
         if (score===""||score===null||comment===""||comment===null){
             message.error("请填写正确的分数和评语！");
             return 1;
         }
+        let homework = this.state.homework;
+        homework.score = score;
+        homework.comment = comment;
+        homework.correct = drawing;
+        console.log(homework)
+        let config = {
+            method: 'post',
+            url: 'http://106.13.209.140:8383/CorrectHomework',
+            data:homework,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        let data = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
     showModalHomework = () => {
         this.setState({

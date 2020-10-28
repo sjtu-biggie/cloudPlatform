@@ -1,6 +1,7 @@
 import React from 'react'
 import {Card, Button, List, Icon,} from 'antd'
 import axios from 'axios'
+import {withRouter} from "react-router-dom";
 
 const deathHomework = [];
 for(let i=0;i<3;i++){
@@ -42,6 +43,7 @@ const IconText = ({ type, text }) => (
   </span>
 );
 
+@withRouter
 class HomeworkList extends React.Component {
     state = {
         type:0,
@@ -239,7 +241,7 @@ class HomeworkList extends React.Component {
                                           }}>删除</Button>]:[])}
                                           >
                                           <List.Item.Meta
-                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General="+item.homeworkId}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
+                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General/"+item.homeworkId+"/"}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
                                               description={item.description}
                                           />
                                           {item.content}
@@ -260,4 +262,4 @@ const styles = {
     }
 }
 
-export default HomeworkList
+export default withRouter(HomeworkList)

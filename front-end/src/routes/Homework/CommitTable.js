@@ -132,18 +132,6 @@ export default class STable extends Component {
             });
             this.setState({ renderData2: filterData });
         };
-        this.handleSearch3 = () => {
-            const { orData2, search3 } = this.state;
-            const filterData = orData2.filter(row => {
-                if (!search3) return true;
-                const keys = columns.map(item => item.dataIndex);
-                for (let i = 0; i < keys.length; i++) {
-                    if (String(row[keys[i]] || '').toLowerCase()===search3.toLowerCase()) return true;
-                }
-                return false;
-            });
-            this.setState({ renderData2: filterData });
-        };
 
         this.deleteData=()=>{
         };
@@ -187,6 +175,7 @@ export default class STable extends Component {
                         break;
                     }
                 }
+                if(j===list2.length) continue;
                 if (list2[j].score !== null){
                     data.push({
                         _index:list2[j]._index,

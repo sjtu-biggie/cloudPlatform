@@ -231,14 +231,14 @@ class ChangeHomework extends React.Component {
                         <FormItem label='作业类型' {...formItemLayout} required>
                             {
                                 getFieldDecorator('type', {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请选择作业类型'
-                                    }
-                                ]
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请选择作业类型'
+                                        }
+                                    ]
                                 })
-                               (
+                                (
                                     <Cascader  style={{width: 100}} disabled={this.state.ableState} options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
                                 )
                             }
@@ -273,12 +273,12 @@ class ChangeHomework extends React.Component {
                             }
                         </FormItem>
                         <FormItem style={display2} label='作业详情' {...DraftLayout} >
-                        {
-                            (
-                                <DraftDemo/>
-                            )
-                        }
-                    </FormItem>
+                            {
+                                (
+                                    <DraftDemo/>
+                                )
+                            }
+                        </FormItem>
                         <FormItem label='上传作业附件' {...formItemLayout} style={display2} >
                             {
                                 (
@@ -300,7 +300,6 @@ class ChangeHomework extends React.Component {
                                 )
                             }
                         </FormItem>
-
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
                             <Button type="primary" htmlType="submit" disabled={this.state.ableState}>提交</Button>
                             <Button type="primary" style={{marginLeft: 50}} onClick={()=>{
@@ -321,6 +320,7 @@ class ChangeHomework extends React.Component {
                             }}>{this.state.buttonName}</Button>
                         </FormItem>
                     </Form>
+
                 </Card>
                 <BackTop visibilityHeight={200} style={{right: 50}}/>
             </div>

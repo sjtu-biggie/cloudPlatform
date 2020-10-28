@@ -3,39 +3,6 @@ import {Card, Button, List, Icon,} from 'antd'
 import axios from 'axios'
 import {withRouter} from "react-router-dom";
 
-const deathHomework = [];
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'数学',
-        grade:'七年级上',
-        title: `七年级上数学作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'语文',
-        grade:'七年级上',
-        title: `七年级上语文作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
-    })
-}
-
 const IconText = ({ type, text }) => (
     <span>
     <Icon type={type} style={{ marginRight: 8 }} />

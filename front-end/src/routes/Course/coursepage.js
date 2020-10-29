@@ -29,7 +29,7 @@ import {
     DatePicker,
     FormItem,
     message,
-    Empty
+    Empty, Select, Switch
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
@@ -412,6 +412,11 @@ class CoursePageDemo extends React.Component {
                 courseJson.syllabus = modifiedCourse.courseInfo.syllabus;
                 courseJson.textbook = modifiedCourse.courseInfo.textbook;
                 courseJson.modify = true;
+                courseJson.seeCourseAverage = values.seeCourseAverage;
+                courseJson.seeHomeworkAverage = values.seeHomeworkAverage;
+                courseJson.noteHomeworkAssign = values.noteHomeworkAssign;
+                courseJson.noteHomeworkDue = values.noteHomeworkDue;
+                courseJson.noteHomeworkRatify = values.noteHomeworkRatify;
                 console.log(courseJson);
                 let config = {
                     method: 'post',
@@ -743,6 +748,43 @@ class CoursePageDemo extends React.Component {
                     <Row><Col offset={4} span={10}>
                         <p style={{marginLeft: '100px'}}>原结束时间：{this.state.course.course.endDate}</p>
                     </Col></Row>
+                    <FormItem label='学生查看课程均分' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('seeCourseAverage', {
+                                initialValue: this.state.course.course.seeCourseAverage,
+                            })(
+                                <Switch defaultChecked={this.state.course.course.seeCourseAverage}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='学生查看作业均分' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('seeHomeworkAverage', {})(
+                                <Switch defaultChecked={this.state.course.course.seeHomeworkAverage}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='发送作业发布通知' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('noteHomeworkAssign', {})(
+                                <Switch defaultChecked={this.state.course.course.noteHomeworkAssign}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='发送作业临期通知' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('noteHomeworkDue', {})(
+                                <Switch defaultChecked={this.state.course.course.noteHomeworkDue}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='发送作业批改通知' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('noteHomeworkRatify', {})(
+                                <Switch defaultChecked={this.state.course.course.noteHomeworkRatify}/>
+                            )
+                        }
+                    </FormItem>
                     <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
                         <Button htmlType="submit">确认修改</Button>
                     </FormItem>

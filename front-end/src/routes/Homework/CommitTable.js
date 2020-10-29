@@ -189,7 +189,7 @@ export default class STable extends Component {
                     })
                 }
                 else{
-                    if (list2[i].handinTime !== null){
+                    if (list2[j].handinTime !== null){
                         data.push({
                             _index:list2[j]._index,
                             username: list1[i].username,
@@ -295,7 +295,8 @@ export default class STable extends Component {
                             name: '操作',
                             key: 'cor',
                             render: (text,record,index) => (
-                                <a href={"/home/homework/rate/"+this.state.handinAlready+"/"+this.state.homeworkId+"/"+record.username+"/"+record._index+"/"}>批改</a>),
+                                record.commit === "已提交"?
+                                <a href={"/home/homework/rate/"+this.state.handinAlready+"/"+this.state.homeworkId+"/"+record.username+"/"+record._index+"/"}>批改</a>:null),
                         }]}
                         dataSource={renderData}/>
                 </Card>

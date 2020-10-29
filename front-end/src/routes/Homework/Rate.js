@@ -144,7 +144,9 @@ class Rating extends React.Component {
             return;
         }
         this.getAverageScore(nextProps.homework.homeworkId);
-        this.getHomework(nextProps.homework.homeworkId);
+        if(this.state.assignHomework==={}){
+            this.getHomework(nextProps.homework.homeworkId);
+        }
         this.setState({
             loading: false
         });
@@ -300,9 +302,9 @@ class Rating extends React.Component {
                                     <div>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
                                             <InputNumber style={{marginLeft: '20px'}} id={'inputNumber'} min={0}
-                                                         max={100}/> /100</p>
+                                                        defaultValue={this.state.homework.score} max={100}/> /100</p>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>
-                                            <TextArea style={{height: '200px', marginTop: '15px'}} id={'textarea'}/></p>
+                                            <TextArea defaultValue={this.state.homework.comment} style={{height: '200px', marginTop: '15px'}} id={'textarea'}/></p>
                                     </div>
                                     :
                                     <div style={{height: '320px'}}>
@@ -325,7 +327,6 @@ class Rating extends React.Component {
                                             <Button onClick={() => {
                                                 let homework = this.state.homework;
                                                 homework.score = null;
-                                                homework.comment = "";
                                                 this.setState({
                                                     homework: homework
                                                 })
@@ -390,11 +391,22 @@ class Rating extends React.Component {
                                             </Col>
                                             <Col offset={3} span={3}>
                                                 <Button onClick={() => {
+                                                    let homework = this.state.homework;
+                                                    homework.correct = this.saveableCanvas.getSaveData();
                                                     this.setState({
-                                                        saveableCanvas:this.saveableCanvas.getSaveData()
+                                                        saveableCanvas:this.saveableCanvas.getSaveData(),
+                                                        homework:homework
                                                     });
                                                     console.log(this.saveableCanvas.getSaveData());
                                                 }} style={{fontWeight: 'bold', marginLeft: '10px'}}> 保存画布 </Button>
+                                            </Col>
+                                            <Col offset={3} span={3}>
+                                                <Button onClick={() => {
+                                                    if(this.state.homework.correct!==""&&this.state.homework.correct!==null){
+                                                        this.saveableCanvas.loadSaveData(this.state.homework.correct)
+                                                    }
+
+                                                }} style={{fontWeight: 'bold', marginLeft: '10px'}}> 加载画布 </Button>
                                             </Col>
                                         </Row>
 
@@ -404,10 +416,6 @@ class Rating extends React.Component {
                             <Row>
                                 <Col offset={1} span={7}>
                                     <img onClick={() => {
-                                        if(!(this.state.homework.score === null)){
-                                            message.error("请先点击重新评价，再做批注");
-                                            return 1;
-                                        }
                                         this.setState({status: status.DRAWING})
                                     }} style={{float: 'left'}} width={80} alt="logo"
                                          src={require("../../pic/school-svg/002-marker.svg")}/>
@@ -446,7 +454,6 @@ class Rating extends React.Component {
             return 1;
         }
         let homework = this.state.homework;
-        homework.id = homework.homeworkId;
         homework.score = score;
         homework.comment = comment;
         homework.correct = drawing;

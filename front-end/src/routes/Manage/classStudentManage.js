@@ -256,7 +256,6 @@ export default class ClassManage extends Component {
 
         this.addStudentToClass=()=>{
             const {record}=this.state;
-            console.log(record);
             console.log("this is a try");
             console.log(record["theClass"]);
             record["theClass"]="F1803702";
@@ -355,16 +354,31 @@ export default class ClassManage extends Component {
             console.log(err)
         })
 
+        // axios({
+        //     method: 'POST',
+        //     url: 'http://106.13.209.140:8000/getAllUsers'
+        // }).then(msg => {
+        //     console.log(msg);
+        //     this.setState({orData: msg.data});
+        //     this.setState({renderData: msg.data});
+        // }).catch(err => {
+        //     console.log(err);
+        //     console.log("提取数据失败");
+        // })
         axios({
             method: 'POST',
-            url: 'http://106.13.209.140:8000/getAllUsers'
+            url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
+            data: {
+                "theClass": "F1803702"
+            }
         }).then(msg => {
-            console.log(msg);
-            this.setState({orData: msg.data});
-            this.setState({renderData: msg.data});
+            console.log(msg.data);
+            this.setState({
+                orData: msg.data,
+                renderData: msg.data,
+            })
         }).catch(err => {
             console.log(err);
-            console.log("提取数据失败");
         })
 
 
@@ -464,9 +478,9 @@ export default class ClassManage extends Component {
                             render: record => (
                                 <Button onClick={() => {
                                     var newAddData = addData.filter(item => item.username !== record.username);
+                                    record["theClass"]="F1803702";
                                     console.log(record);
                                     console.log(newAddData);
-                                    console.log(this.state.record);
                                     this.setState({
                                         addData: newAddData,
                                         delData: record.username,
@@ -475,7 +489,6 @@ export default class ClassManage extends Component {
                                         record:record,
                                     }, () => {
                                         this.addStudentToClass();
-                                        // this.handleSearch();
                                     });
                                 }}>添加</Button>),
                         }]}

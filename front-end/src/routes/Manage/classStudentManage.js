@@ -55,18 +55,22 @@ class EditText extends Component {
 const menu = (
     <Menu>
         <Menu.Item>
-            <Button target="_blank" rel="noopener noreferrer">
-                F1803702
-            </Button>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+                1st menu item
+            </a>
         </Menu.Item>
         <Menu.Item>
-            <Button target="_blank" rel="noopener noreferrer">
-                F1803704
-            </Button>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+                2nd menu item
+            </a>
+        </Menu.Item>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="/home/homework/overall/">
+                创建班级
+            </a>
         </Menu.Item>
     </Menu>
 );
-
 
 export default class ClassManage extends Component {
     constructor(props) {
@@ -120,6 +124,8 @@ export default class ClassManage extends Component {
         }
 
         this.handleSearch = () => {
+            console.log(this.props);
+            console.log(window.localStorage.getItem("sid"));
             console.log("进入handleSearch")
             const {orData, search} = this.state;
             const filterData = orData.filter(row => {
@@ -187,6 +193,21 @@ export default class ClassManage extends Component {
             })
         }
 
+    }
+
+    componentDidMount() {
+        console.log("开始获取老师班级");
+        axios({
+            url:'http://106.13.209.140:8000/getAllClassByTeacher',
+            method:'POST',
+            data:{
+                teacherId:window.localStorage.getItem("sid")
+            }
+        }).then(msg=>{
+            console.log(msg);
+        }).catch(err=>{
+            console.log(err)
+        })
     }
 
     // this.setClass=(clas)=>{
@@ -368,4 +389,4 @@ export default class ClassManage extends Component {
 }
 
 
-// onClick={this.getClass("F1803702")}
+

@@ -68,7 +68,7 @@ class RegisterForm extends React.Component {
         // if (values.===window.localStorage.getItem("veriCode")){  }
 
           // console.log(values.registerVeriCode)
-        if (values.registerVeriCode!=window.localStorage.getItem("veriCode")){
+        if (values.registerVeriCode!==window.localStorage.getItem("veriCode")){
           alert("验证码错误");
           return null;
         }

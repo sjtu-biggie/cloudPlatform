@@ -130,7 +130,6 @@ export default class ClassManage extends Component {
             record: '',
             addNewStudent: false,
             addData:'',
-            addRenderData:'',
         };
         this.searchInput = createRef();
 
@@ -215,7 +214,7 @@ export default class ClassManage extends Component {
                     if (String(item[dataIndex]||'').toLowerCase().includes(String(selectedKeys).toLowerCase())) {return true;}
                     return false;
                 });
-                this.setState({addData: fileterData,addRenderData:fileterData});
+                this.setState({addData: fileterData});
             }).catch(err => {
                 console.log(err);
                 console.log("提取数据失败");
@@ -252,6 +251,18 @@ export default class ClassManage extends Component {
             this.setState({
                 addNewStudent: !this.state.addNewStudent,
                 addData:this.state.addData===''?'':'',
+            })
+        }
+
+        this.addStudentToClass=()=>{
+            const {record}=this.state;
+            console.log(record);
+            console.log("this is a try");
+            console.log(record["theClass"]);
+            record["theClass"]="F1803702";
+            axios({
+                method:'POST',
+                url:'http://106.13.209.140:8000/addStudentToClass'
             })
         }
 
@@ -442,24 +453,19 @@ export default class ClassManage extends Component {
                             key: 'del',
                             render: record => (
                                 <Button onClick={() => {
-                                    var newOrData = orData.filter(item => item.username !== record.username);
+                                    var newAddData = addData.filter(item => item.username !== record.username);
                                     console.log(record);
-                                    var newRenderData = renderData.filter(item => item.username !== record.username);
-
-                                    var newDa = orData.filter(item => {
-                                        console.log(item);
-                                        return true;
-                                    })
-                                    console.log(newOrData);
-                                    console.log(newRenderData);
+                                    console.log(newAddData);
                                     console.log(this.state.record);
                                     this.setState({
-                                        renderData: newRenderData,
-                                        orData: newOrData,
+                                        addData: newAddData,
                                         delData: record.username,
+                                        orData:[...orData,record],
+                                        renderData:[...renderData,record],
+                                        record:record,
                                     }, () => {
-                                        this.deleteStudent();
-                                        this.handleSearch();
+                                        this.addStudentToClass();
+                                        // this.handleSearch();
                                     });
                                 }}>添加</Button>),
                         }]}

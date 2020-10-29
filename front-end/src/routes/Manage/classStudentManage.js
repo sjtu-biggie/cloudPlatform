@@ -368,6 +368,7 @@ export default class ClassManage extends Component {
         })
 
 
+
     }
 
     // this.setClass=(clas)=>{

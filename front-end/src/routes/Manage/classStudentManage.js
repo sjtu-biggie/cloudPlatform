@@ -260,9 +260,18 @@ export default class ClassManage extends Component {
             console.log("this is a try");
             console.log(record["theClass"]);
             record["theClass"]="F1803702";
+            console.log(record);
             axios({
                 method:'POST',
-                url:'http://106.13.209.140:8000/addStudentToClass'
+                url:'http://106.13.209.140:8000/addStudentToClass',
+                data:{
+                    username: record.username,
+                    theClass:record.theClass
+                }
+            }).then(msg=>{
+                console.log(msg);
+            }).catch(err=>{
+                console.log(err)
             })
         }
 

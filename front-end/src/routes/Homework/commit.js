@@ -11,6 +11,7 @@ import {fileToObject} from "antd/es/upload/utils";
 import axios from "axios";
 import Upload from "./upload"
 
+
 const { Text, Link } = Typography;
 
 
@@ -70,7 +71,7 @@ class HomeworkCommit extends React.Component{
                     <Card bordered={false} className='card-item'>
                         <RichText></RichText>
                     </Card>
-
+                    <Upload></Upload>
                     <br></br>
                     <Button type="primary"  onClick={()=>this.setState({isCommit:!this.state.isCommit})} size={this.state.size}>{this.state.isCommit===true?"重新提交":"提交"}</Button>&emsp;
                 </Card>

@@ -1,11 +1,13 @@
 import React from 'react'
-import {Card, Col, Row, Button, Tooltip, notification, Select, Typography,List,Divider, Icon, Upload, Avatar} from 'antd'
+import {Card, Col, Row, Button, Tooltip, notification, Select, Typography,List,Divider, Icon, Avatar,message} from 'antd'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import TypingCard from '../../components/TypingCard'
 import {Editor} from "react-draft-wysiwyg";
 import Commit from "./commit"
 import axios from "axios";
+import {UploadOutlined} from "@ant-design/icons";
+
 
 const { Text, Link } = Typography;
 class commitPage extends React.Component{
@@ -68,6 +70,31 @@ class commitPage extends React.Component{
 
     }
 
+    MyUpLoad = (option) => {
+        let images = this.state.images;
+        let len = this.state.uids.length;
+        let temp = [];
+        temp.push(this.state.uids[len - 1]);
+
+        const formData = new FormData();
+        formData.append("files[]", option.file);
+        const reader = new FileReader();
+        reader.readAsDataURL(option.file);
+
+        reader.onloadend = (e) => {
+
+            if (e && e.target && e.target.result) {
+                option.onSuccess();
+                temp.push(e.target.result);
+                images.push(temp);
+                this.setState({
+                    images: images,
+                });
+                console.log(images[0][1]);
+            }
+        };
+    };
+
     componentDidMount() {
         console.log(this.state.homeworkId)
         this.getTeacherHomeworkOne(this.state.homeworkId);
@@ -75,6 +102,22 @@ class commitPage extends React.Component{
 
     render(){
         const { editorState,contentState } = this.state;
+        const props = {
+            name: 'file',
+            headers: {
+                authorization: 'authorization-text',
+            },
+            onChange(info) {
+                if (info.file.status !== 'uploading') {
+                    console.log(info.file, info.fileList);
+                }
+                if (info.file.status === 'done') {
+                    message.success(`${info.file.name} file uploaded successfully`);
+                } else if (info.file.status === 'error') {
+                    message.error(`${info.file.name} file upload failed.`);
+                }
+            },
+        };
         return (
 
             <div>
@@ -84,6 +127,7 @@ class commitPage extends React.Component{
                     </Row>
                     <Row>
                         <Text type={"secondary"}>{"截止日期："+this.state.endTime}</Text>
+
                     </Row>
             </div>
         )

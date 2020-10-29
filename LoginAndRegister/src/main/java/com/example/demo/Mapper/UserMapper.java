@@ -16,6 +16,9 @@ public interface UserMapper {
     @Select("select * from userdemo where username=#{username} and password =#{password}")
     public User getUser(String username, String password);
 
+    @Select("select * from userdemo where sid=#{sid}")
+    public User getUserBySid(String sid);
+
     @Select("select * from userdemo where username=#{username}")
     public User getUserMessage(String username);
 
@@ -41,9 +44,12 @@ public interface UserMapper {
     public List<User> getAllUsers();
 
     @Select("select username,password,sid,email,telephone,nickname,type,theGrade,theClass from userdemo where theClass=#{theClass}")
-    public  List<User> getAllStudentsByClass(String theClass);
+    public List<User> getAllStudentsByClass(String theClass);
 
     @Select("select * from userdemo where theClass IN classIds")
     public List<User> getAllUsersByClassIds(@Param("classIds") String[] classIds);
+
+    @Select("select * from userdemo where theClass=#{theClass}")
+    List<User> getAllStudentsByTheClass(String theClass);
 
 }

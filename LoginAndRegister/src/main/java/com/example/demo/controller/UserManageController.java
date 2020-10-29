@@ -69,4 +69,20 @@ public class UserManageController {
         return users;
     }
 
+    @RequestMapping(value = "/getUserBySid",method=RequestMethod.POST)
+    public User getUserBySid(@RequestBody JSONObject obj){
+        String sid= obj.getString("sid");
+        User user=userMapper.getUserBySid(sid);
+        return user;
+    }
+
+    @RequestMapping(value = "/getAllStudentsByTheClass",method = RequestMethod.POST)
+    public List<User> getAllStudentsByTheClass(@RequestBody JSONObject obj){
+        String theClass = obj.getString("theClass");
+        List<User> users=userMapper.getAllStudentsByTheClass(theClass);
+        return  users;
+    }
+
+
+
 }

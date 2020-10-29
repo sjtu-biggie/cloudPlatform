@@ -44,11 +44,18 @@ public class ClassManageController {
 
     @RequestMapping(value = "/updateClass",method = RequestMethod.POST)
     public String updateClass(@RequestBody JSONObject obj){
-        String getId=obj.getString("id");
+        String classNo=obj.getString("classNo");
         int n=obj.getIntValue("number");
-        classManageMapper.updateClass(getId,n);
+        classManageMapper.updateClass(classNo,n);
         return "成功增加学生人数";
     }
 
+
+    @RequestMapping(value = "/getAllClassByManager",method = RequestMethod.POST)
+    public List<ClassManage> getAllClassByManager(@RequestBody JSONObject obj){
+        String sid= obj.getString("sid");
+        List<ClassManage> theClassIds=classManageMapper.getAllClassByManager(sid);
+        return theClassIds;
+    }
 
 }

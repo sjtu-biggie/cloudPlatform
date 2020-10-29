@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.example.demo.model.User;
 import org.apache.ibatis.annotations.*;
 import org.omg.CORBA.PUBLIC_MEMBER;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
@@ -52,4 +53,6 @@ public interface UserMapper {
     @Select("select * from userdemo where theClass=#{theClass}")
     List<User> getAllStudentsByTheClass(String theClass);
 
+    @Update("update userdemo set theClass=#{theClass} where username=#{username}")
+    void addStudentToClass(String username, String theClass);
 }

@@ -83,6 +83,18 @@ public class UserManageController {
         return  users;
     }
 
+    @RequestMapping(value = "/addStudentToClass",method = RequestMethod.POST)
+    public String addStudentToClass(@RequestBody JSONObject obj){
+        String username=obj.getString("username");
+        String theClass=obj.getString("theClass");
+        try{
+            userMapper.addStudentToClass(username,theClass);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return "添加完成";
+
+    }
 
 
 }

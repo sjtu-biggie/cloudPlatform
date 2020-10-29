@@ -17,13 +17,13 @@ public class ClassManageController {
 
     @RequestMapping(value = "/addClass",method = RequestMethod.POST)
     public String addClass(@RequestBody JSONObject obj){
-        String id=  obj.getString("id");
         String classNo=obj.getString("classNo");
         int number=obj.getIntValue("number");
+        String classManagers=obj.getString("classManagers");
         ClassManage classManage=new ClassManage();
-        classManage.setId(id);
         classManage.setClassNo(classNo);
         classManage.setNumber(number);
+        classManage.setClassManagers(classManagers);
         classManageMapper.addClass(classManage);
         return "添加班级成功";
     }

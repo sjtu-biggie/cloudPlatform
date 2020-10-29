@@ -1,39 +1,7 @@
 import React from 'react'
 import {Card, Button, List, Icon,} from 'antd'
 import axios from 'axios'
-
-const deathHomework = [];
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'数学',
-        grade:'七年级上',
-        title: `七年级上数学作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'语文',
-        grade:'七年级上',
-        title: `七年级上语文作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100',
-        range:['八年级三班','八年级二班']
-
-    })
-}
+import {withRouter} from "react-router-dom";
 
 const IconText = ({ type, text }) => (
     <span>
@@ -42,6 +10,7 @@ const IconText = ({ type, text }) => (
   </span>
 );
 
+@withRouter
 class HomeworkList extends React.Component {
     state = {
         type:0,
@@ -239,7 +208,7 @@ class HomeworkList extends React.Component {
                                           }}>删除</Button>]:[])}
                                           >
                                           <List.Item.Meta
-                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit?homeworkId="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General?homeworkId="+item.homeworkId}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
+                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General/"+item.homeworkId+"/"}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
                                               description={item.description}
                                           />
                                           {item.content}
@@ -260,4 +229,4 @@ const styles = {
     }
 }
 
-export default HomeworkList
+export default withRouter(HomeworkList)

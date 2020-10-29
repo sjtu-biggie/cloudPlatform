@@ -19,6 +19,7 @@ import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import CommitTable from './CommitTable'
 import ChangeHomework from './ChangeHomework'
+import {withRouter} from "react-router-dom";
 
 const deadHomework = {
   homeworkId:1,
@@ -32,19 +33,20 @@ const deadHomework = {
   range:'加载中'
 };
 
+@withRouter
 class ListDemo extends React.Component {
   state = {
-    homeworkId:0,
-    homework:deadHomework,
-    studentHomework:deadHomework,
-    userInfo:null,
-    role:null,
-    cNum:0,
-    average:0,
-    handinAmount:0,
-    handinAlready:0,
-    isLoading:false,
-  };
+    homeworkId: 0,
+    homework: deadHomework,
+    studentHomework: deadHomework,
+    userInfo: null,
+    role: null,
+    cNum: 0,
+    average: 0,
+    handinAmount: 0,
+    handinAlready: 0,
+    isLoading: false,
+  }
 
   getUserInfo = async (username)=>{
     let config = {
@@ -79,7 +81,6 @@ class ListDemo extends React.Component {
     };
     const hw = await axios(config)
         .then(function (response) {
-          console.log(response.data);
           return response.data;
         })
         .catch(function (error) {
@@ -96,8 +97,7 @@ class ListDemo extends React.Component {
     let storage = window.localStorage;
     let username = storage.getItem("username");
     let r = storage.getItem("type");
-    let params = this.props.location.search.slice(1).split('&').map(kv => kv.split('='));
-    let hwId = params[0][1];
+    let hwId = this.props.match.params.homeworkId;
     this.getHomeworkOfStudents(hwId);
     this.getHomeworkOne(hwId);
     this.setState({
@@ -195,4 +195,4 @@ class ListDemo extends React.Component {
   }
 }
 
-export default ListDemo
+export default withRouter(ListDemo)

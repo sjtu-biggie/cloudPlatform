@@ -125,7 +125,6 @@ class Rating extends React.Component {
             loading: true,
             homework: this.props.homework,
             index: this.props.index,
-
         });
         console.log(this.props.homework);
         this.setState({
@@ -145,7 +144,9 @@ class Rating extends React.Component {
             return;
         }
         this.getAverageScore(nextProps.homework.homeworkId);
-        this.getHomework(nextProps.homework.homeworkId);
+        if(this.state.assignHomework==={}){
+            this.getHomework(nextProps.homework.homeworkId);
+        }
         this.setState({
             loading: false
         });
@@ -207,7 +208,7 @@ class Rating extends React.Component {
                                 width: '30%',
                                 textAlign: 'center',
                                 height: '90px'
-                            }}>{this.props.homework.title}</Card.Grid>
+                            }}>{this.state.homework.title}</Card.Grid>
                             <Card.Grid style={{
                                 width: '11%',
                                 textAlign: 'center',
@@ -301,9 +302,9 @@ class Rating extends React.Component {
                                     <div>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
                                             <InputNumber style={{marginLeft: '20px'}} id={'inputNumber'} min={0}
-                                                         max={100}/> /100</p>
+                                                        defaultValue={this.state.homework.score} max={100}/> /100</p>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>
-                                            <TextArea style={{height: '200px', marginTop: '15px'}} id={'textarea'}/></p>
+                                            <TextArea defaultValue={this.state.homework.comment} style={{height: '200px', marginTop: '15px'}} id={'textarea'}/></p>
                                     </div>
                                     :
                                     <div style={{height: '320px'}}>
@@ -326,7 +327,6 @@ class Rating extends React.Component {
                                             <Button onClick={() => {
                                                 let homework = this.state.homework;
                                                 homework.score = null;
-                                                homework.comment = "";
                                                 this.setState({
                                                     homework: homework
                                                 })
@@ -391,11 +391,22 @@ class Rating extends React.Component {
                                             </Col>
                                             <Col offset={3} span={3}>
                                                 <Button onClick={() => {
+                                                    let homework = this.state.homework;
+                                                    homework.correct = this.saveableCanvas.getSaveData();
                                                     this.setState({
-                                                        saveableCanvas:this.saveableCanvas.getSaveData()
+                                                        saveableCanvas:this.saveableCanvas.getSaveData(),
+                                                        homework:homework
                                                     });
                                                     console.log(this.saveableCanvas.getSaveData());
                                                 }} style={{fontWeight: 'bold', marginLeft: '10px'}}> 保存画布 </Button>
+                                            </Col>
+                                            <Col offset={3} span={3}>
+                                                <Button onClick={() => {
+                                                    if(this.state.homework.correct!==""&&this.state.homework.correct!==null){
+                                                        this.saveableCanvas.loadSaveData(this.state.homework.correct)
+                                                    }
+
+                                                }} style={{fontWeight: 'bold', marginLeft: '10px'}}> 加载画布 </Button>
                                             </Col>
                                         </Row>
 
@@ -430,7 +441,7 @@ class Rating extends React.Component {
             </div>
         )
     };
-    submitRate=()=>{
+    submitRate= async()=>{
         if(!(this.state.homework.score === null)){
             message.error("请先点击重新评价，再提交批改");
             return 1;
@@ -438,12 +449,32 @@ class Rating extends React.Component {
         let score = document.getElementById("inputNumber").value;
         let comment = document.getElementById("textarea").value;
         let drawing = this.state.saveableCanvas;
-        // score = score.value;
-        // comment = comment.value;
         if (score===""||score===null||comment===""||comment===null){
             message.error("请填写正确的分数和评语！");
             return 1;
         }
+        let homework = this.state.homework;
+        homework.score = score;
+        homework.comment = comment;
+        homework.correct = drawing;
+        homework.studentid = homework.studentId;
+        console.log(homework);
+        let config = {
+            method: 'post',
+            url: 'http://106.13.209.140:8383/CorrectHomework',
+            data:homework,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        let data = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
     showModalHomework = () => {
         this.setState({

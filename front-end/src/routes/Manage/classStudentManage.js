@@ -1,9 +1,10 @@
 /* eslint-disable */
 import React, {Component, createRef} from 'react';
-import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form} from 'antd';
 import styles from './index.css';
 import {Router} from "react-router-dom";
 import axios from "axios";
+import {values} from "mobx";
 
 
 const columns = [
@@ -17,7 +18,27 @@ const columns = [
     {title: '邮箱', dataIndex: 'email'},
 ];
 
+const columns1 = [
+    {title: '用户名', dataIndex: 'username'},
+    {title: '学号', dataIndex: 'sid'},
+    {title: '昵称', dataIndex: 'nickname'},
+    {title: '用户类型', dataIndex: 'type'},
+    {title: '年级', dataIndex: 'theGrade'},
+    {title: '班级', dataIndex: 'theClass'},
+];
+
 columns.map(item => {
+    item.sorter = (a, b) => {
+        if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
+            return a[item.dataIndex] - b[item.dataIndex];
+        }
+        const aa = a[item.dataIndex] || '';
+        const bb = b[item.dataIndex] || '';
+        return String(aa).localeCompare(String(bb));
+    };
+});
+
+columns1.map(item => {
     item.sorter = (a, b) => {
         if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
             return a[item.dataIndex] - b[item.dataIndex];
@@ -52,6 +73,31 @@ class EditText extends Component {
     }
 };
 
+class addStudentTable extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            edit: false,
+            editValue: props.children,
+        };
+    }
+
+    render() {
+        const {edit, editValue} = this.state;
+        return (edit ? <Input autoFocus style={{width: 100}}
+                              value={editValue}
+                              onChange={event => this.setState({editValue: event.target.value})}
+                              onBlur={() => {
+                                  this.setState({edit: false});
+                                  this.props.onChange(editValue);
+                              }}/> :
+            <div style={{width: 100}} onDoubleClick={() => this.setState({edit: true})}>
+                {this.props.children || <span>&nbsp;</span>}
+            </div>);
+    }
+}
+
+
 const menu = (
     <Menu>
         <Menu.Item>
@@ -82,6 +128,9 @@ export default class ClassManage extends Component {
             renderData: '',
             modifyIds: [],
             record: '',
+            addNewStudent: false,
+            addData:'',
+            addRenderData:'',
         };
         this.searchInput = createRef();
 
@@ -119,8 +168,59 @@ export default class ClassManage extends Component {
             };
         });
 
-        this.test = () => {
+        columns1.forEach(item => {
+            const {dataIndex, title} = item;
+            item.filterDropdown = ({setSelectedKeys, selectedKeys, confirm}) => (
+                <div style={{padding: 8}}>
+                    <Input
+                        allowClear
+                        ref={this.searchInput}
+                        placeholder={`搜索 ${title}`}
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={confirm}
+                        style={{width: 188, marginBottom: 8, display: 'block'}}
+                    />
+                    <Button
+                        type="primary"
+                        onClick={()=>{this.addSearch(selectedKeys,dataIndex)}}
+                        size="small"
+                        style={{width: 90}}
+                    >
+                        搜索
+                    </Button>
+                </div>
+            );
+            item.onFilter = (value, record) =>
+                record[dataIndex]
+                    ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+                    : '';
+            item.onFilterDropdownVisibleChange = visible => {
+                if (visible) {
+                    setTimeout(() => this.searchInput.current.select(), 100);
+                }
+            };
+        });
+
+        this.addSearch = (selectedKeys,dataIndex) => {
             console.log("this is a try");
+            console.log(selectedKeys);
+            console.log(dataIndex);
+            axios({
+                method: 'POST',
+                url: 'http://106.13.209.140:8000/getAllUsers'
+            }).then(msg => {
+                console.log(msg);
+                var fileterData=msg.data.filter(item => {
+                    if (String(item[dataIndex]||'').toLowerCase().includes(String(selectedKeys).toLowerCase())) {return true;}
+                    return false;
+                });
+                this.setState({addData: fileterData,addRenderData:fileterData});
+            }).catch(err => {
+                console.log(err);
+                console.log("提取数据失败");
+            })
+
         }
 
         this.handleSearch = () => {
@@ -139,13 +239,20 @@ export default class ClassManage extends Component {
             this.setState({renderData: filterData});
         };
 
+        // this.addStudent = () => {
+        //     const {orData} = this.state;
+        //     const getData = [getMockData(), ...this.state.orData];
+        //     this.setState({
+        //         orData: getData,
+        //         renderData: getData
+        //     });
+        // }
+
         this.addStudent = () => {
-            const {orData} = this.state;
-            const getData = [getMockData(), ...this.state.orData];
             this.setState({
-                orData: getData,
-                renderData: getData
-            });
+                addNewStudent: !this.state.addNewStudent,
+                addData:this.state.addData===''?'':'',
+            })
         }
 
         this.deleteStudent = () => {
@@ -193,21 +300,54 @@ export default class ClassManage extends Component {
             })
         }
 
+
+        this.getClassStudents = (theclass) => {
+            console.log(theclass);
+            axios({
+                method: 'POST',
+                url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
+                data: {
+                    "theClass": "F1803702"
+                }
+            }).then(msg => {
+                console.log(msg.data);
+                this.setState({
+                    orData: msg.data,
+                    renderData: msg.data,
+                })
+            }).catch(err => {
+                console.log(err);
+            })
+        }
     }
 
     componentDidMount() {
         console.log("开始获取老师班级");
         axios({
-            url:'http://106.13.209.140:8000/getAllClassByTeacher',
-            method:'POST',
-            data:{
-                teacherId:window.localStorage.getItem("sid")
+            url: 'http://106.13.209.140:8000/getAllClassByManager',
+            method: 'POST',
+            data: {
+                sid: "518030910213"
             }
-        }).then(msg=>{
+        }).then(msg => {
             console.log(msg);
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err)
         })
+
+        axios({
+            method: 'POST',
+            url: 'http://106.13.209.140:8000/getAllUsers'
+        }).then(msg => {
+            console.log(msg);
+            this.setState({orData: msg.data});
+            this.setState({renderData: msg.data});
+        }).catch(err => {
+            console.log(err);
+            console.log("提取数据失败");
+        })
+
+
     }
 
     // this.setClass=(clas)=>{
@@ -224,9 +364,6 @@ export default class ClassManage extends Component {
     //         })
     //     })
 
-
-    //
-    // this.getStudentsByClass
 
     // this.handleSearch2 = () => {
     //     const { orData2, search2 } = this.state;
@@ -256,23 +393,8 @@ export default class ClassManage extends Component {
     // };
 
 
-    componentWillMount() {
-        axios({
-            method: 'POST',
-            url: 'http://106.13.209.140:8000/getAllUsers'
-        }).then(msg => {
-            console.log(msg);
-            this.setState({orData: msg.data});
-            this.setState({renderData: msg.data});
-        }).catch(err => {
-            console.log(err);
-            console.log("提取数据失败");
-        })
-    }
-
-
     render() {
-        const {orData, search, renderData, modifyIds} = this.state;
+        const {orData, search, renderData, modifyIds,addData} = this.state;
         return (
             <div className={styles.normal}>
                 <Card title={<div style={{textAlign: "center"}}>管理班级名单</div>}>
@@ -288,7 +410,7 @@ export default class ClassManage extends Component {
                                 <Button type={"primary"}
                                         onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Col>
-                            <Col span={4} offset={10}>
+                            <Col span={8} offset={1}>
                                 <div>
                                     <Dropdown overlay={menu} placement="bottomCenter">
                                         <Button>班级选择</Button>
@@ -296,37 +418,55 @@ export default class ClassManage extends Component {
                                     <Button type={'primary'} onClick={this.addStudent} style={{marginLeft: '30px'}}>
                                         添加
                                     </Button>
+                                    <Button onClick={() => {
+                                        this.getClassStudents("F1803702")
+                                    }}>
+                                        2班
+                                    </Button>
+                                    <Button>
+                                        创建新的班级
+                                    </Button>
                                 </div>
                             </Col>
                         </Row>
                     </Card>
-                    <Card bordered={false} style={{marginBottom: 10, height: 800}}>
 
-                        {/*<Table*/}
-                        {/*    rowKey={'id'}*/}
-                        {/*    columns={[...columns.map(item => ({*/}
-                        {/*        ...item,*/}
-                        {/*        render: (text, record) => <EditText onChange={value => {*/}
-                        {/*            const newData = [...orData];*/}
-                        {/*            newData.find(col => col.username === record.username)[item.dataIndex] = value;*/}
-                        {/*            console.log(col.username);*/}
-                        {/*            console.log("Fsadf");*/}
-                        {/*            this.setState({ orData: newData });*/}
-                        {/*        }}>{text}</EditText>,*/}
-                        {/*    })), {*/}
-                        {/*        name: '操作',*/}
-                        {/*        key: 'del',*/}
-                        {/*        render: record => (*/}
-                        {/*            <Button onClick={() => {*/}
-                        {/*                this.setState({*/}
-                        {/*                    orData: orData.filter(item => item.id !== record.id),*/}
-                        {/*                }, () => {*/}
-                        {/*                    this.handleSearch();*/}
-                        {/*                    this.handleSearch2();*/}
-                        {/*                });*/}
-                        {/*            }}>删除</Button>),*/}
-                        {/*    }]}*/}
-                        {/*    dataSource={renderData}/>*/}
+                    {this.state.addNewStudent === true ? <Table
+                        rowKey={'sid'}
+                        columns={[...columns1.map(item => ({
+                            ...item,
+                            render: (text, record) =>
+                                <EditText>{text}</EditText>,
+                        })), {
+                            name: '操作',
+                            key: 'del',
+                            render: record => (
+                                <Button onClick={() => {
+                                    var newOrData = orData.filter(item => item.username !== record.username);
+                                    console.log(record);
+                                    var newRenderData = renderData.filter(item => item.username !== record.username);
+
+                                    var newDa = orData.filter(item => {
+                                        console.log(item);
+                                        return true;
+                                    })
+                                    console.log(newOrData);
+                                    console.log(newRenderData);
+                                    console.log(this.state.record);
+                                    this.setState({
+                                        renderData: newRenderData,
+                                        orData: newOrData,
+                                        delData: record.username,
+                                    }, () => {
+                                        this.deleteStudent();
+                                        this.handleSearch();
+                                    });
+                                }}>添加</Button>),
+                        }]}
+                        dataSource={addData}/> : ''}
+
+
+                    <Card bordered={false} style={{marginBottom: 10, height: 800}}>
 
                         <Table
                             rowKey={'sid'}
@@ -341,7 +481,6 @@ export default class ClassManage extends Component {
                                             console.log(record);
                                             record[item.dataIndex] = value;
                                             this.setState({orData: newData, renderData: newData});
-
 
                                             console.log(record);
                                             this.setState({record: record});
@@ -362,10 +501,6 @@ export default class ClassManage extends Component {
                                         console.log(record);
                                         var newRenderData = renderData.filter(item => item.username !== record.username);
 
-                                        var newDa = orData.filter(item => {
-                                            console.log(item);
-                                            return true;
-                                        })
                                         console.log(newOrData);
                                         console.log(newRenderData);
                                         console.log(this.state.record);

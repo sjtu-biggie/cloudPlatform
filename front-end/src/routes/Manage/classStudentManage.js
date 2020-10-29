@@ -376,7 +376,6 @@ export default class ClassManage extends Component {
                 method:'POST',
                 url:'http://106.13.209.140:8000/addClass',
                 data:{
-                    id:10,
                     classNo:this.state.createClass,
                     number:0,
                     sid:"518030910213",

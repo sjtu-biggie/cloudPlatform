@@ -1,10 +1,14 @@
 /* eslint-disable */
 import React, {Component, createRef} from 'react';
-import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form} from 'antd';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form,Drawer} from 'antd';
 import styles from './index.css';
 import {Router} from "react-router-dom";
 import axios from "axios";
 import {values} from "mobx";
+import {PlusOutlined} from "@ant-design/icons";
+
+
+
 
 
 const columns = [
@@ -129,7 +133,9 @@ export default class ClassManage extends Component {
             modifyIds: [],
             record: '',
             addNewStudent: false,
-            addData:'',
+            addData: '',
+            visible:false,
+            createClass:'',
         };
         this.searchInput = createRef();
 
@@ -182,7 +188,9 @@ export default class ClassManage extends Component {
                     />
                     <Button
                         type="primary"
-                        onClick={()=>{this.addSearch(selectedKeys,dataIndex)}}
+                        onClick={() => {
+                            this.addSearch(selectedKeys, dataIndex)
+                        }}
                         size="small"
                         style={{width: 90}}
                     >
@@ -201,7 +209,20 @@ export default class ClassManage extends Component {
             };
         });
 
-        this.addSearch = (selectedKeys,dataIndex) => {
+        this.showDrawer = () => {
+            this.setState({
+                visible: true,
+            });
+        };
+
+        this.onClose = () => {
+            this.setState({
+                visible: false,
+            });
+        };
+
+
+        this.addSearch = (selectedKeys, dataIndex) => {
             console.log("this is a try");
             console.log(selectedKeys);
             console.log(dataIndex);
@@ -210,8 +231,10 @@ export default class ClassManage extends Component {
                 url: 'http://106.13.209.140:8000/getAllUsers'
             }).then(msg => {
                 console.log(msg);
-                var fileterData=msg.data.filter(item => {
-                    if (String(item[dataIndex]||'').toLowerCase().includes(String(selectedKeys).toLowerCase())) {return true;}
+                var fileterData = msg.data.filter(item => {
+                    if (String(item[dataIndex] || '').toLowerCase().includes(String(selectedKeys).toLowerCase())) {
+                        return true;
+                    }
                     return false;
                 });
                 this.setState({addData: fileterData});
@@ -250,26 +273,26 @@ export default class ClassManage extends Component {
         this.addStudent = () => {
             this.setState({
                 addNewStudent: !this.state.addNewStudent,
-                addData:this.state.addData===''?'':'',
+                addData: this.state.addData === '' ? '' : '',
             })
         }
 
-        this.addStudentToClass=()=>{
-            const {record}=this.state;
+        this.addStudentToClass = () => {
+            const {record} = this.state;
             console.log("this is a try");
             console.log(record["theClass"]);
-            record["theClass"]="F1803702";
+            record["theClass"] = "F1803702";
             console.log(record);
             axios({
-                method:'POST',
-                url:'http://106.13.209.140:8000/addStudentToClass',
-                data:{
+                method: 'POST',
+                url: 'http://106.13.209.140:8000/addStudentToClass',
+                data: {
                     username: record.username,
-                    theClass:record.theClass
+                    theClass: record.theClass
                 }
-            }).then(msg=>{
+            }).then(msg => {
                 console.log(msg);
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err)
             })
         }
@@ -338,6 +361,32 @@ export default class ClassManage extends Component {
                 console.log(err);
             })
         }
+
+        this.getClassNo=(event)=>{
+            console.log(event.target.value);
+            this.setState({
+                createClass:event.target.value
+            })
+        }
+
+
+        this.createClass = () => {
+            console.log("建立班级"+this.state.createClass);
+            axios({
+                method:'POST',
+                url:'http://106.13.209.140:8000/addClass',
+                data:{
+                    id:10,
+                    classNo:this.state.createClass,
+                    number:0,
+                    sid:"518030910213",
+                }
+            }).then(msg=>{
+                console.log(msg);
+            }).catch(err=>{
+                console.log(err);
+            })
+        }
     }
 
     componentDidMount() {
@@ -380,8 +429,6 @@ export default class ClassManage extends Component {
         }).catch(err => {
             console.log(err);
         })
-
-
 
     }
 
@@ -429,7 +476,7 @@ export default class ClassManage extends Component {
 
 
     render() {
-        const {orData, search, renderData, modifyIds,addData} = this.state;
+        const {orData, search, renderData, modifyIds, addData} = this.state;
         return (
             <div className={styles.normal}>
                 <Card title={<div style={{textAlign: "center"}}>管理班级名单</div>}>
@@ -450,7 +497,7 @@ export default class ClassManage extends Component {
                                     <Dropdown overlay={menu} placement="bottomCenter">
                                         <Button>班级选择</Button>
                                     </Dropdown>
-                                    <Button type={'primary'} onClick={this.addStudent} style={{marginLeft: '30px'}}>
+                                    <Button onClick={this.addStudent} style={{marginLeft: '30px'}}>
                                         添加
                                     </Button>
                                     <Button onClick={() => {
@@ -458,13 +505,27 @@ export default class ClassManage extends Component {
                                     }}>
                                         2班
                                     </Button>
-                                    <Button>
-                                        创建新的班级
+                                    <Button onClick={this.showDrawer}>
+                                        <PlusOutlined /> 创建新的班级
                                     </Button>
                                 </div>
                             </Col>
                         </Row>
                     </Card>
+
+                    <Drawer
+                        title="创建新的班级"
+                        closable={false}
+                        onClose={this.onClose}
+                        visible={this.state.visible}
+                    >
+                        <Form name="basic" initialValues={{ remember: true }}>
+                            <Form.Item label="班级号" name="username" rules={[{ required: true }]}>
+                                <Input onBlur={this.getClassNo} />
+                            </Form.Item>
+                            <Button htmlType="submit" type='primary' onClick={this.createClass}>创建</Button>
+                        </Form>
+                    </Drawer>
 
                     {this.state.addNewStudent === true ? <Table
                         rowKey={'sid'}
@@ -478,15 +539,15 @@ export default class ClassManage extends Component {
                             render: record => (
                                 <Button onClick={() => {
                                     var newAddData = addData.filter(item => item.username !== record.username);
-                                    record["theClass"]="F1803702";
+                                    record["theClass"] = "F1803702";
                                     console.log(record);
                                     console.log(newAddData);
                                     this.setState({
                                         addData: newAddData,
                                         delData: record.username,
-                                        orData:[...orData,record],
-                                        renderData:[...renderData,record],
-                                        record:record,
+                                        orData: [...orData, record],
+                                        renderData: [...renderData, record],
+                                        record: record,
                                     }, () => {
                                         this.addStudentToClass();
                                     });
@@ -551,6 +612,17 @@ export default class ClassManage extends Component {
         );
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

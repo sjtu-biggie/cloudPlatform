@@ -25,8 +25,13 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
     public TeacherHomework editOne(TeacherHomework homework){
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = homework.getHomeworkId();
+        int c_id = homework.getCourseId();
+        String hwId = Integer.toString(h_id);
+        String csId = Integer.toString(c_id);
         homeworkDetail.setId(homework.getId());
-        homeworkDetail.setHomeworkId(h_id);
+        homeworkDetail.setHomeworkId(hwId);
+        homeworkDetail.setCourseId(csId);
+        homeworkDetail.setTeacherId(homework.getTeacherId());
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
         teacherhomeworkDetailRepository.save(homeworkDetail);
@@ -38,8 +43,13 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         teacherhomeworkRepository.save(homework);
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = homework.getHomeworkId();
+        int c_id = homework.getCourseId();
+        String hwId = Integer.toString(h_id);
+        String csId = Integer.toString(c_id);
         homeworkDetail.setId(homework.getId());
-        homeworkDetail.setHomeworkId(h_id);
+        homeworkDetail.setHomeworkId(hwId);
+        homeworkDetail.setCourseId(csId);
+        homeworkDetail.setTeacherId(homework.getTeacherId());
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
         teacherhomeworkDetailRepository.save(homeworkDetail);

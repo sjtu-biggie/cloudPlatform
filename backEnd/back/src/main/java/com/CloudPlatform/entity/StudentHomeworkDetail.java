@@ -30,10 +30,10 @@ public class StudentHomeworkDetail implements Serializable {
     private String studentId;
 
     @Column(name = "HOMEWORKID")
-    private int homeworkId;
+    private String homeworkId;
 
     @Column(name = "COURSEID")
-    private int courseId;
+    private String courseId;
 
     @Transient
     @Column(name = "CONTENT")

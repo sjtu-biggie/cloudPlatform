@@ -7,37 +7,33 @@ function getBase64(img, callback) {
     reader.readAsDataURL(img);
 }
 
-const props = {
-    name: 'file',
-    action: '//jsonplaceholder.typicode.com/posts/',
-    headers: {
-        authorization: 'authorization-text',
-    },
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            // console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} 文件上传成功`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} 文件上传失败`);
-        }
-    },
-    defaultFileList: [],
-}
+
 
 
 class UploadDemo extends React.Component {
-    state = {
-        loading: false,
-        previewVisible: false,
-        previewImage: '',
-        fileList: [{
-            uid: -1,
-            name: 'xxx.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        }],
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            uid:"",
+            previewVisible: false,
+            previewImage: '',
+            fileList: [{
+                uid: -1,
+                name: 'xxx.png',
+                status: 'done',
+                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            }],
+        }
+    }
+
+
+    componentWillMount() {
+        let uid=localStorage.getItem("username")
+        console.log(uid)
+        this.setState({
+            uid:uid,
+        })
     }
 
     beforeUpload(file, fileList) {
@@ -45,11 +41,11 @@ class UploadDemo extends React.Component {
         if (!isJPG) {
             message.error('只能上传JPG格式的图片');
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('图片大小不超过 2MB!');
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+            message.error('图片大小不超过 5MB!');
         }
-        return isJPG && isLt2M;
+        return isJPG && isLt5M;
     }
 
     handleChange = (info) => {
@@ -78,7 +74,34 @@ class UploadDemo extends React.Component {
         });
     }
 
+
+
     render() {
+        let that = this;
+        const props = {
+            name: 'file',
+            action: 'http://106.13.209.140:8383/upload?userId='+this.state.uid,
+            headers: {
+                authorization: 'authorization-text',
+            },
+            onChange(info) {
+                console.log(info)
+                if (info.file.status !== 'uploading') {
+                    // console.log(info.file, info.fileList);
+                }
+                if (info.file.status === 'done') {
+                    message.success(`${info.file.name} 文件上传成功`);
+                    that.setState({
+                        fileList:[...info.fileList]
+                    });
+                    console.log(that.state.fileList)
+
+                } else if (info.file.status === 'error') {
+                    message.error(`${info.file.name} 文件上传失败`);
+                }
+            },
+            defaultFileList: [],
+        }
         const uploadButton = (
             <div>
                 <Icon type="plus"/>

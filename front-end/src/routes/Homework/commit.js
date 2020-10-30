@@ -20,14 +20,26 @@ const { Text, Link } = Typography;
 class HomeworkCommit extends React.Component{
 
     state={
-        title:"作业0",
-        isCommit:false,
-        homeworkId:""
+        title:"",
+        homeworkId:"",
+        correct:"",
+        comment:""
     };
 
     uploadFilesChange(file) {
         // 通过FileReader对象读取文件
         console.log(file);
+    }
+
+    getChildrenMsg = (result, correct,comment,title) => {
+        // console.log(result, msg)
+        // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
+        console.log(comment)
+        this.setState({
+            correct: correct,
+            comment:comment,
+            title:title
+        })
     }
 
     componentWillMount() {
@@ -38,39 +50,24 @@ class HomeworkCommit extends React.Component{
     }
 
     componentDidMount() {
-        console.log(this.state.homeworkId)
+        console.log(this.state.correct)
     }
 
     render(){
         const { editorState,contentState } = this.state;
-        const props = {
-            name: 'file',
-            action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-            headers: {
-                authorization: 'authorization-text',
-            },
-            onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} file upload failed.`);
-                }
-            },
-        };
         return (
             <div>
                 <CustomBreadcrumb arr={['作业','提交']}/>
                 <Card  bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
 
-                    <CommitPage isCommit={this.state.isCommit} homeworkId={this.state.homeworkId} />
+                    <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
 
 
                     <Card bordered={false} className='card-item'>
                         <RichText></RichText>
                     </Card>
+                    <p>{this.state.correct}</p>
+                    <p>{this.state.comment}</p>
                     <Upload></Upload>
                     <br></br>
                     <Button type="primary"  onClick={()=>this.setState({isCommit:!this.state.isCommit})} size={this.state.size}>{this.state.isCommit===true?"重新提交":"提交"}</Button>&emsp;

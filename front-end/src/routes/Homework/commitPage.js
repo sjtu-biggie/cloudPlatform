@@ -14,12 +14,14 @@ class commitPage extends React.Component{
 
     state={
         content: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
-        endTime:"2020-10-1 20:00",
+        endTime:"",
         editorState: EditorState.createEmpty(),
         size: 'default',
-        overDdl:false,
-        isCommit:null,
         homeworkId:"",
+        correct:"",
+        comment:"",
+        handinTime:"",
+        title:""
     };
 
     format = (shijianchuo) => {
@@ -37,10 +39,10 @@ class commitPage extends React.Component{
         return m < 10 ? '0' + m : m
     }
 
-    getTeacherHomeworkOne=async (hid)=>{
+    getStudentHomeworkOne=async (sid,hid)=>{
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId='+hid,
+            url: 'http://106.13.209.140:8383/getStudentHomeworkOne?studentId='+sid+"&homeworkId="+hid,
             headers: {
                 withCredentials: true,
             }
@@ -53,13 +55,24 @@ class commitPage extends React.Component{
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(hw);
+        console.log(hw.comment);
         hw.endTime = this.format(hw.endTime);
         this.setState({
             content:hw.content,
-            endTime:hw.endTime
+            endTime:hw.endTime,
+            correct:hw.correct,
+            comment:hw.comment,
+            handinTime:hw.handinTime,
+            title:hw.title
         })
+        this.toParent();
     };
+
+    toParent = () => {
+        // console.log(this.props.parent.getChildrenMsg.bind(this, this.state.msg))
+        this.props.parent.getChildrenMsg(this, this.state.correct,this.state.comment,this.state.title)
+    }
+
     componentWillMount() {
         this.setState({
             isCommit:this.props.isCommit,
@@ -97,7 +110,10 @@ class commitPage extends React.Component{
 
     componentDidMount() {
         console.log(this.state.homeworkId)
-        this.getTeacherHomeworkOne(this.state.homeworkId);
+        let sid=localStorage.getItem("username")
+        this.getStudentHomeworkOne(sid,this.state.homeworkId);
+        console.log(this.state.correct);
+
     }
 
     render(){
@@ -123,7 +139,7 @@ class commitPage extends React.Component{
             <div>
                     <Row>
                         <Col span={20}>{this.state.content}</Col>
-                        <Col span={4}>{this.state.overDdl===true?"已截止 |":"未截止 |"}{this.state.isCommit===true?" 已提交":" 未提交"}</Col>
+                        <Col span={4}>{this.state.endTime<new Date().toLocaleTimeString()?"已截止 |":"未截止 |"}{this.state.handinTime!==null?" 已提交":" 未提交"}</Col>
                     </Row>
                     <Row>
                         <Text type={"secondary"}>{"截止日期："+this.state.endTime}</Text>

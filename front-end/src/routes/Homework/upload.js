@@ -1,5 +1,6 @@
 import React from 'react'
 import {Icon, Upload, message, Button} from 'antd'
+import axios from "axios";
 
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -74,7 +75,27 @@ class UploadDemo extends React.Component {
         });
     }
 
+    customRequest = async(detail) => {
+        console.log(detail)
+        let config = {
+            method: 'post',
+            data: {
 
+            },
+            url: '',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
     render() {
         let that = this;
@@ -111,7 +132,7 @@ class UploadDemo extends React.Component {
 
         return (
             <div>
-                <Upload {...props}>
+                <Upload {...props} customRequest={this.customRequest}>
                     <Button><Icon type="upload"/>Upload</Button>
                 </Upload>
             </div>

@@ -23,7 +23,6 @@ class HomeworkDemo extends React.Component {
         size: 'default',
         bordered: true,
         homework: deathHomework,
-        //homework: null,
         displayHomework: null,
         gradeHomework: null,
         subjectHomework: null,
@@ -65,7 +64,6 @@ class HomeworkDemo extends React.Component {
         };
         const user = await axios(config)
             .then(function (response) {
-
                 return response.data;
             })
             .catch(function (error) {
@@ -77,15 +75,37 @@ class HomeworkDemo extends React.Component {
         })
 
         if (this.state.role === 'teacher'){
-            this.getTeacherHomeworkAll(this.state.userInfo.username);
+            this.getTeacherHomeworkAll(this.state.type,this.state.userInfo.username);
         }
         else if (this.state.role === 'student'){
-            this.getStudentHomeworkAll(this.state.userInfo.username)
+            this.getStudentHomeworkAll(this.state.type,this.state.userInfo.username);
         }
     };
 
-    getTeacherHomeworkAll=async (teacherId)=>{
-        console.log(teacherId);
+    add0=(m)=>{return m<10?'0'+m:m };
+    format=(shijianchuo)=>
+    {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth()+1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
+    };
+
+    JudgeCon = (item) => {
+        let nowDate = new Date();
+        let endT = new Date(this.format(item.endTime));
+
+        if (nowDate.getTime() < endT.getTime()){
+            return "未截止";
+        }
+        else return "已截止";
+    };
+
+    getTeacherHomeworkAll = async (type,teacherId)=>{
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/getHomeworkAll?teacherId='+teacherId,
@@ -101,6 +121,40 @@ class HomeworkDemo extends React.Component {
                 console.log(error);
             });
         console.log(hw);
+        switch(type){
+            case 0:{
+                break;
+            }
+            case 1:{
+
+                break;
+            }
+            case 2:{
+                break;
+            }
+            case 3:{
+                for (let i = 0; i < hw.length;){
+                    if (this.JudgeCon(hw[i]) !== "已截止"){
+                        hw.splice(i,1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+                break;
+            }
+            case 4:{
+                for (let i = 0; i < hw.length;){
+                    if (this.JudgeCon(hw[i]) === "已截止"){
+                        hw.splice(i,1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+                break;
+            }
+        };
         this.setState({
             homework:hw,
             displayHomework:hw,
@@ -110,8 +164,8 @@ class HomeworkDemo extends React.Component {
         console.log(this.state.homework);
     };
 
-    getStudentHomeworkAll=async (studentId)=>{
-        console.log(studentId)
+    getStudentHomeworkAll= async (type, studentId)=>{
+        console.log(studentId);
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/getStudentHomeworkAll?studentId=' + studentId,
@@ -127,13 +181,63 @@ class HomeworkDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
+        console.log(hw);
+        switch(type){
+            case 0:{
+                break;
+            }
+            case 1:{
+                for (let i = 0; i < hw.length;){
+                    if (hw[i].handinTime === null){
+                        hw.splice(i,1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+                break;
+            }
+            case 2:{
+                for (let i = 0; i < hw.length;){
+                    if (hw[i].handinTime !== null){
+                        hw.splice(i,1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+                break;
+            }
+            case 3:{
+                for (let i = 0; i < hw.length;){
+                    if (this.JudgeCon(hw[i]) !== "已截止"){
+                        hw.splice(i,1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+                break;
+            }
+            case 4:{
+                for (let i = 0; i < hw.length;){
+                    if (this.JudgeCon(hw[i]) === "已截止"){
+                        hw.splice(i,1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+                break;
+            }
+        }
         this.setState({
             homework:hw,
             displayHomework:hw,
             subjectHomework:hw,
             gradeHomework:hw
         })
-        console.log(this.state.homework);
+
     };
 
     changeSubject1=(subject)=>{
@@ -196,35 +300,40 @@ class HomeworkDemo extends React.Component {
         });
     };
 
-    componentWillMount() {
-        this.getData2();
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.componentWillMount(nextProps.location.pathname);
+    }
+
+    componentWillMount(param) {
         this.setState({
             displayHomework: this.state.homework,
             subjectHomework: this.state.homework,
             gradeHomework: this.state.homework
         });
 
+        let pathname;
+        if (param === undefined || param === null) {
+            pathname = this.props.location.pathname;
+        } else {
+            pathname = param;
+        }
 
-        if(this.props.location.pathname==="/home/homework/overall"){
+        if(pathname ==="/home/homework/overall"){
             this.setState({type:0});
-            console.log(0);
         }
-        if(this.props.location.pathname==="/home/homework/submitted"){
+        if(pathname ==="/home/homework/submitted"){
             this.setState({type:1});
-            console.log(1);
         }
-        if(this.props.location.pathname==="/home/homework/uncommitted"){
+        if(pathname ==="/home/homework/uncommitted"){
             this.setState({type:2});
-            console.log(3);
         }
-        if(this.props.location.pathname==="/home/homework/closed"){
+        if(pathname ==="/home/homework/closed"){
             this.setState({type:3});
-            console.log(4);
         }
-        if(this.props.location.pathname==="'/home/homework/notclosed"){
+        if(pathname ==="/home/homework/notclosed"){
             this.setState({type:4});
-            console.log(5);
         }
+        this.getData2();
     }
 
     render() {

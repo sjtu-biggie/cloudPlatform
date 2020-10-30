@@ -191,7 +191,7 @@ class HomeworkList extends React.Component {
                                   return (
                                       <List.Item
                                           actions={this.state.role === 'student' ?
-                                              [<IconText type="file-text" text= {item.score === null ? '暂无': item.score} />,
+                                              [<IconText type="file-text" text = {item.score === null ? '暂无': item.score} />,
                                                   <IconText type="calendar" text={"截止："+ this.format(item.endTime)} />,
                                                   <IconText type="schedule" text ={ item.handinTime === null ? "未提交":"已提交"} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />,
@@ -208,10 +208,23 @@ class HomeworkList extends React.Component {
                                           }}>删除</Button>]:[])}
                                           >
                                           <List.Item.Meta
-                                              title={this.state.role === 'student' ? <a href={"/home/homework/commit="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General/"+item.homeworkId+"/"}  style={{color:'darkslategray',fontWeight:'bold',fontSize:'18px'}}>{item.title}</a>}
-                                              description={item.description}
+                                              title={this.state.role === 'student' ? <a style={{
+                                                  color: 'darkslategray',
+                                                  fontSize: '20px',
+                                                  fontWeight: 'bold',
+                                                  display: 'block'
+                                              }} href={"/home/homework/commit="+item.homeworkId}>{item.title}</a> : <a href={"/home/homework/General/"+item.homeworkId+"/"} style={{
+                                                  color: 'darkslategray',
+                                                  fontSize: '20px',
+                                                  fontWeight: 'bold',
+                                                  display: 'block'
+                                              }}>{item.title}</a>}
                                           />
-                                          {item.content}
+                                          {<p style={{
+                                              fontSize:'18px',
+                                              marginTop: '10px',
+                                              height: '20px'
+                                          }}>{item.content}</p>}
                                       </List.Item>
                                   )
                               }}

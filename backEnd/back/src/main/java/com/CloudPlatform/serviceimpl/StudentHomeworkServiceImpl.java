@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +128,28 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Override
     public void deleteStudentHomeworkOne(String studentId, int homeworkId){
         studenthomeworkDao.deleteOne(studentId, homeworkId);
+    }
+    @Override
+    public Integer upload(MultipartFile file){
+        String pathName = "/homework/";//想要存储文件的地址
+        String pname = file.getOriginalFilename();//获取文件名（包括后缀）
+        pathName += pname;
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(pathName);
+            fos.write(file.getBytes()); // 写入文件
+            //System.out.println("文件上传成功");
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     @Override
     public StudentStat getStudentStatistics(String studentId, int courseId,int time){

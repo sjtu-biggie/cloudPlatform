@@ -5,6 +5,7 @@ import com.CloudPlatform.entity.StudentStat;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,4 +26,6 @@ public interface StudentHomeworkService {
     List<StudentHomework> getStudentHomeworkAllOfHomeworkPage(int homeworkId, Pageable p);
 
     double getAverage(int homeworkId);
+
+    Integer upload(MultipartFile file);
 }

@@ -10,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,6 +41,11 @@ public class StudentHomeworkController {
     public StudentHomework getStudentHomeworkOne(@RequestParam("studentId") String studentId,
                                                  @RequestParam("homeworkId") int homeworkId) {
         return studenthomeworkService.getStudentHomeworkOne(studentId, homeworkId);
+    }
+
+    @PostMapping(value = "/upload")
+    public Integer upload(@RequestParam("data") MultipartFile file) {
+        return studenthomeworkService.upload(file);
     }
 
 

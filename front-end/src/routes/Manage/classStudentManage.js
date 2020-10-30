@@ -397,7 +397,8 @@ export default class ClassManage extends Component {
                 sid: "518030910213"
             }
         }).then(msg => {
-            console.log(msg);
+            console.log(msg.data);
+            msg.data.map()
         }).catch(err => {
             console.log(err)
         })

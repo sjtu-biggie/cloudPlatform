@@ -270,18 +270,17 @@ export default class Manager extends Component {
                 return item;
             })
             console.log(mySids);
-
             var filterData = data2.filter(item => {
-                    console.log(item.sid);
-                    console.log(mySids.indexOf(item.sid.toLocaleString()));
-                    console.log(mySids.includes(item.sid));
+                    // console.log(item.sid);
+                    // console.log(mySids.indexOf(item.sid.toLocaleString()));
+                    // console.log(mySids.includes(item.sid));
                     if (!mySids.includes(item.sid)) {
                         return item;
                     }
+                    return null;
                 }
             );
             console.log(filterData);
-
             this.setState({
                 orData: data1,
                 renderData: data1,
@@ -291,10 +290,21 @@ export default class Manager extends Component {
                 courseId: myCourseId,
                 classIds: myclassIds,
             })
+            // this.setState({
+            //         orData: res[0].data,
+            //         renderData: res[0].data,
+            //         orData2: res[1].data,
+            //         renderData2: res[1].data,
+            //         sid: mySids,
+            //         courseId: myCourseId,
+            //         classIds: myclassIds,
+            //
+            // })
 
         }).catch(err => {
             console.log(err);
         })
+
 
 
         // axios.interceptors.request.use(config => {
@@ -369,19 +379,19 @@ export default class Manager extends Component {
         // }).then(msg => {
         //     console.log(msg.data);
         //     console.log(mySids);
-        //     var filterData = msg.data.filter(item => {
-        //             console.log(item.sid);
-        //             console.log(mySids.indexOf(item.sid.toLocaleString()));
-        //             console.log(mySids.includes(item.sid));
-        //             if (!mySids.includes(item.sid)) {
-        //                 return item;
-        //             }
-        //         }
-        //     );
-        //     console.log(filterData);
+        //     // var filterData = msg.data.filter(item => {
+        //     //         console.log(item.sid);
+        //     //         console.log(mySids.indexOf(item.sid.toLocaleString()));
+        //     //         console.log(mySids.includes(item.sid));
+        //     //         if (!mySids.includes(item.sid)) {
+        //     //             return item;
+        //     //         }
+        //     //     }
+        //     // );
+        //     // console.log(filterData);
         //     this.setState({
-        //         orData2: filterData,
-        //         renderData2: filterData,
+        //         orData2: msg.data,
+        //         renderData2: msg.data,
         //     })
         // }).catch(err => {
         //     console.log(err)

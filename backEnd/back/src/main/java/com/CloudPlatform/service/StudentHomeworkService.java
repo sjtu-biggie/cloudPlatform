@@ -27,5 +27,5 @@ public interface StudentHomeworkService {
 
     double getAverage(int homeworkId);
 
-    Integer upload(MultipartFile file);
+    String upload(MultipartFile file,String userId);
 }

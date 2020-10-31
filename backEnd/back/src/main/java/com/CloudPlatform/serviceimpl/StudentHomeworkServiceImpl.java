@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -130,19 +131,24 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         studenthomeworkDao.deleteOne(studentId, homeworkId);
     }
     @Override
-    public Integer upload(MultipartFile file){
-        String pathName = "/homework/";//想要存储文件的地址
+    public String upload(MultipartFile file,String userId){
+        String pathName = "/homework/"+userId+"/";//想要存储文件的地址
         String pname = file.getOriginalFilename();//获取文件名（包括后缀）
-        pathName += pname;
         FileOutputStream fos = null;
         try {
+            File ffile=new File(pathName);
+            if(!ffile.exists()){//如果文件夹不存在
+                ffile.mkdir();//创建文件夹
+            }
+            pathName+=System.currentTimeMillis();
+            pathName += pname;
             fos = new FileOutputStream(pathName);
             fos.write(file.getBytes()); // 写入文件
-            //System.out.println("文件上传成功");
-            return 0;
+            System.out.println("文件上传成功");
+            return pathName;
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
+            return "";
         } finally {
             try {
                 fos.close();

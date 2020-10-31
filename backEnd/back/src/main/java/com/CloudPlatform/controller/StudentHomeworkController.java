@@ -44,8 +44,8 @@ public class StudentHomeworkController {
     }
 
     @PostMapping(value = "/upload")
-    public Integer upload(@RequestParam("data") MultipartFile file) {
-        return studenthomeworkService.upload(file);
+    public String upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId) {
+        return studenthomeworkService.upload(file,userId);
     }
 
 

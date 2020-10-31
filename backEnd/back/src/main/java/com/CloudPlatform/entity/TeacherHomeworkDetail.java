@@ -38,4 +38,12 @@ public class TeacherHomeworkDetail implements Serializable {
     @Transient
     @Column(name = "ANSWER")
     private String Answer;
+
+    @Transient
+    @Column(name = "CONTENTUPLOAD")
+    private String ContentUpload;
+
+    @Transient
+    @Column(name = "ANSWERUPLOAD")
+    private String AnswerUpload;
 }

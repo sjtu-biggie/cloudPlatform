@@ -50,4 +50,9 @@ public class StudentHomeworkDetail implements Serializable {
     @Transient
     @Column(name = "REMARKS")
     private String Remarks;
+
+    @Transient
+    @Column(name = "UPLOAD")
+    private String Upload;
+
 }

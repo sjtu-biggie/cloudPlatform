@@ -6,6 +6,7 @@ import com.CloudPlatform.service.TeacherHomeworkService;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @CrossOrigin
@@ -37,14 +38,44 @@ public class TeacherHomeworkController {
     @RequestMapping(value = "/editTeacherHomework")
     public @ResponseBody
     TeacherHomework editTeacherHomework(@RequestBody JSONObject object){
-        return teacherhomeworkService.editTeacherHomework(object);
+        JSONObject teaHw = object.getObject("homework",JSONObject.class);
+        String teaId= teaHw.getString("teahcerId");
+        MultipartFile ansFile = object.getObject("ansFile",MultipartFile.class);
+        MultipartFile conFile = object.getObject("conFile",MultipartFile.class);
+        String ansUpload = "";
+        String conUpload = "";
+        if (ansFile != null){
+            ansUpload = teacherhomeworkService.upload(ansFile,teaId);
+        }
+        else ansUpload = "";
+
+        if (conFile != null){
+            conUpload = teacherhomeworkService.upload(conFile,teaId);
+        }
+        else conUpload = "";
+        return teacherhomeworkService.addTeacherHomework(object,ansUpload,conUpload);
     }
 
     //添加发布作业
     @RequestMapping(value = "/addTeacherHomework")
     public @ResponseBody
     TeacherHomework addTeacherHomework(@RequestBody JSONObject object){
-        return teacherhomeworkService.addTeacherHomework(object);
+        JSONObject teaHw = object.getObject("homework",JSONObject.class);
+        String teaId= teaHw.getString("teahcerId");
+        MultipartFile ansFile = object.getObject("ansFile",MultipartFile.class);
+        MultipartFile conFile = object.getObject("conFile",MultipartFile.class);
+        String ansUpload = "";
+        String conUpload = "";
+        if (ansFile != null){
+            ansUpload = teacherhomeworkService.upload(ansFile,teaId);
+        }
+        else ansUpload = "";
+
+        if (conFile != null){
+            conUpload = teacherhomeworkService.upload(conFile,teaId);
+        }
+        else conUpload = "";
+        return teacherhomeworkService.addTeacherHomework(object,ansUpload,conUpload);
     }
 
     //删除课程的所有作业

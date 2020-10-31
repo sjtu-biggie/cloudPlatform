@@ -53,8 +53,7 @@ public class StudentHomeworkController {
     @RequestMapping(value = "/CorrectHomework")
     public @ResponseBody
     StudentHomework CorrectHomework(@RequestBody JSONObject object){
-        System.out.println(object);
-        return studenthomeworkService.editStudentHomework(object);
+        return studenthomeworkService.correctStudentHomework(object);
     }
 
     @InitBinder
@@ -88,14 +87,30 @@ public class StudentHomeworkController {
     @RequestMapping(value = "/editStudentHomework")
     public @ResponseBody
     StudentHomework editStudentHomework(@RequestBody JSONObject object){
-        return studenthomeworkService.editStudentHomework(object);
+        JSONObject stuHw = object.getObject("homework",JSONObject.class);
+        String studentId= stuHw.getString("studentId");
+        MultipartFile file = object.getObject("file",MultipartFile.class);
+        String upload = "";
+        if (file != null){
+            upload = studenthomeworkService.upload(file,studentId);
+        }
+        else upload = "";
+        return studenthomeworkService.addStudentHomework(object,upload);
     }
 
     //提交作业
     @RequestMapping(value = "/addStudentHomework")
     public @ResponseBody
     StudentHomework addStudentHomework(@RequestBody JSONObject object){
-        return studenthomeworkService.addStudentHomework(object);
+        JSONObject stuHw = object.getObject("homework",JSONObject.class);
+        String studentId= stuHw.getString("studentId");
+        MultipartFile file = object.getObject("file",MultipartFile.class);
+        String upload = "";
+        if (file != null){
+            upload = studenthomeworkService.upload(file,studentId);
+        }
+        else upload = "";
+        return studenthomeworkService.addStudentHomework(object,upload);
     }
 
     //删除某课程的所有作业

@@ -52,32 +52,60 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     }
 
     @Override
-    public StudentHomework editStudentHomework(JSONObject object){
-        String Id = object.getString("id");
-        int homeworkId= object.getInteger("homeworkId");
-        int courseId= object.getInteger("courseId");
-        String studentId= object.getString("studentId");
-        String title= object.getString("title");
-        String comment= object.getString("comment");
-        String content= object.getString("content");
-        int finishHomework= object.getInteger("finishHomework");
-        int handinRank= object.getInteger("handinRank");
-        String nickName= object.getString("nickName");
-        String remarks = object.getString("remarks");
-        String subject= object.getString("subject");
-        String correct= object.getString("correct");
-        double score = object.getDouble("score");
-        Date startTime = object.getDate("startTime");
-        Date endTime = object.getDate("endTime");
-        Date handinTime = object.getDate("handinTime");
+    public StudentHomework editStudentHomework(JSONObject object, String upload){
+        JSONObject stuHw = object.getObject("homework",JSONObject.class);
+        String Id = stuHw.getString("id");
+        int homeworkId= stuHw.getInteger("homeworkId");
+        int courseId= stuHw.getInteger("courseId");
+        String studentId= stuHw.getString("studentId");
+        String title= stuHw.getString("title");
+        String comment= stuHw.getString("comment");
+        String content= stuHw.getString("content");
+        int finishHomework= stuHw.getInteger("finishHomework");
+        int handinRank= stuHw.getInteger("handinRank");
+        String nickName= stuHw.getString("nickName");
+        String remarks = stuHw.getString("remarks");
+        String subject= stuHw.getString("subject");
+        String correct= stuHw.getString("correct");
+        double score = stuHw.getDouble("score");
+        Date startTime = stuHw.getDate("startTime");
+        Date endTime = stuHw.getDate("endTime");
+        Date handinTime = stuHw.getDate("handinTime");
         StudentHomework hw = new StudentHomework(studentId,homeworkId,courseId,nickName,handinTime,
-                startTime,endTime,score,title,subject,content,correct,comment,remarks,Id,
+                startTime,endTime,score,title,subject,content,correct,comment,remarks,Id, upload,
                 finishHomework,handinRank);
         return studenthomeworkDao.editOne(hw);
     }
 
     @Override
-    public StudentHomework addStudentHomework(JSONObject object){
+    public StudentHomework addStudentHomework(JSONObject object, String upload){
+        JSONObject stuHw = object.getObject("homework",JSONObject.class);
+        String Id = stuHw.getString("id");
+        int homeworkId= stuHw.getInteger("homeworkId");
+        int courseId= stuHw.getInteger("courseId");
+        String studentId= stuHw.getString("studentId");
+        String title= stuHw.getString("title");
+        String comment= stuHw.getString("comment");
+        String content= stuHw.getString("content");
+        int finishHomework= stuHw.getInteger("finishHomework");
+        int handinRank= stuHw.getInteger("handinRank");
+        String nickName= stuHw.getString("nickName");
+        String remarks = stuHw.getString("remarks");
+        String subject= stuHw.getString("subject");
+        String correct= stuHw.getString("correct");
+        double score = stuHw.getDouble("score");
+        Date startTime = stuHw.getDate("startTime");
+        Date endTime = stuHw.getDate("endTime");
+        Date handinTime = stuHw.getDate("handinTime");
+
+        StudentHomework hw = new StudentHomework(studentId,homeworkId,courseId,nickName,handinTime,
+                startTime,endTime,score,title,subject,content,correct,comment,remarks,Id, upload,
+                finishHomework,handinRank);
+        return studenthomeworkDao.editOne(hw);
+    }
+
+    @Override
+    public StudentHomework correctStudentHomework(JSONObject object) {
         String Id = object.getString("id");
         int homeworkId= object.getInteger("homeworkId");
         int courseId= object.getInteger("courseId");
@@ -95,8 +123,10 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         Date startTime = object.getDate("startTime");
         Date endTime = object.getDate("endTime");
         Date handinTime = object.getDate("handinTime");
+        String upload = object.getString("upload");
+
         StudentHomework hw = new StudentHomework(studentId,homeworkId,courseId,nickName,handinTime,
-                startTime,endTime,score,title,subject,content,correct,comment,remarks,Id,
+                startTime,endTime,score,title,subject,content,correct,comment,remarks,Id, upload,
                 finishHomework,handinRank);
         return studenthomeworkDao.editOne(hw);
     }

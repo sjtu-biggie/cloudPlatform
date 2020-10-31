@@ -23,7 +23,9 @@ class HomeworkCommit extends React.Component{
         title:"",
         homeworkId:"",
         correct:"",
-        comment:""
+        comment:"",
+        handinTime:"",
+        fileList:[]
     };
 
     uploadFilesChange(file) {
@@ -31,15 +33,51 @@ class HomeworkCommit extends React.Component{
         console.log(file);
     }
 
-    getChildrenMsg = (result, correct,comment,title) => {
+    getChildrenMsg = (result, correct,comment,title,handinTime) => {
         // console.log(result, msg)
         // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
         console.log(comment)
         this.setState({
             correct: correct,
             comment:comment,
-            title:title
+            title:title,
+            handinTime:handinTime
         })
+    }
+
+    getUploadMsg = (result, fileList) => {
+        // console.log(result, msg)
+        // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
+        this.setState({
+            fileList:fileList
+        })
+    }
+
+    postObject = async() => {
+        console.log(this.state.fileList)
+        let obj={
+            fileList:this.state.fileList,
+            homeworkId:this.state.homeworkId,
+            handinTime:new Date().toLocaleTimeString(),
+            studentId:localStorage.getItem("username")
+        }
+        console.log(obj)
+        let config = {
+            method: 'post',
+            data: obj,
+            url: 'http://106.13.209.140:8383/addStudentHomework',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     componentWillMount() {
@@ -68,9 +106,9 @@ class HomeworkCommit extends React.Component{
                     </Card>
                     <p>{this.state.correct}</p>
                     <p>{this.state.comment}</p>
-                    <Upload></Upload>
+                    <Upload parent={this}></Upload>
                     <br></br>
-                    <Button type="primary"  onClick={()=>this.setState({isCommit:!this.state.isCommit})} size={this.state.size}>{this.state.isCommit===true?"重新提交":"提交"}</Button>&emsp;
+                    <Button type="primary"  onClick={()=>this.postObject()}>{this.state.handinTime!==null?"重新提交":"提交"}</Button>&emsp;
                 </Card>
             </div>
         )

@@ -37,6 +37,11 @@ class UploadDemo extends React.Component {
         })
     }
 
+    toParent = () => {
+        // console.log(this.props.parent.getChildrenMsg.bind(this, this.state.msg))
+        this.props.parent.getUploadMsg(this, this.state.fileList)
+    }
+
     beforeUpload(file, fileList) {
         const isJPG = file.type === 'image/jpeg'
         if (!isJPG) {
@@ -75,28 +80,6 @@ class UploadDemo extends React.Component {
         });
     }
 
-    customRequest = async(detail) => {
-        console.log(detail)
-        let config = {
-            method: 'post',
-            data: {
-
-            },
-            url: '',
-            headers: {
-                withCredentials: true,
-            }
-        };
-        const user = await axios(config)
-            .then(function (response) {
-                console.log(response.data);
-                return response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
-
     render() {
         let that = this;
         const props = {
@@ -115,6 +98,7 @@ class UploadDemo extends React.Component {
                     that.setState({
                         fileList:[...info.fileList]
                     });
+                    that.toParent()
                     console.log(that.state.fileList)
 
                 } else if (info.file.status === 'error') {
@@ -132,7 +116,7 @@ class UploadDemo extends React.Component {
 
         return (
             <div>
-                <Upload {...props} customRequest={this.customRequest}>
+                <Upload {...props}>
                     <Button><Icon type="upload"/>Upload</Button>
                 </Upload>
             </div>

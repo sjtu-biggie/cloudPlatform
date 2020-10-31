@@ -70,12 +70,11 @@ class commitPage extends React.Component{
 
     toParent = () => {
         // console.log(this.props.parent.getChildrenMsg.bind(this, this.state.msg))
-        this.props.parent.getChildrenMsg(this, this.state.correct,this.state.comment,this.state.title)
+        this.props.parent.getChildrenMsg(this, this.state.correct,this.state.comment,this.state.title,this.state.handinTime)
     }
 
     componentWillMount() {
         this.setState({
-            isCommit:this.props.isCommit,
             homeworkId:this.props.homeworkId
         })
         let username=localStorage.getItem("username");

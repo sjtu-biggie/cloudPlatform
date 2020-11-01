@@ -19,11 +19,11 @@ public class ClassManageController {
     public String addClass(@RequestBody JSONObject obj){
         String classNo=obj.getString("classNo");
         int number=obj.getIntValue("number");
-        String classManagers=obj.getString("classManagers");
+        String classManager=obj.getString("classManager");
         ClassManage classManage=new ClassManage();
         classManage.setClassNo(classNo);
         classManage.setNumber(number);
-        classManage.setClassManagers(classManagers);
+        classManage.setClassManagers(classManager);
         classManageMapper.addClass(classManage);
         return "添加班级成功";
     }

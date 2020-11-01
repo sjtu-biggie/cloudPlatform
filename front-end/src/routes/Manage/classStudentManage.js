@@ -1,14 +1,11 @@
 /* eslint-disable */
 import React, {Component, createRef} from 'react';
-import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form,Drawer} from 'antd';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form, Drawer} from 'antd';
 import styles from './index.css';
 import {Router} from "react-router-dom";
 import axios from "axios";
 import {values} from "mobx";
-import {PlusOutlined} from "@ant-design/icons";
-
-
-
+import {PlusOutlined, UserOutlined} from "@ant-design/icons";
 
 
 const columns = [
@@ -52,6 +49,24 @@ columns1.map(item => {
         return String(aa).localeCompare(String(bb));
     };
 });
+
+const keys = ['1', '2', '3', '4'];
+
+
+const menu12 = (
+    <Menu>
+        <Menu.Item key="1" icon={<UserOutlined/>}>
+            1st menu item
+        </Menu.Item>
+        <Menu.Item key="2" icon={<UserOutlined/>}>
+            2nd menu item
+        </Menu.Item>
+        <Menu.Item key="3" icon={<UserOutlined/>}>
+            3rd menu item
+        </Menu.Item>
+    </Menu>
+);
+
 
 class EditText extends Component {
     constructor(props) {
@@ -102,25 +117,25 @@ class addStudentTable extends Component {
 }
 
 
-const menu = (
-    <Menu>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-                1st menu item
-            </a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-                2nd menu item
-            </a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="/home/homework/overall/">
-                创建班级
-            </a>
-        </Menu.Item>
-    </Menu>
-);
+// const menu = (
+//     <Menu>
+//         <Menu.Item>
+//             <a target="_blank" rel="noopener noreferrer">
+//                 1st menu item
+//             </a>
+//         </Menu.Item>
+//         <Menu.Item>
+//             <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+//                 2nd menu item
+//             </a>
+//         </Menu.Item>
+//         <Menu.Item>
+//             <a target="_blank" rel="noopener noreferrer" href="/home/homework/overall/">
+//                 创建班级
+//             </a>
+//         </Menu.Item>
+//     </Menu>
+// );
 
 export default class ClassManage extends Component {
     constructor(props) {
@@ -134,8 +149,10 @@ export default class ClassManage extends Component {
             record: '',
             addNewStudent: false,
             addData: '',
-            visible:false,
-            createClass:'',
+            visible: false,
+            createClass: '',
+            menu: '',
+            classChoose: '',
         };
         this.searchInput = createRef();
 
@@ -349,7 +366,7 @@ export default class ClassManage extends Component {
                 method: 'POST',
                 url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
                 data: {
-                    "theClass": "F1803702"
+                    "theClass": theclass
                 }
             }).then(msg => {
                 console.log(msg.data);
@@ -362,31 +379,59 @@ export default class ClassManage extends Component {
             })
         }
 
-        this.getClassNo=(event)=>{
+        this.getClassNo = (event) => {
             console.log(event.target.value);
             this.setState({
-                createClass:event.target.value
+                createClass: event.target.value
             })
         }
 
 
         this.createClass = () => {
-            console.log("建立班级"+this.state.createClass);
+            console.log("建立班级" + this.state.createClass);
             axios({
-                method:'POST',
-                url:'http://106.13.209.140:8000/addClass',
-                data:{
-                    classNo:this.state.createClass,
-                    number:0,
-                    sid:"518030910213",
+                method: 'POST',
+                url: 'http://106.13.209.140:8000/addClass',
+                data: {
+                    classNo: this.state.createClass,
+                    number: 0,
+                    classManager: "518030910213",
                 }
-            }).then(msg=>{
+            }).then(msg => {
                 console.log(msg);
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err);
             })
-        }
+        };
+
+        this.handleClick = (e) => {
+            if (e.key !== "-1") {
+                console.log('click ', e);
+                this.getClassStudents(e.key);
+                this.setState({
+                    classChoose: e.key
+                })
+            }
+        };
     }
+
+// <div>
+// <Menu onClick={this.handleClick} style={{width: 240}} mode="inline">
+// {
+//     menutar.map(function (item) {
+//             return (<SubMenu key={item.id}
+//                              title={<span><Icon type="appstore"/><span>
+//                                                              {item.name}</span></span>}>
+//                 {item.vvl.map((vl) => (
+//                     <Menu.Item key={item.vvl.indexOf(vl)}>
+//                         {vl}</Menu.Item>))}
+//             </SubMenu>)
+//         }
+//     )
+// }
+// </Menu>
+// </div>
+
 
     componentDidMount() {
         console.log("开始获取老师班级");
@@ -398,7 +443,28 @@ export default class ClassManage extends Component {
             }
         }).then(msg => {
             console.log(msg.data);
-            msg.data.map()
+            var i = -1;
+            var menu =
+                <Menu onClick={this.handleClick}>
+                    {msg.data.map(function (item) {
+                            i++;
+                            // return item;
+                            return (
+                                <Menu.Item key={item.classNo} icon={<UserOutlined/>}>
+                                    {item.classNo}
+                                </Menu.Item>
+                            )
+                        }
+                    )}
+                    <Menu.Item key="-1" onClick={this.showDrawer}>
+                        <PlusOutlined/> 创建新的班级
+                    </Menu.Item>
+                </Menu>;
+            console.log(menu);
+            console.log(menu12);
+            this.setState({
+                menu: menu
+            })
         }).catch(err => {
             console.log(err)
         })
@@ -477,6 +543,26 @@ export default class ClassManage extends Component {
 
     render() {
         const {orData, search, renderData, modifyIds, addData} = this.state;
+        const SubMenu = Menu.SubMenu;
+        const menutar = [
+            {
+                'id': 'id1',
+                'name': 'user',
+                'vvl': ['a', 'b', 'c', 'd']
+            },
+            {
+                'id': 'id2',
+                'name': 'password',
+                'vvl': ['x', 'y', 'p', 'n']
+            },
+            {
+                'id': 'id3',
+                'name': 'shadow',
+                'vvl': ['t', 'w', 'u', 'k']
+            }
+        ];
+
+
         return (
             <div className={styles.normal}>
                 <Card title={<div style={{textAlign: "center"}}>管理班级名单</div>}>
@@ -494,24 +580,46 @@ export default class ClassManage extends Component {
                             </Col>
                             <Col span={8} offset={1}>
                                 <div>
-                                    <Dropdown overlay={menu} placement="bottomCenter">
-                                        <Button>班级选择</Button>
-                                    </Dropdown>
-                                    <Button onClick={this.addStudent} style={{marginLeft: '30px'}}>
-                                        添加
-                                    </Button>
-                                    <Button onClick={() => {
-                                        this.getClassStudents("F1803702")
-                                    }}>
-                                        2班
-                                    </Button>
+                                    <Col span={4}>
+                                        <Dropdown.Button overlay={this.state.menu} style={{width: 60}}
+                                                         placement="bottomCenter">
+                                            {/*<Button onClick={this.justATest}>班级选择</Button>*/}
+                                            {this.state.classChoose}
+                                        </Dropdown.Button>
+                                    </Col>
+                                    {/*<Dropdown.Button  overlay={menu12}>*/}
+                                    {/*    Dropdown*/}
+                                    {/*</Dropdown.Button>*/}
+                                    <Col span={4} offset={3}>
+                                        <Button onClick={this.addStudent} style={{marginLeft: '30px'}}>
+                                            添加
+                                        </Button>
+                                    </Col>
+
                                     <Button onClick={this.showDrawer}>
-                                        <PlusOutlined /> 创建新的班级
+                                        <PlusOutlined/> 创建新的班级
                                     </Button>
                                 </div>
                             </Col>
                         </Row>
                     </Card>
+
+                    {/*<div>*/}
+                    {/*    <Menu onClick={this.handleClick} style={{width: 240}} mode="inline">*/}
+                    {/*        {*/}
+                    {/*            menutar.map(function (item) {*/}
+                    {/*                    return (<SubMenu key={item.id}*/}
+                    {/*                                     title={<span><Icon type="appstore"/><span>*/}
+                    {/*                                         {item.name}</span></span>}>*/}
+                    {/*                        {item.vvl.map((vl) => (*/}
+                    {/*                            <Menu.Item key={item.vvl.indexOf(vl)}>*/}
+                    {/*                                {vl}</Menu.Item>))}*/}
+                    {/*                    </SubMenu>)*/}
+                    {/*                }*/}
+                    {/*            )*/}
+                    {/*        }*/}
+                    {/*    </Menu>*/}
+                    {/*</div>*/}
 
                     <Drawer
                         title="创建新的班级"
@@ -519,9 +627,9 @@ export default class ClassManage extends Component {
                         onClose={this.onClose}
                         visible={this.state.visible}
                     >
-                        <Form name="basic" initialValues={{ remember: true }}>
-                            <Form.Item label="班级号" name="username" rules={[{ required: true }]}>
-                                <Input onBlur={this.getClassNo} />
+                        <Form name="basic" initialValues={{remember: true}}>
+                            <Form.Item label="班级号" name="username" rules={[{required: true}]}>
+                                <Input onBlur={this.getClassNo}/>
                             </Form.Item>
                             <Button htmlType="submit" type='primary' onClick={this.createClass}>创建</Button>
                         </Form>

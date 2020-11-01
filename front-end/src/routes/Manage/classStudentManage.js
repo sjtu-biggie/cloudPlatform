@@ -50,24 +50,6 @@ columns1.map(item => {
     };
 });
 
-const keys = ['1', '2', '3', '4'];
-
-
-const menu12 = (
-    <Menu>
-        <Menu.Item key="1" icon={<UserOutlined/>}>
-            1st menu item
-        </Menu.Item>
-        <Menu.Item key="2" icon={<UserOutlined/>}>
-            2nd menu item
-        </Menu.Item>
-        <Menu.Item key="3" icon={<UserOutlined/>}>
-            3rd menu item
-        </Menu.Item>
-    </Menu>
-);
-
-
 class EditText extends Component {
     constructor(props) {
         super(props);
@@ -91,51 +73,6 @@ class EditText extends Component {
             </div>);
     }
 };
-
-class addStudentTable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            edit: false,
-            editValue: props.children,
-        };
-    }
-
-    render() {
-        const {edit, editValue} = this.state;
-        return (edit ? <Input autoFocus style={{width: 100}}
-                              value={editValue}
-                              onChange={event => this.setState({editValue: event.target.value})}
-                              onBlur={() => {
-                                  this.setState({edit: false});
-                                  this.props.onChange(editValue);
-                              }}/> :
-            <div style={{width: 100}} onDoubleClick={() => this.setState({edit: true})}>
-                {this.props.children || <span>&nbsp;</span>}
-            </div>);
-    }
-}
-
-
-// const menu = (
-//     <Menu>
-//         <Menu.Item>
-//             <a target="_blank" rel="noopener noreferrer">
-//                 1st menu item
-//             </a>
-//         </Menu.Item>
-//         <Menu.Item>
-//             <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-//                 2nd menu item
-//             </a>
-//         </Menu.Item>
-//         <Menu.Item>
-//             <a target="_blank" rel="noopener noreferrer" href="/home/homework/overall/">
-//                 创建班级
-//             </a>
-//         </Menu.Item>
-//     </Menu>
-// );
 
 export default class ClassManage extends Component {
     constructor(props) {
@@ -278,14 +215,6 @@ export default class ClassManage extends Component {
             this.setState({renderData: filterData});
         };
 
-        // this.addStudent = () => {
-        //     const {orData} = this.state;
-        //     const getData = [getMockData(), ...this.state.orData];
-        //     this.setState({
-        //         orData: getData,
-        //         renderData: getData
-        //     });
-        // }
 
         this.addStudent = () => {
             this.setState({
@@ -295,17 +224,17 @@ export default class ClassManage extends Component {
         }
 
         this.addStudentToClass = () => {
-            const {record} = this.state;
+            const {record,classChoose} = this.state;
             console.log("this is a try");
             console.log(record["theClass"]);
-            record["theClass"] = "F1803702";
+            record["theClass"] = classChoose;
             console.log(record);
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8000/addStudentToClass',
                 data: {
                     username: record.username,
-                    theClass: record.theClass
+                    theClass: record.theClass,
                 }
             }).then(msg => {
                 console.log(msg);
@@ -415,24 +344,6 @@ export default class ClassManage extends Component {
         };
     }
 
-// <div>
-// <Menu onClick={this.handleClick} style={{width: 240}} mode="inline">
-// {
-//     menutar.map(function (item) {
-//             return (<SubMenu key={item.id}
-//                              title={<span><Icon type="appstore"/><span>
-//                                                              {item.name}</span></span>}>
-//                 {item.vvl.map((vl) => (
-//                     <Menu.Item key={item.vvl.indexOf(vl)}>
-//                         {vl}</Menu.Item>))}
-//             </SubMenu>)
-//         }
-//     )
-// }
-// </Menu>
-// </div>
-
-
     componentDidMount() {
         console.log("开始获取老师班级");
         axios({
@@ -480,6 +391,7 @@ export default class ClassManage extends Component {
         //     console.log(err);
         //     console.log("提取数据失败");
         // })
+
         axios({
             method: 'POST',
             url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
@@ -544,23 +456,7 @@ export default class ClassManage extends Component {
     render() {
         const {orData, search, renderData, modifyIds, addData} = this.state;
         const SubMenu = Menu.SubMenu;
-        const menutar = [
-            {
-                'id': 'id1',
-                'name': 'user',
-                'vvl': ['a', 'b', 'c', 'd']
-            },
-            {
-                'id': 'id2',
-                'name': 'password',
-                'vvl': ['x', 'y', 'p', 'n']
-            },
-            {
-                'id': 'id3',
-                'name': 'shadow',
-                'vvl': ['t', 'w', 'u', 'k']
-            }
-        ];
+
 
 
         return (
@@ -581,45 +477,23 @@ export default class ClassManage extends Component {
                             <Col span={8} offset={1}>
                                 <div>
                                     <Col span={4}>
-                                        <Dropdown.Button overlay={this.state.menu} style={{width: 60}}
+                                        <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}} block='true'
                                                          placement="bottomCenter">
-                                            {/*<Button onClick={this.justATest}>班级选择</Button>*/}
                                             {this.state.classChoose}
                                         </Dropdown.Button>
                                     </Col>
-                                    {/*<Dropdown.Button  overlay={menu12}>*/}
-                                    {/*    Dropdown*/}
-                                    {/*</Dropdown.Button>*/}
+
                                     <Col span={4} offset={3}>
-                                        <Button onClick={this.addStudent} style={{marginLeft: '30px'}}>
+                                        <Button onClick={this.addStudent} style={{marginLeft: '100px'}}>
                                             添加
                                         </Button>
                                     </Col>
 
-                                    <Button onClick={this.showDrawer}>
-                                        <PlusOutlined/> 创建新的班级
-                                    </Button>
                                 </div>
                             </Col>
                         </Row>
                     </Card>
 
-                    {/*<div>*/}
-                    {/*    <Menu onClick={this.handleClick} style={{width: 240}} mode="inline">*/}
-                    {/*        {*/}
-                    {/*            menutar.map(function (item) {*/}
-                    {/*                    return (<SubMenu key={item.id}*/}
-                    {/*                                     title={<span><Icon type="appstore"/><span>*/}
-                    {/*                                         {item.name}</span></span>}>*/}
-                    {/*                        {item.vvl.map((vl) => (*/}
-                    {/*                            <Menu.Item key={item.vvl.indexOf(vl)}>*/}
-                    {/*                                {vl}</Menu.Item>))}*/}
-                    {/*                    </SubMenu>)*/}
-                    {/*                }*/}
-                    {/*            )*/}
-                    {/*        }*/}
-                    {/*    </Menu>*/}
-                    {/*</div>*/}
 
                     <Drawer
                         title="创建新的班级"

@@ -224,7 +224,7 @@ export default class ClassManage extends Component {
         }
 
         this.addStudentToClass = () => {
-            const {record,classChoose} = this.state;
+            const {record, classChoose} = this.state;
             console.log("this is a try");
             console.log(record["theClass"]);
             record["theClass"] = classChoose;
@@ -238,24 +238,28 @@ export default class ClassManage extends Component {
                 }
             }).then(msg => {
                 console.log(msg);
-                var tos=[];
+                var tos = [];
                 tos.push(record.email);
+
                 axios({
-                    method:'POST',
-                    url:'http://106.13.209.140:8000/sendNotice',
-                    data:{
-                        "tos":tos,
-                        "type":"ADD",
+                    method: 'POST',
+                    url: 'http://106.13.209.140:8000/sendNotice',
+                    data: {
+                        "tos": tos,
+                        "context": "已经将你添加至新的班级",
                     }
-                }).then(msg=>{
+                }).then(msg => {
                     console.log(msg);
-                }).catch(err=>{
+                }).catch(err => {
                     console.log(err);
                 })
+
+
             }).catch(err => {
                 console.log(err)
             })
         }
+
 
         this.deleteStudent = () => {
             axios({
@@ -457,7 +461,6 @@ export default class ClassManage extends Component {
         const SubMenu = Menu.SubMenu;
 
 
-
         return (
             <div className={styles.normal}>
                 <Card title={<div style={{textAlign: "center"}}>管理班级名单</div>}>
@@ -476,7 +479,8 @@ export default class ClassManage extends Component {
                             <Col span={8} offset={1}>
                                 <div>
                                     <Col span={4}>
-                                        <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}} block='true'
+                                        <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}}
+                                                         block='true'
                                                          placement="bottomCenter">
                                             {this.state.classChoose}
                                         </Dropdown.Button>

@@ -102,7 +102,7 @@ class AddBulletin extends React.Component {
                                 url:'http://106.13.209.140:8000/sendNotice',
                                 data:{
                                     "tos":tos,
-                                    "type":"BULLETIN",
+                                    "context":"BULLETIN",
                                 }
                             }).then(msg=>{
                                 console.log(msg.data);

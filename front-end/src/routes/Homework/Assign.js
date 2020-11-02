@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker} from 'antd'
+import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Upload, Icon} from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
 import axios from "axios";
@@ -233,13 +233,13 @@ class Assign extends React.Component {
                 }
             }
         });
-    }
+    };
 
     componentWillUnmount() {
 
         this.setState({
             courseId: this.props.course.id
-        })
+        });
         this.getData2();
     }
 
@@ -356,6 +356,7 @@ class Assign extends React.Component {
                                 )
                             }
                         </FormItem>
+
                         <FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
                         {
                             (
@@ -363,6 +364,55 @@ class Assign extends React.Component {
                             )
                         }
                     </FormItem>
+                    <Upload
+                        accept=".png,.jpg,.jpeg"
+                        action={ 'https://www.mocky.io/v2/5cc8019d300000980a055e76'}
+                        onChange={({ file, fileList }) =>{
+                        if (file.status !== 'uploading') {
+                            console.log(file,file.originFileObj, fileList);
+                            let fr = new FileReader();
+                            fr.onload = async (e)=>{
+                                // target.result 该属性表示目标对象的DataURL
+                                console.log(e.target.result);
+                                let config = {
+                                    method: 'post',
+                                    data :{
+                                        "img":e.target.result,
+                                        //"url": "F:/Documentation/Courseware/Software Introduction 2021/cloudPlatform/front-end/src/pic/deadHomework1.jpg",
+                                        //是否需要识别结果中每一行的置信度，默认不需要。 true：需要 false：不需要
+                                        "prob": false,
+                                        //是否需要单字识别功能，默认不需要。 true：需要 false：不需要
+                                        "charInfo": false,
+                                        //是否需要自动旋转功能，默认不需要。 true：需要 false：不需要
+                                        "rotate": false,
+                                        //是否需要表格识别功能，默认不需要。 true：需要 false：不需要
+                                        "table": false,
+                                        //字块返回顺序，false表示从左往右，从上到下的顺序，true表示从上到下，从左往右的顺序，默认false
+                                        "sortPage": false
+                                    },
+                                    url: 'https://ocrapi-advanced.taobao.com/ocrservice/advanced',
+                                    headers: {
+                                        Authorization:'APPCODE 41d14f8d1c4e405bb2c800e1cfb72272'
+                                    }
+                                };
+                                const result = await axios(config)
+                                    .then(function (response) {
+                                        console.log(response.data);
+                                        return response.data;
+                                    })
+                                    .catch(function (error) {
+                                        console.log(error);
+                                    });
+                                
+                            };
+                            fr.readAsDataURL(file.originFileObj);
+                        }
+
+                        }}
+                        style={{marginLeft:'150px',marginBottom:'50px'}}
+                    >
+                        <Button><Icon type="upload"/>从图片中识别作业内容</Button>
+                    </Upload>
                         <FormItem label='上传作业附件' {...formItemLayout} >
                             {
                                 (

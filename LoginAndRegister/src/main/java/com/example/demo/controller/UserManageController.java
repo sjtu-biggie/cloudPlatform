@@ -30,6 +30,18 @@ public class UserManageController {
         return "Fsadf";
     }
 
+    @RequestMapping(value = "/setUserType",method = RequestMethod.POST)
+    public String setUserType(@RequestBody JSONObject obj){
+        String username=obj.getString("username");
+        String type=obj.getString("type");
+        try {
+            userMapper.setUserType(username,type);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return "更改完成";
+    }
+
     @RequestMapping(value = "/getAllUsers",method = RequestMethod.POST)
     public List<User> getAllUsers(){
         List<User> users=userMapper.getAllUsers();

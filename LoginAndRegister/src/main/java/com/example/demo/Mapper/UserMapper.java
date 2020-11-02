@@ -55,4 +55,7 @@ public interface UserMapper {
 
     @Update("update userdemo set theClass=#{theClass} where username=#{username}")
     void addStudentToClass(String username, String theClass);
+
+    @Update("update userdemo set type=#{type} where username=#{username}")
+    void setUserType(String username, String type);
 }

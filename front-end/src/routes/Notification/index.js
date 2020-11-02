@@ -60,7 +60,7 @@ class Notification extends React.Component {
         loadingMore: false,
         notification:data3,
         displayNotification:null,
-        nrnum:0,
+        count:0,
     }
 
     format = (shijianchuo) => {
@@ -167,7 +167,13 @@ class Notification extends React.Component {
             }
             for (let i = 0; i < res.length; ++i) {
                 res[i].publishDate = this.format(res[i].publishDate);
+                if(res[i].reading===false){
+                    this.setState({
+                        count:this.state.count+1
+                    })
+                }
             }
+            console.log(this.state.count)
             this.setState({
                 notification: res,
                 displayNotification: res

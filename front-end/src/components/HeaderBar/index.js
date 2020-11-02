@@ -1,5 +1,6 @@
 import React from 'react'
 import {Icon, Badge, Dropdown, Menu, Modal, Button, message} from 'antd'
+import { NotificationOutlined } from '@ant-design/icons';
 import screenfull from 'screenfull'
 import { inject, observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
@@ -10,7 +11,7 @@ import  axios from 'axios'
 class HeaderBar extends React.Component {
   state = {
     icon: 'arrows-alt',
-    count: 29,
+    count: 0,
     visible: false,
     // avatar: require('./img/04.jpg')
     // avatar: window.localStorage.getItem("iconBase64")
@@ -46,13 +47,47 @@ class HeaderBar extends React.Component {
     })
   }
 
+  getNoteInfo=async (username)=>{
+    let config = {
+      method: 'get',
+      url: 'http://106.13.209.140:8787/course/getNoteByUser?userId='+username,
+      headers: {
+        withCredentials: true,
+      }
+    };
+    return await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  };
+
+  getNote=()=>{
+    let username=localStorage.getItem("username");
+    console.log(username)
+    this.getNoteInfo(username).then((res) => {
+      if (res === null) {
+        message.success("failure loading courses!");
+        return;
+      }
+      for (let i = 0; i < res.length; ++i) {
+        if(res[i].reading===false){
+          this.setState({
+            count:this.state.count+1
+          })
+        }
+      }
+      console.log(this.state.count)
+    });
+  }
 
 
   componentWillMount() {
-
-
+    this.getNote()
   }
-
 
   componentWillUnmount () {
     screenfull.off('change')
@@ -103,9 +138,9 @@ class HeaderBar extends React.Component {
         <div style={{lineHeight: '64px', float: 'right'}}>
           <ul className='header-ul'>
             <li><Icon type={icon} onClick={this.screenfullToggle}/></li>
-            <li onClick={() => {this.setState({count: 0}),this.props.history.push('/home/notification')}}>
-              <Badge count={appStore.isLogin ? count : 0} overflowCount={99} style={{marginRight: -17}}>
-                <Icon type="notification"/>
+            <li onClick={() => {this.props.history.push('/home/notification')}}>
+              <Badge count={this.state.count} style={{marginRight: -17}}>
+                <NotificationOutlined />
               </Badge>
             </li>
             <li>

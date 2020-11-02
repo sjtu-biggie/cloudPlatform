@@ -84,7 +84,7 @@ class NotificationPage extends React.Component {
                                 fontWeight: 'bold',
                                 display: 'block'
                             }}>{this.state.notification.title}</p>
-                            <a  href={"/home/homework/commit"} style={{marginTop: '10px', height: '90px'}}>{this.state.notification.content}</a>
+                            <p   style={{marginTop: '10px', height: '90px'}}>{this.state.notification.content}</p>
                             <p>{"发布时间："+this.state.notification.publishDate}</p>
                         </Col>
 
@@ -156,8 +156,6 @@ class NotificationPage extends React.Component {
             default:
                 return /*this.rankRender()*/;
         }
-
-
     };
 
     format = (shijianchuo) => {
@@ -192,6 +190,7 @@ class NotificationPage extends React.Component {
                 console.log(error);
             });
         hw.publishDate = this.format(hw.publishDate);
+        console.log(hw)
         this.setState({
             notification:hw,
         })

@@ -74,7 +74,6 @@ class HomeworkCommit extends React.Component{
         let obj={
             file:this.state.fileList,
             homework:this.state.homework,
-            studentId:this.state.homework.studentId
         }
 
         console.log(obj)

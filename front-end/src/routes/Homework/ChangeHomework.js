@@ -201,7 +201,7 @@ class ChangeHomework extends React.Component {
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                         <FormItem label='作业名称' {...formItemLayout} required>
                             {
-                                getFieldDecorator('homework_name', {
+                                getFieldDecorator('title', {
                                     initialValue:this.state.homework === null ? '暂无': this.state.homework.title,
                                     rules: [
                                         {
@@ -258,20 +258,20 @@ class ChangeHomework extends React.Component {
                                 )
                             }
                         </FormItem>
-                        <FormItem label='定时发布' {...formItemLayout} >
-                            {
-                                getFieldDecorator('type', {
-                                    rules: [
-                                        {
-                                            message: '请选择定时发布的时间'
-                                        }
-                                    ]
-                                })
-                                (
-                                    <DatePicker disabled={this.state.ableState}/>
-                                )
-                            }
-                        </FormItem>
+                        {/*<FormItem label='定时发布' {...formItemLayout} >*/}
+                        {/*    {*/}
+                        {/*        getFieldDecorator('type', {*/}
+                        {/*            rules: [*/}
+                        {/*                {*/}
+                        {/*                    message: '请选择定时发布的时间'*/}
+                        {/*                }*/}
+                        {/*            ]*/}
+                        {/*        })*/}
+                        {/*        (*/}
+                        {/*            <DatePicker disabled={this.state.ableState}/>*/}
+                        {/*        )*/}
+                        {/*    }*/}
+                        {/*</FormItem>*/}
                         <FormItem style={display2} label='作业详情' {...DraftLayout} >
                             {
                                 (

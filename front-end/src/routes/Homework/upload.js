@@ -80,6 +80,14 @@ class UploadDemo extends React.Component {
         });
     }
 
+    customRequest = (detail) => {
+        console.log(detail)
+    }
+
+    onRemove=(file)=>{
+        console.log(file)
+    }
+
     render() {
         let that = this;
         const props = {
@@ -95,6 +103,7 @@ class UploadDemo extends React.Component {
                 }
                 if (info.file.status === 'done') {
                     message.success(`${info.file.name} 文件上传成功`);
+                    console.log(info.response)
                     that.setState({
                         fileList:[...info.fileList]
                     });
@@ -116,7 +125,7 @@ class UploadDemo extends React.Component {
 
         return (
             <div>
-                <Upload {...props}>
+                <Upload {...props} customRequest={this.customRequest} onRemove={this.onRemove}>
                     <Button><Icon type="upload"/>Upload</Button>
                 </Upload>
             </div>

@@ -9,8 +9,8 @@ const Option = Select.Option;
 
 const options1 = [
     {
-        label: '一年级3班',
-        value: 'F1803704',
+        label: '加载中',
+        value: '加载中',
     }
 ];
 
@@ -50,7 +50,9 @@ class Assign extends React.Component {
         role: null,
         content: null,
         answer:null,
-        courseId:null
+        courseId:null,
+        option:null,
+        loading:false,
     };
 
     add0=(m)=>{return m<10?'0'+m:m };
@@ -73,6 +75,7 @@ class Assign extends React.Component {
         this.getUserInfo(username);
     };
 
+
     getUserInfo = async (username)=>{
         let config = {
             method: 'post',
@@ -93,81 +96,20 @@ class Assign extends React.Component {
                 console.log(error);
             });
         console.log(user);
+        const options1 = [
+            {
+                label:user.theClass,
+                value:user.theClass,
+            }
+        ];
+        console.log(options1);
         this.setState({
             userInfo:user,
+            option: options1,
+            loading:true,
         })
     };
-    getStudentInfo = async (obj)=>{
-        let config = {
-            method: 'post',
-            data : obj,
-            url: 'http://106.13.209.140:8000/getAllStudentsByClass',
-            headers: {
-                withCredentials: true,
-            }
-        };
-        const studentInfo = await axios(config)
-            .then(function (response) {
-                return response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
 
-        let list1 = Array.from(studentInfo);
-        for(let i = 0; i < list1.length; ++i){
-            if (list1[i].type === 'teacher')
-                list1.splice(i,1);
-        }
-        let list2 = Array.from(this.props.studentHomework);
-        let data = [];
-        for (let i = 0; i < list1.length; ++i){
-            if (list2[i].score !== null){
-                data.push({
-                    username: list1[i].username,
-                    sid: list1[i].sid,
-                    nickname: list1[i].nickname,
-                    theClass: list1[i].theClass,
-                    theGrade: list2[i].score,
-                    commit: '已提交',
-                    correct:'已批改'
-                })
-            }
-            else{
-                if (list2[i].handinTime !== null){
-                    data.push({
-                        username: list1[i].username,
-                        sid: list1[i].sid,
-                        nickname: list1[i].nickname,
-                        theClass: list1[i].theClass,
-                        theGrade: null,
-                        commit: '已提交',
-                        correct:'未批改'
-                    })
-                }
-                else{
-                    data.push({
-                        username: list1[i].username,
-                        sid: list1[i].sid,
-                        nickname: list1[i].nickname,
-                        theClass: list1[i].theClass,
-                        theGrade: null,
-                        commit: '未提交',
-                        correct:'未批改'
-                    })
-                }
-            }
-        }
-
-        this.setState({
-            studentInfo:studentInfo,
-            data:data,
-            orData: data,
-            renderData: data
-        })
-        console.log(this.props);
-        console.log(this.state.data);
-    };
 
     addHomework=async (homework)=>{
         let config = {
@@ -278,6 +220,8 @@ class Assign extends React.Component {
             },
         }
 
+        console.log()
+
         return (
             <div>
                 <Card bordered={false} title='布置作业'>
@@ -306,7 +250,7 @@ class Assign extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <Cascader options={options1} expandTrigger="hover" placeholder=''/>
+                                    <Cascader options={this.state.loading === false ? options1: this.state.option} expandTrigger="hover" placeholder=''/>
                                 )
                             }
                         </FormItem>

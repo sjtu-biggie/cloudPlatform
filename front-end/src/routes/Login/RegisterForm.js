@@ -40,6 +40,7 @@ class RegisterForm extends React.Component {
       }
     }).then(msg=>{
       console.log(msg.data);
+      message.info("验证码已发送");
       window.localStorage.setItem("veriCode",msg.data);
     }).catch(err=>{
       console.log(err);
@@ -280,7 +281,7 @@ class RegisterForm extends React.Component {
           <Row className="bottom">
             <Col span={6}>
               {/*<span className='registerBtn' onClick={()=>{this.sendVeriCode("1921209391@qq.com")}}>发送验证码</span>*/}
-              <span className='registerBtn' onClick={()=>{this.sendVeriCode()}}>发送验证码</span>
+              <span className='registerBtn' onClick={()=>{this.sendVeriCode()}} disabled >发送验证码</span>
             </Col>
               <Col span={6}>
                 <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>

@@ -8,7 +8,7 @@ import axios from "axios";
 class SiderNav extends React.Component {
     state = {
         menus: null,
-        role: "student"
+        role: null,
     };
     componentWillMount=()=> {
         let storage = window.localStorage;

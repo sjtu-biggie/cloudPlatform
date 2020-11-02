@@ -132,6 +132,11 @@ export default class extends React.Component{
         };
     }
 
+    toParent = () => {
+        // console.log(this.props.parent.getChildrenMsg.bind(this, this.state.msg))
+        this.props.parent.getEditorMsg(this,draftjs(this.state.editorContent))
+    }
+
     onEditorChange = (editorContent) => {
         console.log('父组件' + draftjs(editorContent)); //实时根据输入进行更新
         //editorContent = '<html lang="en"><head><meta charset="UTF-8"><title></title></head><body>' + draftjs(editorContent) + '</body></html>'
@@ -139,6 +144,7 @@ export default class extends React.Component{
             editorContent,
         });
         console.log(editorContent)
+        this.toParent()
     };//获取html富文本
 
     render() {

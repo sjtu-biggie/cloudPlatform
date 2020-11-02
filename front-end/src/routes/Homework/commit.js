@@ -20,12 +20,12 @@ const { Text, Link } = Typography;
 class HomeworkCommit extends React.Component{
 
     state={
-        title:"",
         homeworkId:"",
-        correct:"",
+        content:"",
         comment:"",
         handinTime:"",
-        fileList:[]
+        fileList:[],
+        homework:[]
     };
 
     uploadFilesChange(file) {
@@ -33,15 +33,12 @@ class HomeworkCommit extends React.Component{
         console.log(file);
     }
 
-    getChildrenMsg = (result, correct,comment,title,handinTime) => {
+    getChildrenMsg = (result, homework) => {
         // console.log(result, msg)
         // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
-        console.log(comment)
         this.setState({
-            correct: correct,
-            comment:comment,
-            title:title,
-            handinTime:handinTime
+            homework:homework,
+            content:homework.content
         })
     }
 
@@ -49,19 +46,39 @@ class HomeworkCommit extends React.Component{
         // console.log(result, msg)
         // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
         this.setState({
-            fileList:fileList
+            fileList:fileList,
         })
     }
 
+    getEditorMsg = (result, editorContent) => {
+        // console.log(result, msg)
+        // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
+        let homework=this.state.homework;
+        homework.content=editorContent;
+        this.setState({
+            homework:homework
+        })
+        console.log(this.state.homework)
+    }
+
     postObject = async() => {
-        console.log(this.state.fileList)
+
+        let homework=this.state.homework;
+        homework.handinTime=new Date();
+        this.setState({
+            homework: homework
+        })
+
+        console.log(this.state.homework)
+
         let obj={
-            fileList:this.state.fileList,
-            homeworkId:this.state.homeworkId,
-            handinTime:new Date().toLocaleTimeString(),
-            studentId:localStorage.getItem("username")
+            file:this.state.fileList,
+            homework:this.state.homework,
+            studentId:this.state.homework.studentId
         }
+
         console.log(obj)
+
         let config = {
             method: 'post',
             data: obj,
@@ -96,19 +113,20 @@ class HomeworkCommit extends React.Component{
         return (
             <div>
                 <CustomBreadcrumb arr={['作业','提交']}/>
-                <Card  bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
+                <Card  bordered={false} className='card-item' title={this.state.homework.title} style={{minHeight:200}}>
 
                     <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
 
 
                     <Card bordered={false} className='card-item'>
-                        <RichText></RichText>
+                        <RichText parent={this}></RichText>
                     </Card>
-                    <p>{this.state.correct}</p>
-                    <p>{this.state.comment}</p>
+                    <p>{this.state.content}</p>
+                    <p>{this.state.homework.correct}</p>
+                    <p>{this.state.homework.comment}</p>
                     <Upload parent={this}></Upload>
                     <br></br>
-                    <Button type="primary"  onClick={()=>this.postObject()}>{this.state.handinTime!==null?"重新提交":"提交"}</Button>&emsp;
+                    <Button type="primary"  onClick={()=>this.postObject()}>{this.state.homework.handinTime!==null?"重新提交":"提交"}</Button>&emsp;
                 </Card>
             </div>
         )

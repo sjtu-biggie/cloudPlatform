@@ -42,11 +42,12 @@ public class SendEmail {
         return result;
     }
 
+
     @RequestMapping(value = "/sendNotice",method= RequestMethod.POST)
     public String sendNotice(@RequestBody JSONObject obj){
         JSONArray tos=obj.getJSONArray("tos");
         System.out.println(tos);
-        String context="已发布新的通知，请注意查收";
+        String context= obj.getString("context");
         SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
         simpleMailMessage.setText(context);
         simpleMailMessage.setSubject(subject);
@@ -60,7 +61,6 @@ public class SendEmail {
         return "发送完成";
     }
 }
-
 
 //        for(Object s:classIds){
 //                String classId=s.toString();

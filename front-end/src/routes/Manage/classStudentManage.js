@@ -238,6 +238,20 @@ export default class ClassManage extends Component {
                 }
             }).then(msg => {
                 console.log(msg);
+                var tos=[];
+                tos.push(record.email);
+                axios({
+                    method:'POST',
+                    url:'http://106.13.209.140:8000/sendNotice',
+                    data:{
+                        "tos":tos,
+                        "type":"ADD",
+                    }
+                }).then(msg=>{
+                    console.log(msg);
+                }).catch(err=>{
+                    console.log(err);
+                })
             }).catch(err => {
                 console.log(err)
             })
@@ -368,11 +382,10 @@ export default class ClassManage extends Component {
                         }
                     )}
                     <Menu.Item key="-1" onClick={this.showDrawer}>
-                        <PlusOutlined/> 创建新的班级
+                        <PlusOutlined/> 创建班级
                     </Menu.Item>
                 </Menu>;
             console.log(menu);
-            console.log(menu12);
             this.setState({
                 menu: menu
             })
@@ -409,20 +422,6 @@ export default class ClassManage extends Component {
         })
 
     }
-
-    // this.setClass=(clas)=>{
-    //     axios({
-    //         method:'POST',
-    //         url:'http://106.13.209.140:8000/getAllUsersByStudent',
-    //         data:{
-    //             theClass:clas
-    //         }
-    //     }).then(msg=>{
-    //         this.setState({
-    //             orData:msg.data,
-    //             renderData:msg.data
-    //         })
-    //     })
 
 
     // this.handleSearch2 = () => {

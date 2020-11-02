@@ -25,6 +25,27 @@ class Home extends React.Component {
         this.getUserInfo(username);
     }
 
+    handleClick=async (type)=>{
+        let config={
+            method:'POST',
+            data:{
+                "username": window.localStorage.getItem("username"),
+                "type":type,
+            },
+            url:'http://106.13.209.140:8000/setUserType',
+            headers: {
+                withCredentials: true,
+            }
+        };
+
+        const result=await axios(config).then(msg=>{
+            console.log(msg.data);
+        }).catch(err=>{
+            console.log(err)
+        })
+
+    }
+
     getUserInfo = async (username) => {
 
         let config = {
@@ -62,9 +83,44 @@ class Home extends React.Component {
             <div style={styles.bg} className='home'>
                 <Carousel arrows effect='fade' className='size'>
                     {imgs.map(item => <div key={item}>
-
                         <div className='size' id='picc'>
                             {this.state.role === 'teacher' ? <Row>
+                                <Col offset={6} span={6}>
+                                    <Card style={{
+                                        border: '2px solid',
+                                        marginTop: '155px',
+                                        height: '600px',
+                                        width: '800px'
+                                    }}>
+                                        <Row>
+                                            <Col span={6}>
+                                                <img /*width={275}*/ alt="logo" height={530}
+                                                                     src={require("../../pic/teacher.png")}/>
+                                            </Col>
+                                            <Col span={18}>
+
+                                                <p style={{
+                                                    textAlign: 'center',
+                                                    fontSize: '40px',
+                                                    fontWeight: 'bold',
+                                                    marginTop: '30px'
+                                                }}>教师用户-{this.state.userInfo.nickname}</p>
+                                                <p style={{textAlign: 'center', fontSize: '25px', marginTop: '100px'}}>
+                                                    <Icon
+                                                        type={'check'}/>方便管理学生信息</p>
+                                                <p style={{textAlign: 'center', fontSize: '25px'}}><Icon
+                                                    type={'check'}/>自由创建修改课程
+                                                </p>
+                                                <p style={{textAlign: 'center', fontSize: '25px'}}><Icon
+                                                    type={'check'}/>快速批改学生作业
+                                                </p>
+                                                <p style={{textAlign: 'center', fontSize: '25px'}}><Icon
+                                                    type={'check'}/>详细数据统计分析
+                                                </p></Col>
+                                        </Row>
+                                    </Card>
+                                </Col>
+                            </Row> : this.state.role === 'student' ? <Row>
 
                                     <Col offset={6} span={6}>
                                         <Card style={{
@@ -72,44 +128,7 @@ class Home extends React.Component {
                                             marginTop: '155px',
                                             height: '600px',
                                             width: '800px'
-                                        }} >
-                                            <Row>
-                                                <Col span={6}>
-                                                    <img /*width={275}*/ alt="logo" height={530}
-                                                                         src={require("../../pic/teacher.png")}/>
-                                                </Col>
-                                                <Col span={18}>
-
-                                                    <p style={{
-                                                        textAlign: 'center',
-                                                        fontSize: '40px',
-                                                        fontWeight: 'bold',
-                                                        marginTop: '30px'
-                                                    }}>教师用户-{this.state.userInfo.nickname}</p>
-                                                    <p style={{textAlign: 'center', fontSize: '25px', marginTop: '100px'}}>
-                                                        <Icon
-                                                            type={'check'}/>方便管理学生信息</p>
-                                                    <p style={{textAlign: 'center', fontSize: '25px'}}><Icon
-                                                        type={'check'}/>自由创建修改课程
-                                                    </p>
-                                                    <p style={{textAlign: 'center', fontSize: '25px'}}><Icon
-                                                        type={'check'}/>快速批改学生作业
-                                                    </p>
-                                                    <p style={{textAlign: 'center', fontSize: '25px'}}><Icon
-                                                        type={'check'}/>详细数据统计分析
-                                                    </p></Col>
-                                            </Row>
-                                        </Card>
-                                    </Col>
-                                </Row> :this.state.role==='student'?<Row>
-
-                                    <Col offset={6} span={6}>
-                                        <Card style={{
-                                            border: '2px solid',
-                                            marginTop: '155px',
-                                            height: '600px',
-                                            width: '800px'
-                                        }} >
+                                        }}>
                                             <Row>
                                                 <Col span={6}>
                                                     <img /*width={275}*/ alt="logo" height={530}
@@ -137,10 +156,10 @@ class Home extends React.Component {
                                             </Row>
                                         </Card>
                                     </Col>
-                                </Row>:
+                                </Row> :
                                 <Row>
                                     <Col offset={1} span={10}>
-                                        <Card style={styles.cd} id='teacher1'>
+                                        <Card style={styles.cd} id='teacher1' name='hhh' onClick={()=>{this.handleClick("teacher")}}>
                                             <Row>
                                                 <Col span={8}>
                                                     <img /*width={275}*/ alt="logo" height={530}
@@ -169,7 +188,7 @@ class Home extends React.Component {
                                         </Card>
                                     </Col>
                                     <Col offset={2} span={10}>
-                                        <Card style={styles.cd} id='teacher1'>
+                                        <Card style={styles.cd} id='teacher'  name='fsda' onClick={()=>{this.handleClick("student")}}>
                                             <Row>
                                                 <Col span={8}>
                                                     <img /*width={275}*/ alt="logo" height={530}

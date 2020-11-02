@@ -69,7 +69,7 @@ class AddBulletin extends React.Component {
             if (err) {
                 message.warning('请填写正确的公告内容')
             } else {
-                message.success('提交成功');
+                message.success('公告发布成功');
                 values.courseId = this.props.course_id;
                 values.publishDate = CurentTime();
                 let config = {
@@ -82,27 +82,30 @@ class AddBulletin extends React.Component {
                 };
                 const user = await axios(config)
                     .then(function (response) {
+                        if(values.note === false){
+                            console.log("not send");
+                            return;
+                        }
                         console.log(response.data);
-
                         axios({
                             method: 'POST',
                             url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
                             data: {
-                                "theClass": "F1803705"
+                                "theClass": "F1803702"
                             }
                         }).then(msg => {
                             console.log(msg.data);
-                            var tos = [];
+                            let tos = [];
                             msg.data.map(item => {
                                 tos.push(item.email);
-                            })
-
+                            });
+                            console.log(tos)
                             axios({
                                 method:'POST',
                                 url:'http://106.13.209.140:8000/sendNotice',
                                 data:{
                                     "tos":tos,
-                                    "type":"BULLETIN",
+                                    "context":values.content,
                                 }
                             }).then(msg=>{
                                 console.log(msg.data);
@@ -113,7 +116,7 @@ class AddBulletin extends React.Component {
 
                         }).catch(err => {
                             console.log(err);
-                        })
+                        });
 
 
                         return response.data;
@@ -198,7 +201,7 @@ class AddBulletin extends React.Component {
                         </FormItem>
                         <FormItem label='是否发送通知' {...formItemLayout} required>
                             {
-                                getFieldDecorator('time', {})(
+                                getFieldDecorator('note', {})(
                                     <Switch defaultChecked/>
                                 )
                             }

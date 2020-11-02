@@ -1,14 +1,11 @@
 /* eslint-disable */
 import React, {Component, createRef} from 'react';
-import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form,Drawer} from 'antd';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form, Drawer} from 'antd';
 import styles from './index.css';
 import {Router} from "react-router-dom";
 import axios from "axios";
 import {values} from "mobx";
-import {PlusOutlined} from "@ant-design/icons";
-
-
-
+import {PlusOutlined, UserOutlined} from "@ant-design/icons";
 
 
 const columns = [
@@ -77,51 +74,6 @@ class EditText extends Component {
     }
 };
 
-class addStudentTable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            edit: false,
-            editValue: props.children,
-        };
-    }
-
-    render() {
-        const {edit, editValue} = this.state;
-        return (edit ? <Input autoFocus style={{width: 100}}
-                              value={editValue}
-                              onChange={event => this.setState({editValue: event.target.value})}
-                              onBlur={() => {
-                                  this.setState({edit: false});
-                                  this.props.onChange(editValue);
-                              }}/> :
-            <div style={{width: 100}} onDoubleClick={() => this.setState({edit: true})}>
-                {this.props.children || <span>&nbsp;</span>}
-            </div>);
-    }
-}
-
-
-const menu = (
-    <Menu>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-                1st menu item
-            </a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-                2nd menu item
-            </a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="/home/homework/overall/">
-                创建班级
-            </a>
-        </Menu.Item>
-    </Menu>
-);
-
 export default class ClassManage extends Component {
     constructor(props) {
         super(props);
@@ -134,8 +86,10 @@ export default class ClassManage extends Component {
             record: '',
             addNewStudent: false,
             addData: '',
-            visible:false,
-            createClass:'',
+            visible: false,
+            createClass: '',
+            menu: '',
+            classChoose: '',
         };
         this.searchInput = createRef();
 
@@ -261,14 +215,6 @@ export default class ClassManage extends Component {
             this.setState({renderData: filterData});
         };
 
-        // this.addStudent = () => {
-        //     const {orData} = this.state;
-        //     const getData = [getMockData(), ...this.state.orData];
-        //     this.setState({
-        //         orData: getData,
-        //         renderData: getData
-        //     });
-        // }
 
         this.addStudent = () => {
             this.setState({
@@ -278,20 +224,34 @@ export default class ClassManage extends Component {
         }
 
         this.addStudentToClass = () => {
-            const {record} = this.state;
+            const {record,classChoose} = this.state;
             console.log("this is a try");
             console.log(record["theClass"]);
-            record["theClass"] = "F1803702";
+            record["theClass"] = classChoose;
             console.log(record);
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8000/addStudentToClass',
                 data: {
                     username: record.username,
-                    theClass: record.theClass
+                    theClass: record.theClass,
                 }
             }).then(msg => {
                 console.log(msg);
+                var tos=[];
+                tos.push(record.email);
+                axios({
+                    method:'POST',
+                    url:'http://106.13.209.140:8000/sendNotice',
+                    data:{
+                        "tos":tos,
+                        "type":"ADD",
+                    }
+                }).then(msg=>{
+                    console.log(msg);
+                }).catch(err=>{
+                    console.log(err);
+                })
             }).catch(err => {
                 console.log(err)
             })
@@ -349,7 +309,7 @@ export default class ClassManage extends Component {
                 method: 'POST',
                 url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
                 data: {
-                    "theClass": "F1803702"
+                    "theClass": theclass
                 }
             }).then(msg => {
                 console.log(msg.data);
@@ -362,30 +322,40 @@ export default class ClassManage extends Component {
             })
         }
 
-        this.getClassNo=(event)=>{
+        this.getClassNo = (event) => {
             console.log(event.target.value);
             this.setState({
-                createClass:event.target.value
+                createClass: event.target.value
             })
         }
 
 
         this.createClass = () => {
-            console.log("建立班级"+this.state.createClass);
+            console.log("建立班级" + this.state.createClass);
             axios({
-                method:'POST',
-                url:'http://106.13.209.140:8000/addClass',
-                data:{
-                    classNo:this.state.createClass,
-                    number:0,
-                    sid:"518030910213",
+                method: 'POST',
+                url: 'http://106.13.209.140:8000/addClass',
+                data: {
+                    classNo: this.state.createClass,
+                    number: 0,
+                    classManager: "518030910213",
                 }
-            }).then(msg=>{
+            }).then(msg => {
                 console.log(msg);
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err);
             })
-        }
+        };
+
+        this.handleClick = (e) => {
+            if (e.key !== "-1") {
+                console.log('click ', e);
+                this.getClassStudents(e.key);
+                this.setState({
+                    classChoose: e.key
+                })
+            }
+        };
     }
 
     componentDidMount() {
@@ -398,7 +368,27 @@ export default class ClassManage extends Component {
             }
         }).then(msg => {
             console.log(msg.data);
-            msg.data.map()
+            var i = -1;
+            var menu =
+                <Menu onClick={this.handleClick}>
+                    {msg.data.map(function (item) {
+                            i++;
+                            // return item;
+                            return (
+                                <Menu.Item key={item.classNo} icon={<UserOutlined/>}>
+                                    {item.classNo}
+                                </Menu.Item>
+                            )
+                        }
+                    )}
+                    <Menu.Item key="-1" onClick={this.showDrawer}>
+                        <PlusOutlined/> 创建班级
+                    </Menu.Item>
+                </Menu>;
+            console.log(menu);
+            this.setState({
+                menu: menu
+            })
         }).catch(err => {
             console.log(err)
         })
@@ -414,6 +404,7 @@ export default class ClassManage extends Component {
         //     console.log(err);
         //     console.log("提取数据失败");
         // })
+
         axios({
             method: 'POST',
             url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
@@ -431,20 +422,6 @@ export default class ClassManage extends Component {
         })
 
     }
-
-    // this.setClass=(clas)=>{
-    //     axios({
-    //         method:'POST',
-    //         url:'http://106.13.209.140:8000/getAllUsersByStudent',
-    //         data:{
-    //             theClass:clas
-    //         }
-    //     }).then(msg=>{
-    //         this.setState({
-    //             orData:msg.data,
-    //             renderData:msg.data
-    //         })
-    //     })
 
 
     // this.handleSearch2 = () => {
@@ -477,6 +454,10 @@ export default class ClassManage extends Component {
 
     render() {
         const {orData, search, renderData, modifyIds, addData} = this.state;
+        const SubMenu = Menu.SubMenu;
+
+
+
         return (
             <div className={styles.normal}>
                 <Card title={<div style={{textAlign: "center"}}>管理班级名单</div>}>
@@ -494,24 +475,24 @@ export default class ClassManage extends Component {
                             </Col>
                             <Col span={8} offset={1}>
                                 <div>
-                                    <Dropdown overlay={menu} placement="bottomCenter">
-                                        <Button>班级选择</Button>
-                                    </Dropdown>
-                                    <Button onClick={this.addStudent} style={{marginLeft: '30px'}}>
-                                        添加
-                                    </Button>
-                                    <Button onClick={() => {
-                                        this.getClassStudents("F1803702")
-                                    }}>
-                                        2班
-                                    </Button>
-                                    <Button onClick={this.showDrawer}>
-                                        <PlusOutlined /> 创建新的班级
-                                    </Button>
+                                    <Col span={4}>
+                                        <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}} block='true'
+                                                         placement="bottomCenter">
+                                            {this.state.classChoose}
+                                        </Dropdown.Button>
+                                    </Col>
+
+                                    <Col span={4} offset={3}>
+                                        <Button onClick={this.addStudent} style={{marginLeft: '100px'}}>
+                                            添加
+                                        </Button>
+                                    </Col>
+
                                 </div>
                             </Col>
                         </Row>
                     </Card>
+
 
                     <Drawer
                         title="创建新的班级"
@@ -519,9 +500,9 @@ export default class ClassManage extends Component {
                         onClose={this.onClose}
                         visible={this.state.visible}
                     >
-                        <Form name="basic" initialValues={{ remember: true }}>
-                            <Form.Item label="班级号" name="username" rules={[{ required: true }]}>
-                                <Input onBlur={this.getClassNo} />
+                        <Form name="basic" initialValues={{remember: true}}>
+                            <Form.Item label="班级号" name="username" rules={[{required: true}]}>
+                                <Input onBlur={this.getClassNo}/>
                             </Form.Item>
                             <Button htmlType="submit" type='primary' onClick={this.createClass}>创建</Button>
                         </Form>

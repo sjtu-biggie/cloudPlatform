@@ -20,8 +20,7 @@ const options = [
 /**
  * @return {string}
  */
-function CurentTime()
-{
+function CurentTime() {
     let now = new Date();
 
     let year = now.getFullYear();       //年
@@ -34,17 +33,17 @@ function CurentTime()
 
     let clock = year + "-";
 
-    if(month < 10)
+    if (month < 10)
         clock += "0";
 
     clock += month + "-";
 
-    if(day < 10)
+    if (day < 10)
         clock += "0";
 
     clock += day + " ";
 
-    if(hh < 10)
+    if (hh < 10)
         clock += "0";
 
     clock += hh + ":";
@@ -53,7 +52,7 @@ function CurentTime()
 
     if (ss < 10) clock += '0';
     clock += ss;
-    return(clock);
+    return (clock);
 }
 
 @Form.create()
@@ -64,7 +63,7 @@ class AddBulletin extends React.Component {
 
     };
     timer = 0;
-    handleSubmit =async (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (err) {
@@ -84,6 +83,39 @@ class AddBulletin extends React.Component {
                 const user = await axios(config)
                     .then(function (response) {
                         console.log(response.data);
+
+                        axios({
+                            method: 'POST',
+                            url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
+                            data: {
+                                "theClass": "F1803705"
+                            }
+                        }).then(msg => {
+                            console.log(msg.data);
+                            var tos = [];
+                            msg.data.map(item => {
+                                tos.push(item.email);
+                            })
+
+                            axios({
+                                method:'POST',
+                                url:'http://106.13.209.140:8000/sendNotice',
+                                data:{
+                                    "tos":tos,
+                                    "type":"BULLETIN",
+                                }
+                            }).then(msg=>{
+                                console.log(msg.data);
+                            }).catch(err=>{
+                                console.log(err)
+                            })
+
+
+                        }).catch(err => {
+                            console.log(err);
+                        })
+
+
                         return response.data;
                     })
                     .catch(function (error) {
@@ -160,21 +192,19 @@ class AddBulletin extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <TextArea style={{height:'200px'}}/>
+                                    <TextArea style={{height: '200px'}}/>
                                 )
                             }
                         </FormItem>
                         <FormItem label='是否发送通知' {...formItemLayout} required>
                             {
-                                getFieldDecorator('time', {
-
-                                })(
-                                    <Switch defaultChecked  />
+                                getFieldDecorator('time', {})(
+                                    <Switch defaultChecked/>
                                 )
                             }
                         </FormItem>
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" style={{marginLeft:'100px'}}>发布公告</Button>
+                            <Button type="primary" htmlType="submit" style={{marginLeft: '100px'}}>发布公告</Button>
                         </FormItem>
                     </Form>
                 </Card>

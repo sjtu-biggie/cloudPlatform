@@ -241,7 +241,6 @@ class CoursePageDemo extends React.Component {
 
             </div>
         )
-
     };
     deleteBulletin = async (index) => {
         let config = {

@@ -102,15 +102,15 @@ export class RichText extends React.Component{
                             inline: { inDropdown: false },
                             list: { inDropdown: true },
                             textAlign: { inDropdown: true },
-                            image: {
-                                urlEnabled: true,
-                                uploadEnabled: true,
+                            /*image: {
+                                urlEnabled: false,
+                                uploadEnabled: false,
                                 alignmentEnabled: true,   // 是否显示排列按钮 相当于text-align
                                 uploadCallback: this.imageUploadCallBack,  //图片的处理 （但是仅限于本地上传的，url方式不经过此函数）
                                 previewImage: true,
-                                inputAccept: 'image/*',
+                                inputAccept: 'image/!*',
                                 alt: {present: false, mandatory: false}
-                            }
+                            }*/
                         }}
                         onContentStateChange={this.props.onEditorChange.bind(this)}//引用父组件的函数
                         placeholder="答题区域" //输入框中默认内容

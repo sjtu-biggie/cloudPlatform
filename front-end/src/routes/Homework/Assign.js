@@ -3,6 +3,7 @@ import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicke
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
 import axios from "axios";
+import TextArea from "antd/es/input/TextArea";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -32,6 +33,7 @@ const options2 = [
 @Form.create()
 class Assign extends React.Component {
     state = {
+        dfileList:[],
         disabled: false,
         homework: {
             courseId:0,
@@ -185,7 +187,7 @@ class Assign extends React.Component {
         this.getData2();
     }
 
-    render() {
+    render=()=> {
         const {getFieldDecorator, getFieldValue} = this.props.form
         const formItemLayout = {
             labelCol: {
@@ -309,6 +311,7 @@ class Assign extends React.Component {
                         }
                     </FormItem>
                     <Upload
+                        flieList = {this.state.dfileList}
                         accept=".png,.jpg,.jpeg"
                         action={ 'https://www.mocky.io/v2/5cc8019d300000980a055e76'}
                         onChange={({ file, fileList }) =>{
@@ -347,16 +350,22 @@ class Assign extends React.Component {
                                     .catch(function (error) {
                                         console.log(error);
                                     });
-                                
+                                file.status = 'removed';
+
+                                this.setState({
+                                    dfileList:[]
+                                })
                             };
                             fr.readAsDataURL(file.originFileObj);
+
                         }
 
                         }}
-                        style={{marginLeft:'150px',marginBottom:'50px'}}
                     >
-                        <Button><Icon type="upload"/>从图片中识别作业内容</Button>
+                        <Button                         style={{transform: 'translateX(900px)'}}
+                        ><Icon type="upload"/>从图片中识别作业内容</Button>
                     </Upload>
+                        <TextArea  style={{transform: 'translateX(600px)',height:'100px'}}/>
                         <FormItem label='上传作业附件' {...formItemLayout} >
                             {
                                 (

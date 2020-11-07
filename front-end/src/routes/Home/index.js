@@ -73,6 +73,7 @@ class Home extends React.Component {
         console.log(user);
         this.setState({
             userInfo: user,
+            role:user.type,
         })
     };
 
@@ -164,7 +165,7 @@ class Home extends React.Component {
                                 </Row> :
                                 <Row>
                                     <Col offset={1} span={10}>
-                                        <Card style={styles.cd} id='teacher1' name='hhh' onClick={()=>{this.handleClick("teacher")}}>
+                                        <Card style={styles.cd} id='teacher'  onClick={()=>{this.handleClick("teacher")}}>
                                             <Row>
                                                 <Col span={8}>
                                                     <img /*width={275}*/ alt="logo" height={530}
@@ -193,7 +194,7 @@ class Home extends React.Component {
                                         </Card>
                                     </Col>
                                     <Col offset={2} span={10}>
-                                        <Card style={styles.cd} id='teacher'  name='fsda' onClick={()=>{this.handleClick("student")}}>
+                                        <Card style={styles.cd} id='student' onClick={()=>{this.handleClick("student")}}>
                                             <Row>
                                                 <Col span={8}>
                                                     <img /*width={275}*/ alt="logo" height={530}

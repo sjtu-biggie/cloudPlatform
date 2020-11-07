@@ -180,8 +180,8 @@ class Assign extends React.Component {
         });
     };
 
-    componentWillUnmount() {
-
+    componentWillMount() {
+        
         this.setState({
             courseId: this.props.course.id
         });

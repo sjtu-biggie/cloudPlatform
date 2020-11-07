@@ -306,7 +306,6 @@ export default class Manager extends Component {
         })
 
 
-
         // axios.interceptors.request.use(config => {
         //     console.log("进入请求拦截器");
         //     console.log(config);

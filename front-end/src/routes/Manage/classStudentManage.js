@@ -215,13 +215,23 @@ export default class ClassManage extends Component {
             this.setState({renderData: filterData});
         };
 
-
         this.addStudent = () => {
 
-
-            this.setState({
-                addNewStudent: !this.state.addNewStudent,
-                addData: this.state.addData === '' ? '' : '',
+            axios({
+                method:'POST',
+                url:'http://106.13.109.140:8000/getAllUsers',
+            }).then(msg=>{
+                console.log(msg.data);
+                let filterData=msg.data.filter(item=>
+                    item.theClass!==this.state.classChoose
+                );
+                console.log(filterData);
+                this.setState({
+                    addData:filterData,
+                    addNewStudent: !this.state.addNewStudent,
+                })
+            }).catch(err=>{
+                console.log(err);
             })
         }
 

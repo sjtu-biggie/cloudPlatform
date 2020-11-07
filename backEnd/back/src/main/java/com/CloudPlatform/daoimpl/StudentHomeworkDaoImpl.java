@@ -39,7 +39,6 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setComment(homework.getComment());
         homeworkDetail.setRemarks(homework.getRemarks());
         homeworkDetail.setCorrect(homework.getCorrect());
-        homeworkDetail.setUpload(homework.getUpload());
         studenthomeworkDetailRepository.save(homeworkDetail);
         return studenthomeworkRepository.save(homework);
     }
@@ -61,7 +60,6 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setComment(homework.getComment());
         homeworkDetail.setRemarks(homework.getRemarks());
         homeworkDetail.setCorrect(homework.getCorrect());
-        homeworkDetail.setUpload(homework.getUpload());
         studenthomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }
@@ -90,7 +88,6 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homework.setComment(detail.getComment());
         homework.setRemarks(detail.getRemarks());
         homework.setCorrect(detail.getCorrect());
-        homework.setUpload(detail.getUpload());
         return homework;
     }
 
@@ -105,7 +102,6 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
             (homeworkList.get(i)).setComment(((StudentHomeworkDetail)list1.get(i)).getComment());
             (homeworkList.get(i)).setRemarks(((StudentHomeworkDetail)list1.get(i)).getRemarks());
             (homeworkList.get(i)).setCorrect(((StudentHomeworkDetail)list1.get(i)).getCorrect());
-            (homeworkList.get(i)).setUpload(((StudentHomeworkDetail)list1.get(i)).getUpload());
         }
 
         return homeworkList;
@@ -123,7 +119,6 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
                 (homeworkList.get(i)).setComment(studentHomeworkDetail.getComment());
                 (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
                 (homeworkList.get(i)).setCorrect(studentHomeworkDetail.getCorrect());
-                (homeworkList.get(i)).setUpload(studentHomeworkDetail.getUpload());
             }
         }
         return homeworkList;
@@ -140,7 +135,6 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
             (homeworkList.get(i)).setComment(((StudentHomeworkDetail)list1.get(i)).getComment());
             (homeworkList.get(i)).setRemarks(((StudentHomeworkDetail)list1.get(i)).getRemarks());
             (homeworkList.get(i)).setCorrect(((StudentHomeworkDetail)list1.get(i)).getCorrect());
-            (homeworkList.get(i)).setUpload(((StudentHomeworkDetail)list1.get(i)).getUpload());
         }
         return homeworkList;
     }
@@ -179,7 +173,6 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
                 (homeworkList.get(i)).setComment(studentHomeworkDetail.getComment());
                 (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
                 (homeworkList.get(i)).setCorrect(studentHomeworkDetail.getCorrect());
-                (homeworkList.get(i)).setUpload(studentHomeworkDetail.getUpload());
             }
         }
 

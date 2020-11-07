@@ -34,8 +34,6 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homeworkDetail.setTeacherId(homework.getTeacherId());
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
-        homeworkDetail.setAnswerUpload(homework.getAnswer());
-        homeworkDetail.setContentUpload(homework.getAnswer());
         teacherhomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }
@@ -54,8 +52,6 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homeworkDetail.setTeacherId(homework.getTeacherId());
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
-        homeworkDetail.setAnswerUpload(homework.getAnswer());
-        homeworkDetail.setContentUpload(homework.getAnswer());
         teacherhomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }
@@ -82,8 +78,6 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homework.setId(detail.getId());
         homework.setContent(detail.getContent());
         homework.setAnswer(detail.getAnswer());
-        homework.setAnswerUpload(detail.getAnswerUpload());
-        homework.setContentUpload(detail.getContentUpload());
         return homework;
     }
 
@@ -96,8 +90,6 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
             (homeworkList.get(i)).setId(((TeacherHomeworkDetail)list1.get(i)).getId());
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setAnswer(((TeacherHomeworkDetail)list1.get(i)).getAnswer());
-            (homeworkList.get(i)).setAnswerUpload(((TeacherHomeworkDetail)list1.get(i)).getAnswerUpload());
-            (homeworkList.get(i)).setContentUpload(((TeacherHomeworkDetail)list1.get(i)).getContentUpload());
         }
 
         return homeworkList;
@@ -113,8 +105,6 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
             (homeworkList.get(i)).setId(((TeacherHomeworkDetail)list1.get(i)).getId());
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
             (homeworkList.get(i)).setAnswer(((TeacherHomeworkDetail)list1.get(i)).getAnswer());
-            (homeworkList.get(i)).setAnswerUpload(((TeacherHomeworkDetail)list1.get(i)).getAnswerUpload());
-            (homeworkList.get(i)).setContentUpload(((TeacherHomeworkDetail)list1.get(i)).getContentUpload());
         }
 
         return homeworkList;

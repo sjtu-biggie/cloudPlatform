@@ -16,9 +16,8 @@ public interface StudentHomeworkService {
     List<StudentHomework> getStudentHomeworkAllOfHomework(int homeworkId);
     List<StudentHomework> getStudentHomeworkAllOfHomeworkNoMongo(int homeworkId);
     StudentHomework getStudentHomeworkOne(String studentId, int homeworkId);
-    StudentHomework editStudentHomework(JSONObject object,String upload);
-    StudentHomework addStudentHomework(JSONObject object,String upload);
-    StudentHomework correctStudentHomework(JSONObject object);
+    StudentHomework editStudentHomework(JSONObject object);
+    StudentHomework addStudentHomework(JSONObject object);
     void deleteStudentHomeworkAll(String studentId, int courseId);
     void deleteStudentHomeworkOne(String studentId, int homeworkId);
 

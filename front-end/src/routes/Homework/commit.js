@@ -96,6 +96,12 @@ class HomeworkCommit extends React.Component{
             });
     }
 
+    changeData=(e)=>{//input输入什么，就监听这个方法，然后再修改state，然后返回到视图
+        this.setState({
+            file:[e.target.value]
+        })
+    }
+
     componentWillMount() {
         this.setState({
             homeworkId:this.props.match.params[0].substr(1)

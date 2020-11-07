@@ -59,7 +59,6 @@ public class UserManageController {
     @RequestMapping(value = "/deleteStudentFromClass",method = RequestMethod.POST)
     public String deleteStudentFromClass(@RequestBody JSONObject obj){
         String username=obj.getString("username");
-        System.out.println("从班级中删除学生"+username);
         userMapper.delUser(username);
         return "已经删除用户";
     }

@@ -11,6 +11,7 @@ class SiderNav extends React.Component {
         role: null,
     };
     componentWillMount=()=> {
+        console.log("开始渲染边框");
         let storage = window.localStorage;
         let role = storage.getItem("type");
         this.setState({

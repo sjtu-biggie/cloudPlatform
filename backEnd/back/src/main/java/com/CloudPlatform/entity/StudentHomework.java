@@ -79,6 +79,10 @@ public class StudentHomework {
     private String id;
 
     @Transient
+    @Column(name = "UPLOAD")
+    private String Upload;
+
+    @Transient
     private int finishHomework;
     @Transient
     private int handinRank;

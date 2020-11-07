@@ -117,7 +117,7 @@ class Assign extends React.Component {
     addHomework=async (homework)=>{
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383//addTeacherHomework',
+            url: 'http://106.13.209.140:8383/addTeacherHomework',
             data:{
                 'homework':homework
             },
@@ -181,7 +181,7 @@ class Assign extends React.Component {
     };
 
     componentWillMount() {
-        
+
         this.setState({
             courseId: this.props.course.id
         });

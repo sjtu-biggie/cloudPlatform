@@ -217,6 +217,8 @@ export default class ClassManage extends Component {
 
 
         this.addStudent = () => {
+
+
             this.setState({
                 addNewStudent: !this.state.addNewStudent,
                 addData: this.state.addData === '' ? '' : '',
@@ -352,8 +354,11 @@ export default class ClassManage extends Component {
         };
 
         this.handleClick = (e) => {
+            let courseButton = document.getElementById("courseButton");
+
             if (e.key !== "-1") {
                 console.log('click ', e);
+                courseButton.innerText = e.item.props.children;
                 this.getClassStudents(e.key);
                 this.setState({
                     classChoose: e.key
@@ -372,12 +377,9 @@ export default class ClassManage extends Component {
             }
         }).then(msg => {
             console.log(msg.data);
-            var i = -1;
             var menu =
                 <Menu onClick={this.handleClick}>
                     {msg.data.map(function (item) {
-                            i++;
-                            // return item;
                             return (
                                 <Menu.Item key={item.classNo} icon={<UserOutlined/>}>
                                     {item.classNo}
@@ -386,7 +388,7 @@ export default class ClassManage extends Component {
                         }
                     )}
                     <Menu.Item key="-1" onClick={this.showDrawer}>
-                        <PlusOutlined/> 创建班级
+                         创建班级
                     </Menu.Item>
                 </Menu>;
             console.log(menu);
@@ -409,21 +411,21 @@ export default class ClassManage extends Component {
         //     console.log("提取数据失败");
         // })
 
-        axios({
-            method: 'POST',
-            url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
-            data: {
-                "theClass": "F1803702"
-            }
-        }).then(msg => {
-            console.log(msg.data);
-            this.setState({
-                orData: msg.data,
-                renderData: msg.data,
-            })
-        }).catch(err => {
-            console.log(err);
-        })
+        // axios({
+        //     method: 'POST',
+        //     url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
+        //     data: {
+        //         "theClass": "F1803702"
+        //     }
+        // }).then(msg => {
+        //     console.log(msg.data);
+        //     this.setState({
+        //         orData: msg.data,
+        //         renderData: msg.data,
+        //     })
+        // }).catch(err => {
+        //     console.log(err);
+        // })
 
     }
 
@@ -458,8 +460,6 @@ export default class ClassManage extends Component {
 
     render() {
         const {orData, search, renderData, modifyIds, addData} = this.state;
-        const SubMenu = Menu.SubMenu;
-
 
         return (
             <div className={styles.normal}>
@@ -476,24 +476,25 @@ export default class ClassManage extends Component {
                                 <Button type={"primary"}
                                         onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Col>
-                            <Col span={8} offset={1}>
-                                <div>
-                                    <Col span={4}>
-                                        <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}}
-                                                         block='true'
-                                                         placement="bottomCenter">
-                                            {this.state.classChoose}
-                                        </Dropdown.Button>
-                                    </Col>
+                            <Col span={4} offset={9}>
 
-                                    <Col span={4} offset={3}>
-                                        <Button onClick={this.addStudent} style={{marginLeft: '100px'}}>
-                                            添加
-                                        </Button>
-                                    </Col>
-
-                                </div>
+                                {/*<Col span={4}>*/}
+                                {/*    <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}}*/}
+                                {/*                     block='true'*/}
+                                {/*                     placement="bottomCenter">*/}
+                                {/*        {this.state.classChoose}*/}
+                                {/*    </Dropdown.Button>*/}
+                                {/*</Col>*/}
+                                <Dropdown overlay={this.state.menu} trigger={['click']}>
+                                    <Button style={{width: "110px"}}><span id="courseButton">选择班级</span> <Icon
+                                        type="down"/></Button>
+                                </Dropdown>
+                                <Button style={{marginLeft: '20px',width:'110px'}} onClick={this.addStudent}>
+                                    添加学生
+                                </Button>
                             </Col>
+
+
                         </Row>
                     </Card>
 

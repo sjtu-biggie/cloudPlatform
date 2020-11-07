@@ -26,6 +26,7 @@ class Home extends React.Component {
     }
 
     handleClick=async (type)=>{
+        console.log(type);
         let config={
             method:'POST',
             data:{
@@ -39,6 +40,9 @@ class Home extends React.Component {
         };
 
         const result=await axios(config).then(msg=>{
+            this.setState({
+                role:type
+            })
             console.log(msg.data);
         }).catch(err=>{
             console.log(err)
@@ -69,8 +73,10 @@ class Home extends React.Component {
         console.log(user);
         this.setState({
             userInfo: user,
+            role:user.type,
         })
     };
+
     beTeacher = async (data) => {
 
     };
@@ -159,7 +165,7 @@ class Home extends React.Component {
                                 </Row> :
                                 <Row>
                                     <Col offset={1} span={10}>
-                                        <Card style={styles.cd} id='teacher1' name='hhh' onClick={()=>{this.handleClick("teacher")}}>
+                                        <Card style={styles.cd} id='teacher'  onClick={()=>{this.handleClick("teacher")}}>
                                             <Row>
                                                 <Col span={8}>
                                                     <img /*width={275}*/ alt="logo" height={530}
@@ -188,7 +194,7 @@ class Home extends React.Component {
                                         </Card>
                                     </Col>
                                     <Col offset={2} span={10}>
-                                        <Card style={styles.cd} id='teacher'  name='fsda' onClick={()=>{this.handleClick("student")}}>
+                                        <Card style={styles.cd} id='student' onClick={()=>{this.handleClick("student")}}>
                                             <Row>
                                                 <Col span={8}>
                                                     <img /*width={275}*/ alt="logo" height={530}

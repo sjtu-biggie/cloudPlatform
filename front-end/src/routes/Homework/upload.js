@@ -107,8 +107,8 @@ class UploadDemo extends React.Component {
                     that.setState({
                         fileList:[...info.fileList]
                     });
-                    that.toParent()
                     console.log(that.state.fileList)
+                    that.toParent()
 
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败`);

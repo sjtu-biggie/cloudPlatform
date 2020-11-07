@@ -24,7 +24,7 @@ class HomeworkCommit extends React.Component{
         content:"",
         comment:"",
         handinTime:"",
-        fileList:[],
+        file:[],
         homework:[]
     };
 
@@ -46,7 +46,7 @@ class HomeworkCommit extends React.Component{
         // console.log(result, msg)
         // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
         this.setState({
-            fileList:fileList,
+            file:fileList,
         })
     }
 
@@ -72,7 +72,7 @@ class HomeworkCommit extends React.Component{
         console.log(this.state.homework)
 
         let obj={
-            file:this.state.fileList,
+            file:this.state.file,
             homework:this.state.homework,
         }
 
@@ -120,9 +120,16 @@ class HomeworkCommit extends React.Component{
                     <Card bordered={false} className='card-item'>
                         <RichText parent={this}></RichText>
                     </Card>
-                    <p>{this.state.content}</p>
-                    <p>{this.state.homework.correct}</p>
-                    <p>{this.state.homework.comment}</p>
+                    <Card title="作业内容" >
+                        <p>{this.state.content}</p>
+
+                    </Card> <br/>
+                    <Card title="批改内容"  >
+                        <p>{this.state.homework.correct}</p>
+                    </Card><br/>
+                    <Card title="作业评论" >
+                        <p>{this.state.homework.comment}</p>
+                    </Card><br/>
                     <Upload parent={this}></Upload>
                     <br></br>
                     <Button type="primary"  onClick={()=>this.postObject()}>{this.state.homework.handinTime!==null?"重新提交":"提交"}</Button>&emsp;

@@ -139,6 +139,7 @@ export default class extends React.Component{
 
     onEditorChange = (editorContent) => {
         console.log('父组件' + draftjs(editorContent)); //实时根据输入进行更新
+        console.log(typeof(draftjs(editorContent)))
         //editorContent = '<html lang="en"><head><meta charset="UTF-8"><title></title></head><body>' + draftjs(editorContent) + '</body></html>'
         this.setState({
             editorContent,

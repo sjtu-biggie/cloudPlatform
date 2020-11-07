@@ -26,6 +26,7 @@ class Home extends React.Component {
     }
 
     handleClick=async (type)=>{
+        console.log(type);
         let config={
             method:'POST',
             data:{
@@ -39,6 +40,9 @@ class Home extends React.Component {
         };
 
         const result=await axios(config).then(msg=>{
+            this.setState({
+                role:type
+            })
             console.log(msg.data);
         }).catch(err=>{
             console.log(err)
@@ -71,6 +75,7 @@ class Home extends React.Component {
             userInfo: user,
         })
     };
+
     beTeacher = async (data) => {
 
     };

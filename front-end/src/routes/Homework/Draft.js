@@ -12,7 +12,7 @@ class Draft extends React.Component{
         editorState: EditorState.createEmpty(),
         contentState:content,
 
-    }
+    };
 
     onEditorStateChange = (editorState) => {
         this.setState({

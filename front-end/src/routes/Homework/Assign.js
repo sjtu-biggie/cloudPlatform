@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Upload, Icon} from 'antd'
+import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Upload, Icon, Popconfirm} from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
 import axios from "axios";
@@ -33,6 +33,7 @@ const options2 = [
 @Form.create()
 class Assign extends React.Component {
     state = {
+        text:'加载中',
         dfileList:[],
         disabled: false,
         homework: {
@@ -353,7 +354,7 @@ class Assign extends React.Component {
                                 file.status = 'removed';
 
                                 this.setState({
-                                    dfileList:[]
+                                    text:result.content
                                 })
                             };
                             fr.readAsDataURL(file.originFileObj);
@@ -362,10 +363,12 @@ class Assign extends React.Component {
 
                         }}
                     >
-                        <Button                         style={{transform: 'translateX(900px)'}}
-                        ><Icon type="upload"/>从图片中识别作业内容</Button>
+                        <Popconfirm placement="top" title={this.state.text} okText="确认">
+                            <Button style={{transform: 'translateX(900px)'}}
+                            ><Icon type="upload"/>从图片中识别作业内容</Button>
+                        </Popconfirm>
+
                     </Upload>
-                        <TextArea  style={{transform: 'translateX(600px)',height:'100px'}}/>
                         <FormItem label='上传作业附件' {...formItemLayout} >
                             {
                                 (

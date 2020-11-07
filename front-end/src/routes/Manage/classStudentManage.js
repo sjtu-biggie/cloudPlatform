@@ -217,6 +217,8 @@ export default class ClassManage extends Component {
 
 
         this.addStudent = () => {
+
+
             this.setState({
                 addNewStudent: !this.state.addNewStudent,
                 addData: this.state.addData === '' ? '' : '',

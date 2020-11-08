@@ -238,10 +238,9 @@ export default class ClassManage extends Component {
         }
 
         this.addStudentToClass = () => {
-            const {record, classChoose,addData,addDataRender,orData,renderData} = this.state;
+            const {record} = this.state;
             console.log("this is a try");
             console.log(record["theClass"]);
-            record["theClass"] = classChoose;
             console.log(record);
             axios({
                 method: 'POST',
@@ -374,6 +373,71 @@ export default class ClassManage extends Component {
                 })
             }
         };
+
+        this.muliAdd=()=>{
+            const {addData,addDataRender,orData,renderData,modifyIds,classChoose}=this.state;
+            console.log(modifyIds);
+            let chosenData=addDataRender.filter(item=>modifyIds.includes(item.username));
+            console.log(chosenData);
+            let chosenDataNew=chosenData.map(item=>{
+                item["theClass"]=classChoose;
+                axios({
+                    method: 'POST',
+                    url: 'http://106.13.209.140:8000/addStudentToClass',
+                    data: {
+                        username: item.username,
+                        theClass: item.theClass,
+                    }
+                }).then(msg => {
+                    console.log(msg);
+                    var tos = [];
+                    tos.push(item.email);
+                    axios({
+                        method: 'POST',
+                        url: 'http://106.13.209.140:8000/sendNotice',
+                        data: {
+                            "tos": tos,
+                            "context": "已经将你添加至新的班级",
+                        }
+                    }).then(msg => {
+                        console.log(msg);
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                }).catch(err => {
+                    console.log(err)
+                })
+                return item;
+            })
+            console.log(chosenDataNew);
+            let addDataRenderNew=addDataRender.filter(item=>!modifyIds.includes(item.username));
+            console.log(addDataRenderNew);
+            let addDataNew=addData.filter(item=>!modifyIds.includes(item.username));
+            console.log(addDataNew);
+
+            let orDataNew=[...chosenDataNew,...orData];
+            console.log(orDataNew);
+            let renderDataNew=[...chosenDataNew,...renderData];
+            console.log(renderDataNew);
+
+            this.setState({
+                addData:addDataNew,
+                addDataRender:addDataRenderNew,
+                orData:orDataNew,
+                renderData:renderDataNew,
+                modifyIds:[],
+            })
+
+
+
+
+            // let addDataNew=addData.map(item=>{
+            //     return modifyIds.includes(item.username)?null:item;
+            // })
+            // console.log(addDataNew);
+
+
+        };
     }
 
     componentDidMount() {
@@ -498,7 +562,7 @@ export default class ClassManage extends Component {
                                     <Button style={{width: "110px"}}><span id="courseButton">选择班级</span> <Icon
                                         type="down"/></Button>
                                 </Dropdown>
-                                <Button style={{marginLeft: '20px',width:'110px'}} onClick={this.addStudent}>
+                                <Button style={{marginLeft: '20px',width:'110px'}} disabled={this.state.classChoose===''} onClick={this.addStudent}>
                                     添加学生
                                 </Button>
                             </Col>
@@ -523,19 +587,36 @@ export default class ClassManage extends Component {
                     </Drawer>
 
                     {this.state.addNewStudent === true ?
-                        <Card bordered={false} style={{marginBottom: 10}} title={<div style={{textAlign:"center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>}>
+                        <Card bordered={false} style={{marginBottom: 10}}>
+                            <Card>
+                            <Row>
+                                <Col span={2}>
+                                    <Button type={'primary'} onClick={this.muliAdd}>确定</Button>
+                                </Col>
+                                <Col span={5} offset={8}>
+                                    <div style={{fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>
+                                </Col>
+                            </Row>
+                            </Card>
+
                         <Table
-                        rowKey={'sid'}
-                        columns={[...columns1.map(item => ({
-                            ...item,
-                            render: (text, record) =>
-                                <EditText>{text}</EditText>,
-                        })), {
+                        rowKey={'username'}
+                        columns={[
+                            ...columns1
+                            // ...columns1.map(item => ({
+                            //     if(item.dataIndex==="username"){
+                            //         return item;
+                            // }
+                        //     ...item,
+                        //     render: (text, record) =>
+                        //         <EditText>{text}</EditText>,
+                        // }))
+                            , {
                             name: '操作',
                             key: 'del',
                             render: record => (
                                 <Button onClick={() => {
-                                    record["theClass"] = "F1803702";
+                                    record["theClass"] = this.state.classChoose;
                                     let addDataFilter=addData.filter(item=>item.username!==record.username);
                                     let addDataRenderFilter=addDataRender.filter(item=>item.username!==record.username);
                                     console.log(record);
@@ -551,20 +632,24 @@ export default class ClassManage extends Component {
                                     });
                                 }}>添加</Button>),
                         }]}
+                        rowSelection={{
+                            type: 'checkbox',
+                            selectedRowKeys: modifyIds,
+                            onChange: ids => this.setState({modifyIds: ids}),
+                        }}
                         dataSource={addDataRender}/></Card> : ''}
 
 
                     <Card bordered={false} style={{marginBottom: 10, height: 800}}>
                         <Card title={<div style={{textAlign: "center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>{this.state.classChoose}</div>}>
                         <Table
-                            rowKey={'sid'}
+                            rowKey={'username'}
                             columns={[...columns.map(item => ({
                                 ...item,
                                 render: (text, record) =>
                                     <EditText
                                         onChange={value => {
                                             const newData = [...orData];
-                                            // newData.find(col => col.id === record.id)[item.dataIndex] = value;
                                             console.log(value);
                                             console.log(record);
                                             record[item.dataIndex] = value;

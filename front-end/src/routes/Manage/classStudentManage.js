@@ -86,6 +86,7 @@ export default class ClassManage extends Component {
             record: '',
             addNewStudent: false,
             addData: '',
+            addDataRender:'',
             visible: false,
             createClass: '',
             menu: '',
@@ -177,26 +178,19 @@ export default class ClassManage extends Component {
 
 
         this.addSearch = (selectedKeys, dataIndex) => {
+            const {addData,addDataRender} = this.state;
             console.log("this is a try");
             console.log(selectedKeys);
             console.log(dataIndex);
-            axios({
-                method: 'POST',
-                url: 'http://106.13.209.140:8000/getAllUsers'
-            }).then(msg => {
-                console.log(msg);
-                var fileterData = msg.data.filter(item => {
-                    if (String(item[dataIndex] || '').toLowerCase().includes(String(selectedKeys).toLowerCase())) {
-                        return true;
-                    }
-                    return false;
-                });
-                this.setState({addData: fileterData});
-            }).catch(err => {
-                console.log(err);
-                console.log("提取数据失败");
+            let filterData=addData.filter(item=>{
+                if (String(item[dataIndex]||'').toLowerCase().includes(String(selectedKeys).toLowerCase())){
+                    return true;
+                }
+                return false;
             })
-
+            this.setState({
+                addDataRender:filterData
+            })
         }
 
         this.handleSearch = () => {
@@ -216,27 +210,35 @@ export default class ClassManage extends Component {
         };
 
         this.addStudent = () => {
-
-            axios({
-                method:'POST',
-                url:'http://106.13.109.140:8000/getAllUsers',
-            }).then(msg=>{
-                console.log(msg.data);
-                let filterData=msg.data.filter(item=>
-                    item.theClass!==this.state.classChoose
-                );
-                console.log(filterData);
-                this.setState({
-                    addData:filterData,
-                    addNewStudent: !this.state.addNewStudent,
+            console.log("添加学生");
+            if (this.state.addNewStudent===false)
+            {
+                axios({
+                    method:'POST',
+                    url:'http://106.13.209.140:8000/getAllUsers',
+                }).then(msg=>{
+                    console.log(msg.data);
+                    let filterData=msg.data.filter(item=>
+                        item.theClass!==this.state.classChoose
+                    );
+                    console.log(filterData);
+                    this.setState({
+                        addData:filterData,
+                        addDataRender:filterData,
+                        addNewStudent: !this.state.addNewStudent,
+                    })
+                }).catch(err=>{
+                    console.log(err);
                 })
-            }).catch(err=>{
-                console.log(err);
-            })
+                return ;
+            }
+           this.setState({
+               addNewStudent: false
+           })
         }
 
         this.addStudentToClass = () => {
-            const {record, classChoose} = this.state;
+            const {record, classChoose,addData,addDataRender,orData,renderData} = this.state;
             console.log("this is a try");
             console.log(record["theClass"]);
             record["theClass"] = classChoose;
@@ -252,7 +254,6 @@ export default class ClassManage extends Component {
                 console.log(msg);
                 var tos = [];
                 tos.push(record.email);
-
                 axios({
                     method: 'POST',
                     url: 'http://106.13.209.140:8000/sendNotice',
@@ -265,8 +266,6 @@ export default class ClassManage extends Component {
                 }).catch(err => {
                     console.log(err);
                 })
-
-
             }).catch(err => {
                 console.log(err)
             })
@@ -469,7 +468,7 @@ export default class ClassManage extends Component {
 
 
     render() {
-        const {orData, search, renderData, modifyIds, addData} = this.state;
+        const {orData, search, renderData, modifyIds,addDataRender, addData} = this.state;
 
         return (
             <div className={styles.normal}>
@@ -534,22 +533,23 @@ export default class ClassManage extends Component {
                             key: 'del',
                             render: record => (
                                 <Button onClick={() => {
-                                    var newAddData = addData.filter(item => item.username !== record.username);
                                     record["theClass"] = "F1803702";
+                                    let addDataFilter=addData.filter(item=>item.username!==record.username);
+                                    let addDataRenderFilter=addDataRender.filter(item=>item.username!==record.username);
                                     console.log(record);
-                                    console.log(newAddData);
                                     this.setState({
-                                        addData: newAddData,
+                                        addData: addDataFilter,
+                                        addDataRender:addDataRenderFilter,
                                         delData: record.username,
-                                        orData: [...orData, record],
-                                        renderData: [...renderData, record],
+                                        orData: [record,...orData],
+                                        renderData: [record,...renderData],
                                         record: record,
                                     }, () => {
                                         this.addStudentToClass();
                                     });
                                 }}>添加</Button>),
                         }]}
-                        dataSource={addData}/> : ''}
+                        dataSource={addDataRender}/> : ''}
 
 
                     <Card bordered={false} style={{marginBottom: 10, height: 800}}>
@@ -572,8 +572,6 @@ export default class ClassManage extends Component {
                                             this.setState({record: record});
                                             console.log(this.state.record);
                                             this.updateUser(record);
-
-
                                         }}
                                         onBlur={this.updateUser}
                                     >{text}
@@ -601,7 +599,6 @@ export default class ClassManage extends Component {
                                     }}>删除</Button>),
                             }]}
                             dataSource={renderData}/>
-
                     </Card>
                 </Card>
             </div>

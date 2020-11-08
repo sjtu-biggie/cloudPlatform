@@ -145,7 +145,7 @@ export default class STable extends Component {
             let config = {
                 method: 'post',
                 data : obj,
-                url: 'http://106.13.209.140:8000/getAllStudentsByClass',
+                url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
                 headers: {
                     withCredentials: true,
                 }
@@ -242,6 +242,8 @@ export default class STable extends Component {
             homeworkId: this.props.homeworkId,
             handinAlready:this.props.handinAlready,
         });
+        let array = this.props.homework.range.split(",");
+        this.props.homework.classIds = array;
         this.getStudentInfo(this.props.homework,indexStudentHomeworks);
     }
     componentWillReceiveProps(nextProps, nextContext) {
@@ -258,6 +260,13 @@ export default class STable extends Component {
             homeworkId: nextProps.homeworkId,
             handinAlready:nextProps.handinAlready,
         });
+        // if(Object.prototype.toString.call(nextProps.homework.range).indexOf('Array') === -1){
+        //     let array = nextProps.homework.range.split(",");
+        //     nextProps.homework.range = array;
+        // }
+        let array = nextProps.homework.range.split(",");
+        nextProps.homework.classIds = array;
+
         this.getStudentInfo(nextProps.homework,indexStudentHomeworks);
     }
 

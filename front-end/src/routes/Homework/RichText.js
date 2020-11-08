@@ -90,7 +90,7 @@ export class RichText extends React.Component{
         const { editorContent, editorState } = this.state;
         return (
             <div style={{marginBottom:'20px'}}>
-                <Card >
+                <Card style={{height:"350px"}}>
                     <Editor
                         editorState={editorState}
                         toolbarClassName="home-toolbar"

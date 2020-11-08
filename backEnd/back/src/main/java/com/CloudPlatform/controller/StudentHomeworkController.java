@@ -48,6 +48,11 @@ public class StudentHomeworkController {
         return studenthomeworkService.upload(file,userId);
     }
 
+    @PostMapping(value = "/uploadNotSave")
+    public String uploadNotSave(@RequestParam("file") MultipartFile file) {
+        return studenthomeworkService.uploadNotSave(file);
+    }
+
 
     //批改同学提交的作业
     @RequestMapping(value = "/CorrectHomework")

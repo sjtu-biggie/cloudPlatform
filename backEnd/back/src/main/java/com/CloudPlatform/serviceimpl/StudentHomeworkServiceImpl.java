@@ -161,6 +161,10 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         studenthomeworkDao.deleteOne(studentId, homeworkId);
     }
     @Override
+    public String uploadNotSave(MultipartFile file){
+        return "Successful";
+    }
+    @Override
     public String upload(MultipartFile file,String userId){
         String pathName = "/homework/"+userId+"/";//想要存储文件的地址
         String pname = file.getOriginalFilename();//获取文件名（包括后缀）

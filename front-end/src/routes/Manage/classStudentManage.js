@@ -271,7 +271,6 @@ export default class ClassManage extends Component {
             })
         }
 
-
         this.deleteStudent = () => {
             axios({
                 method: 'POST',
@@ -370,7 +369,8 @@ export default class ClassManage extends Component {
                 courseButton.innerText = e.item.props.children;
                 this.getClassStudents(e.key);
                 this.setState({
-                    classChoose: e.key
+                    classChoose: e.key,
+                    addNewStudent:false,
                 })
             }
         };
@@ -522,7 +522,9 @@ export default class ClassManage extends Component {
                         </Form>
                     </Drawer>
 
-                    {this.state.addNewStudent === true ? <Table
+                    {this.state.addNewStudent === true ?
+                        <Card bordered={false} style={{marginBottom: 10}} title={<div style={{textAlign:"center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>}>
+                        <Table
                         rowKey={'sid'}
                         columns={[...columns1.map(item => ({
                             ...item,
@@ -549,11 +551,11 @@ export default class ClassManage extends Component {
                                     });
                                 }}>添加</Button>),
                         }]}
-                        dataSource={addDataRender}/> : ''}
+                        dataSource={addDataRender}/></Card> : ''}
 
 
                     <Card bordered={false} style={{marginBottom: 10, height: 800}}>
-
+                        <Card title={<div style={{textAlign: "center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>{this.state.classChoose}</div>}>
                         <Table
                             rowKey={'sid'}
                             columns={[...columns.map(item => ({
@@ -599,6 +601,7 @@ export default class ClassManage extends Component {
                                     }}>删除</Button>),
                             }]}
                             dataSource={renderData}/>
+                        </Card>
                     </Card>
                 </Card>
             </div>

@@ -224,7 +224,7 @@ class HomeworkList extends React.Component {
                                               fontSize:'18px',
                                               marginTop: '10px',
                                               height: '20px'
-                                          }}>{item.content}</p>}
+                                          }}>{item.type==="主观题"||item.content.chapter1===undefined?item.content:item.content.chapter1.text}</p>}
                                       </List.Item>
                                   )
                               }}

@@ -92,9 +92,7 @@ class HomeworkCommit extends React.Component{
 
         console.log(this.state.homework)
 
-        let obj={
-            homework:this.state.homework,
-        }
+        let obj = this.state.homework;
 
         console.log(obj)
 
@@ -102,6 +100,7 @@ class HomeworkCommit extends React.Component{
             method: 'post',
             data: obj,
             url: 'http://106.13.209.140:8383/addStudentHomework',
+            //url: 'http://localhost:8080/addStudentHomework',
             headers: {
                 withCredentials: true,
             }

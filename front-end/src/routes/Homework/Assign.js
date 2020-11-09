@@ -197,8 +197,8 @@ class Assign extends React.Component {
         console.log(homework);
         let config = {
             method: 'post',
-            //url: 'http://106.13.209.140:8383/addTeacherHomework',
-            url: 'http://localhost:8080/addTeacherHomework',
+            url: 'http://106.13.209.140:8383/addTeacherHomework',
+            //url: 'http://localhost:8080/addTeacherHomework',
             data: homework,
             headers: {
                 withCredentials: true,

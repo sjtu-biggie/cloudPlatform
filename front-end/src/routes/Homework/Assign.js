@@ -192,7 +192,11 @@ class Assign extends React.Component {
                 } else {
                     console.log(this.props);
                     values.courseId = this.props.course.course.id;
-                    values.content = this.state.content;
+                    if(values.type === '主观题'){
+                        values.content = this.state.content;
+                    }else{
+                        values.content = this.state.syllabus;
+                    }
                     values.answer = this.state.answer;
                     this.setState({
                         homework: values,

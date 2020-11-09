@@ -526,11 +526,15 @@ export default class ClassManage extends Component {
                         <Card bordered={false} style={{marginBottom: 10}} title={<div style={{textAlign:"center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>}>
                         <Table
                         rowKey={'sid'}
-                        columns={[...columns1.map(item => ({
-                            ...item,
-                            render: (text, record) =>
-                                <EditText>{text}</EditText>,
-                        })), {
+                        columns={[
+                            ...columns1
+                            // ...columns1.map(item => ({
+                            // ...item,
+                            // render: (text, record) =>
+                            //     <EditText>{text}</EditText>,
+                            // }))
+                            ,
+                            {
                             name: '操作',
                             key: 'del',
                             render: record => (

@@ -12,7 +12,7 @@ import {
     Upload,
     Icon,
     Popconfirm,
-    Collapse, List
+    Collapse, List, Row, Col, Dropdown, Menu
 } from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
@@ -47,17 +47,16 @@ class Assign extends React.Component {
         syllabus: {
             chapterNum: 1,
             chapter1: {
-                title: "第一题",
+                title: "题目",
                 type:'选择题',
-                text:'小明有两个苹果，给妈妈吃了一个，还剩几个苹果？',
+                text:'请输入题干，若是填空题请显式标记出要填的空来，并和填空题的答案一一对应',
                 content: [
-                    "1",
-                    "2", "3", "10086"
+
                 ]
             }
         },
         //0 主观题，1 客观题
-        homeworkType: 0,
+        homeworkType: 1,
         text: '加载中',
         dfileList: [],
         disabled: false,
@@ -440,7 +439,7 @@ class Assign extends React.Component {
                                 <Collapse defaultActiveKey={['0']} onChange={() => {
                                     this.setState({addChapter: false, addContent: false})
                                 }}>{chapterList.map((value, index) => {
-                                    return (<Collapse.Panel header={value.title} key={index}>
+                                    return (<Collapse.Panel header={"第"+(index+1)+"题"} key={index}>
                                         {this.state.addChapter ?
                                             <Search
                                                 style={{marginBottom: '15px'}}
@@ -454,18 +453,59 @@ class Assign extends React.Component {
                                                     this.addBig(index, value)
                                                 }}
                                             /> : null}
-                                        <Button type="primary" onClick={() => {
-                                            this.setState({addChapter: !this.state.addChapter})
-                                        }} style={{}}>添加题目</Button>
-                                        <Button type="danger" onClick={() => {
-                                            this.deleteBig(index)
-                                        }} style={{marginLeft: '10px', marginBottom: '20px'}}>删除题目</Button>
+                                        <Row>
+                                            <Col span={18}>
+                                                <TextArea id='assignTextarea' defaultValue={value.text} style={{height:'80px'}} onSubmit={(e)=>{
+                                                    this.submitContent(e)
+                                                }}/>
+                                            </Col>
+                                            <Col span={2} offset={1}>
+                                                <Dropdown overlay={ (<Menu>
+                                                    <Menu.Item onClick={()=>{
+                                                        let chapterString = 'chapter' + (index + 1);
+                                                        let modifiedSyllabus = this.state.syllabus;
+                                                        let chapterName = modifiedSyllabus[chapterString];
+                                                        chapterName.type = "选择题";
+                                                        modifiedSyllabus[chapterString] = chapterName;
+                                                        console.log(modifiedSyllabus);
+                                                        this.setState({syllabus: modifiedSyllabus});
+                                                    }}>
+                                                        选择题
+                                                    </Menu.Item>
+                                                    <Menu.Item onClick={()=>{
+                                                        let chapterString = 'chapter' + (index + 1);
+                                                        let modifiedSyllabus = this.state.syllabus;
+                                                        let chapterName = modifiedSyllabus[chapterString];
+                                                        chapterName.type = "填空题";
+                                                        modifiedSyllabus[chapterString] = chapterName;
+                                                        console.log(modifiedSyllabus);
+                                                        this.setState({syllabus: modifiedSyllabus});
+                                                    }}>
+                                                        填空题
+                                                    </Menu.Item>
+                                                </Menu>)}>
+                                                <Button>{value.type}</Button>
+                                                </Dropdown>
+                                                <Button  onClick={() => {
+                                                    this.submitContent(index)
+                                                }} style={{marginTop: '10px'}}>保存题干</Button>
+                                            </Col>
+                                            <Col span={2} offset={1}>
+                                                <Button type="primary" onClick={() => {
+                                                    this.addBig(index, "题目")
+                                                }} style={{}}>添加题目</Button>
+                                                <Button  onClick={() => {
+                                                    this.deleteBig(index)
+                                                }} style={{marginTop: '10px'}}>删除题目</Button>
+                                            </Col>
+                                        </Row>
+
                                         <List
                                             rowKey={(text, record) => text.key}
                                             bordered
                                             dataSource={value.content}
                                             renderItem={item => (
-                                                <List.Item actions={[<Button type="danger" onClick={() => {
+                                                <List.Item actions={[<Button onClick={() => {
                                                     this.deleteSmall(index, item)
                                                 }} style={{marginLeft: '10px'}}>删除选项</Button>]}>
                                                     <List.Item.Meta
@@ -534,7 +574,7 @@ class Assign extends React.Component {
     };
     addBig = (index, smallName) => {
         let chapterString = 'chapter' + (index + 2);
-        let chapterName = {title: smallName, content: []};
+        let chapterName = {title: smallName, content: [],type:'选择题',text:''};
         let modifiedSyllabus = this.state.syllabus;
         for (let i = modifiedSyllabus.chapterNum; i > index + 1; --i) {
             let prvChapter = 'chapter' + i;
@@ -558,6 +598,17 @@ class Assign extends React.Component {
         console.log(modifiedSyllabus);
         this.setState({syllabus: modifiedSyllabus});
     };
+
+    submitContent(index) {
+        let value = document.getElementById('assignTextarea').value;
+        let chapterString = 'chapter' + (index + 1);
+        let modifiedSyllabus = this.state.syllabus;
+        let chapterName = modifiedSyllabus[chapterString];
+        chapterName.text = value;
+        modifiedSyllabus[chapterString] = chapterName;
+        console.log(modifiedSyllabus);
+        this.setState({syllabus: modifiedSyllabus});
+    }
 }
 
 export default Assign

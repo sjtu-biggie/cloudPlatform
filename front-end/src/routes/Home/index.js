@@ -42,13 +42,14 @@ class Home extends React.Component {
         const result=await axios(config).then(msg=>{
             this.setState({
                 role:type
-            })
+            });
+            localStorage.setItem("type",type);
             console.log(msg.data);
         }).catch(err=>{
             console.log(err)
         })
 
-    }
+    };
 
     getUserInfo = async (username) => {
 

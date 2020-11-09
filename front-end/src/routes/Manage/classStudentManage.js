@@ -176,7 +176,6 @@ export default class ClassManage extends Component {
             });
         };
 
-
         this.addSearch = (selectedKeys, dataIndex) => {
             const {addData,addDataRender} = this.state;
             console.log("this is a try");
@@ -219,7 +218,7 @@ export default class ClassManage extends Component {
                 }).then(msg=>{
                     console.log(msg.data);
                     let filterData=msg.data.filter(item=>
-                        item.theClass!==this.state.classChoose
+                        item.theClass!==this.state.classChoose&&item.type!=="teacher"&&item.type!=="manager"
                     );
                     console.log(filterData);
                     this.setState({
@@ -243,17 +242,21 @@ export default class ClassManage extends Component {
             console.log(record["theClass"]);
             record["theClass"] = classChoose;
             console.log(record);
+            this.addStudentToClassAxios(record);
+        }
+
+        this.addStudentToClassAxios=(item)=>{
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8000/addStudentToClass',
                 data: {
-                    username: record.username,
-                    theClass: record.theClass,
+                    username: item.username,
+                    theClass: item.theClass,
                 }
             }).then(msg => {
                 console.log(msg);
-                var tos = [];
-                tos.push(record.email);
+                let tos = [];
+                tos.push(item.email);
                 axios({
                     method: 'POST',
                     url: 'http://106.13.209.140:8000/sendNotice',
@@ -374,6 +377,26 @@ export default class ClassManage extends Component {
                 })
             }
         };
+
+        this.addMulti=()=>{
+            const {addData,addDataRender,modifyIds,orData,renderData,classChoose} = this.state;
+            let chosenData=addDataRender.filter(item=>modifyIds.includes(item.username));
+            let chosenDataNew=chosenData.map(item=>{
+                item["theClass"]=classChoose;
+                this.addStudentToClassAxios(item);
+                return item;
+            })
+            let addDataNew=addData.filter(item=>!modifyIds.includes(item.username));
+            let addDataRenderNew=addDataRender.filter(item=>!modifyIds.includes(item.username));
+            let orDataNew=[...chosenDataNew,...orData];
+            let renderDataNew=[...chosenDataNew,...renderData];
+            this.setState({
+                orData:orDataNew,
+                renderData:renderDataNew,
+                addData:addDataNew,
+                addDataRender:addDataRenderNew,
+            })
+        }
     }
 
     componentDidMount() {
@@ -438,7 +461,6 @@ export default class ClassManage extends Component {
 
     }
 
-
     // this.handleSearch2 = () => {
     //     const { orData2, search2 } = this.state;
     //     const filterData = orData2.filter(row => {
@@ -465,8 +487,6 @@ export default class ClassManage extends Component {
     //     });
     //     this.setState({ renderData2: filterData });
     // };
-
-
     render() {
         const {orData, search, renderData, modifyIds,addDataRender, addData} = this.state;
 
@@ -475,8 +495,8 @@ export default class ClassManage extends Component {
                 <Card title={<div style={{textAlign: "center"}}>管理班级名单</div>}>
                     <Card className={styles.control} bordered={false} style={{marginBottom: 10}}>
                         <Row>
-                            <Col span={8}>
-                                <Input style={{width: 560, marginRight: 16}}
+                            <Col span={10}>
+                                <Input
                                        value={search}
                                        allowClear
                                        onChange={event => this.setState({search: event.target.value})}/>
@@ -485,28 +505,21 @@ export default class ClassManage extends Component {
                                 <Button type={"primary"}
                                         onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Col>
-                            <Col span={4} offset={9}>
-
-                                {/*<Col span={4}>*/}
-                                {/*    <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}}*/}
-                                {/*                     block='true'*/}
-                                {/*                     placement="bottomCenter">*/}
-                                {/*        {this.state.classChoose}*/}
-                                {/*    </Dropdown.Button>*/}
-                                {/*</Col>*/}
+                            <Col span={2} offset={6}>
                                 <Dropdown overlay={this.state.menu} trigger={['click']}>
                                     <Button style={{width: "110px"}}><span id="courseButton">选择班级</span> <Icon
                                         type="down"/></Button>
                                 </Dropdown>
-                                <Button style={{marginLeft: '20px',width:'110px'}} onClick={this.addStudent}>
-                                    添加学生
-                                </Button>
                             </Col>
+                                <Col span={2} offset={1}>
+                                    <Button style={{marginLeft: '20px',width:'110px'}} onClick={this.addStudent} disabled={this.state.classChoose===''}>
+                                        添加学生
+                                    </Button>
+                                </Col>
 
 
                         </Row>
                     </Card>
-
 
                     <Drawer
                         title="创建新的班级"
@@ -523,14 +536,28 @@ export default class ClassManage extends Component {
                     </Drawer>
 
                     {this.state.addNewStudent === true ?
-                        <Card bordered={false} style={{marginBottom: 10}} title={<div style={{textAlign:"center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>}>
+                        <Card bordered={false} style={{marginBottom: 10}}>
+                            <Card style={{marginBottom:10}}>
+                                <Row>
+                                    <Col span={4}>
+                                        <Button size={"large"} onClick={this.addMulti}>确定添加</Button>
+                                    </Col>
+                                    <Col offset={3} span={10}>
+                                        <div style={{textAlign:"center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>
+                                    </Col>
+                                </Row>
+                            </Card>
                         <Table
-                        rowKey={'sid'}
-                        columns={[...columns1.map(item => ({
-                            ...item,
-                            render: (text, record) =>
-                                <EditText>{text}</EditText>,
-                        })), {
+                        rowKey={'username'}
+                        columns={[
+                            ...columns1
+                            // ...columns1.map(item => ({
+                            // ...item,
+                            // render: (text, record) =>
+                            //     <EditText>{text}</EditText>,
+                            // }))
+                            ,
+                            {
                             name: '操作',
                             key: 'del',
                             render: record => (
@@ -551,9 +578,19 @@ export default class ClassManage extends Component {
                                     });
                                 }}>添加</Button>),
                         }]}
-                        dataSource={addDataRender}/></Card> : ''}
+                        dataSource={addDataRender}
+                        rowSelection={{
+                            type: 'checkbox',
+                            selectedRowKeys: modifyIds,
+                            onChange: ids => this.setState({modifyIds: ids}),
+                        }}
+                        /></Card> : ''}
 
-
+                    {this.state.classChoose===''?
+                        <Card style={{textAlign:'center',fontWeight:"bold",fontSize:'30px'}}>
+                            请先选择班级
+                        </Card>
+                        :
                     <Card bordered={false} style={{marginBottom: 10, height: 800}}>
                         <Card title={<div style={{textAlign: "center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>{this.state.classChoose}</div>}>
                         <Table
@@ -603,22 +640,10 @@ export default class ClassManage extends Component {
                             dataSource={renderData}/>
                         </Card>
                     </Card>
+                    }
+
                 </Card>
             </div>
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

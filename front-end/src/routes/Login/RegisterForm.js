@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Form, Input, message,Row,Col,Button } from 'antd'
+import  { Card,Form, Input, message,Row,Col,Button } from 'antd'
 import { inject, observer } from 'mobx-react/index'
 import { calculateWidth } from '../../utils/utils'
 import PromptBox from '../../components/PromptBox'
@@ -156,15 +156,13 @@ class RegisterForm extends React.Component {
 
     return (
       <div  className={this.props.className}>
-        {/*<Row>*/}
-        {/*  <Col span={12}>*/}
-        {/*  <span className='title'>注册</span>*/}
-        {/*  </Col>*/}
-        {/*  /!*<Col span={12}>*!/*/}
-        {/*  /!*  <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>*!/*/}
-        {/*  /!*</Col>*!/*/}
-        {/*</Row>*/}
-
+        <div style={{height:'40px'}}>
+        <Row>
+          <Col span={24}>
+          <h3 style={{textAlign:'center'}} className='title'>注册页面</h3>
+          </Col>
+        </Row>
+        </div>
         <Form onSubmit={this.registerSubmit}>
           <Form.Item help={getFieldError('registerUsername') && <PromptBox info={getFieldError('registerUsername')}
                                                                            width={calculateWidth(getFieldError('registerUsername'))}/>}>
@@ -316,16 +314,14 @@ class RegisterForm extends React.Component {
 
 
             <Row className="bottom">
-              <Col span={6}>
+              <Col offset={1} span={8}>
                 <input className='registerBtn' type="submit" value='注册'/>
               </Col>
-              <Col span={6}>
+              <Col span={8}>
                 <span className='registerBtn' onClick={()=>this.setState({isPhone:!this.state.isPhone})}>{this.state.isPhone===false?"手机注册":"邮箱注册"}</span>
               </Col>
-            </Row>
-          <Row className="bottom">
-              <Col span={6}>
-                <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>
+              <Col  span={7}>
+                <span className='registerBtn' style={{textAlign:'center'}} onClick={this.gobackLogin}>返回登录</span>
               </Col>
             </Row>
         </Form>

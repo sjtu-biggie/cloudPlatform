@@ -20,6 +20,7 @@ class SiderNav extends React.Component {
         this.getUserInfo(role);
     };
     getUserInfo=(role)=>{
+        console.log(role);
         if(role==='student'){
             this.setState({
                 menus: [
@@ -36,7 +37,7 @@ class SiderNav extends React.Component {
                             {key: '/home/course/overall', title: '所有课程', icon: '',},
                             {
                                 key: '/home/course/ongoing',
-                                title: this.state.role === 'student' ? '正在进行' : '正在授课',
+                                title: role === 'student' ? '正在进行' : '正在授课',
                                 icon: '',
                             },
                             {key: '/home/course/end', title: '已结束', icon: '',},
@@ -48,8 +49,8 @@ class SiderNav extends React.Component {
                         key: '/home/homework',
                         subs: [
                             {key: '/home/homework/overall', title: '所有作业', icon: ''},
-                            {key: '/home/homework/submitted', title: this.state.role === 'student' ? '已交' : '已收齐', icon: ''},
-                            {key: '/home/homework/uncommitted', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
+                            {key: '/home/homework/submitted', title: role === 'student' ? '已交' : '已收齐', icon: ''},
+                            {key: '/home/homework/uncommitted', title: role === 'student' ? '未交' : '未收齐', icon: ''},
                             {key: '/home/homework/closed', title: '已截止', icon: ''},
                             {key: '/home/homework/notclosed', title: '未截止', icon: ''},
                         ]
@@ -106,7 +107,7 @@ class SiderNav extends React.Component {
                             {key: '/home/course/overall', title: '所有课程', icon: '',},
                             {
                                 key: '/home/course/ongoing',
-                                title: this.state.role === 'student' ? '正在进行' : '正在授课',
+                                title: role === 'student' ? '正在进行' : '正在授课',
                                 icon: '',
                             },
                             {key: '/home/course/end', title: '已结束', icon: '',},
@@ -118,8 +119,8 @@ class SiderNav extends React.Component {
                         key: '/home/homework',
                         subs: [
                             {key: '/home/homework/overall', title: '所有作业', icon: ''},
-                            {key: '/home/homework/submitted', title: this.state.role === 'student' ? '已交' : '已收齐', icon: ''},
-                            {key: '/home/homework/uncommitted', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
+                            {key: '/home/homework/submitted', title: role === 'student' ? '已交' : '已收齐', icon: ''},
+                            {key: '/home/homework/uncommitted', title: role === 'student' ? '未交' : '未收齐', icon: ''},
                             {key: '/home/homework/closed', title: '已截止', icon: ''},
                             {key: '/home/homework/notclosed', title: '未截止', icon: ''},
                         ]

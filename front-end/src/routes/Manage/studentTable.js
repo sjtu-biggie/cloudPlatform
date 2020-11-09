@@ -45,7 +45,7 @@ columns.map(item => {
 
 columns1.map(item => {
     item.sorter = (a, b) => {
-        if (!isNaN(a[item.dataIndex]) && !isNan(b[item.dataIndex])) {
+        if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
             return a[item.dataIndex] - b[item.dataIndex];
         }
         const aa = a[item.dataIndex] || '';
@@ -63,7 +63,6 @@ class EditText extends Component {
             editValue: props.children,
         };
     }
-
     render() {
         const {edit, editValue} = this.state;
         return (edit ? <Input autoFocus style={{width: 100}}
@@ -102,6 +101,40 @@ export default class Manager extends Component {
 
 
         columns.forEach(item => {
+            const {dataIndex, title} = item;
+            item.filterDropdown = ({setSelectedKeys, selectedKeys, confirm}) => (
+                <div style={{padding: 8}}>
+                    <Input
+                        allowClear
+                        ref={this.searchInput}
+                        placeholder={`搜索 ${title}`}
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={confirm}
+                        style={{width: 188, marginBottom: 8, display: 'block'}}
+                    />
+                    <Button
+                        type="primary"
+                        onClick={confirm}
+                        size="small"
+                        style={{width: 90}}
+                    >
+                        搜索
+                    </Button>
+                </div>
+            );
+            item.onFilter = (value, record) =>
+                record[dataIndex]
+                    ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+                    : '';
+            item.onFilterDropdownVisibleChange = visible => {
+                if (visible) {
+                    setTimeout(() => this.searchInput.current.select(), 100);
+                }
+            };
+        });
+
+        columns1.forEach(item => {
             const {dataIndex, title} = item;
             item.filterDropdown = ({setSelectedKeys, selectedKeys, confirm}) => (
                 <div style={{padding: 8}}>
@@ -274,7 +307,7 @@ export default class Manager extends Component {
                     // console.log(item.sid);
                     // console.log(mySids.indexOf(item.sid.toLocaleString()));
                     // console.log(mySids.includes(item.sid));
-                    if (!mySids.includes(item.sid)) {
+                    if (!mySids.includes(item.sid)&&item.type!=="teacher"&&item.type!=="manager") {
                         return item;
                     }
                     return null;
@@ -515,7 +548,8 @@ export default class Manager extends Component {
                                         type: 'checkbox',
                                         selectedRowKeys: modifyIds,
                                         onChange: ids => this.setState({modifyIds: ids}),
-                                    }}/>
+                                    }}
+                                />
                             </Card>
                         </Card>
                     </Col>

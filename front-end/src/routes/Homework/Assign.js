@@ -80,12 +80,17 @@ class Assign extends React.Component {
         courseId: null,
         option: null,
         loading: false,
+        conUpload: null,
+        ansUpload: null,
+        conFile:null,
+        ansFile:null,
+        handinAmount:0,
+        course:null,
     };
 
     add0 = (m) => {
         return m < 10 ? '0' + m : m
     };
-
     format = (shijianchuo) => {
         let time = new Date(shijianchuo);
         let y = time.getFullYear();
@@ -101,8 +106,42 @@ class Assign extends React.Component {
         let storage = window.localStorage;
         let username = storage.getItem("username");
         this.getUserInfo(username);
+        this.getCourse(this.props.course.course.id);
     };
 
+    getStudentInfo = async (obj)=>{
+        let array = obj.split(',');
+        let ob = {
+            classIds: array
+        }
+        console.log(ob);
+        let config = {
+            method: 'post',
+            data : ob,
+            url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const studentInfo = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        let list1 = Array.from(studentInfo);
+        let count = 0;
+        for (let i = 0; i < list1.length;++i){
+            if (list1[i].type === 'student'){
+                count++;
+            }
+        }
+        console.log(count);
+        this.setState({
+            handinAmount: count,
+        })
+    };
 
     getUserInfo = async (username) => {
         let config = {
@@ -124,28 +163,49 @@ class Assign extends React.Component {
                 console.log(error);
             });
         console.log(user);
-        const options1 = [
-            {
-                label: user.theClass,
-                value: user.theClass,
-            }
-        ];
-        console.log(options1);
         this.setState({
             userInfo: user,
-            option: options1,
             loading: true,
         })
     };
 
+    getCourse = async (courseId) => {
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8787/course/getCourseById?courseId=' + courseId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const course = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        let classes = course.course.classes.split(",");
+        let options1 = [];
+        for (let i = 0; i < classes.length; ++i){
+            options1.push(
+                <Option key={classes[i]}>{classes[i]}</Option>
+            )
+        }
+        console.log(course);
+        this.setState({
+            option:options1,
+            course:course.course
+        })
+        this.getStudentInfo(course.course.classes);
+    };
 
     addHomework = async (homework) => {
+        console.log(homework);
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/addTeacherHomework',
-            data: {
-                'homework': homework
-            },
+            //url: 'http://localhost:8080/addTeacherHomework',
+            data: homework,
             headers: {
                 withCredentials: true,
             }
@@ -161,6 +221,17 @@ class Assign extends React.Component {
         console.log(hw);
         this.setState({
             homework: hw,
+            syllabus: {
+                chapterNum: 1,
+                chapter1: {
+                    title: "题目",
+                    type:'选择题',
+                    text:'请输入题干，若是填空题请显式标记出要填的空来，并和填空题的答案一一对应',
+                    content: [
+
+                    ]
+                }
+            },
         })
     };
 
@@ -178,38 +249,74 @@ class Assign extends React.Component {
         })
     };
 
-
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (err) {
                 message.warning('请先填写正确的表单')
             } else {
-                values.startDate = this.format(values.startDate);
-                values.endDate = this.format(values.endDate);
+                values.type = values.tp[0];
+                values.range = values.ran.join(',');
+                values.startTime = this.format(values.startDate);
+                values.endTime = this.format(values.endDate);
+                values.handinAmount = this.state.handinAmount;
+                values.teacherId = this.state.userInfo.username;
+                let tp = this.state.course.type;
+                let gra = this.state.course.grade;
+                values.subject = gra+tp;
                 if (values.startDate > values.endDate) {
                     message.error('开始时间不能晚于结束时间');
                 } else {
-                    console.log(this.props);
                     values.courseId = this.props.course.course.id;
                     if(values.type === '主观题'){
                         values.content = this.state.content;
+                        values.conUpload = this.state.conUpload;
                     }else{
-                        values.content = this.state.syllabus;
+                        values.syllabus = this.state.syllabus;
                     }
                     values.answer = this.state.answer;
+                    values.ansUpload = this.state.ansUpload;
                     this.setState({
                         homework: values,
                     });
-                    message.success('提交成功');
                     console.log(values);
+                    this.addHomework(values);
+                    message.success('提交成功');
+
                 }
             }
         });
     };
 
-    componentWillMount() {
+    getConUpload = (result, fileList) => {
+        this.setState({
+            conFile:fileList,
+        })
+        let conPath = [];
+        for(let i=0;i<fileList.length;i++){
+            conPath.push(fileList[i].response)
+        }
+        let conUpload=conPath.join(',')
+        this.setState({
+            conUpload: conUpload
+        })
+    }
 
+    getAnsUpload = (result, fileList) => {
+        this.setState({
+            ansFile:fileList,
+        })
+        let ansPath = [];
+        for(let i=0;i<fileList.length;i++){
+            ansPath.push(fileList[i].response)
+        }
+        let ansUpload = ansPath.join(',')
+        this.setState({
+            ansUpload: ansUpload
+        })
+    }
+
+    componentWillMount() {
         this.setState({
             courseId: this.props.course.id
         });
@@ -251,7 +358,6 @@ class Assign extends React.Component {
             },
         }
 
-        console.log();
         let i = 1;
         let chapterList = [];
         while (1) {
@@ -281,7 +387,7 @@ class Assign extends React.Component {
                         </FormItem>
                         <FormItem label='布置范围' {...formItemLayout} required>
                             {
-                                getFieldDecorator('range', {
+                                getFieldDecorator('ran', {
                                     rules: [
                                         {
                                             required: true,
@@ -289,14 +395,21 @@ class Assign extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <Cascader options={this.state.loading === false ? options1 : this.state.option}
-                                              expandTrigger="hover" placeholder=''/>
+                                    // <Cascader options={this.state.loading === false ? options1 : this.state.option}
+                                    //           expandTrigger="hover" placeholder=''/>
+                                    <Select
+                                        mode="multiple"
+                                        allowClear
+                                    >
+                                        {this.state.option}
+                                    </Select>
+
                                 )
                             }
                         </FormItem>
                         <FormItem label='作业类型' {...formItemLayout} required>
                             {
-                                getFieldDecorator('type', {
+                                getFieldDecorator('tp', {
                                     rules: [
                                         {
                                             required: true,
@@ -422,7 +535,7 @@ class Assign extends React.Component {
                                 <FormItem label='上传作业附件' {...formItemLayout} >
                                     {
                                         (
-                                            <UploadDemo/>
+                                            <UploadDemo parent={this} flag='content'/>
                                         )
                                     }
                                 </FormItem>
@@ -436,7 +549,7 @@ class Assign extends React.Component {
                                 <FormItem label='上传答案附件' {...formItemLayout} >
                                     {
                                         (
-                                            <UploadDemo/>
+                                            <UploadDemo parent={this} flag='answer'/>
                                         )
                                     }
                                 </FormItem></div> : <div>
@@ -592,6 +705,7 @@ class Assign extends React.Component {
     };
     deleteBig = (index) => {
         let modifiedSyllabus = this.state.syllabus;
+        if(modifiedSyllabus.chapterNum===1) return;
         for (let i = index + 1; i < modifiedSyllabus.chapterNum; ++i) {
             let prvChapter = 'chapter' + i;
             let mdfChapter = 'chapter' + (i + 1);

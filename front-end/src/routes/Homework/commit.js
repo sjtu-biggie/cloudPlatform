@@ -74,7 +74,6 @@ class HomeworkCommit extends React.Component{
         console.log(this.state.homework)
 
         let obj={
-            file:this.state.file,
             homework:this.state.homework,
         }
 
@@ -142,6 +141,7 @@ class HomeworkCommit extends React.Component{
                     <Button type="primary"  onClick={()=>this.postObject()}>{this.state.homework.handinTime!==null?"重新提交":"提交"}</Button>&emsp;
                 </Card>
             </div>
+
         )
     }
 }

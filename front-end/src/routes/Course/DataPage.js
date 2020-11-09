@@ -59,9 +59,7 @@ class DataPage extends React.Component {
     return (
       <div>
         <RankData courseId={this.props.match.params.courseId} userId={this.props.match.params.userId} seeCourseAverage={true} seeHomeworkAverage = {true} />
-
       </div>
-
     )
   }
 }

@@ -33,7 +33,8 @@ class HomeworkCommit extends React.Component{
         handinTime:"",
         file:[],
         homework:[],
-        path:[]
+        path:[],
+        endTime:"",
     };
 
     uploadFilesChange(file) {
@@ -46,7 +47,7 @@ class HomeworkCommit extends React.Component{
         // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
         this.setState({
             homework:homework,
-            content:homework.content
+            content:homework.content,
         })
     }
 
@@ -137,15 +138,13 @@ class HomeworkCommit extends React.Component{
             <div>
                 <CustomBreadcrumb arr={['作业','提交']}/>
                 <Card  bordered={false} className='card-item' title={this.state.homework.title} style={{minHeight:200}}>
-
                     <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
-
-                    <Card bordered={false} className='card-item'>
+                    {new Date(Date.parse(this.state.homework.endTime))>new Date()?<Card bordered={false} className='card-item'>
                         <RichText parent={this}></RichText>
-                    </Card>
+                    </Card>:<br/>}
+
                     <Card title="作业内容" >
                         <p>{this.state.content}</p>
-
                     </Card> <br/>
                     <Card title="批改内容"  >
                         <p>{this.state.homework.correct}</p>

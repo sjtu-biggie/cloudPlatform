@@ -515,7 +515,8 @@ export default class Manager extends Component {
                                         type: 'checkbox',
                                         selectedRowKeys: modifyIds,
                                         onChange: ids => this.setState({modifyIds: ids}),
-                                    }}/>
+                                    }}
+                                />
                             </Card>
                         </Card>
                     </Col>

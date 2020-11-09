@@ -176,7 +176,6 @@ export default class ClassManage extends Component {
             });
         };
 
-
         this.addSearch = (selectedKeys, dataIndex) => {
             const {addData,addDataRender} = this.state;
             console.log("this is a try");
@@ -498,7 +497,7 @@ export default class ClassManage extends Component {
                                     <Button style={{width: "110px"}}><span id="courseButton">选择班级</span> <Icon
                                         type="down"/></Button>
                                 </Dropdown>
-                                <Button style={{marginLeft: '20px',width:'110px'}} onClick={this.addStudent}>
+                                <Button style={{marginLeft: '20px',width:'110px'}} onClick={this.addStudent} disabled={this.state.classChoose===''}>
                                     添加学生
                                 </Button>
                             </Col>
@@ -523,7 +522,17 @@ export default class ClassManage extends Component {
                     </Drawer>
 
                     {this.state.addNewStudent === true ?
-                        <Card bordered={false} style={{marginBottom: 10}} title={<div style={{textAlign:"center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>}>
+                        <Card bordered={false} style={{marginBottom: 10}}>
+                            <Card style={{marginBottom:10}}>
+                                <Row>
+                                    <Col span={4}>
+                                        <Button size={"large"}>确定添加</Button>
+                                    </Col>
+                                    <Col offset={3} span={10}>
+                                        <div style={{textAlign:"center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>
+                                    </Col>
+                                </Row>
+                            </Card>
                         <Table
                         rowKey={'sid'}
                         columns={[
@@ -555,7 +564,13 @@ export default class ClassManage extends Component {
                                     });
                                 }}>添加</Button>),
                         }]}
-                        dataSource={addDataRender}/></Card> : ''}
+                        dataSource={addDataRender}
+                        rowSelection={{
+                            type: 'checkbox',
+                            selectedRowKeys: modifyIds,
+                            onChange: ids => this.setState({modifyIds: ids}),
+                        }}
+                        /></Card> : ''}
 
 
                     <Card bordered={false} style={{marginBottom: 10, height: 800}}>

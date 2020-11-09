@@ -29,16 +29,20 @@ class PersonalCenter extends React.Component {
         })
         this.props.form.validateFields((err, values) => {
             if (!err) {
-
                 const obj =  {
+                    iconBase64: this.state.userInfo.iconBase64,
+                    password: this.state.userInfo.password,
+                    sid:this.state.userInfo.sid,
+                    theClass:this.state.userInfo.theClass,
+                    theGrade: this.state.userInfo.theGrade,
+                    type: this.state.userInfo.type,
+                    username:this.state.userInfo.username,
                     nickname: values.name,
                     email:values.Email,
                     telephone:values.Phonenumber,
                 };
-
                 console.log(obj);
                 this.updateUserInfo(obj);
-
                 message.success('提交成功')
             }
         });

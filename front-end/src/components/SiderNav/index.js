@@ -238,7 +238,7 @@ class SiderNav extends React.Component {
     render() {
 
         return (
-            <div style={{height: '100vh', overflowY: 'scroll'}}>
+            <div style={{height: '100vh', overflowY: 'scroll',position:'fixed'}}>
                 <div style={{}}>
 
                     <div style={styles.logo}><p

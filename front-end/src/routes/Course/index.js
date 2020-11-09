@@ -4,6 +4,7 @@ import axios from 'axios'
 import {withRouter} from 'react-router'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import Search from "antd/es/input/Search";
+import Loading2 from "../../components/Loading2";
 
 const IconText = ({type, text}) => (
     <span>
@@ -23,7 +24,7 @@ class CourseDemo extends React.Component {
         size: 'default',
         bordered: true,
         data2: [],
-        loading: false,
+        loading: true,
         loadingMore: false,
         deleteCourses: false,
     };
@@ -123,9 +124,7 @@ class CourseDemo extends React.Component {
             this.setState({type: 2});
         }
         this.getCourses(type, 0);
-        this.setState({
-            loading: false
-        });
+
 
     }
 
@@ -170,6 +169,7 @@ class CourseDemo extends React.Component {
                                     displayCourses: res,
                                     typeCourses: res,
                                     gradeCourses: res,
+                                    loading:false,
                                 });
                             }
                         )
@@ -204,6 +204,7 @@ class CourseDemo extends React.Component {
                                         displayCourses: res,
                                         typeCourses: res,
                                         gradeCourses: res,
+                                        loading:false,
                                     });
                                 }
                             )
@@ -235,6 +236,7 @@ class CourseDemo extends React.Component {
                                         displayCourses: res,
                                         typeCourses: res,
                                         gradeCourses: res,
+                                        loading:false,
                                     });
                                 }
                             )
@@ -246,6 +248,7 @@ class CourseDemo extends React.Component {
                         displayCourses: [],
                         typeCourses: [],
                         gradeCourses: [],
+                        loading:false,
                     });
                 }
                 break;
@@ -277,6 +280,7 @@ class CourseDemo extends React.Component {
                                         displayCourses: res,
                                         typeCourses: res,
                                         gradeCourses: res,
+                                        loading:false,
                                     });
                                 }
                             )
@@ -308,6 +312,7 @@ class CourseDemo extends React.Component {
                                         displayCourses: res,
                                         typeCourses: res,
                                         gradeCourses: res,
+                                        loading:false,
                                     });
                                 }
                             )
@@ -319,6 +324,7 @@ class CourseDemo extends React.Component {
                         displayCourses: [],
                         typeCourses: [],
                         gradeCourses: [],
+                        loading:false,
                     });
                 }
                 break;
@@ -536,161 +542,170 @@ class CourseDemo extends React.Component {
                 </Menu.SubMenu>
             </Menu>
         );
-        return (
-            <div>
-                <CustomBreadcrumb
-                    arr={['课程', this.state.type === 0 ? "所有课程" : this.state.type === 1 ? "正在进行" : "已结束"]}/>
+        if(this.state.loading){
+            return             <div>
+                <h3 style={styles.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
+                <Loading2/>
+            </div>
+        }else{
+            return (
 
-                <Card bordered={false} style={{marginBottom: 10}} id="howUse">
+                <div>
+                    <CustomBreadcrumb
+                        arr={['课程', this.state.type === 0 ? "所有课程" : this.state.type === 1 ? "正在进行" : "已结束"]}/>
 
-                    <Form layout='horizontal' style={{width: '70%', float: 'left'}} onSubmit={this.handleSubmit}>
-                        <Form.Item label='搜索'>
-                            {
-                                (
-                                    <Search
-                                        placeholder="输入课程名称"
-                                        enterButton="搜索"
-                                        size="default"
-                                        onSearch={value => {
-                                            this.searchFun(value)
-                                        }}
-                                    />
-                                )
-                            }
-                        </Form.Item>
-                    </Form>
-                    <Dropdown overlay={menu1} trigger={['click']} style={{marginTop: '30px'}}>
-                        <Button style={{width: "10%", marginLeft: '30px'}}><span id="courseButton">学科</span> <Icon
-                            type="down"/></Button>
-                    </Dropdown>
-                    <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
-                        <Button id="gradeButton" style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
-                            type="down"/></Button>
-                    </Dropdown>
-                </Card>
-                {
-                    this.state.role === 'student' ? null :
-                        <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
-                            <Row/>
-                            <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large'
-                                    onClick={() => {
-                                        this.props.history.push('/home/course/addCourse');
-                                    }}>创建一门新的课程</Button>
+                    <Card bordered={false} style={{marginBottom: 10}} id="howUse">
 
-                            <p style={{
-                                float: 'left',
-                                color: 'grey',
-                                marginLeft: '40px',
-                                height: '90px'
-                            }}>各位老师，若要修改具体课程内容，请从下方进入课程主页!</p>
-                        </Card>
-                }
-                <Card>
-                    <Row>
-                        <Col span={18}>
-                    <span style={{float: 'left'}}>课程列表</span>
-                        </Col>
-                        <Col span={6}>
-                            <img style={{ marginLeft: '80px'}}
-                                 width={30} alt="logo"
-                                 src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
-                            <span style={{ marginLeft: '5px'}}>正在进行</span>
+                        <Form layout='horizontal' style={{width: '70%', float: 'left'}} onSubmit={this.handleSubmit}>
+                            <Form.Item label='搜索'>
+                                {
+                                    (
+                                        <Search
+                                            placeholder="输入课程名称"
+                                            enterButton="搜索"
+                                            size="default"
+                                            onSearch={value => {
+                                                this.searchFun(value)
+                                            }}
+                                        />
+                                    )
+                                }
+                            </Form.Item>
+                        </Form>
+                        <Dropdown overlay={menu1} trigger={['click']} style={{marginTop: '30px'}}>
+                            <Button style={{width: "10%", marginLeft: '30px'}}><span id="courseButton">学科</span> <Icon
+                                type="down"/></Button>
+                        </Dropdown>
+                        <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
+                            <Button id="gradeButton" style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
+                                type="down"/></Button>
+                        </Dropdown>
+                    </Card>
+                    {
+                        this.state.role === 'student' ? null :
+                            <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
+                                <Row/>
+                                <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large'
+                                        onClick={() => {
+                                            this.props.history.push('/home/course/addCourse');
+                                        }}>创建一门新的课程</Button>
 
-                            <img style={{ marginLeft: '80px'}}
-                                 width={30} alt="logo"
-                                 src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
-                            <span  style={{ marginLeft: '5px'}}>已截止</span>
+                                <p style={{
+                                    float: 'left',
+                                    color: 'grey',
+                                    marginLeft: '40px',
+                                    height: '90px'
+                                }}>各位老师，若要修改具体课程内容，请从下方进入课程主页!</p>
+                            </Card>
+                    }
+                    <Card>
+                        <Row>
+                            <Col span={18}>
+                                <span style={{float: 'left'}}>课程列表</span>
+                            </Col>
+                            <Col span={6}>
+                                <img style={{ marginLeft: '80px'}}
+                                     width={30} alt="logo"
+                                     src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
+                                <span style={{ marginLeft: '5px'}}>正在进行</span>
 
-                        </Col>
+                                <img style={{ marginLeft: '80px'}}
+                                     width={30} alt="logo"
+                                     src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
+                                <span  style={{ marginLeft: '5px'}}>已截止</span>
+
+                            </Col>
                         </Row>
                     </Card>
-                <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={this.state.displayCourses}
-                          itemLayout='vertical'
-                          pagination={{pageSize: 3}}
-                          style={styles.listStyle}
-                          renderItem={item => {
-                              return (
-                                  <List.Item style={{height: "210px"}}>
-                                      <Row>
-                                          <Col span={3} style={{fontSize: '15px'}}>
-                                              <img width={120} height={120} alt="logo"
-                                                   src={require('../../pic/teacher2.jpg')}
-                                                   style={{marginBottom: '6px'}}/>
-                                              <p style={{marginTop: '25px'}}><Icon type={"user"}/><span style={{
-                                                  fontWeight: 'bold',
-                                                  fontSize: 20,
-                                                  marginLeft: '10px',
-                                              }}>教师 ：</span><span style={{fontSize: 20}}>{item.course.nickname}</span>
-                                              </p>
-                                          </Col>
-                                          <Col span={17}>
-                                              <a style={{
-                                                  color: 'darkslategray',
-                                                  fontSize: '25px',
-                                                  fontWeight: 'bold',
-                                                  display: 'block'
-                                              }}
-                                                 href={"/home/course/class=" + item.course.id}>{item.course.courseName}</a>
-                                              <p style={{
-                                                  fontSize:'18px',
-                                                  marginTop: '10px',
-                                                  height: '90px'
-                                              }}>{item.courseInfo.introduction}</p>
-                                              <p style={{height: '20px'}}>
+                    <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
+                        <List dataSource={this.state.displayCourses}
+                              itemLayout='vertical'
+                              pagination={{pageSize: 3}}
+                              style={styles.listStyle}
+                              renderItem={item => {
+                                  return (
+                                      <List.Item style={{height: "210px"}}>
+                                          <Row>
+                                              <Col span={3} style={{fontSize: '15px'}}>
+                                                  <img width={120} height={120} alt="logo"
+                                                       src={require('../../pic/teacher2.jpg')}
+                                                       style={{marginBottom: '6px'}}/>
+                                                  <p style={{marginTop: '25px'}}><Icon type={"user"}/><span style={{
+                                                      fontWeight: 'bold',
+                                                      fontSize: 20,
+                                                      marginLeft: '10px',
+                                                  }}>教师 ：</span><span style={{fontSize: 20}}>{item.course.nickname}</span>
+                                                  </p>
+                                              </Col>
+                                              <Col span={17}>
+                                                  <a style={{
+                                                      color: 'darkslategray',
+                                                      fontSize: '25px',
+                                                      fontWeight: 'bold',
+                                                      display: 'block'
+                                                  }}
+                                                     href={"/home/course/class=" + item.course.id}>{item.course.courseName}</a>
+                                                  <p style={{
+                                                      fontSize:'18px',
+                                                      marginTop: '10px',
+                                                      height: '90px'
+                                                  }}>{item.courseInfo.introduction}</p>
+                                                  <p style={{height: '20px'}}>
                                                   <span
                                                       style={{marginRight: '30px', fontSize: 20}}><span
                                                       style={{fontWeight: 'bold'}}>类型：</span> {item.course.type}</span>
-                                                  <span style={{
-                                                      marginRight: '30px',
-                                                      fontSize: 20
-                                                  }}><span
-                                                      style={{fontWeight: 'bold'}}>年级： </span>{item.course.grade}</span>
-                                                  <span style={{
-                                                      marginRight: '30px',
-                                                      fontSize: 20
-                                                  }}><span
-                                                      style={{fontWeight: 'bold'}}>上课班级： </span>{item.course.classes}</span>
-                                              </p>
-                                          </Col>
-                                          <Col span={4}>
-                                              {item.course.end === true ?
-                                                  <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
-                                                       width={80} alt="logo"
-                                                       src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
-                                                  :
-                                                  <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
-                                                       width={80} alt="logo"
-                                                       src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
-                                              }
-                                              <p style={{marginTop: '30px'}}><IconText type={'calendar'}
-                                                                                       text={'开始时间：'}/>
-                                                  <span
-                                                      style={{marginRight: '30px'}}>{item.course.startDate}</span>
-                                              </p><p><IconText type={'calendar'}
-                                                               style={{marginLeft: '30px'}}
-                                                               text={'结束时间：'}/>
-                                              {item.course.endDate}</p>
+                                                      <span style={{
+                                                          marginRight: '30px',
+                                                          fontSize: 20
+                                                      }}><span
+                                                          style={{fontWeight: 'bold'}}>年级： </span>{item.course.grade}</span>
+                                                      <span style={{
+                                                          marginRight: '30px',
+                                                          fontSize: 20
+                                                      }}><span
+                                                          style={{fontWeight: 'bold'}}>上课班级： </span>{item.course.classes}</span>
+                                                  </p>
+                                              </Col>
+                                              <Col span={4}>
+                                                  {item.course.end === true ?
+                                                      <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
+                                                           width={80} alt="logo"
+                                                           src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
+                                                      :
+                                                      <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
+                                                           width={80} alt="logo"
+                                                           src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
+                                                  }
+                                                  <p style={{marginTop: '30px'}}><IconText type={'calendar'}
+                                                                                           text={'开始时间：'}/>
+                                                      <span
+                                                          style={{marginRight: '30px'}}>{item.course.startDate}</span>
+                                                  </p><p><IconText type={'calendar'}
+                                                                   style={{marginLeft: '30px'}}
+                                                                   text={'结束时间：'}/>
+                                                  {item.course.endDate}</p>
 
-                                          </Col>
-                                      </Row>
+                                              </Col>
+                                          </Row>
 
-                                  </List.Item>
-                              )
-                          }}
-                    />
-                </Card>
+                                      </List.Item>
+                                  )
+                              }}
+                        />
+                    </Card>
 
-                <BackTop visibilityHeight={200} style={{right: 50}}/>
-                {/*<Affix style={styles.affixBox}>*/}
-                {/*  <Anchor offsetTop={200} affix={false}>*/}
-                {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
-                {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
-                {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
-                {/*  </Anchor>*/}
-                {/*</Affix>*/}
-            </div>
-        )
+                    <BackTop visibilityHeight={200} style={{right: 50}}/>
+                    {/*<Affix style={styles.affixBox}>*/}
+                    {/*  <Anchor offsetTop={200} affix={false}>*/}
+                    {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
+                    {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
+                    {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
+                    {/*  </Anchor>*/}
+                    {/*</Affix>*/}
+                </div>
+            )
+        }
+
     }
 }
 
@@ -721,7 +736,16 @@ const styles = {
         top: 200,
         right: 50,
         with: 170
-    }
+    } ,loadingTitle:{
+        position:'fixed',
+        top:'50%',
+        left:'50%',
+        marginLeft: -45,
+        marginTop: -18,
+        color:'#000',
+        fontWeight:500,
+        fontSize:24
+    },
 };
 
 export default withRouter(CourseDemo)

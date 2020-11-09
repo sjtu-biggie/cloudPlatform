@@ -60,6 +60,7 @@ class Assign extends React.Component {
         text: '加载中',
         dfileList: [],
         disabled: false,
+        homeworkId:null,
         homework: {
             courseId: 0,
             homeworkId: 0,
@@ -86,6 +87,7 @@ class Assign extends React.Component {
         ansFile:null,
         handinAmount:0,
         course:null,
+        student:null,
     };
 
     add0 = (m) => {
@@ -109,10 +111,9 @@ class Assign extends React.Component {
         this.getCourse(this.props.course.course.id);
     };
 
-    getStudentInfo = async (obj)=>{
-        let array = obj.split(',');
+    getStudentInfo = async (values)=>{
         let ob = {
-            classIds: array
+            classIds: values.ran
         }
         console.log(ob);
         let config = {
@@ -131,16 +132,43 @@ class Assign extends React.Component {
                 console.log(error);
             });
         let list1 = Array.from(studentInfo);
-        let count = 0;
+        let list2 = [];
         for (let i = 0; i < list1.length;++i){
             if (list1[i].type === 'student'){
-                count++;
+                list2.push(list1[i]);
             }
         }
-        console.log(count);
+        console.log(list2);
         this.setState({
-            handinAmount: count,
+            handinAmount: list2.length,
+            student:list2
         })
+        values.startTime = this.format(values.startDate);
+        values.endTime = this.format(values.endDate);
+        values.handinAmount = this.state.handinAmount;
+        values.teacherId = this.state.userInfo.username;
+        let tp = this.state.course.type;
+        let gra = this.state.course.grade;
+        values.subject = gra+tp;
+        if (values.startDate > values.endDate) {
+            message.error('开始时间不能晚于结束时间');
+        } else {
+            values.courseId = this.props.course.course.id;
+            if(values.type === '主观题'){
+                values.content = this.state.content;
+                values.conUpload = this.state.conUpload;
+            }else{
+                values.syllabus = this.state.syllabus;
+            }
+            values.answer = this.state.answer;
+            values.ansUpload = this.state.ansUpload;
+            this.setState({
+                homework: values,
+            });
+            console.log(values);
+            this.addHomework(values);
+            message.success('提交成功');
+        }
     };
 
     getUserInfo = async (username) => {
@@ -196,15 +224,17 @@ class Assign extends React.Component {
             option:options1,
             course:course.course
         })
-        this.getStudentInfo(course.course.classes);
+
     };
 
-    addHomework = async (homework) => {
+    addStudentHomework = async (homework,studentId,nickname) => {
+        homework.studentId = studentId;
+        homework.nickname = nickname;
         console.log(homework);
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383/addTeacherHomework',
-            //url: 'http://localhost:8080/addTeacherHomework',
+            //url: 'http://106.13.209.140:8383/addStudentHomework',
+            url: 'http://localhost:8080/addStudentHomework',
             data: homework,
             headers: {
                 withCredentials: true,
@@ -219,8 +249,40 @@ class Assign extends React.Component {
                 console.log(error);
             });
         console.log(hw);
+    };
+
+    addHomework = async (homework) => {
+        console.log(homework);
+        let config = {
+            method: 'post',
+            //url: 'http://106.13.209.140:8383/addTeacherHomework',
+            url: 'http://localhost:8080/addTeacherHomework',
+            data: homework,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hwId = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hwId);
+        let stHw = {
+            homeworkId: hwId,
+            courseId:this.props.course.course.id,
+            startTime:homework.startTime,
+            endTime:homework.endTime,
+            subject:homework.subject,
+            title:homework.title,
+        }
+        for (let i = 0; i < this.state.student.length; ++i){
+            this.addStudentHomework(stHw,this.state.student[i].username,this.state.student[i].nickname);
+        }
         this.setState({
-            homework: hw,
+            homeworkId: hwId,
             syllabus: {
                 chapterNum: 1,
                 chapter1: {
@@ -257,33 +319,7 @@ class Assign extends React.Component {
             } else {
                 values.type = values.tp[0];
                 values.range = values.ran.join(',');
-                values.startTime = this.format(values.startDate);
-                values.endTime = this.format(values.endDate);
-                values.handinAmount = this.state.handinAmount;
-                values.teacherId = this.state.userInfo.username;
-                let tp = this.state.course.type;
-                let gra = this.state.course.grade;
-                values.subject = gra+tp;
-                if (values.startDate > values.endDate) {
-                    message.error('开始时间不能晚于结束时间');
-                } else {
-                    values.courseId = this.props.course.course.id;
-                    if(values.type === '主观题'){
-                        values.content = this.state.content;
-                        values.conUpload = this.state.conUpload;
-                    }else{
-                        values.syllabus = this.state.syllabus;
-                    }
-                    values.answer = this.state.answer;
-                    values.ansUpload = this.state.ansUpload;
-                    this.setState({
-                        homework: values,
-                    });
-                    console.log(values);
-                    this.addHomework(values);
-                    message.success('提交成功');
-
-                }
+                this.getStudentInfo(values);
             }
         });
     };

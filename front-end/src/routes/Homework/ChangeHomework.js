@@ -109,6 +109,34 @@ class ChangeHomework extends React.Component {
         })
     };
 
+    getConUpload = (result, fileList) => {
+        this.setState({
+            conFile:fileList,
+        })
+        let conPath = [];
+        for(let i=0;i<fileList.length;i++){
+            conPath.push(fileList[i].response)
+        }
+        let conUpload=conPath.join(',')
+        this.setState({
+            conUpload: conUpload
+        })
+    }
+
+    getAnsUpload = (result, fileList) => {
+        this.setState({
+            ansFile:fileList,
+        })
+        let ansPath = [];
+        for(let i=0;i<fileList.length;i++){
+            ansPath.push(fileList[i].response)
+        }
+        let ansUpload = ansPath.join(',')
+        this.setState({
+            ansUpload: ansUpload
+        })
+    }
+
     editHomework = async (homework)=>{
         let config = {
             method: 'post',
@@ -214,32 +242,18 @@ class ChangeHomework extends React.Component {
                                 )
                             }
                         </FormItem>
-                        <FormItem label='布置范围' {...formItemLayout} required>
+                        <FormItem label='布置范围' {...formItemLayout}>
                             {
-                                getFieldDecorator('range', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请选择布置班级'
-                                        }
-                                    ]
-                                })(
-                                    <Cascader disabled={this.state.ableState} options={options} expandTrigger="hover" placeholder={this.state.homework.range}/>
+                                (
+                                    <Cascader disabled options={options} expandTrigger="hover" placeholder={this.state.homework.range}/>
                                 )
                             }
                         </FormItem>
-                        <FormItem label='作业类型' {...formItemLayout} required>
+                        <FormItem label='作业类型' {...formItemLayout}>
                             {
-                                getFieldDecorator('type', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请选择作业类型'
-                                        }
-                                    ]
-                                })
+
                                 (
-                                    <Cascader  style={{width: 100}} disabled={this.state.ableState} options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
+                                    <Cascader  style={{width: 100}} disabled options={options2} expandTrigger="hover" placeholder={this.state.homework.type}/>
                                 )
                             }
                         </FormItem>

@@ -274,7 +274,7 @@ export default class Manager extends Component {
                     // console.log(item.sid);
                     // console.log(mySids.indexOf(item.sid.toLocaleString()));
                     // console.log(mySids.includes(item.sid));
-                    if (!mySids.includes(item.sid)) {
+                    if (!mySids.includes(item.sid)&&item.type!=="teacher"&&item.type!=="manager") {
                         return item;
                     }
                     return null;

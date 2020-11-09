@@ -34,7 +34,13 @@ class UploadDemo extends React.Component {
     }
 
     toParent = () => {
-        this.props.parent.getUploadMsg(this, this.state.fileList)
+        if (this.props.flag === 'content'){
+            this.props.parent.getConUpload(this, this.state.fileList)
+        }
+        else if (this.props.flag === 'answer'){
+            this.props.parent.getAnsUpload(this, this.state.fileList)
+        }
+        else this.props.parent.getUploadMsg(this, this.state.fileList)
     }
 
     beforeUpload(file, fileList) {

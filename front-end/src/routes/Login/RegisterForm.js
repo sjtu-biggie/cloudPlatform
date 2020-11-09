@@ -16,8 +16,9 @@ class RegisterForm extends React.Component {
       focusItem: -1,
       isPhone:false,
       to:'',
-      count:60,
+      count:10,
       display:true,
+
     };
   }
 
@@ -31,6 +32,7 @@ class RegisterForm extends React.Component {
 
   countDown=()=>{
     const {count} =this.state;
+    console.log("开始计时现在时间为"+count);
     if(count===1){
       message.info("请重新要求发送验证码");
       this.setState({
@@ -45,6 +47,7 @@ class RegisterForm extends React.Component {
   }
 
   sendVeriCode=()=>{
+    console.log("开始发送验证码");
     console.log(this.state.to);
     var url=this.state.isPhone?'http://106.13.209.140:8000/sendMessage':'http://106.13.209.140:8000/sendEmail';
     axios({
@@ -61,7 +64,7 @@ class RegisterForm extends React.Component {
       console.log(err);
     })
 
-
+    this.countDown();
   };
 
   registerSubmit = async (e) => {

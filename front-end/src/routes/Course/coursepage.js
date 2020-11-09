@@ -69,7 +69,8 @@ class CoursePageDemo extends React.Component {
         addContent: false,
         lookStudentData: false,
         displayHomeworkList: [],
-        teacher:{}
+        teacher:{},
+        end:false,
     };
 
     componentWillMount() {
@@ -133,6 +134,12 @@ class CoursePageDemo extends React.Component {
                 withCredentials: true,
             }
         };
+        if (course.course.userId === username) {
+            this.setState({role: "teacher"})
+        }
+        if (new Date(course.course.endDate).getTime() < (new Date()).getTime()) {
+            this.setState({end:true})
+        }
         const courseList = await axios(config2)
             .then(function (response) {
                 console.log(response.data);
@@ -148,6 +155,7 @@ class CoursePageDemo extends React.Component {
                 withCredentials: true,
             }
         };
+
         const courseList2 = await axios(config3)
             .then(function (response) {
                 console.log(response.data);
@@ -210,7 +218,7 @@ class CoursePageDemo extends React.Component {
         //TODO:传参给FormDemo1
         return (
             <div>
-                {this.state.role === 'teacher' ?
+                {this.state.role === 'teacher'&&this.state.end ===false ?
                     <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
                         <Row/>
                         <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
@@ -294,7 +302,7 @@ class CoursePageDemo extends React.Component {
 
         return (
             <div>
-                {this.state.role === 'teacher' ? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
+                {this.state.role === 'teacher' &&this.state.end ===false? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
                     <Row/>
                     <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
                         this.setState({modifyCourse: true, modifySyllabus: false})
@@ -818,7 +826,7 @@ class CoursePageDemo extends React.Component {
     bulletinRender = () => {
         return (
             <div>
-                {this.state.role === 'teacher' ? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
+                {this.state.role === 'teacher' &&this.state.end ===false? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
                     <Row/>
                     <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
                         this.setState({addBulletin: true})
@@ -859,7 +867,7 @@ class CoursePageDemo extends React.Component {
     };
     rankRender = () => {
         return (
-            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id} seeCourseAverage = {this.state.course.seeCourseAverage} seeHomeworkAverage ={this.state.course.seeHomeworkAverage}/>);
+            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id} seeCourseAverage = {this.state.type==='teacher'?true:this.state.course.seeCourseAverage} seeHomeworkAverage ={this.state.course.seeHomeworkAverage}/>);
     };
     studentTableRender = () => {
         return (

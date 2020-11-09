@@ -20,6 +20,7 @@ class SiderNav extends React.Component {
         this.getUserInfo(role);
     };
     getUserInfo=(role)=>{
+        console.log(role);
         if(role==='student'){
             this.setState({
                 menus: [
@@ -36,7 +37,7 @@ class SiderNav extends React.Component {
                             {key: '/home/course/overall', title: '所有课程', icon: '',},
                             {
                                 key: '/home/course/ongoing',
-                                title: this.state.role === 'student' ? '正在进行' : '正在授课',
+                                title: role === 'student' ? '正在进行' : '正在授课',
                                 icon: '',
                             },
                             {key: '/home/course/end', title: '已结束', icon: '',},
@@ -106,7 +107,7 @@ class SiderNav extends React.Component {
                             {key: '/home/course/overall', title: '所有课程', icon: '',},
                             {
                                 key: '/home/course/ongoing',
-                                title: this.state.role === 'student' ? '正在进行' : '正在授课',
+                                title: role === 'student' ? '正在进行' : '正在授课',
                                 icon: '',
                             },
                             {key: '/home/course/end', title: '已结束', icon: '',},

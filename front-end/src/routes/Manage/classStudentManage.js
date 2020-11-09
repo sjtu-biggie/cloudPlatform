@@ -242,17 +242,21 @@ export default class ClassManage extends Component {
             console.log(record["theClass"]);
             record["theClass"] = classChoose;
             console.log(record);
+            this.addStudentToClassAxios(record);
+        }
+
+        this.addStudentToClassAxios=(item)=>{
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8000/addStudentToClass',
                 data: {
-                    username: record.username,
-                    theClass: record.theClass,
+                    username: item.username,
+                    theClass: item.theClass,
                 }
             }).then(msg => {
                 console.log(msg);
-                var tos = [];
-                tos.push(record.email);
+                let tos = [];
+                tos.push(item.email);
                 axios({
                     method: 'POST',
                     url: 'http://106.13.209.140:8000/sendNotice',
@@ -269,6 +273,8 @@ export default class ClassManage extends Component {
                 console.log(err)
             })
         }
+
+
 
         this.deleteStudent = () => {
             axios({
@@ -373,6 +379,26 @@ export default class ClassManage extends Component {
                 })
             }
         };
+
+        this.addMulti=()=>{
+            const {addData,addDataRender,modifyIds,orData,renderData,classChoose} = this.state;
+            let chosenData=addDataRender.filter(item=>modifyIds.includes(item.username));
+            let chosenDataNew=chosenData.map(item=>{
+                item["theClass"]=classChoose;
+                this.addStudentToClassAxios(item);
+                return item;
+            })
+            let addDataNew=addData.filter(item=>!modifyIds.includes(item.username));
+            let addDataRenderNew=addDataRender.filter(item=>!modifyIds.includes(item.username));
+            let orDataNew=[...chosenDataNew,...orData];
+            let renderDataNew=[...chosenDataNew,...renderData];
+            this.setState({
+                orData:orDataNew,
+                renderData:renderDataNew,
+                addData:addDataNew,
+                addDataRender:addDataRenderNew,
+            })
+        }
     }
 
     componentDidMount() {
@@ -526,7 +552,7 @@ export default class ClassManage extends Component {
                             <Card style={{marginBottom:10}}>
                                 <Row>
                                     <Col span={4}>
-                                        <Button size={"large"}>确定添加</Button>
+                                        <Button size={"large"} onClick={this.addMulti}>确定添加</Button>
                                     </Col>
                                     <Col offset={3} span={10}>
                                         <div style={{textAlign:"center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>添加学生至{this.state.classChoose}</div>
@@ -534,7 +560,7 @@ export default class ClassManage extends Component {
                                 </Row>
                             </Card>
                         <Table
-                        rowKey={'sid'}
+                        rowKey={'username'}
                         columns={[
                             ...columns1
                             // ...columns1.map(item => ({

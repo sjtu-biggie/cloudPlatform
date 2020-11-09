@@ -4,7 +4,9 @@ import com.CloudPlatform.entity.StudentHomework;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -12,7 +14,6 @@ import java.util.List;
 public interface StudentHomeworkRepository extends JpaRepository<StudentHomework,String> {
     List<StudentHomework> findByStudentId(String studentId);
     List<StudentHomework> findByHomeworkId(int homeworkId);
-
     Page<StudentHomework> findAllByHomeworkId(int homeworkId, Pageable pageable);
 
     @Query(nativeQuery = true,value="select * from studenthomework where courseid=?2 and studentid=?1 order by starttime desc ")

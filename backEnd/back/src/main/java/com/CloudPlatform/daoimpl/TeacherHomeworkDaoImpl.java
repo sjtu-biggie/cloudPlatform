@@ -34,8 +34,8 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homeworkDetail.setTeacherId(homework.getTeacherId());
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
-        homeworkDetail.setAnswerUpload(homework.getAnswer());
-        homeworkDetail.setContentUpload(homework.getAnswer());
+        homeworkDetail.setAnswerUpload(homework.getAnswerUpload());
+        homeworkDetail.setContentUpload(homework.getContentUpload());
         homeworkDetail.setSyllabus(homework.getSyllabus());
         teacherhomeworkDetailRepository.save(homeworkDetail);
         return homework;
@@ -43,9 +43,19 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
 
     @Override
     public TeacherHomework addOne(TeacherHomework homework){
-        teacherhomeworkRepository.save(homework);
+        int maxId = teacherhomeworkRepository.getMaxId()+1;
+        teacherhomeworkRepository.Insert(homework.getEndTime(),
+                homework.getHandinAmount(),
+                homework.getRange(),
+                homework.getStartTime(),
+                homework.getSubject(),
+                homework.getTitle(),
+                homework.getType(),
+                homework.getCourseId(),
+                homework.getTeacherId(),maxId);
+
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
-        int h_id = homework.getHomeworkId();
+        int h_id = maxId;
         int c_id = homework.getCourseId();
         String hwId = Integer.toString(h_id);
         String csId = Integer.toString(c_id);
@@ -55,8 +65,9 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homeworkDetail.setTeacherId(homework.getTeacherId());
         homeworkDetail.setContent(homework.getContent());
         homeworkDetail.setAnswer(homework.getAnswer());
-        homeworkDetail.setAnswerUpload(homework.getAnswer());
-        homeworkDetail.setContentUpload(homework.getAnswer());
+        homeworkDetail.setAnswerUpload(homework.getAnswerUpload());
+        homeworkDetail.setContentUpload(homework.getContentUpload());
+        homeworkDetail.setSyllabus(homework.getSyllabus());
         teacherhomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }

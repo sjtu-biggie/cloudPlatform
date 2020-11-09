@@ -67,7 +67,6 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
 
     @Override
     public TeacherHomework addTeacherHomework(JSONObject object){
-        String Id = object.getString("id");
         int courseId= object.getInteger("courseId");
         String teacherId= object.getString("teacherId");
         String title= object.getString("title");
@@ -88,8 +87,8 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
             syllabus = null;
         }
         TeacherHomework hw = new TeacherHomework(courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,content,syllabus,answer,Id, conUpload, ansUpload);
-        return teacherhomeworkDao.editOne(hw);
+                startTime,endTime,type,subject,handinAmount,content,syllabus,answer, conUpload, ansUpload);
+        return teacherhomeworkDao.addOne(hw);
     }
 
     @Override

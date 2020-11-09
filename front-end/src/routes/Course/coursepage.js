@@ -40,6 +40,7 @@ import StudenTable from "../Manage/studentTable";
 import TextArea from "antd/es/input/TextArea";
 import Search from "antd/es/input/Search";
 import RankData from "./RankData";
+import Loading2 from "../../components/Loading2";
 
 
 @Form.create()
@@ -53,7 +54,7 @@ class CoursePageDemo extends React.Component {
         size: 'default',
         bordered: true,
         data2: [],
-        loading: false,
+        loading: true,
         loadingMore: false,
         course: deadCourse,
         bulletins: bulletin,
@@ -74,7 +75,6 @@ class CoursePageDemo extends React.Component {
     };
 
     componentWillMount() {
-
         this.setState({
             loading: true,
         });
@@ -104,9 +104,7 @@ class CoursePageDemo extends React.Component {
                 });
             this.setState({teacher:user})
         });
-        this.setState({
-            loading: false
-        });
+
 
     }
 
@@ -181,7 +179,8 @@ class CoursePageDemo extends React.Component {
         course.course.startDate = this.format(course.course.startDate);
         course.course.endDate = this.format(course.course.endDate);
         this.setState({
-            course: course
+            course: course,
+            loading:false,
         });
         return course.course.userId;
     };
@@ -917,63 +916,72 @@ class CoursePageDemo extends React.Component {
         return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
     };
 
-    render() {
+    render=()=> {
         const {loadingMore} = this.state
-        return (
-            <div>
-                <CustomBreadcrumb
-                    arr={['课程', this.state.course.course_name]}/>
-                <Card bordered={false} style={{marginBottom: '10px'}}>
-                    <Menu style={{fontSize: '20px', fontWeight: 'bold'}} mode="horizontal" onSelect={() => {
-                        this.setState({
-                            addHomework: false,
-                            deleteHomework: false,
-                            addBulletin: false,
-                            deleteBulletin: false
-                        })
-                    }}>
-                        <Menu.Item onClick={() => {
-                            this.setState({type: 1})
-                        }}><Icon type="appstore"/>主页</Menu.Item>
-                        <Menu.Item key="bulletin" onClick={() => {
-                            this.getPageBulletin(1, 10);
-                            this.setState({type: 2})
-                        }}><Icon type="align-left"/>公告</Menu.Item>
-                        <Menu.SubMenu key='app' onClick={() => {
-                            if(this.state.displayHomeworkList.length===0){
-                                this.getHomeworkAllByCourse(this.state.course.course.id);
-                            }
-                            this.setState({type: 3})
-                        }} title={<span><Icon type='snippets'/><span>作业</span></span>}>
-                            <Menu.Item>总览</Menu.Item>
-                            <Menu.Item>已提交</Menu.Item>
-                            <Menu.Item>未提交</Menu.Item>
-                            <Menu.Item>已截止</Menu.Item>
-                            <Menu.Item>未截止</Menu.Item>
-                        </Menu.SubMenu>
-                        {
-                            this.state.role === 'student' ?
-                                <Menu.Item onClick={() => {
-                                    this.setState({type: 5})
-                                }} key="rank"><Icon type="appstore"/>数据</Menu.Item> : this.state.role === 'teacher' ?
-                                <Menu.Item onClick={() => {
-                                    this.setState({type: 6})
-                                }} key="set"><Icon type="setting"/>管理</Menu.Item> : null
-                        }
-                    </Menu>
-                </Card>
-                {this.typeRender()}
-
-                <BackTop visibilityHeight={200} style={{right: 50}}/>
-                {/*<Affix style={styles.affixBox}>*/}
-                {/*  <Anchor offsetTop={200} affix={false}>*/}
-                {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
-                {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
-                {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
-                {/*  </Anchor>*/}
-                {/*</Affix>*/}
+        if(this.state.loading){
+            return             <div>
+                <h3 style={styles.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
+                <Loading2/>
             </div>
-        )
+        }else{
+            return (
+
+                <div>
+                    <CustomBreadcrumb
+                        arr={['课程', this.state.course.course_name]}/>
+                    <Card bordered={false} style={{marginBottom: '10px'}}>
+                        <Menu style={{fontSize: '20px', fontWeight: 'bold'}} mode="horizontal" onSelect={() => {
+                            this.setState({
+                                addHomework: false,
+                                deleteHomework: false,
+                                addBulletin: false,
+                                deleteBulletin: false
+                            })
+                        }}>
+                            <Menu.Item onClick={() => {
+                                this.setState({type: 1})
+                            }}><Icon type="appstore"/>主页</Menu.Item>
+                            <Menu.Item key="bulletin" onClick={() => {
+                                this.getPageBulletin(1, 10);
+                                this.setState({type: 2})
+                            }}><Icon type="align-left"/>公告</Menu.Item>
+                            <Menu.SubMenu key='app' onClick={() => {
+                                if(this.state.displayHomeworkList.length===0){
+                                    this.getHomeworkAllByCourse(this.state.course.course.id);
+                                }
+                                this.setState({type: 3})
+                            }} title={<span><Icon type='snippets'/><span>作业</span></span>}>
+                                <Menu.Item>总览</Menu.Item>
+                                <Menu.Item>已提交</Menu.Item>
+                                <Menu.Item>未提交</Menu.Item>
+                                <Menu.Item>已截止</Menu.Item>
+                                <Menu.Item>未截止</Menu.Item>
+                            </Menu.SubMenu>
+                            {
+                                this.state.role === 'student' ?
+                                    <Menu.Item onClick={() => {
+                                        this.setState({type: 5})
+                                    }} key="rank"><Icon type="appstore"/>数据</Menu.Item> : this.state.role === 'teacher' ?
+                                    <Menu.Item onClick={() => {
+                                        this.setState({type: 6})
+                                    }} key="set"><Icon type="setting"/>管理</Menu.Item> : null
+                            }
+                        </Menu>
+                    </Card>
+                    {this.typeRender()}
+
+                    <BackTop visibilityHeight={200} style={{right: 50}}/>
+                    {/*<Affix style={styles.affixBox}>*/}
+                    {/*  <Anchor offsetTop={200} affix={false}>*/}
+                    {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
+                    {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
+                    {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
+                    {/*  </Anchor>*/}
+                    {/*</Affix>*/}
+                </div>
+            )
+        }
+
     }
 }
 
@@ -1004,7 +1012,17 @@ const styles = {
         top: 200,
         right: 50,
         with: 170
-    }
+    },
+    loadingTitle:{
+        position:'fixed',
+        top:'50%',
+        left:'50%',
+        marginLeft: -45,
+        marginTop: -18,
+        color:'#000',
+        fontWeight:500,
+        fontSize:24
+    },
 };
 const IconText = ({type, text}) => (
     <span>

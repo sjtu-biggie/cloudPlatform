@@ -21,7 +21,8 @@ class HomeworkCommit extends React.Component{
         comment:"",
         handinTime:"",
         file:[],
-        homework:[]
+        homework:[],
+        path:[]
     };
 
     uploadFilesChange(file) {
@@ -47,8 +48,12 @@ class HomeworkCommit extends React.Component{
         console.log(this.state.file)
         let homework=this.state.homework;
         for(let i=0;i<fileList.length;i++){
-            homework.upload.push(fileList[i].response)
+            this.state.path.push(fileList[i].response)
         }
+        homework.upload=this.state.path.join(',')
+        this.setState({
+            homework: homework
+        })
         console.log(homework)
     }
 
@@ -141,7 +146,6 @@ class HomeworkCommit extends React.Component{
                     <Button type="primary"  onClick={()=>this.postObject()}>{this.state.homework.handinTime!==null?"重新提交":"提交"}</Button>&emsp;
                 </Card>
             </div>
-
         )
     }
 }

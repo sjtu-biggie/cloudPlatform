@@ -19,12 +19,8 @@ class UploadDemo extends React.Component {
             uid:"",
             previewVisible: false,
             previewImage: '',
-            fileList: [{
-                uid: -1,
-                name: 'xxx.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            }],
+            fileList: [],
+            imgList:[]
         }
     }
 
@@ -99,13 +95,12 @@ class UploadDemo extends React.Component {
                 }
                 if (info.file.status === 'done') {
                     message.success(`${info.file.name} 文件上传成功`);
-                    console.log(info.response)
+
                     that.setState({
                         fileList:[...info.fileList]
                     });
                     console.log(that.state.fileList)
                     that.toParent()
-
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败`);
                 }
@@ -121,7 +116,7 @@ class UploadDemo extends React.Component {
 
         return (
             <div>
-                <Upload {...props}   onRemove={this.onRemove}>
+                <Upload {...props}   onRemove={this.onRemove} >
                     <Button><Icon type="upload"/>Upload</Button>
                 </Upload>
             </div>

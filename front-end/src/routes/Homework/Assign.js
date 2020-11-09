@@ -1,9 +1,24 @@
 import React from 'react'
-import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Upload, Icon, Popconfirm} from 'antd'
+import {
+    Card,
+    Cascader,
+    Form,
+    Select,
+    Input,
+    Button,
+    message,
+    BackTop,
+    DatePicker,
+    Upload,
+    Icon,
+    Popconfirm,
+    Collapse, List
+} from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
 import axios from "axios";
 import TextArea from "antd/es/input/TextArea";
+import Search from "antd/es/input/Search";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -21,55 +36,66 @@ const options2 = [
         label: '主观题',
     },
     {
-        value: '选择题',
-        label: '选择题',
-    },
-    {
-        value: '填空题',
-        label: '填空题',
+        value: '客观题',
+        label: '客观题',
     }
 ];
 
 @Form.create()
 class Assign extends React.Component {
     state = {
-        text:'加载中',
-        dfileList:[],
+        syllabus: {
+            chapterNum: 1,
+            chapter1: {
+                title: "第一题",
+                type:'选择题',
+                text:'小明有两个苹果，给妈妈吃了一个，还剩几个苹果？',
+                content: [
+                    "1",
+                    "2", "3", "10086"
+                ]
+            }
+        },
+        //0 主观题，1 客观题
+        homeworkType: 0,
+        text: '加载中',
+        dfileList: [],
         disabled: false,
         homework: {
-            courseId:0,
-            homeworkId:0,
-            teacherId:0,
-            endTime:0,
-            startTime:0,
-            handinAmount:0,
-            title:0,
-            range:0,
-            type:0,
-            content:0,
-            answer:0
+            courseId: 0,
+            homeworkId: 0,
+            teacherId: 0,
+            endTime: 0,
+            startTime: 0,
+            handinAmount: 0,
+            title: 0,
+            range: 0,
+            type: 0,
+            content: 0,
+            answer: 0
         },
         userInfo: null,
         role: null,
         content: null,
-        answer:null,
-        courseId:null,
-        option:null,
-        loading:false,
+        answer: null,
+        courseId: null,
+        option: null,
+        loading: false,
     };
 
-    add0=(m)=>{return m<10?'0'+m:m };
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
+    };
 
-    format=(shijianchuo)=>
-    {
+    format = (shijianchuo) => {
         let time = new Date(shijianchuo);
         let y = time.getFullYear();
-        let m = time.getMonth()+1;
+        let m = time.getMonth() + 1;
         let d = time.getDate();
         let h = time.getHours();
         let mm = time.getMinutes();
         let s = time.getSeconds();
-        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
     };
 
     getData2 = () => {
@@ -79,11 +105,11 @@ class Assign extends React.Component {
     };
 
 
-    getUserInfo = async (username)=>{
+    getUserInfo = async (username) => {
         let config = {
             method: 'post',
-            data :{
-                'username':username
+            data: {
+                'username': username
             },
             url: 'http://106.13.209.140:8000/getUserMessage',
             headers: {
@@ -101,25 +127,25 @@ class Assign extends React.Component {
         console.log(user);
         const options1 = [
             {
-                label:user.theClass,
-                value:user.theClass,
+                label: user.theClass,
+                value: user.theClass,
             }
         ];
         console.log(options1);
         this.setState({
-            userInfo:user,
+            userInfo: user,
             option: options1,
-            loading:true,
+            loading: true,
         })
     };
 
 
-    addHomework=async (homework)=>{
+    addHomework = async (homework) => {
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/addTeacherHomework',
-            data:{
-                'homework':homework
+            data: {
+                'homework': homework
             },
             headers: {
                 withCredentials: true,
@@ -135,7 +161,7 @@ class Assign extends React.Component {
             });
         console.log(hw);
         this.setState({
-            homework:hw,
+            homework: hw,
         })
     };
 
@@ -144,14 +170,14 @@ class Assign extends React.Component {
         this.setState({
             content: t
         })
-    }
+    };
 
     getAnswer = (result, t) => {
         console.log(t);
         this.setState({
             answer: t
         })
-    }
+    };
 
 
     handleSubmit = (e) => {
@@ -162,16 +188,15 @@ class Assign extends React.Component {
             } else {
                 values.startDate = this.format(values.startDate);
                 values.endDate = this.format(values.endDate);
-                if (values.startDate > values.endDate){
+                if (values.startDate > values.endDate) {
                     message.error('开始时间不能晚于结束时间');
-                }
-                else{
+                } else {
                     console.log(this.props);
                     values.courseId = this.props.course.course.id;
                     values.content = this.state.content;
                     values.answer = this.state.answer;
                     this.setState({
-                        homework:values,
+                        homework: values,
                     });
                     message.success('提交成功');
                     console.log(values);
@@ -188,7 +213,7 @@ class Assign extends React.Component {
         this.getData2();
     }
 
-    render=()=> {
+    render = () => {
         const {getFieldDecorator, getFieldValue} = this.props.form
         const formItemLayout = {
             labelCol: {
@@ -223,8 +248,16 @@ class Assign extends React.Component {
             },
         }
 
-        console.log()
-
+        console.log();
+        let i = 1;
+        let chapterList = [];
+        while (1) {
+            let str = 'this.state.syllabus.chapter' + i;
+            let contents = eval(str);
+            if (contents === undefined || contents === null) break;
+            chapterList.push(contents);
+            ++i;
+        }
         return (
             <div>
                 <Card bordered={false} title='布置作业'>
@@ -253,7 +286,8 @@ class Assign extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <Cascader options={this.state.loading === false ? options1: this.state.option} expandTrigger="hover" placeholder=''/>
+                                    <Cascader options={this.state.loading === false ? options1 : this.state.option}
+                                              expandTrigger="hover" placeholder=''/>
                                 )
                             }
                         </FormItem>
@@ -267,7 +301,20 @@ class Assign extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <Cascader options={options2} expandTrigger="hover" placeholder=''/>
+                                    <Cascader onChange={(e) => {
+                                        console.log(e);
+                                        if (e[0] === '主观题') {
+                                            this.setState({
+                                                homeworkType: 0
+                                            })
+                                        } else {
+                                            console.log(1);
+                                            this.setState({
+                                                homeworkType: 1
+                                            })
+                                        }
+                                    }
+                                    } options={options2} expandTrigger="hover" placeholder=''/>
                                 )
                             }
                         </FormItem>
@@ -303,96 +350,148 @@ class Assign extends React.Component {
                                 )
                             }
                         </FormItem>
+                        {this.state.homeworkType === 0 ?
+                            <div><FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
+                                {
+                                    (
+                                        <DraftDemo parent={this} flag='content'/>
+                                    )
+                                }
+                            </FormItem>
+                                <Upload
+                                    flieList={this.state.dfileList}
+                                    accept=".png,.jpg,.jpeg"
+                                    action={'http://106.13.209.140:8383/uploadNotSave'}
+                                    onChange={({file, fileList}) => {
+                                        if (file.status !== 'uploading') {
+                                            console.log(file, file.originFileObj, fileList);
+                                            let fr = new FileReader();
+                                            fr.onload = async (e) => {
+                                                // target.result 该属性表示目标对象的DataURL
+                                                console.log(e.target.result);
+                                                let config = {
+                                                    method: 'post',
+                                                    data: {
+                                                        "img": e.target.result,
+                                                        //"url": "F:/Documentation/Courseware/Software Introduction 2021/cloudPlatform/front-end/src/pic/deadHomework1.jpg",
+                                                        //是否需要识别结果中每一行的置信度，默认不需要。 true：需要 false：不需要
+                                                        "prob": false,
+                                                        //是否需要单字识别功能，默认不需要。 true：需要 false：不需要
+                                                        "charInfo": false,
+                                                        //是否需要自动旋转功能，默认不需要。 true：需要 false：不需要
+                                                        "rotate": false,
+                                                        //是否需要表格识别功能，默认不需要。 true：需要 false：不需要
+                                                        "table": false,
+                                                        //字块返回顺序，false表示从左往右，从上到下的顺序，true表示从上到下，从左往右的顺序，默认false
+                                                        "sortPage": false
+                                                    },
+                                                    url: 'https://ocrapi-advanced.taobao.com/ocrservice/advanced',
+                                                    headers: {
+                                                        Authorization: 'APPCODE 41d14f8d1c4e405bb2c800e1cfb72272'
+                                                    }
+                                                };
+                                                const result = await axios(config)
+                                                    .then(function (response) {
+                                                        console.log(response.data);
+                                                        return response.data;
+                                                    })
+                                                    .catch(function (error) {
+                                                        console.log(error);
+                                                    });
+                                                file.status = 'removed';
 
-                        <FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
-                        {
-                            (
-                                <DraftDemo parent={ this } flag = 'content'/>
-                            )
-                        }
-                    </FormItem>
-                    <Upload
-                        flieList = {this.state.dfileList}
-                        accept=".png,.jpg,.jpeg"
-                        action={ 'https://www.mocky.io/v2/5cc8019d300000980a055e76'}
-                        onChange={({ file, fileList }) =>{
-                        if (file.status !== 'uploading') {
-                            console.log(file,file.originFileObj, fileList);
-                            let fr = new FileReader();
-                            fr.onload = async (e)=>{
-                                // target.result 该属性表示目标对象的DataURL
-                                console.log(e.target.result);
-                                let config = {
-                                    method: 'post',
-                                    data :{
-                                        "img":e.target.result,
-                                        //"url": "F:/Documentation/Courseware/Software Introduction 2021/cloudPlatform/front-end/src/pic/deadHomework1.jpg",
-                                        //是否需要识别结果中每一行的置信度，默认不需要。 true：需要 false：不需要
-                                        "prob": false,
-                                        //是否需要单字识别功能，默认不需要。 true：需要 false：不需要
-                                        "charInfo": false,
-                                        //是否需要自动旋转功能，默认不需要。 true：需要 false：不需要
-                                        "rotate": false,
-                                        //是否需要表格识别功能，默认不需要。 true：需要 false：不需要
-                                        "table": false,
-                                        //字块返回顺序，false表示从左往右，从上到下的顺序，true表示从上到下，从左往右的顺序，默认false
-                                        "sortPage": false
-                                    },
-                                    url: 'https://ocrapi-advanced.taobao.com/ocrservice/advanced',
-                                    headers: {
-                                        Authorization:'APPCODE 41d14f8d1c4e405bb2c800e1cfb72272'
+                                                this.setState({
+                                                    text: result.content
+                                                })
+                                            };
+                                            fr.readAsDataURL(file.originFileObj);
+
+                                        }
+
+                                    }}
+                                >
+                                    <Popconfirm placement="top" title={this.state.text} okText="确认">
+                                        <Button style={{transform: 'translateX(900px)'}}
+                                        ><Icon type="upload"/>从图片中识别作业内容</Button>
+                                    </Popconfirm>
+
+                                </Upload>
+                                <FormItem label='上传作业附件' {...formItemLayout} >
+                                    {
+                                        (
+                                            <UploadDemo/>
+                                        )
                                     }
-                                };
-                                const result = await axios(config)
-                                    .then(function (response) {
-                                        console.log(response.data);
-                                        return response.data;
-                                    })
-                                    .catch(function (error) {
-                                        console.log(error);
-                                    });
-                                file.status = 'removed';
+                                </FormItem>
+                                <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
+                                    {
+                                        (
+                                            <DraftDemo parent={this} flag='answer'/>
+                                        )
+                                    }
+                                </FormItem>
+                                <FormItem label='上传答案附件' {...formItemLayout} >
+                                    {
+                                        (
+                                            <UploadDemo/>
+                                        )
+                                    }
+                                </FormItem></div> : <div>
+                                <Collapse defaultActiveKey={['0']} onChange={() => {
+                                    this.setState({addChapter: false, addContent: false})
+                                }}>{chapterList.map((value, index) => {
+                                    return (<Collapse.Panel header={value.title} key={index}>
+                                        {this.state.addChapter ?
+                                            <Search
+                                                style={{marginBottom: '15px'}}
+                                                placeholder="请输入要添加的题目标题，按回车确认！"
+                                                enterButton="添加"
+                                                onSearch={(value) => {
+                                                    if (value === "") {
+                                                        message.warning("输入不能为空！", 3);
+                                                        return;
+                                                    }
+                                                    this.addBig(index, value)
+                                                }}
+                                            /> : null}
+                                        <Button type="primary" onClick={() => {
+                                            this.setState({addChapter: !this.state.addChapter})
+                                        }} style={{}}>添加题目</Button>
+                                        <Button type="danger" onClick={() => {
+                                            this.deleteBig(index)
+                                        }} style={{marginLeft: '10px', marginBottom: '20px'}}>删除题目</Button>
+                                        <List
+                                            rowKey={(text, record) => text.key}
+                                            bordered
+                                            dataSource={value.content}
+                                            renderItem={item => (
+                                                <List.Item actions={[<Button type="danger" onClick={() => {
+                                                    this.deleteSmall(index, item)
+                                                }} style={{marginLeft: '10px'}}>删除选项</Button>]}>
+                                                    <List.Item.Meta
+                                                        title={item}
+                                                    />
+                                                </List.Item>
+                                            )}
+                                        />
+                                        <Search
+                                            style={{marginTop: '15px'}}
+                                            placeholder="请输入要添加的选项/填空答案，按回车确认！"
+                                            enterButton="添加"
+                                            onSearch={(value) => {
+                                                if (value === "") {
+                                                    message.warning("输入不能为空！", 3);
+                                                    return;
+                                                }
+                                                this.addSmall(index, value)
+                                            }}
+                                        />
+                                    </Collapse.Panel>)
+                                })}</Collapse>
 
-                                this.setState({
-                                    text:result.content
-                                })
-                            };
-                            fr.readAsDataURL(file.originFileObj);
-
-                        }
-
-                        }}
-                    >
-                        <Popconfirm placement="top" title={this.state.text} okText="确认">
-                            <Button style={{transform: 'translateX(900px)'}}
-                            ><Icon type="upload"/>从图片中识别作业内容</Button>
-                        </Popconfirm>
-
-                    </Upload>
-                        <FormItem label='上传作业附件' {...formItemLayout} >
-                            {
-                                (
-                                    <UploadDemo/>
-                                )
-                            }
-                        </FormItem>
-                        <FormItem style={{width: '100%', margin: '0 auto'}} label='参考答案' {...DraftLayout}>
-                            {
-                                (
-                                    <DraftDemo parent={ this } flag = 'answer'/>
-                                )
-                            }
-                        </FormItem>
-                        <FormItem label='上传答案附件' {...formItemLayout} >
-                            {
-                                (
-                                    <UploadDemo/>
-                                )
-                            }
-                        </FormItem>
-
+                            </div>}
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" >提交</Button>
+                            <Button type="primary" htmlType="submit">提交</Button>
                         </FormItem>
                     </Form>
                 </Card>
@@ -400,6 +499,65 @@ class Assign extends React.Component {
             </div>
         )
     }
+    deleteSmall = (index, smallName) => {
+        let chapterName = 'chapter' + (index + 1);
+        let modifiedSyllabus = this.state.syllabus;
+        for (let a in modifiedSyllabus) {
+            if (a === chapterName) {
+                let chapter = modifiedSyllabus[a].content;
+                for (let i = 0; i < chapter.length; ++i) {
+                    if (chapter[i] === smallName) {
+                        if (i === 0) {
+                            chapter = chapter.slice(1);
+                            modifiedSyllabus[a].content = chapter
+                        } else chapter.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+        console.log(modifiedSyllabus);
+        this.setState({syllabus: modifiedSyllabus});
+    };
+    addSmall = (index, smallName) => {
+        let chapterName = 'chapter' + (index + 1);
+        let modifiedSyllabus = this.state.syllabus;
+        for (let a in modifiedSyllabus) {
+            if (a === chapterName) {
+                let chapter = modifiedSyllabus[a].content;
+                chapter.push(smallName);
+                modifiedSyllabus[a].content = chapter;
+            }
+        }
+        console.log(modifiedSyllabus);
+        this.setState({syllabus: modifiedSyllabus});
+    };
+    addBig = (index, smallName) => {
+        let chapterString = 'chapter' + (index + 2);
+        let chapterName = {title: smallName, content: []};
+        let modifiedSyllabus = this.state.syllabus;
+        for (let i = modifiedSyllabus.chapterNum; i > index + 1; --i) {
+            let prvChapter = 'chapter' + i;
+            let mdfChapter = 'chapter' + (i + 1);
+            modifiedSyllabus[mdfChapter] = modifiedSyllabus[prvChapter];
+        }
+        modifiedSyllabus[chapterString] = chapterName;
+        modifiedSyllabus['chapterNum'] = modifiedSyllabus['chapterNum'] + 1;
+        console.log(modifiedSyllabus);
+        this.setState({syllabus: modifiedSyllabus});
+    };
+    deleteBig = (index) => {
+        let modifiedSyllabus = this.state.syllabus;
+        for (let i = index + 1; i < modifiedSyllabus.chapterNum; ++i) {
+            let prvChapter = 'chapter' + i;
+            let mdfChapter = 'chapter' + (i + 1);
+            modifiedSyllabus[prvChapter] = modifiedSyllabus[mdfChapter];
+        }
+        delete modifiedSyllabus['chapter' + modifiedSyllabus.chapterNum];
+        modifiedSyllabus['chapterNum'] = modifiedSyllabus['chapterNum'] - 1;
+        console.log(modifiedSyllabus);
+        this.setState({syllabus: modifiedSyllabus});
+    };
 }
 
 export default Assign

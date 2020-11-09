@@ -11,11 +11,7 @@ import {fileToObject} from "antd/es/upload/utils";
 import axios from "axios";
 import Upload from "./upload"
 
-
 const { Text, Link } = Typography;
-
-
-
 
 class HomeworkCommit extends React.Component{
 
@@ -48,6 +44,12 @@ class HomeworkCommit extends React.Component{
         this.setState({
             file:fileList,
         })
+        console.log(this.state.file)
+        let homework=this.state.homework;
+        for(let i=0;i<fileList.length;i++){
+            homework.upload.push(fileList[i].response)
+        }
+        console.log(homework)
     }
 
     getEditorMsg = (result, editorContent) => {
@@ -106,7 +108,6 @@ class HomeworkCommit extends React.Component{
         this.setState({
             homeworkId:this.props.match.params[0].substr(1)
         });
-        console.log(this.props.match.params[0].substr(1))
     }
 
     componentDidMount() {

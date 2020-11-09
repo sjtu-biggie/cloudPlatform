@@ -30,6 +30,7 @@ const deadHomework = {
   startTime:'2020-10-11 12:12:12',
   handinTime: null,
   endTime:'2020-10-12 12:12:13',
+  theClass:'加载中',
   range:'加载中'
 };
 
@@ -136,6 +137,7 @@ class ListDemo extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
+    console.log(hw);
     let list = Array.from(hw);
     let total = 0;
     list.map(item=>{

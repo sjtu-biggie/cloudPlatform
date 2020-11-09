@@ -46,7 +46,13 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
 
     @Override
     public StudentHomework addOne(StudentHomework homework){
-        studenthomeworkRepository.save(homework);
+        studenthomeworkRepository.Insert(homework.getEndTime(),
+                homework.getStartTime(),
+                homework.getSubject(),
+                homework.getTitle(),
+                homework.getNickName(),
+                homework.getCourseId(),
+                homework.getStudentId(),homework.getHomeworkId());
         StudentHomeworkDetail homeworkDetail = new StudentHomeworkDetail();
         String t_id = homework.getStudentId();
         int h_id = homework.getHomeworkId();
@@ -57,11 +63,11 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setCourseId(csId);
         homeworkDetail.setHomeworkId(hwId);
         homeworkDetail.setStudentId(t_id);
-        homeworkDetail.setContent(homework.getContent());
-        homeworkDetail.setComment(homework.getComment());
-        homeworkDetail.setRemarks(homework.getRemarks());
-        homeworkDetail.setCorrect(homework.getCorrect());
-        homeworkDetail.setUpload(homework.getUpload());
+//        homeworkDetail.setContent(homework.getContent());
+//        homeworkDetail.setComment(homework.getComment());
+//        homeworkDetail.setRemarks(homework.getRemarks());
+//        homeworkDetail.setCorrect(homework.getCorrect());
+//        homeworkDetail.setUpload(homework.getUpload());
         studenthomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }

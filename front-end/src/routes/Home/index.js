@@ -229,7 +229,6 @@ class Home extends React.Component {
                     {/*不用img标签是因为图片大小会出现问题*/}
                 </Carousel>
 
-
             </div>
         )
     }

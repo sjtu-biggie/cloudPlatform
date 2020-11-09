@@ -21,7 +21,8 @@ class HomeworkCommit extends React.Component{
         comment:"",
         handinTime:"",
         file:[],
-        homework:[]
+        homework:[],
+        path:[]
     };
 
     uploadFilesChange(file) {
@@ -47,8 +48,12 @@ class HomeworkCommit extends React.Component{
         console.log(this.state.file)
         let homework=this.state.homework;
         for(let i=0;i<fileList.length;i++){
-            homework.upload.push(fileList[i].response)
+            this.state.path.push(fileList[i].response)
         }
+        homework.upload=this.state.path.join(',')
+        this.setState({
+            homework: homework
+        })
         console.log(homework)
     }
 
@@ -74,7 +79,6 @@ class HomeworkCommit extends React.Component{
         console.log(this.state.homework)
 
         let obj={
-            file:this.state.file,
             homework:this.state.homework,
         }
 
@@ -122,7 +126,6 @@ class HomeworkCommit extends React.Component{
                 <Card  bordered={false} className='card-item' title={this.state.homework.title} style={{minHeight:200}}>
 
                     <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
-
 
                     <Card bordered={false} className='card-item'>
                         <RichText parent={this}></RichText>

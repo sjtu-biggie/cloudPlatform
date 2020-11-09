@@ -80,7 +80,6 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
 
     @Override
     public StudentHomework addStudentHomework(JSONObject object){
-        String Id = object.getString("id");
         int homeworkId= object.getInteger("homeworkId");
         int courseId= object.getInteger("courseId");
         String studentId= object.getString("studentId");
@@ -99,10 +98,9 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         Date handinTime = object.getDate("handinTime");
         String upload = object.getString("upload");
 
-        StudentHomework hw = new StudentHomework(studentId,homeworkId,courseId,nickName,handinTime,
-                startTime,endTime,score,title,subject,content,correct,comment,remarks,Id, upload,
-                finishHomework,handinRank);
-        return studenthomeworkDao.editOne(hw);
+        StudentHomework hw = new StudentHomework(courseId,studentId,title,
+                startTime,endTime,subject,nickName);
+        return studenthomeworkDao.addOne(hw);
     }
 
     @Override

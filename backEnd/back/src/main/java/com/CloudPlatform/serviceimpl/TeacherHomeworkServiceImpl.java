@@ -66,7 +66,7 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
     }
 
     @Override
-    public TeacherHomework addTeacherHomework(JSONObject object){
+    public int addTeacherHomework(JSONObject object){
         int courseId= object.getInteger("courseId");
         String teacherId= object.getString("teacherId");
         String title= object.getString("title");

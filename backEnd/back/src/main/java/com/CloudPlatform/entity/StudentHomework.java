@@ -1,6 +1,7 @@
 package com.CloudPlatform.entity;
 
 import com.CloudPlatform.utils.multikeys.StudentHomeworkMultiKeys;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,18 @@ import java.util.List;
 
 public class StudentHomework {
     private static final long serialVersionUID = 1L;
+
+    public StudentHomework(int _courseId, String _studentId, String _title,
+                           Date _startTime, Date _endTime, String _nickname, String _subject
+                           ){
+        courseId = _courseId;
+        studentId = _studentId;
+        Title = _title;
+        StartTime = _startTime;
+        EndTime = _endTime;
+        Subject = _subject;
+        nickName = _nickname;
+    }
 
     @Id
     @Column(name = "STUDENTID")

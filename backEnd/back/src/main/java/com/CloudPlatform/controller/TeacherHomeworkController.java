@@ -38,13 +38,13 @@ public class TeacherHomeworkController {
     @RequestMapping(value = "/editTeacherHomework")
     public @ResponseBody
     TeacherHomework editTeacherHomework(@RequestBody JSONObject object){
-        return teacherhomeworkService.addTeacherHomework(object);
+        return teacherhomeworkService.editTeacherHomework(object);
     }
 
     //添加发布作业
     @RequestMapping(value = "/addTeacherHomework")
     public @ResponseBody
-    TeacherHomework addTeacherHomework(@RequestBody JSONObject object){
+    int addTeacherHomework(@RequestBody JSONObject object){
         return teacherhomeworkService.addTeacherHomework(object);
     }
 

@@ -42,7 +42,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
     }
 
     @Override
-    public TeacherHomework addOne(TeacherHomework homework){
+    public int addOne(TeacherHomework homework){
         int maxId = teacherhomeworkRepository.getMaxId()+1;
         teacherhomeworkRepository.Insert(homework.getEndTime(),
                 homework.getHandinAmount(),
@@ -69,7 +69,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homeworkDetail.setContentUpload(homework.getContentUpload());
         homeworkDetail.setSyllabus(homework.getSyllabus());
         teacherhomeworkDetailRepository.save(homeworkDetail);
-        return homework;
+        return maxId;
     }
 
     @Override

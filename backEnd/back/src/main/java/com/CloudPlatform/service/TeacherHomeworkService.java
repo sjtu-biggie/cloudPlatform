@@ -13,7 +13,7 @@ public interface TeacherHomeworkService {
     List<TeacherHomework> getTeacherHomeworkAll(int courseId);
     TeacherHomework getTeacherHomeworkOne(int homeworkId);
     TeacherHomework editTeacherHomework(JSONObject object);
-    TeacherHomework addTeacherHomework(JSONObject object);
+    int addTeacherHomework(JSONObject object);
     void deleteTeacherHomeworkAll(int courseId);
     void deleteTeacherHomeworkOne(int homeworkId);
     String upload(MultipartFile file, String userId);

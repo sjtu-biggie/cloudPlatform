@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Form, Input, message,Row,Col } from 'antd'
+import { Form, Input, message,Row,Col,Button } from 'antd'
 import { inject, observer } from 'mobx-react/index'
 import { calculateWidth } from '../../utils/utils'
 import PromptBox from '../../components/PromptBox'
@@ -16,8 +16,10 @@ class RegisterForm extends React.Component {
       focusItem: -1,
       isPhone:false,
       to:'',
-    };
+      count:10,
+      display:true,
 
+    };
   }
 
   handleGetTo=(event)=>{
@@ -28,8 +30,24 @@ class RegisterForm extends React.Component {
     })
   };
 
+  countDown=()=>{
+    const {count} =this.state;
+    console.log("开始计时现在时间为"+count);
+    if(count===1){
+      message.info("请重新要求发送验证码");
+      this.setState({
+        count:10,
+      })
+    }else{
+      this.setState({
+        count:count-1,
+      })
+    };
+    setTimeout(this.countDown,1000);
+  }
 
   sendVeriCode=()=>{
+    console.log("开始发送验证码");
     console.log(this.state.to);
     var url=this.state.isPhone?'http://106.13.209.140:8000/sendMessage':'http://106.13.209.140:8000/sendEmail';
     axios({
@@ -40,11 +58,13 @@ class RegisterForm extends React.Component {
       }
     }).then(msg=>{
       console.log(msg.data);
-      message.info("验证码已发送");
+      message.info("验证码已发送,请在五分钟之内输入");
       window.localStorage.setItem("veriCode",msg.data);
     }).catch(err=>{
       console.log(err);
     })
+
+    this.countDown();
   };
 
   registerSubmit = async (e) => {
@@ -282,7 +302,7 @@ class RegisterForm extends React.Component {
           <Row className="bottom">
             <Col span={6}>
               {/*<span className='registerBtn' onClick={()=>{this.sendVeriCode("1921209391@qq.com")}}>发送验证码</span>*/}
-              <span className='registerBtn' onClick={()=>{this.sendVeriCode()}}  >发送验证码</span>
+              <span className='registerBtn' onClick={()=>{this.sendVeriCode()}}   >发送验证码</span>
             </Col>
               <Col span={6}>
                 <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>

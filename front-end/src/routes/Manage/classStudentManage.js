@@ -218,7 +218,7 @@ export default class ClassManage extends Component {
                 }).then(msg=>{
                     console.log(msg.data);
                     let filterData=msg.data.filter(item=>
-                        item.theClass!==this.state.classChoose
+                        item.theClass!==this.state.classChoose&&item.type!=="teacher"&&item.type!=="manager"
                     );
                     console.log(filterData);
                     this.setState({
@@ -495,8 +495,8 @@ export default class ClassManage extends Component {
                 <Card title={<div style={{textAlign: "center"}}>管理班级名单</div>}>
                     <Card className={styles.control} bordered={false} style={{marginBottom: 10}}>
                         <Row>
-                            <Col span={8}>
-                                <Input style={{width: 560, marginRight: 16}}
+                            <Col span={10}>
+                                <Input
                                        value={search}
                                        allowClear
                                        onChange={event => this.setState({search: event.target.value})}/>
@@ -505,7 +505,7 @@ export default class ClassManage extends Component {
                                 <Button type={"primary"}
                                         onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Col>
-                            <Col span={4} offset={9}>
+                            <Col span={4} offset={8}>
 
                                 {/*<Col span={4}>*/}
                                 {/*    <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}}*/}

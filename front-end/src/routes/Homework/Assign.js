@@ -131,9 +131,15 @@ class Assign extends React.Component {
                 console.log(error);
             });
         let list1 = Array.from(studentInfo);
-        console.log(studentInfo);
+        let count = 0;
+        for (let i = 0; i < list1.length;++i){
+            if (list1[i].type === 'student'){
+                count++;
+            }
+        }
+        console.log(count);
         this.setState({
-            handinAmount: list1.length,
+            handinAmount: count,
         })
     };
 

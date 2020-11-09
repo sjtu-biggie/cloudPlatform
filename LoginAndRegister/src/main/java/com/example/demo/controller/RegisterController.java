@@ -61,6 +61,7 @@ public class RegisterController {
 
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     public String updateUser(@RequestBody JSONObject obj) {
+        System.out.println(obj);
         String username = obj.getString("username");
         String password = obj.getString("password");
         String sid = obj.getString("sid");

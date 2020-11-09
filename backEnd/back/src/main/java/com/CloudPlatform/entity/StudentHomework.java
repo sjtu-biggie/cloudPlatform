@@ -7,13 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "STUDENTHOMEWORK")
@@ -26,9 +24,10 @@ import java.util.List;
 public class StudentHomework {
     private static final long serialVersionUID = 1L;
 
-    public StudentHomework(int _courseId, String _studentId, String _title,
+    public StudentHomework(int _homeworkId,int _courseId, String _studentId, String _title,
                            Date _startTime, Date _endTime, String _nickname, String _subject
                            ){
+        homeworkId = _homeworkId;
         courseId = _courseId;
         studentId = _studentId;
         Title = _title;
@@ -102,7 +101,4 @@ public class StudentHomework {
 
     @Transient
     private int handinRank;
-
-    @Transient
-    List<MultipartFile> file;
 }

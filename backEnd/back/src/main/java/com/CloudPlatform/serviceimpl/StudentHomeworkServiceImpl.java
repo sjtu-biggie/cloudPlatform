@@ -80,25 +80,17 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
 
     @Override
     public StudentHomework addStudentHomework(JSONObject object){
-        int homeworkId= object.getInteger("homeworkId");
+        System.out.println(object);
         int courseId= object.getInteger("courseId");
+        int homeworkId= object.getInteger("homeworkId");
         String studentId= object.getString("studentId");
         String title= object.getString("title");
-        String comment= object.getString("comment");
-        String content= object.getString("content");
-        int finishHomework= object.getInteger("finishHomework");
-        int handinRank= object.getInteger("handinRank");
         String nickName= object.getString("nickName");
-        String remarks = object.getString("remarks");
         String subject= object.getString("subject");
-        String correct= object.getString("correct");
-        double score = object.getDouble("score");
         Date startTime = object.getDate("startTime");
         Date endTime = object.getDate("endTime");
-        Date handinTime = object.getDate("handinTime");
-        String upload = object.getString("upload");
 
-        StudentHomework hw = new StudentHomework(courseId,studentId,title,
+        StudentHomework hw = new StudentHomework(homeworkId,courseId,studentId,title,
                 startTime,endTime,subject,nickName);
         return studenthomeworkDao.addOne(hw);
     }

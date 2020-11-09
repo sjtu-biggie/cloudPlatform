@@ -215,6 +215,17 @@ class Assign extends React.Component {
         console.log(hw);
         this.setState({
             homework: hw,
+            syllabus: {
+                chapterNum: 1,
+                chapter1: {
+                    title: "题目",
+                    type:'选择题',
+                    text:'请输入题干，若是填空题请显式标记出要填的空来，并和填空题的答案一一对应',
+                    content: [
+
+                    ]
+                }
+            },
         })
     };
 
@@ -255,7 +266,7 @@ class Assign extends React.Component {
                         values.content = this.state.content;
                         values.conUpload = this.state.conUpload;
                     }else{
-                        values.content = this.state.syllabus;
+                        values.syllabus = this.state.syllabus;
                     }
                     values.answer = this.state.answer;
                     values.ansUpload = this.state.ansUpload;
@@ -688,6 +699,7 @@ class Assign extends React.Component {
     };
     deleteBig = (index) => {
         let modifiedSyllabus = this.state.syllabus;
+        if(modifiedSyllabus.chapterNum===1) return;
         for (let i = index + 1; i < modifiedSyllabus.chapterNum; ++i) {
             let prvChapter = 'chapter' + i;
             let mdfChapter = 'chapter' + (i + 1);

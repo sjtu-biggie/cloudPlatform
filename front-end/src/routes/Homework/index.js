@@ -121,6 +121,13 @@ class HomeworkDemo extends React.Component {
                 console.log(error);
             });
         console.log(hw);
+        let index = 0;
+        for (let _hw of hw){
+            if(_hw.type==='客观题'){
+                let content = _hw.syllabus;
+            }
+            index++;
+        }
         switch(type){
             case 0:{
                 break;

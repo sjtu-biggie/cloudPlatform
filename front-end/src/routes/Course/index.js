@@ -736,7 +736,7 @@ const styles = {
         top: 200,
         right: 50,
         with: 170
-    } ,loadingTitle:{
+    },loadingTitle:{
         position:'fixed',
         top:'50%',
         left:'50%',

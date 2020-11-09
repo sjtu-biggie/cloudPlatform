@@ -16,7 +16,7 @@ class RegisterForm extends React.Component {
       focusItem: -1,
       isPhone:false,
       to:'',
-      count:10,
+      count:0,
       display:true,
 
     };
@@ -33,12 +33,13 @@ class RegisterForm extends React.Component {
   countDown=()=>{
     const {count} =this.state;
     console.log("开始计时现在时间为"+count);
-    if(count===1){
-      message.info("请重新要求发送验证码");
-      this.setState({
-        count:10,
-      })
+    let buttonMsg=document.getElementById("code");
+    if(count<=0){
+      buttonMsg.innerText="发送验证码";
+      window.localStorage.setItem("veriCode",null);
+      return ;
     }else{
+      buttonMsg.innerText=count-1+"s"
       this.setState({
         count:count-1,
       })
@@ -47,8 +48,13 @@ class RegisterForm extends React.Component {
   }
 
   sendVeriCode=()=>{
-    console.log("开始发送验证码");
+    let tools=this.state.isPhone?"手机号":"邮箱";
     console.log(this.state.to);
+    if(this.state.to===''){
+      message.info("请输入"+tools);
+      return;
+    }
+    console.log("开始发送验证码");
     var url=this.state.isPhone?'http://106.13.209.140:8000/sendMessage':'http://106.13.209.140:8000/sendEmail';
     axios({
       method:'POST',
@@ -60,11 +66,13 @@ class RegisterForm extends React.Component {
       console.log(msg.data);
       message.info("验证码已发送,请在五分钟之内输入");
       window.localStorage.setItem("veriCode",msg.data);
+      this.setState({
+        count:301
+      })
+      this.countDown();
     }).catch(err=>{
       console.log(err);
     })
-
-    this.countDown();
   };
 
   registerSubmit = async (e) => {
@@ -148,7 +156,15 @@ class RegisterForm extends React.Component {
 
     return (
       <div  className={this.props.className}>
-        <h3 className='title'>注册</h3>
+        {/*<Row>*/}
+        {/*  <Col span={12}>*/}
+        {/*  <span className='title'>注册</span>*/}
+        {/*  </Col>*/}
+        {/*  /!*<Col span={12}>*!/*/}
+        {/*  /!*  <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>*!/*/}
+        {/*  /!*</Col>*!/*/}
+        {/*</Row>*/}
+
         <Form onSubmit={this.registerSubmit}>
           <Form.Item help={getFieldError('registerUsername') && <PromptBox info={getFieldError('registerUsername')}
                                                                            width={calculateWidth(getFieldError('registerUsername'))}/>}>
@@ -281,12 +297,20 @@ class RegisterForm extends React.Component {
                 {pattern: '^[^ ]+$', message: '不能输入空格'},
               ]
             })(
-                <Input
-                    onFocus={() => this.setState({focusItem: 5})}
-                    onBlur={() => this.setState({focusItem: -1})}
-                    maxLength={16}
-                    placeholder='验证码'
-                    addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 5 ? styles.focus : {}}/>}/>
+                <Row>
+                  <Col span={16}>
+                    <Input
+                        onFocus={() => this.setState({focusItem: 5})}
+                        onBlur={() => this.setState({focusItem: -1})}
+                        maxLength={16}
+                        placeholder='验证码'
+                        addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 5 ? styles.focus : {}}/>}/>
+                  </Col>
+                  <Col span={8}>
+                    <Button type={'primary'} id={"code"} onClick={()=>{this.sendVeriCode()}} style={{width:'110px',textAlign:'center'}} disabled={this.state.count!==0} >发送验证码</Button>
+                  </Col>
+
+                </Row>
             )}
           </Form.Item>
 
@@ -300,10 +324,6 @@ class RegisterForm extends React.Component {
               </Col>
             </Row>
           <Row className="bottom">
-            <Col span={6}>
-              {/*<span className='registerBtn' onClick={()=>{this.sendVeriCode("1921209391@qq.com")}}>发送验证码</span>*/}
-              <span className='registerBtn' onClick={()=>{this.sendVeriCode()}}   >发送验证码</span>
-            </Col>
               <Col span={6}>
                 <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>
               </Col>

@@ -36,6 +36,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homeworkDetail.setAnswer(homework.getAnswer());
         homeworkDetail.setAnswerUpload(homework.getAnswer());
         homeworkDetail.setContentUpload(homework.getAnswer());
+        homeworkDetail.setSyllabus(homework.getSyllabus());
         teacherhomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }

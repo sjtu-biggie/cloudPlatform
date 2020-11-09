@@ -1,5 +1,6 @@
 package com.CloudPlatform.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,10 @@ public class TeacherHomeworkDetail implements Serializable {
 
     @Column(name = "CONTENT")
     private String Content;
+
+    @Transient
+    @Column(name = "SYLLABUS")
+    private JSONObject syllabus;
 
     @Transient
     @Column(name = "ANSWER")

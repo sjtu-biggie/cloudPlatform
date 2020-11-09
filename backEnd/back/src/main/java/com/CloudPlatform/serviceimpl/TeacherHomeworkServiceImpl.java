@@ -5,6 +5,7 @@ import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.TeacherHomework;
 import com.CloudPlatform.service.TeacherHomeworkService;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,15 +39,21 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
     @Override
     public TeacherHomework editTeacherHomework(JSONObject object){
         String Id = object.getString("id");
+        String type= object.getString("type");
         int homeworkId= object.getInteger("homeworkId");
         int courseId= object.getInteger("courseId");
         String teacherId= object.getString("teacherId");
         String title= object.getString("title");
         String range= object.getString("range");
+        JSONObject syllabus;
+        if(type.equals("客观题")){
+            syllabus = object.getJSONObject("syllabus");
+        }else{
+            syllabus = null;
+        }
         String content= object.getString("content");
         String answer= object.getString("answer");
         String subject= object.getString("subject");
-        String type= object.getString("type");
         int handinAmount = object.getInteger("handinAmount");
         Date startTime = object.getDate("startTime");
         Date endTime = object.getDate("endTime");
@@ -54,7 +61,7 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         String ansUpload= object.getString("ansUpload");
 
         TeacherHomework hw = new TeacherHomework(homeworkId,courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,content,answer,Id, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,content,syllabus,answer,Id, conUpload, ansUpload);
         return teacherhomeworkDao.editOne(hw);
     }
 
@@ -74,9 +81,14 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         Date endTime = object.getDate("endTime");
         String conUpload= object.getString("conUpload");
         String ansUpload= object.getString("ansUpload");
-
+        JSONObject syllabus;
+        if(type.equals("客观题")){
+            syllabus = object.getJSONObject("syllabus");
+        }else{
+            syllabus = null;
+        }
         TeacherHomework hw = new TeacherHomework(courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,content,answer,Id, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,content,syllabus,answer,Id, conUpload, ansUpload);
         return teacherhomeworkDao.editOne(hw);
     }
 

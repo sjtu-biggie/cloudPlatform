@@ -1,5 +1,6 @@
 package com.CloudPlatform.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class TeacherHomework implements Serializable {
 
     public TeacherHomework(int _courseId, String _teacherId, String _title, String _range,
                            Date _startTime, Date _endTime,String _type,String _subject,
-                           int _handinAmount, String _content,String _answer,
+                           int _handinAmount, String _content,JSONObject _syllabus,String _answer,
                            String _Id, String _ContentUpload, String _AnswerUpload){
         courseId = _courseId;
         teacherId = _teacherId;
@@ -35,6 +36,7 @@ public class TeacherHomework implements Serializable {
         Subject = _subject;
         HandinAmount = _handinAmount;
         Content = _content;
+        syllabus = _syllabus;
         Answer = _answer;
         id = _Id;
         ContentUpload = _ContentUpload;
@@ -79,6 +81,10 @@ public class TeacherHomework implements Serializable {
     @Transient
     @Column(name = "CONTENT")
     private String Content;
+
+    @Transient
+    @Column(name = "SYLLABUS")
+    private JSONObject syllabus;
 
     @Transient
     @Column(name = "ANSWER")

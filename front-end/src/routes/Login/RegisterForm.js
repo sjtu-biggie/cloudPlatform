@@ -202,6 +202,7 @@ class RegisterForm extends React.Component {
               ]
             })(
               <Input
+                  onPaste={(e)=>{e.preventDefault()}}
                 onFocus={() => this.setState({focusItem: 2})}
                 onBlur={() => this.setState({focusItem: -1})}
                 type='password'
@@ -281,7 +282,7 @@ class RegisterForm extends React.Component {
           <Row className="bottom">
             <Col span={6}>
               {/*<span className='registerBtn' onClick={()=>{this.sendVeriCode("1921209391@qq.com")}}>发送验证码</span>*/}
-              <span className='registerBtn' onClick={()=>{this.sendVeriCode()}} disabled >发送验证码</span>
+              <span className='registerBtn' onClick={()=>{this.sendVeriCode()}}  >发送验证码</span>
             </Col>
               <Col span={6}>
                 <span className='registerBtn' onClick={this.gobackLogin}>返回登录</span>

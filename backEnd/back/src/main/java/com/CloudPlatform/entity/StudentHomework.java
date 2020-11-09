@@ -39,6 +39,32 @@ public class StudentHomework {
         nickName = _nickname;
     }
 
+    public StudentHomework(String _studentId, int _homeworkId, int _courseId,
+                           String _nickName, Date _handinTime, Date _startTime,
+                           Date _endTime, double _score, String _title,
+                           String _subject, String _content, String _correct,
+                           String _comment, String _remarks, String _id,
+                           String _upload, int _finishHomework, int _handinRank) {
+        studentId = _studentId;
+        homeworkId = _homeworkId;
+        courseId = _courseId;
+        nickName = _nickName;
+        HandinTime = _handinTime;
+        StartTime = _startTime;
+        EndTime = _endTime;
+        Score = _score;
+        Title = _title;
+        Subject = _subject;
+        Content = _content;
+        Comment = _comment;
+        Correct = _correct;
+        Remarks = _remarks;
+        id = _id;
+        Upload = _upload;
+        finishHomework = _finishHomework;
+        handinRank = _handinRank;
+    }
+
     @Id
     @Column(name = "STUDENTID")
     private String studentId;
@@ -106,4 +132,6 @@ public class StudentHomework {
 
     @Transient
     List<MultipartFile> file;
+
+
 }

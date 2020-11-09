@@ -74,7 +74,6 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         StudentHomework hw = new StudentHomework(studentId,homeworkId,courseId,nickName,handinTime,
                 startTime,endTime,score,title,subject,content,correct,comment,remarks,Id, upload,
                 finishHomework,handinRank);
-        System.out.println(hw);
         return studenthomeworkDao.editOne(hw);
     }
 

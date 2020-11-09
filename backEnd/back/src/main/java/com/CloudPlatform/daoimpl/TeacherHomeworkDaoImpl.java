@@ -93,6 +93,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         TeacherHomeworkDetail detail =  teacherhomeworkDetailRepository.findByHomeworkId(hwId);
         homework.setId(detail.getId());
         homework.setContent(detail.getContent());
+        homework.setSyllabus(detail.getSyllabus());
         homework.setAnswer(detail.getAnswer());
         homework.setAnswerUpload(detail.getAnswerUpload());
         homework.setContentUpload(detail.getContentUpload());
@@ -107,6 +108,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         for(int i = 0; i < homeworkList.size();++i){
             (homeworkList.get(i)).setId(((TeacherHomeworkDetail)list1.get(i)).getId());
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
+            (homeworkList.get(i)).setSyllabus(((TeacherHomeworkDetail)list1.get(i)).getSyllabus());
             (homeworkList.get(i)).setAnswer(((TeacherHomeworkDetail)list1.get(i)).getAnswer());
             (homeworkList.get(i)).setAnswerUpload(((TeacherHomeworkDetail)list1.get(i)).getAnswerUpload());
             (homeworkList.get(i)).setContentUpload(((TeacherHomeworkDetail)list1.get(i)).getContentUpload());
@@ -124,6 +126,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         for(int i = 0; i < homeworkList.size();++i){
             (homeworkList.get(i)).setId(((TeacherHomeworkDetail)list1.get(i)).getId());
             (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
+            (homeworkList.get(i)).setSyllabus(((TeacherHomeworkDetail)list1.get(i)).getSyllabus());
             (homeworkList.get(i)).setAnswer(((TeacherHomeworkDetail)list1.get(i)).getAnswer());
             (homeworkList.get(i)).setAnswerUpload(((TeacherHomeworkDetail)list1.get(i)).getAnswerUpload());
             (homeworkList.get(i)).setContentUpload(((TeacherHomeworkDetail)list1.get(i)).getContentUpload());

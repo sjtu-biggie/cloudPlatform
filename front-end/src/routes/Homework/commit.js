@@ -127,7 +127,6 @@ class HomeworkCommit extends React.Component{
 
                     <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
 
-
                     <Card bordered={false} className='card-item'>
                         <RichText parent={this}></RichText>
                     </Card>

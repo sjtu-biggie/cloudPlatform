@@ -16,6 +16,17 @@ const { Text, Link } = Typography;
 class HomeworkCommit extends React.Component{
 
     state={
+        syllabus: {
+            chapterNum: 1,
+            chapter1: {
+                title: "题目",
+                type:'选择题',
+                text:'请输入题干，若是填空题请显式标记出要填的空来，并和填空题的答案一一对应',
+                content: [
+
+                ]
+            }
+        },
         homeworkId:"",
         content:"",
         comment:"",
@@ -81,9 +92,7 @@ class HomeworkCommit extends React.Component{
 
         console.log(this.state.homework)
 
-        let obj={
-            homework:this.state.homework,
-        }
+        let obj = this.state.homework;
 
         console.log(obj)
 
@@ -91,6 +100,7 @@ class HomeworkCommit extends React.Component{
             method: 'post',
             data: obj,
             url: 'http://106.13.209.140:8383/addStudentHomework',
+            //url: 'http://localhost:8080/addStudentHomework',
             headers: {
                 withCredentials: true,
             }
@@ -103,7 +113,7 @@ class HomeworkCommit extends React.Component{
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
     changeData=(e)=>{//input输入什么，就监听这个方法，然后再修改state，然后返回到视图
         this.setState({

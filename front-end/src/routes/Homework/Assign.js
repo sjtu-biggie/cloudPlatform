@@ -194,6 +194,7 @@ class Assign extends React.Component {
                     values.courseId = this.props.course.course.id;
                     values.content = this.state.content;
                     values.answer = this.state.answer;
+                    values.syllabus = this.state.syllabus;
                     this.setState({
                         homework: values,
                     });

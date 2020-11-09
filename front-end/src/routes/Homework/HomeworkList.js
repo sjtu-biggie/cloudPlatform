@@ -79,10 +79,7 @@ class HomeworkList extends React.Component {
     deleteTeacherHomeworkOne=async (homeworkId)=>{
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383/deleteTeacherHomeworkOne',
-            data:{
-                'homeworkId':homeworkId
-            },
+            url: 'http://106.13.209.140:8383/deleteTeacherHomeworkOne?homeworkId=' + homeworkId,
             headers: {
                 withCredentials: true,
             }
@@ -205,6 +202,7 @@ class HomeworkList extends React.Component {
 
                                           extra={((this.state.delete === false && this.state.role === 'teacher')? [<Button type="danger" onClick={()=>{
                                               //delete
+                                              this.deleteTeacherHomeworkOne(item.homeworkId)
                                           }}>删除</Button>]:[])}
                                           >
                                           <List.Item.Meta

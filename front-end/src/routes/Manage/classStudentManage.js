@@ -505,23 +505,17 @@ export default class ClassManage extends Component {
                                 <Button type={"primary"}
                                         onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Col>
-                            <Col span={4} offset={8}>
-
-                                {/*<Col span={4}>*/}
-                                {/*    <Dropdown.Button overlay={this.state.menu} style={{width: '100px'}}*/}
-                                {/*                     block='true'*/}
-                                {/*                     placement="bottomCenter">*/}
-                                {/*        {this.state.classChoose}*/}
-                                {/*    </Dropdown.Button>*/}
-                                {/*</Col>*/}
+                            <Col span={2} offset={6}>
                                 <Dropdown overlay={this.state.menu} trigger={['click']}>
                                     <Button style={{width: "110px"}}><span id="courseButton">选择班级</span> <Icon
                                         type="down"/></Button>
                                 </Dropdown>
-                                <Button style={{marginLeft: '20px',width:'110px'}} onClick={this.addStudent} disabled={this.state.classChoose===''}>
-                                    添加学生
-                                </Button>
                             </Col>
+                                <Col span={2} offset={1}>
+                                    <Button style={{marginLeft: '20px',width:'110px'}} onClick={this.addStudent} disabled={this.state.classChoose===''}>
+                                        添加学生
+                                    </Button>
+                                </Col>
 
 
                         </Row>
@@ -592,7 +586,11 @@ export default class ClassManage extends Component {
                         }}
                         /></Card> : ''}
 
-
+                    {this.state.classChoose===''?
+                        <Card style={{textAlign:'center',fontWeight:"bold",fontSize:'30px'}}>
+                            请先选择班级
+                        </Card>
+                        :
                     <Card bordered={false} style={{marginBottom: 10, height: 800}}>
                         <Card title={<div style={{textAlign: "center",fontWeight:"550",fontSize:"25px",fontStyle:"italic"}}>{this.state.classChoose}</div>}>
                         <Table
@@ -642,6 +640,8 @@ export default class ClassManage extends Component {
                             dataSource={renderData}/>
                         </Card>
                     </Card>
+                    }
+
                 </Card>
             </div>
         );

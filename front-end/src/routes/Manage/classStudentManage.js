@@ -274,8 +274,6 @@ export default class ClassManage extends Component {
             })
         }
 
-
-
         this.deleteStudent = () => {
             axios({
                 method: 'POST',
@@ -463,7 +461,6 @@ export default class ClassManage extends Component {
 
     }
 
-
     // this.handleSearch2 = () => {
     //     const { orData2, search2 } = this.state;
     //     const filterData = orData2.filter(row => {
@@ -490,8 +487,6 @@ export default class ClassManage extends Component {
     //     });
     //     this.setState({ renderData2: filterData });
     // };
-
-
     render() {
         const {orData, search, renderData, modifyIds,addDataRender, addData} = this.state;
 
@@ -531,7 +526,6 @@ export default class ClassManage extends Component {
 
                         </Row>
                     </Card>
-
 
                     <Drawer
                         title="创建新的班级"
@@ -653,17 +647,3 @@ export default class ClassManage extends Component {
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

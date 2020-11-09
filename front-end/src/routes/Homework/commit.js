@@ -47,6 +47,9 @@ class HomeworkCommit extends React.Component{
         })
         console.log(this.state.file)
         let homework=this.state.homework;
+        this.setState({
+            path:[]
+        })
         for(let i=0;i<fileList.length;i++){
             this.state.path.push(fileList[i].response)
         }

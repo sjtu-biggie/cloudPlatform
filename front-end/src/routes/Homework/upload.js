@@ -34,7 +34,6 @@ class UploadDemo extends React.Component {
     }
 
     toParent = () => {
-        // console.log(this.props.parent.getChildrenMsg.bind(this, this.state.msg))
         this.props.parent.getUploadMsg(this, this.state.fileList)
     }
 
@@ -76,9 +75,6 @@ class UploadDemo extends React.Component {
         });
     }
 
-    onRemove=(file)=>{
-        console.log(file)
-    }
 
     render() {
         let that = this;
@@ -90,17 +86,16 @@ class UploadDemo extends React.Component {
             },
             onChange(info) {
                 console.log(info)
+                that.setState({
+                    fileList:info.fileList
+                });
+                console.log(that.state.fileList)
+                that.toParent()
                 if (info.file.status === 'uploading') {
                     // console.log(info.file, info.fileList);
                 }
                 if (info.file.status === 'done') {
                     message.success(`${info.file.name} 文件上传成功`);
-
-                    that.setState({
-                        fileList:[...info.fileList]
-                    });
-                    console.log(that.state.fileList)
-                    that.toParent()
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败`);
                 }
@@ -116,7 +111,7 @@ class UploadDemo extends React.Component {
 
         return (
             <div>
-                <Upload {...props}   onRemove={this.onRemove} >
+                <Upload {...props}>
                     <Button><Icon type="upload"/>Upload</Button>
                 </Upload>
             </div>
@@ -126,103 +121,3 @@ class UploadDemo extends React.Component {
 
 
 export default UploadDemo
-
-/*
-import React from 'react';
-import {
-    Upload, Button, Icon, message,
-} from 'antd';
-import 'antd/dist/antd.css';
-import reqwest from 'reqwest';  //这块要安装一下reqwest   npm install reqwest
-
-class UploadDemo extends React.Component {
-    state = {
-        fileList: [],
-        uploading: false,
-        uid:""
-    }
-
-    componentWillMount() {
-        let uid=localStorage.getItem("username")
-        console.log(uid)
-        this.setState({
-            uid:uid,
-        })
-    }
-
-    handleUpload = () => {
-        const { fileList } = this.state;
-        const formData = new FormData();
-        formData.append('file1', fileList[0]);   //注意第一个参数是传给后台的参数名字，我的项目中叫file1
-        formData.append('file2', fileList[1]);   //注意第一个参数是传给后台的参数名字，我的项目中叫file2
-        console.log(fileList)
-
-        this.setState({
-            uploading: true,
-        });
-
-        // You can use any AJAX library you like
-        reqwest({
-            url: 'http://106.13.209.140:8383/upload?userId='+this.state.uid,   //这块是你项目的接口
-            method: 'post',
-            processData: false,
-            data: formData,
-            success: () => {
-                this.setState({
-                    fileList,
-                    uploading: false,
-                });
-                message.success('upload successfully.');
-            },
-            error: () => {
-                this.setState({
-                    uploading: false,
-                });
-                message.error('upload failed.');
-            },
-        });
-    }
-
-    render() {
-        const { uploading, fileList } = this.state;
-        const props = {
-            onRemove: (file) => {
-                this.setState((state) => {
-                    const index = state.fileList.indexOf(file);
-                    const newFileList = state.fileList.slice();
-                    newFileList.splice(index, 1);
-                    return {
-                        fileList: newFileList,
-                    };
-                });
-            },
-            beforeUpload: (file) => {
-                this.setState(state => ({
-                    fileList: [...state.fileList, file],
-                }));
-                return false;
-            },
-            fileList,
-        };
-
-        return (
-            <div>
-                <Upload {...props}>
-                    <Button>
-                        <Icon type="upload" /> Select File
-                    </Button>
-                </Upload>
-                <Button
-                    type="primary"
-                    onClick={this.handleUpload}
-                    disabled={fileList.length === 0}
-                    loading={uploading}
-                    style={{ marginTop: 16 }}
-                >
-                    {uploading ? 'Uploading' : 'Start Upload' }
-                </Button>
-            </div>
-        );
-    }
-}
-export default UploadDemo;*/

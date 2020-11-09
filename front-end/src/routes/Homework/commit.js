@@ -48,28 +48,28 @@ class HomeworkCommit extends React.Component{
             homework:homework,
             content:homework.content
         })
-    }
+    };
 
     getUploadMsg = (result, fileList) => {
         // console.log(result, msg)
         // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
         this.setState({
             file:fileList,
-        })
-        console.log(this.state.file)
+        });
+        console.log(this.state.file);
         let homework=this.state.homework;
         this.setState({
             path:[]
-        })
+        });
         for(let i=0;i<fileList.length;i++){
             this.state.path.push(fileList[i].response)
         }
-        homework.upload=this.state.path.join(',')
+        homework.upload=this.state.path.join(',');
         this.setState({
             homework: homework
-        })
+        });
         console.log(homework)
-    }
+    };
 
     getEditorMsg = (result, editorContent) => {
         // console.log(result, msg)
@@ -78,9 +78,9 @@ class HomeworkCommit extends React.Component{
         homework.content=editorContent;
         this.setState({
             homework:homework
-        })
+        });
         console.log(this.state.homework)
-    }
+    };
 
     postObject = async() => {
 
@@ -88,13 +88,13 @@ class HomeworkCommit extends React.Component{
         homework.handinTime=new Date();
         this.setState({
             homework: homework
-        })
+        });
 
-        console.log(this.state.homework)
+        console.log(this.state.homework);
 
         let obj = this.state.homework;
 
-        console.log(obj)
+        console.log(obj);
 
         let config = {
             method: 'post',
@@ -151,7 +151,7 @@ class HomeworkCommit extends React.Component{
                         <p>{this.state.homework.correct}</p>
                     </Card><br/>
                     <Card title="作业评论" >
-                        <p>{this.state.homework.comment}</p>
+                        <p>{this.state.homework.comment===null?'暂无评论':this.state.homework.comment}</p>
                     </Card><br/>
                     <Upload parent={this}></Upload>
                     <br></br>

@@ -49,8 +49,8 @@ class SiderNav extends React.Component {
                         key: '/home/homework',
                         subs: [
                             {key: '/home/homework/overall', title: '所有作业', icon: ''},
-                            {key: '/home/homework/submitted', title: this.state.role === 'student' ? '已交' : '已收齐', icon: ''},
-                            {key: '/home/homework/uncommitted', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
+                            {key: '/home/homework/submitted', title: role === 'student' ? '已交' : '已收齐', icon: ''},
+                            {key: '/home/homework/uncommitted', title: role === 'student' ? '未交' : '未收齐', icon: ''},
                             {key: '/home/homework/closed', title: '已截止', icon: ''},
                             {key: '/home/homework/notclosed', title: '未截止', icon: ''},
                         ]
@@ -119,8 +119,8 @@ class SiderNav extends React.Component {
                         key: '/home/homework',
                         subs: [
                             {key: '/home/homework/overall', title: '所有作业', icon: ''},
-                            {key: '/home/homework/submitted', title: this.state.role === 'student' ? '已交' : '已收齐', icon: ''},
-                            {key: '/home/homework/uncommitted', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
+                            {key: '/home/homework/submitted', title: role === 'student' ? '已交' : '已收齐', icon: ''},
+                            {key: '/home/homework/uncommitted', title: role === 'student' ? '未交' : '未收齐', icon: ''},
                             {key: '/home/homework/closed', title: '已截止', icon: ''},
                             {key: '/home/homework/notclosed', title: '未截止', icon: ''},
                         ]

@@ -38,44 +38,14 @@ public class TeacherHomeworkController {
     @RequestMapping(value = "/editTeacherHomework")
     public @ResponseBody
     TeacherHomework editTeacherHomework(@RequestBody JSONObject object){
-        JSONObject teaHw = object.getObject("homework",JSONObject.class);
-        String teaId= teaHw.getString("teahcerId");
-        MultipartFile ansFile = object.getObject("ansFile",MultipartFile.class);
-        MultipartFile conFile = object.getObject("conFile",MultipartFile.class);
-        String ansUpload = "";
-        String conUpload = "";
-        if (ansFile != null){
-            ansUpload = teacherhomeworkService.upload(ansFile,teaId);
-        }
-        else ansUpload = "";
-
-        if (conFile != null){
-            conUpload = teacherhomeworkService.upload(conFile,teaId);
-        }
-        else conUpload = "";
-        return teacherhomeworkService.addTeacherHomework(object,ansUpload,conUpload);
+        return teacherhomeworkService.addTeacherHomework(object);
     }
 
     //添加发布作业
     @RequestMapping(value = "/addTeacherHomework")
     public @ResponseBody
     TeacherHomework addTeacherHomework(@RequestBody JSONObject object){
-        JSONObject teaHw = object.getObject("homework",JSONObject.class);
-        String teaId= teaHw.getString("teahcerId");
-        MultipartFile ansFile = object.getObject("ansFile",MultipartFile.class);
-        MultipartFile conFile = object.getObject("conFile",MultipartFile.class);
-        String ansUpload = "";
-        String conUpload = "";
-        if (ansFile != null){
-            ansUpload = teacherhomeworkService.upload(ansFile,teaId);
-        }
-        else ansUpload = "";
-
-        if (conFile != null){
-            conUpload = teacherhomeworkService.upload(conFile,teaId);
-        }
-        else conUpload = "";
-        return teacherhomeworkService.addTeacherHomework(object,ansUpload,conUpload);
+        return teacherhomeworkService.addTeacherHomework(object);
     }
 
     //删除课程的所有作业

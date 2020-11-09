@@ -16,8 +16,8 @@ public interface StudentHomeworkService {
     List<StudentHomework> getStudentHomeworkAllOfHomework(int homeworkId);
     List<StudentHomework> getStudentHomeworkAllOfHomeworkNoMongo(int homeworkId);
     StudentHomework getStudentHomeworkOne(String studentId, int homeworkId);
-    StudentHomework editStudentHomework(JSONObject object,String upload);
-    StudentHomework addStudentHomework(JSONObject object,String upload);
+    StudentHomework editStudentHomework(JSONObject object);
+    StudentHomework addStudentHomework(JSONObject object);
     StudentHomework correctStudentHomework(JSONObject object);
     void deleteStudentHomeworkAll(String studentId, int courseId);
     void deleteStudentHomeworkOne(String studentId, int homeworkId);
@@ -29,6 +29,4 @@ public interface StudentHomeworkService {
     double getAverage(int homeworkId);
 
     String upload(MultipartFile file,String userId);
-
-    String uploadNotSave(MultipartFile file);
 }

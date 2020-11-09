@@ -36,21 +36,22 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
     }
 
     @Override
-    public TeacherHomework editTeacherHomework(JSONObject object, String ansUpload, String conUpload){
-        JSONObject teaHw = object.getObject("homework",JSONObject.class);
-        String Id = teaHw.getString("id");
-        int homeworkId= teaHw.getInteger("homeworkId");
-        int courseId= teaHw.getInteger("courseId");
-        String teacherId= teaHw.getString("teacherId");
-        String title= teaHw.getString("title");
-        String range= teaHw.getString("range");
-        String content= teaHw.getString("content");
-        String answer= teaHw.getString("answer");
-        String subject= teaHw.getString("subject");
-        String type= teaHw.getString("type");
-        int handinAmount = teaHw.getInteger("handinAmount");
-        Date startTime = teaHw.getDate("startTime");
-        Date endTime = teaHw.getDate("endTime");
+    public TeacherHomework editTeacherHomework(JSONObject object){
+        String Id = object.getString("id");
+        int homeworkId= object.getInteger("homeworkId");
+        int courseId= object.getInteger("courseId");
+        String teacherId= object.getString("teacherId");
+        String title= object.getString("title");
+        String range= object.getString("range");
+        String content= object.getString("content");
+        String answer= object.getString("answer");
+        String subject= object.getString("subject");
+        String type= object.getString("type");
+        int handinAmount = object.getInteger("handinAmount");
+        Date startTime = object.getDate("startTime");
+        Date endTime = object.getDate("endTime");
+        String conUpload= object.getString("conUpload");
+        String ansUpload= object.getString("ansUpload");
 
         TeacherHomework hw = new TeacherHomework(homeworkId,courseId,teacherId,title,range,
                 startTime,endTime,type,subject,handinAmount,content,answer,Id, conUpload, ansUpload);
@@ -58,20 +59,21 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
     }
 
     @Override
-    public TeacherHomework addTeacherHomework(JSONObject object, String ansUpload, String conUpload){
-        JSONObject teaHw = object.getObject("homework",JSONObject.class);
-        String Id = teaHw.getString("id");
-        int courseId= teaHw.getInteger("courseId");
-        String teacherId= teaHw.getString("teacherId");
-        String title= teaHw.getString("title");
-        String range= teaHw.getString("range");
-        String content= teaHw.getString("content");
-        String answer= teaHw.getString("answer");
-        String subject= teaHw.getString("subject");
-        String type= teaHw.getString("type");
-        int handinAmount = teaHw.getInteger("handinAmount");
-        Date startTime = teaHw.getDate("startTime");
-        Date endTime = teaHw.getDate("endTime");
+    public TeacherHomework addTeacherHomework(JSONObject object){
+        String Id = object.getString("id");
+        int courseId= object.getInteger("courseId");
+        String teacherId= object.getString("teacherId");
+        String title= object.getString("title");
+        String range= object.getString("range");
+        String content= object.getString("content");
+        String answer= object.getString("answer");
+        String subject= object.getString("subject");
+        String type= object.getString("type");
+        int handinAmount = object.getInteger("handinAmount");
+        Date startTime = object.getDate("startTime");
+        Date endTime = object.getDate("endTime");
+        String conUpload= object.getString("conUpload");
+        String ansUpload= object.getString("ansUpload");
 
         TeacherHomework hw = new TeacherHomework(courseId,teacherId,title,range,
                 startTime,endTime,type,subject,handinAmount,content,answer,Id, conUpload, ansUpload);

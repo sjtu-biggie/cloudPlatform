@@ -48,11 +48,6 @@ public class StudentHomeworkController {
         return studenthomeworkService.upload(file,userId);
     }
 
-    @PostMapping(value = "/uploadNotSave")
-    public String uploadNotSave(@RequestParam("file") MultipartFile file) {
-        return studenthomeworkService.uploadNotSave(file);
-    }
-
 
     //批改同学提交的作业
     @RequestMapping(value = "/CorrectHomework")
@@ -92,30 +87,14 @@ public class StudentHomeworkController {
     @RequestMapping(value = "/editStudentHomework")
     public @ResponseBody
     StudentHomework editStudentHomework(@RequestBody JSONObject object){
-        JSONObject stuHw = object.getObject("homework",JSONObject.class);
-        String studentId= stuHw.getString("studentId");
-        MultipartFile file = object.getObject("file",MultipartFile.class);
-        String upload = "";
-        if (file != null){
-            upload = studenthomeworkService.upload(file,studentId);
-        }
-        else upload = "";
-        return studenthomeworkService.addStudentHomework(object,upload);
+        return studenthomeworkService.addStudentHomework(object);
     }
 
     //提交作业
     @RequestMapping(value = "/addStudentHomework")
     public @ResponseBody
     StudentHomework addStudentHomework(@RequestBody JSONObject object){
-        JSONObject stuHw = object.getObject("homework",JSONObject.class);
-        String studentId= stuHw.getString("studentId");
-        MultipartFile file = object.getObject("file",MultipartFile.class);
-        String upload = "";
-        if (file != null){
-            upload = studenthomeworkService.upload(file,studentId);
-        }
-        else upload = "";
-        return studenthomeworkService.addStudentHomework(object,upload);
+        return studenthomeworkService.addStudentHomework(object);
     }
 
     //删除某课程的所有作业

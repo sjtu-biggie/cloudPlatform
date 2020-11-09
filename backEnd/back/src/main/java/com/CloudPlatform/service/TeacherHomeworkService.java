@@ -12,8 +12,8 @@ public interface TeacherHomeworkService {
     List<TeacherHomework> getHomeworkAll(String teacherId);
     List<TeacherHomework> getTeacherHomeworkAll(int courseId);
     TeacherHomework getTeacherHomeworkOne(int homeworkId);
-    TeacherHomework editTeacherHomework(JSONObject object, String ansUpload, String conUpload);
-    TeacherHomework addTeacherHomework(JSONObject object, String ansUpload, String conUpload);
+    TeacherHomework editTeacherHomework(JSONObject object);
+    TeacherHomework addTeacherHomework(JSONObject object);
     void deleteTeacherHomeworkAll(int courseId);
     void deleteTeacherHomeworkOne(int homeworkId);
     String upload(MultipartFile file, String userId);

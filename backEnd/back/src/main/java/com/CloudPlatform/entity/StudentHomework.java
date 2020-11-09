@@ -84,6 +84,7 @@ public class StudentHomework {
 
     @Transient
     private int finishHomework;
+
     @Transient
     private int handinRank;
 }

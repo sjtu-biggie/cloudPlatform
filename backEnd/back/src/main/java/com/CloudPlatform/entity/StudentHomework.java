@@ -28,7 +28,7 @@ public class StudentHomework {
 
     public StudentHomework(int _courseId, String _studentId, String _title,
                            Date _startTime, Date _endTime, String _nickname, String _subject
-                           ){
+    ) {
         courseId = _courseId;
         studentId = _studentId;
         Title = _title;
@@ -36,6 +36,28 @@ public class StudentHomework {
         EndTime = _endTime;
         Subject = _subject;
         nickName = _nickname;
+    }
+
+    public StudentHomework(String _studentId,int _homeworkId,int _courseId, String _nickname, Date _handintime,
+                           Date _startTime, Date _endTime,Double _score, String _title, String _subject, String _content, String _correct, String _comment, String _remarks, String _id, String _uploads,int _finishHomework,int _handinRank
+                           ) {
+        courseId = _courseId;
+        studentId = _studentId;
+        homeworkId = _homeworkId;
+        HandinTime = _handintime;
+        Title = _title;
+        Score = _score;
+        StartTime = _startTime;
+        EndTime = _endTime;
+        Subject = _subject;
+        nickName = _nickname;
+        Content = _content;
+        Comment = _comment;
+        Correct = _correct;
+        Remarks = _remarks;
+        id = _id;
+        handinRank = _handinRank;
+        finishHomework = _finishHomework;
     }
 
     @Id

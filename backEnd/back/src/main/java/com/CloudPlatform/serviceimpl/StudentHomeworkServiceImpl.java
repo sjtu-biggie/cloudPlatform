@@ -14,12 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Double.parseDouble;
-import java.util.Date;
-import java.util.Random;
 
 @Service
 public class StudentHomeworkServiceImpl implements StudentHomeworkService {
@@ -48,6 +45,9 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
 
     @Override
     public StudentHomework getStudentHomeworkOne(String studentId, int homeworkId){
+        StudentHomework studentHomework = studenthomeworkDao.findOne(studentId, homeworkId);
+        String[] path = studentHomework.getUpload().split(",");
+        System.out.println(Arrays.toString(path));
         return studenthomeworkDao.findOne(studentId, homeworkId);
     }
 
@@ -97,7 +97,6 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         Date endTime = object.getDate("endTime");
         Date handinTime = object.getDate("handinTime");
         String upload = object.getString("upload");
-
         StudentHomework hw = new StudentHomework(courseId,studentId,title,
                 startTime,endTime,subject,nickName);
         return studenthomeworkDao.addOne(hw);

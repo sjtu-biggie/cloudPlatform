@@ -1,7 +1,7 @@
-+****************************------------package com.CloudPlatform.entity;
-
+package com.CloudPlatform.entity;
 import com.CloudPlatform.utils.multikeys.StudentHomeworkMultiKeys;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @Transactional
 @IdClass(StudentHomeworkMultiKeys.class)
-
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class StudentHomework {
     private static final long serialVersionUID = 1L;
 
@@ -129,7 +129,6 @@ public class StudentHomework {
 
     @Transient
     private int handinRank;
-
     @Transient
     List<MultipartFile> file;
 

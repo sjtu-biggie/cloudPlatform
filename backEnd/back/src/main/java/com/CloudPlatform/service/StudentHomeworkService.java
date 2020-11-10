@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -15,7 +16,7 @@ public interface StudentHomeworkService {
     List<StudentHomework> getStudentHomeworkAllOfCourse(String studentId, int courseId);
     List<StudentHomework> getStudentHomeworkAllOfHomework(int homeworkId);
     List<StudentHomework> getStudentHomeworkAllOfHomeworkNoMongo(int homeworkId);
-    StudentHomework getStudentHomeworkOne(String studentId, int homeworkId);
+    StudentHomework getStudentHomeworkOne(String studentId, int homeworkId) throws IOException;
     StudentHomework editStudentHomework(JSONObject object);
     StudentHomework addStudentHomework(JSONObject object);
     StudentHomework correctStudentHomework(JSONObject object);

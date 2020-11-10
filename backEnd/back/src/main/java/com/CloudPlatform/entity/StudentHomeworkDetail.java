@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Document(collection="STUDENTHOMEWORKDETAIL")
 //@IdClass(StudentHomeworkMultiKeys.class)
 @Transactional
-
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class StudentHomeworkDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 

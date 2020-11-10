@@ -97,6 +97,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homework.setRemarks(detail.getRemarks());
         homework.setCorrect(detail.getCorrect());
         homework.setUpload(detail.getUpload());
+        System.out.println(homework);
         return homework;
     }
 

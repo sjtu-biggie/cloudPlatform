@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,7 +40,7 @@ public class StudentHomeworkController {
     //同学课程的某次提交的作业
     @RequestMapping(value = "/getStudentHomeworkOne")
     public StudentHomework getStudentHomeworkOne(@RequestParam("studentId") String studentId,
-                                                 @RequestParam("homeworkId") int homeworkId) {
+                                                 @RequestParam("homeworkId") int homeworkId) throws IOException {
         return studenthomeworkService.getStudentHomeworkOne(studentId, homeworkId);
     }
 

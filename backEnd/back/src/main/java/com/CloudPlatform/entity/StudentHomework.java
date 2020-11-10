@@ -1,4 +1,4 @@
-package com.CloudPlatform.entity;
++****************************------------package com.CloudPlatform.entity;
 
 import com.CloudPlatform.utils.multikeys.StudentHomeworkMultiKeys;
 import com.alibaba.fastjson.JSONObject;
@@ -26,9 +26,10 @@ import java.util.List;
 public class StudentHomework {
     private static final long serialVersionUID = 1L;
 
-    public StudentHomework(int _courseId, String _studentId, String _title,
+    public StudentHomework(int _homeworkId,int _courseId, String _studentId, String _title,
                            Date _startTime, Date _endTime, String _nickname, String _subject
-    ) {
+                           ){
+        homeworkId = _homeworkId;
         courseId = _courseId;
         studentId = _studentId;
         Title = _title;
@@ -38,26 +39,30 @@ public class StudentHomework {
         nickName = _nickname;
     }
 
-    public StudentHomework(String _studentId,int _homeworkId,int _courseId, String _nickname, Date _handintime,
-                           Date _startTime, Date _endTime,Double _score, String _title, String _subject, String _content, String _correct, String _comment, String _remarks, String _id, String _uploads,int _finishHomework,int _handinRank
-                           ) {
-        courseId = _courseId;
+    public StudentHomework(String _studentId, int _homeworkId, int _courseId,
+                           String _nickName, Date _handinTime, Date _startTime,
+                           Date _endTime, double _score, String _title,
+                           String _subject, String _content, String _correct,
+                           String _comment, String _remarks, String _id,
+                           String _upload, int _finishHomework, int _handinRank) {
         studentId = _studentId;
         homeworkId = _homeworkId;
-        HandinTime = _handintime;
-        Title = _title;
-        Score = _score;
+        courseId = _courseId;
+        nickName = _nickName;
+        HandinTime = _handinTime;
         StartTime = _startTime;
         EndTime = _endTime;
+        Score = _score;
+        Title = _title;
         Subject = _subject;
-        nickName = _nickname;
         Content = _content;
         Comment = _comment;
         Correct = _correct;
         Remarks = _remarks;
         id = _id;
-        handinRank = _handinRank;
+        Upload = _upload;
         finishHomework = _finishHomework;
+        handinRank = _handinRank;
     }
 
     @Id
@@ -127,4 +132,6 @@ public class StudentHomework {
 
     @Transient
     List<MultipartFile> file;
+
+
 }

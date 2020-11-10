@@ -23,6 +23,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
 
     @Override
     public TeacherHomework editOne(TeacherHomework homework){
+        teacherhomeworkRepository.save(homework);
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = homework.getHomeworkId();
         int c_id = homework.getCourseId();

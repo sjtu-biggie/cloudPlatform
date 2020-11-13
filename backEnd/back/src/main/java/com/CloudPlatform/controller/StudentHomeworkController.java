@@ -94,7 +94,7 @@ public class StudentHomeworkController {
     @RequestMapping(value = "/editStudentHomework")
     public @ResponseBody
     StudentHomework editStudentHomework(@RequestBody JSONObject object){
-        return studenthomeworkService.addStudentHomework(object);
+        return studenthomeworkService.editStudentHomework(object);
     }
 
     //提交作业

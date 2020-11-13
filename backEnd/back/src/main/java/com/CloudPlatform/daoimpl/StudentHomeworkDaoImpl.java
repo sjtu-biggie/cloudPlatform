@@ -25,6 +25,17 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
 
     @Override
     public StudentHomework editOne(StudentHomework homework){
+        studenthomeworkRepository.Update(
+                homework.getEndTime(),
+                homework.getHandinTime(),
+                homework.getScore(),
+                homework.getStartTime(),
+                homework.getNickName(),
+                homework.getTitle(),
+                homework.getSubject(),
+                homework.getCourseId(),
+                homework.getStudentId(),
+                homework.getHomeworkId());
         StudentHomeworkDetail homeworkDetail = new StudentHomeworkDetail();
         String t_id = homework.getStudentId();
         int h_id = homework.getHomeworkId();
@@ -41,7 +52,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setCorrect(homework.getCorrect());
         homeworkDetail.setUpload(homework.getUpload());
         studenthomeworkDetailRepository.save(homeworkDetail);
-        return studenthomeworkRepository.save(homework);
+        return homework;
     }
 
     @Override

@@ -22,6 +22,11 @@ public interface StudentHomeworkRepository extends JpaRepository<StudentHomework
     @Query(nativeQuery = true,value ="insert into studenthomework (endtime, starttime, subject, title, nickname, courseid, studentid, homeworkid) values (?1, ?2,?3, ?4, ?5, ?6,?7, ?8)")
     void Insert(Date endTime, Date starttime, String subject, String title, String nickname, int courseid, String studentid, int homeworkid);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value ="update studenthomework set endtime=?1, handintime=?2, score=?3, starttime=?4, nickname=?5, title=?6, subject=?7, courseid=?8, studentid=?9 where homeworkid = ?10")
+    void Update(Date endTime, Date handintime, Double score, Date starttime, String nickname, String title, String subject, int courseid, String studentid, int homeworkid);
+
     @Query(nativeQuery = true,value="select * from studenthomework where courseid=?2 and studentid=?1 order by starttime desc ")
     List<StudentHomework> findByStudentIdAndCourseId(String studentId, int courseId);
 

@@ -62,29 +62,29 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Override
     public StudentHomework getStudentHomeworkOne(String studentId, int homeworkId) {
         StudentHomework studentHomework = studenthomeworkDao.findOne(studentId, homeworkId);
-        String[] path = studentHomework.getUpload().split(",");
-        System.out.println(Arrays.toString(path));
-        List<MultipartFile> fileList = new ArrayList<>();
-        for (String filepath : path) {
-            ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
-            File file = new File(filepath);//File类型可以是文件也可以是文件夹
-            fixedThreadPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        FileInputStream fileInputStream = null;
-                        fileInputStream = new FileInputStream(file);
-                        MultipartFile multipartFile = new MockMultipartFile(filepath,filepath,
-                                ContentType.APPLICATION_OCTET_STREAM.toString(), fileInputStream);
-                        fileList.add(multipartFile);
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-            });
-        }
-        studentHomework.setFile(fileList);
-        System.out.println(studentHomework);
+//        String[] path = studentHomework.getUpload().split(",");
+//        System.out.println(Arrays.toString(path));
+//        List<MultipartFile> fileList = new ArrayList<>();
+//        for (String filepath : path) {
+//            ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
+//            File file = new File(filepath);//File类型可以是文件也可以是文件夹
+//            fixedThreadPool.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        FileInputStream fileInputStream = null;
+//                        fileInputStream = new FileInputStream(file);
+//                        MultipartFile multipartFile = new MockMultipartFile(filepath,filepath,
+//                                ContentType.APPLICATION_OCTET_STREAM.toString(), fileInputStream);
+//                        fileList.add(multipartFile);
+//                    } catch (Exception e) {
+//                        System.out.println(e.getMessage());
+//                    }
+//                }
+//            });
+//        }
+//        studentHomework.setFile(fileList);
+//        System.out.println(studentHomework);
         return studentHomework;
     }
 

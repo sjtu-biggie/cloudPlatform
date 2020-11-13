@@ -25,7 +25,7 @@ public class LoginService {
     }
 
     public boolean setUseIcon(UserIcon userIcon){
-        System.out.println("进入Service储存用户头像"+userIcon);
+        System.out.println("进入Service储存用户头像");
         return loginDao.setUserIcon(userIcon);
     }
 }

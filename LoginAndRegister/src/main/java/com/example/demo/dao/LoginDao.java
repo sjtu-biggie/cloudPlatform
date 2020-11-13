@@ -22,11 +22,20 @@ public class LoginDao {
         System.out.println("进入Dao获取全部信息");
         String username = obj.getString("username");
         User user1 = userMapper.getUserMessage(username);
-        UserIcon userIcon=userIconRepository.findByUsername(username);
-        user1.setIconBase64(userIcon.getIconBase64());
+        try{
+            UserIcon userIcon=userIconRepository.findByUsername(username);
+            user1.setIconBase64(userIcon.getIconBase64());
+            System.out.println("获取到头像");
+        }catch (Exception e){
+            user1.setIconBase64(null);
+            System.out.println("无头像设置为空");
+        }
         System.out.println("获取全部信息完成");
         return user1;
     }
+
+
+
 
     public String getUserIcon(String username) {
         System.out.println("进入Dao获取头像通过用户名"+username);

@@ -9,6 +9,7 @@ public interface TeacherHomeworkDao {
     TeacherHomework findOne(int homeworkId);
     TeacherHomework editOne(TeacherHomework homework);
     int addOne(TeacherHomework homework);
+    void updateHandinAlready(TeacherHomework homework);
     void deleteAll(int courseId);
     void deleteOne(int homeworkId);
 }

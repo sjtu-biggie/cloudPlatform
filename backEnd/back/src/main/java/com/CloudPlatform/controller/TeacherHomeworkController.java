@@ -59,4 +59,10 @@ public class TeacherHomeworkController {
     public @ResponseBody void deleteTeacherHomeworkOne(@RequestParam("homeworkId") int homeworkId){
         teacherhomeworkService.deleteTeacherHomeworkOne(homeworkId);
     }
+
+    //更新已提交作业的数量
+    @RequestMapping(value = "/UpdateHandinAlready")
+    public @ResponseBody int UpdateHandinAlready(@RequestParam("homeworkId") int homeworkId){
+        return teacherhomeworkService.UpdateHandinAlready(homeworkId);
+    }
 }

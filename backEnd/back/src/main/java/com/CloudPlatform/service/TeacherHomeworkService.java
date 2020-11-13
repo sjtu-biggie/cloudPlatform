@@ -17,4 +17,6 @@ public interface TeacherHomeworkService {
     void deleteTeacherHomeworkAll(int courseId);
     void deleteTeacherHomeworkOne(int homeworkId);
     String upload(MultipartFile file, String userId);
+    int UpdateHandinAlready(int homeworkId);
+
 }

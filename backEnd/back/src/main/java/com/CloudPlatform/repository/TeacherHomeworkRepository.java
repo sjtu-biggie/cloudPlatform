@@ -20,9 +20,18 @@ public interface TeacherHomeworkRepository extends JpaRepository<TeacherHomework
     @Query(nativeQuery = true,value ="insert into teacherhomework (endtime, handinamount, `range`, starttime, subject, title, type, courseid, teacherid, homeworkid) values (?1, ?2,?3, ?4, ?5, ?6,?7, ?8, ?9,?10)")
     void Insert(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int homeworkid);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value ="update teacherhomework set endtime=?1, handinamount=?2, `range`=?3, starttime=?4, subject=?5, title=?6, type=?7, courseid=?8, teacherid=?9, handinalready=?10 where homeworkid = ?11")
+    void Update(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int handinalready, int homeworkid);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value ="update teacherhomework set handinalready = ?1 where homeworkid = ?2")
+    void UpdateHandinAlready(int handinalready, int homeworkid);
+
     @Query(nativeQuery = true,value = "select max(homeworkId) from teacherhomework ")
     Integer getMaxId();
-
 
     @Transactional
     void deleteByCourseId(int courseId);

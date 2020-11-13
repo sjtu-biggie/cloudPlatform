@@ -1,11 +1,9 @@
 package com.CloudPlatform.serviceimpl;
 
 import com.CloudPlatform.dao.TeacherHomeworkDao;
-import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.TeacherHomework;
 import com.CloudPlatform.service.TeacherHomeworkService;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,13 +53,14 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         String answer= object.getString("answer");
         String subject= object.getString("subject");
         int handinAmount = object.getInteger("handinAmount");
+        int handinAlready = object.getInteger("handinAlready");
         Date startTime = object.getDate("startTime");
         Date endTime = object.getDate("endTime");
         String conUpload= object.getString("conUpload");
         String ansUpload= object.getString("ansUpload");
 
         TeacherHomework hw = new TeacherHomework(homeworkId,courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,content,syllabus,answer,Id, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,handinAlready,content,syllabus,answer,Id, conUpload, ansUpload);
         return teacherhomeworkDao.editOne(hw);
     }
 
@@ -87,7 +86,7 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
             syllabus = null;
         }
         TeacherHomework hw = new TeacherHomework(courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,content,syllabus,answer, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,0,content,syllabus,answer, conUpload, ansUpload);
         return teacherhomeworkDao.addOne(hw);
     }
 
@@ -127,6 +126,15 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public int UpdateHandinAlready(int homeworkId) {
+        TeacherHomework teaHw = teacherhomeworkDao.findOne(homeworkId);
+        int num = teaHw.getHandinAlready() + 1;
+        teaHw.setHandinAlready(num);
+        teacherhomeworkDao.updateHandinAlready(teaHw);
+        return num;
     }
 
 }

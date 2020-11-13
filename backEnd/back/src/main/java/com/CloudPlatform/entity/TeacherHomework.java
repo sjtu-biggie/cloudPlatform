@@ -24,7 +24,7 @@ public class TeacherHomework implements Serializable {
 
     public TeacherHomework(int _courseId, String _teacherId, String _title, String _range,
                            Date _startTime, Date _endTime,String _type,String _subject,
-                           int _handinAmount, String _content,JSONObject _syllabus,String _answer,
+                           int _handinAmount, int _handinAlready, String _content,JSONObject _syllabus,String _answer,
                            String _ContentUpload, String _AnswerUpload){
         courseId = _courseId;
         teacherId = _teacherId;
@@ -35,6 +35,7 @@ public class TeacherHomework implements Serializable {
         Type = _type;
         Subject = _subject;
         HandinAmount = _handinAmount;
+        HandinAlready=_handinAlready;
         Content = _content;
         syllabus = _syllabus;
         Answer = _answer;
@@ -95,6 +96,9 @@ public class TeacherHomework implements Serializable {
 
     @Column(name = "HANDINAMOUNT")
     private int HandinAmount;
+
+    @Column(name = "HANDINALREADY")
+    private int HandinAlready;
 
     @Transient
     @Column(name = "CONTENT")

@@ -23,7 +23,19 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
 
     @Override
     public TeacherHomework editOne(TeacherHomework homework){
-        teacherhomeworkRepository.save(homework);
+        teacherhomeworkRepository.Update(
+                homework.getEndTime(),
+                homework.getHandinAmount(),
+                homework.getRange(),
+                homework.getStartTime(),
+                homework.getSubject(),
+                homework.getTitle(),
+                homework.getType(),
+                homework.getCourseId(),
+                homework.getTeacherId(),
+                homework.getHandinAlready(),
+                homework.getHomeworkId());
+
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = homework.getHomeworkId();
         int c_id = homework.getCourseId();
@@ -71,6 +83,12 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         homeworkDetail.setSyllabus(homework.getSyllabus());
         teacherhomeworkDetailRepository.save(homeworkDetail);
         return maxId;
+    }
+
+    @Override
+    public void updateHandinAlready(TeacherHomework homework) {
+        teacherhomeworkRepository.UpdateHandinAlready(
+                homework.getHandinAlready(),homework.getHomeworkId());
     }
 
     @Override

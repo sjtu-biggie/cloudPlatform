@@ -13,6 +13,7 @@ import java.util.List;
 @Service
 public interface StudentHomeworkService {
     List<StudentHomework> getStudentHomeworkAll(String studentId);
+    List<StudentHomework> getStudentMistakenHomework(String studentId);
     List<StudentHomework> getStudentHomeworkAllOfCourse(String studentId, int courseId);
     List<StudentHomework> getStudentHomeworkAllOfHomework(int homeworkId);
     List<StudentHomework> getStudentHomeworkAllOfHomeworkNoMongo(int homeworkId);

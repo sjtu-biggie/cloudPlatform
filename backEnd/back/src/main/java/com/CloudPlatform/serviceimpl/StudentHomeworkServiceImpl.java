@@ -5,9 +5,6 @@ import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
 import com.CloudPlatform.service.StudentHomeworkService;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.io.IOUtils;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +30,18 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Override
     public List<StudentHomework> getStudentHomeworkAll(String studentId) {
         return studenthomeworkDao.findAll(studentId);
+    }
+
+    @Override
+    public List<StudentHomework> getStudentMistakenHomework(String studentId) {
+        List<StudentHomework> studentHomeworkList = studenthomeworkDao.findAll(studentId);
+        List<StudentHomework> res = new ArrayList<>();
+        for (StudentHomework studentHomework : studentHomeworkList){
+            if (studentHomework.getScore() != null && studentHomework.getScore() < 100){
+                res.add(studentHomework);
+            }
+        }
+        return res;
     }
 
     @Override

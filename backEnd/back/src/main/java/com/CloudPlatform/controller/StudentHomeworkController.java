@@ -25,6 +25,12 @@ public class StudentHomeworkController {
     @Autowired
     private StudentHomeworkService studenthomeworkService;
 
+    //同学所有的错题
+    @RequestMapping(value = "/getMistakenHomework")
+    public List<StudentHomework> getMistakenHomework(@RequestParam("studentId") String studentId) {
+        return studenthomeworkService.getStudentMistakenHomework(studentId);
+    }
+
     //同学所有提交的作业
     @RequestMapping(value = "/getStudentHomeworkAll")
     public List<StudentHomework> getStudentHomeworkAll(@RequestParam("studentId") String studentId) {

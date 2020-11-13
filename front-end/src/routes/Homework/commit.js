@@ -92,7 +92,25 @@ class HomeworkCommit extends React.Component{
     };
 
     postObject = async() => {
+        let config0 = {
+            method: 'post',
+            url: 'http://106.13.209.140:8383/UpdateHandinAlready?homeworkId='+this.state.homework.homeworkId,
+            headers: {
+                withCredentials: true,
+            }
+        };
 
+        if(this.state.homework.handinTime===null){
+            console.log("handin")
+            const user0 = await axios(config0)
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
         let homework=this.state.homework;
         homework.handinTime=new Date();
         this.setState({
@@ -105,24 +123,7 @@ class HomeworkCommit extends React.Component{
 
         console.log(obj);
 
-        let config0 = {
-            method: 'post',
-            url: 'http://106.13.209.140:8383/UpdateHandinAlready?homeworkId='+this.state.homework.homeworkId,
-            headers: {
-                withCredentials: true,
-            }
-        };
 
-        if(this.state.homework.handinTime===null){
-            const user0 = await axios(config0)
-                .then(function (response) {
-                    console.log(response.data);
-                    return response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
 
         let config = {
             method: 'post',

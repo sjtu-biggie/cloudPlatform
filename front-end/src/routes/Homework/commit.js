@@ -97,11 +97,29 @@ class HomeworkCommit extends React.Component{
 
         console.log(obj);
 
+        let config0 = {
+            method: 'post',
+            url: 'http://106.13.209.140:8383/UpdateHandinAlready?homeworkId='+this.state.homework.homeworkId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+
+        if(this.state.homework.handinTime===null){
+            const user0 = await axios(config0)
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
         let config = {
             method: 'post',
             data: obj,
             url: 'http://106.13.209.140:8383/addStudentHomework',
-            //url: 'http://localhost:8080/addStudentHomework',
             headers: {
                 withCredentials: true,
             }

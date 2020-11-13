@@ -133,10 +133,25 @@ class HomeworkDemo extends React.Component {
                 break;
             }
             case 1:{
-
+                for (let i = 0; i < hw.length;){
+                    if (hw[i].handinAlready !== hw[i].handinAmount){
+                        hw.splice(i,1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
                 break;
             }
             case 2:{
+                for (let i = 0; i < hw.length;){
+                    if (hw[i].handinAlready === hw[i].handinAmount){
+                        hw.splice(i,1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
                 break;
             }
             case 3:{
@@ -182,7 +197,6 @@ class HomeworkDemo extends React.Component {
         };
         const hw = await axios(config)
             .then(function (response) {
-                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {

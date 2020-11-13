@@ -92,16 +92,15 @@ class HomeworkCommit extends React.Component{
     };
 
     postObject = async() => {
-        let config0 = {
-            method: 'post',
-            url: 'http://106.13.209.140:8383/UpdateHandinAlready?homeworkId='+this.state.homework.homeworkId,
-            headers: {
-                withCredentials: true,
-            }
-        };
-
         if(this.state.homework.handinTime===null){
             console.log("handin")
+            let config0 = {
+                method: 'post',
+                url: 'http://106.13.209.140:8383/UpdateHandinAlready?homeworkId='+this.state.homework.homeworkId,
+                headers: {
+                    withCredentials: true,
+                }
+            };
             const user0 = await axios(config0)
                 .then(function (response) {
                     console.log(response.data);
@@ -110,7 +109,36 @@ class HomeworkCommit extends React.Component{
                 .catch(function (error) {
                     console.log(error);
                 });
+
+            let homework=this.state.homework;
+            homework.handinTime=new Date();
+            this.setState({
+                homework: homework
+            });
+
+            console.log(this.state.homework);
+            let obj = this.state.homework;
+            console.log(obj);
+
+            let config = {
+                method: 'post',
+                data: obj,
+                url: 'http://106.13.209.140:8383/addStudentHomework',
+                headers: {
+                    withCredentials: true,
+                }
+            };
+            const user = await axios(config)
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            return;
         }
+
         let homework=this.state.homework;
         homework.handinTime=new Date();
         this.setState({
@@ -118,22 +146,19 @@ class HomeworkCommit extends React.Component{
         });
 
         console.log(this.state.homework);
-
         let obj = this.state.homework;
-
         console.log(obj);
 
-
-
-        let config = {
+        let config1 = {
             method: 'post',
             data: obj,
-            url: 'http://106.13.209.140:8383/addStudentHomework',
+            url: 'http://106.13.209.140:8383/editStudentHomework',
             headers: {
                 withCredentials: true,
             }
         };
-        const user = await axios(config)
+
+        const user = await axios(config1)
             .then(function (response) {
                 console.log(response.data);
                 return response.data;

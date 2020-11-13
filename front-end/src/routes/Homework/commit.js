@@ -10,6 +10,7 @@ import * as XLSX from "xlsx";
 import {fileToObject} from "antd/es/upload/utils";
 import axios from "axios";
 import Upload from "./upload"
+import CanvasDraw from "react-canvas-draw";
 
 const { Text, Link } = Typography;
 
@@ -35,6 +36,9 @@ class HomeworkCommit extends React.Component{
         homework:[],
         path:[],
         endTime:"",
+        penLazy:5,
+        penSize:5,
+        saveableCanvas:"",
     };
 
     uploadFilesChange(file) {
@@ -48,7 +52,11 @@ class HomeworkCommit extends React.Component{
         this.setState({
             homework:homework,
             content:homework.content,
-        })
+        });
+        console.log(homework.correct);
+        if(homework.correct!==""&&homework.correct!==undefined&&homework.correct!==null){
+            this.saveableCanvas.loadSaveData(homework.correct)
+        }
     };
 
     getUploadMsg = (result, fileList) => {
@@ -138,7 +146,7 @@ class HomeworkCommit extends React.Component{
         this.setState({
             file:[e.target.value]
         })
-    }
+    };
 
     componentWillMount() {
         this.setState({
@@ -147,10 +155,27 @@ class HomeworkCommit extends React.Component{
     }
 
     componentDidMount() {
-        console.log(this.state.correct)
+
     }
 
     render(){
+        let defaultProps = {
+            lazyRadius: this.state.penLazy,
+            onChange: null,
+            loadTimeOffset: 5,
+            brushRadius: this.state.penSize,
+            brushColor: "red",
+            catenaryColor: "#0a0302",
+            gridColor: "rgba(150,150,150,0.17)",
+            hideGrid: false,
+            canvasWidth: 900,
+            canvasHeight: 1000,
+            disabled: false,
+            imgSrc: require("../../pic/deadHomework1.jpg"),
+            saveData: null,
+            immediateLoading: false,
+            hideInterface: false
+        };
         const { editorState,contentState } = this.state;
         return (
             <div>
@@ -165,7 +190,8 @@ class HomeworkCommit extends React.Component{
                         <p>{this.state.content}</p>
                     </Card> <br/>
                     <Card title="批改内容"  >
-                        <p>{this.state.homework.correct}</p>
+                        <CanvasDraw
+                            ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/>
                     </Card><br/>
                     <Card title="作业评论" >
                         <p>{this.state.homework.comment===null?'暂无评论':this.state.homework.comment}</p>

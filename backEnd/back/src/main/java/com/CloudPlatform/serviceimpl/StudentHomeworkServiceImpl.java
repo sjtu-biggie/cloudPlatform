@@ -60,7 +60,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     }
 
     @Override
-    public StudentHomework getStudentHomeworkOne(String studentId, int homeworkId) throws IOException {
+    public StudentHomework getStudentHomeworkOne(String studentId, int homeworkId) {
         StudentHomework studentHomework = studenthomeworkDao.findOne(studentId, homeworkId);
         String[] path = studentHomework.getUpload().split(",");
         System.out.println(Arrays.toString(path));
@@ -130,7 +130,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         String upload = object.getString("upload");
 
         StudentHomework hw = new StudentHomework(homeworkId, courseId, studentId, title,
-                startTime, endTime, subject, nickName);
+                startTime, endTime, nickName, subject);
         return studenthomeworkDao.addOne(hw);
     }
 

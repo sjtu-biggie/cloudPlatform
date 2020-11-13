@@ -22,12 +22,12 @@ public interface StudentHomeworkRepository extends JpaRepository<StudentHomework
     @Query(nativeQuery = true,value ="insert into studenthomework (endtime, starttime, subject, title, nickname, courseid, studentid, homeworkid) values (?1, ?2,?3, ?4, ?5, ?6,?7, ?8)")
     void Insert(Date endTime, Date starttime, String subject, String title, String nickname, int courseid, String studentid, int homeworkid);
 
-    @Query(nativeQuery = true,value = "select max(homeworkId) from teacherhomework ")
-    Integer getMaxId();
-
     @Query(nativeQuery = true,value="select * from studenthomework where courseid=?2 and studentid=?1 order by starttime desc ")
     List<StudentHomework> findByStudentIdAndCourseId(String studentId, int courseId);
+
+    @Query(nativeQuery = true,value="select * from studenthomework where homeworkid=?2 and studentid=?1")
     StudentHomework findByStudentIdAndHomeworkId(String studentId, int homeworkId);
+
     @Transactional
     void deleteByStudentIdAndHomeworkId(String studentId,int homeworkId);
     @Transactional

@@ -89,15 +89,18 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
     @Override
     public StudentHomework findOne(String studentId,  int homeworkId){
         StudentHomework homework = studenthomeworkRepository.findByStudentIdAndHomeworkId(studentId, homeworkId);
+        System.out.println("homeworkId:"+homeworkId);
+        System.out.println("studentId:"+studentId);
+        System.out.println("homework:"+homework);
         String hwId = Integer.toString(homeworkId);
         StudentHomeworkDetail detail =  studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(studentId, hwId);
+        System.out.println("detail"+detail);
         homework.setId(detail.getId());
         homework.setContent(detail.getContent());
         homework.setComment(detail.getComment());
         homework.setRemarks(detail.getRemarks());
         homework.setCorrect(detail.getCorrect());
         homework.setUpload(detail.getUpload());
-        System.out.println(homework);
         return homework;
     }
 

@@ -92,8 +92,10 @@ class Rating extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        if (data !== null && data !== undefined) {
+        if (data !== null && data !== undefined && !isNaN(data)) {
             data = data.toFixed(2);
+        }else{
+            data = 0;
         }
         this.setState({
             average: data,
@@ -128,6 +130,9 @@ class Rating extends React.Component {
         });
         console.log(this.props.homework);
         this.setState({
+            assignHomework:this.props.homework
+        });
+        this.setState({
             loading: false
         });
     };
@@ -144,7 +149,7 @@ class Rating extends React.Component {
             return;
         }
         this.getAverageScore(nextProps.homework.homeworkId);
-        if(this.state.assignHomework==={}){
+        if(this.state.assignHomework==={}||this.state.assignHomework.content===undefined){
             this.getHomework(nextProps.homework.homeworkId);
         }
         this.setState({
@@ -273,7 +278,7 @@ class Rating extends React.Component {
                                 </Button>,
                             ]}
                         >
-                            <p>Some contents...</p>
+                            <p>{this.state.assignHomework.content}</p>
                         </Modal>
                         <Modal
                             title="作业答案"
@@ -391,6 +396,7 @@ class Rating extends React.Component {
                                             </Col>
                                             <Col offset={3} span={3}>
                                                 <Button onClick={() => {
+                                                    message.info("画布已保存");
                                                     let homework = this.state.homework;
                                                     homework.correct = this.saveableCanvas.getSaveData();
                                                     this.setState({

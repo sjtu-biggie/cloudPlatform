@@ -195,7 +195,7 @@ class HomeworkList extends React.Component {
                                               ]
                                           : [<IconText type="file-text" text="暂无" />,
                                                   <IconText type="calendar" text={"截止："+ this.format(item.endTime)} />,
-                                                  <IconText type="pie-chart" text = {(this.state.homeworkList === null ? 0: this.state.homeworkList.length) +"/" + this.state.allAmount} />,
+                                                  <IconText type="pie-chart" text = {item.handinAlready +"/" + item.handinAmount} />,
                                                   <IconText type="clock-circle-o" text={this.SetCon(item)} />,
                                                   <IconText type="profile" text={"布置范围："+item.range} />
                                               ]}

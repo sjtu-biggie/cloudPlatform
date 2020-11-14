@@ -5,12 +5,14 @@ import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
 import com.CloudPlatform.service.StudentHomeworkService;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -62,6 +64,9 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Override
     public StudentHomework getStudentHomeworkOne(String studentId, int homeworkId) {
         StudentHomework studentHomework = studenthomeworkDao.findOne(studentId, homeworkId);
+        if (studentHomework.getUpload() == null){
+            return studentHomework;
+        }
 //        String[] path = studentHomework.getUpload().split(",");
 //        System.out.println(Arrays.toString(path));
 //        List<MultipartFile> fileList = new ArrayList<>();
@@ -83,8 +88,26 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
 //                }
 //            });
 //        }
-//        studentHomework.setFile(fileList);
-//        System.out.println(studentHomework);
+        String[] path = studentHomework.getUpload().split(",");
+        System.out.println(Arrays.toString(path));
+        List fileList = new ArrayList<>();
+        File file = null;
+        for (String filepath : path) {
+            try {
+                file = ResourceUtils.getFile(filepath);
+                // 获取文件输入流
+                InputStream inputStream = new FileInputStream(file);
+                List<String> fList = IOUtils.readLines(inputStream);
+                fileList.add(fList);
+            } catch (FileNotFoundException e) {
+                System.out.println("文件不存在！");
+            } catch (IOException e) {
+                System.out.println("文件读取异常！");
+            }
+        }
+
+        studentHomework.setFile(fileList);
+        System.out.println(studentHomework.getFile());
         return studentHomework;
     }
 
@@ -194,7 +217,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
 
     @Override
     public String upload(MultipartFile file, String userId) {
-        String pathName = "/homework/" + userId + "/";//想要存储文件的地址
+        String pathName = "/homework/" + "/homeworks/"+userId + "/";//想要存储文件的地址
         String pname = file.getOriginalFilename();//获取文件名（包括后缀）
         FileOutputStream fos = null;
         try {

@@ -153,6 +153,7 @@ class HomeworkCommit extends React.Component{
             method: 'post',
             data: obj,
             url: 'http://106.13.209.140:8383/editStudentHomework',
+            //url: 'http://localhost:8080/editStudentHomework',
             headers: {
                 withCredentials: true,
             }

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Button, List, Icon,} from 'antd'
+import {Card, Button, List, Icon, Row, Col,} from 'antd'
 import axios from 'axios'
 import {withRouter} from "react-router-dom";
 
@@ -179,6 +179,18 @@ class HomeworkList extends React.Component {
                                     homeworkList: this.state.homeworkList
                                 });
                             }}>按结束时间降序</Button>
+                            <div style={{ marginLeft: '80px', float: 'right'}} >
+                                <img style={{ marginLeft: '80px'}}
+                                     width={30} alt="logo"
+                                     src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
+                                <span style={{ marginLeft: '5px'}}>正在进行</span>
+
+                                <img style={{ marginLeft: '80px'}}
+                                     width={30} alt="logo"
+                                     src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
+                                <span  style={{ marginLeft: '5px'}}>已截止</span>
+                            </div>
+
                         </div>
                         <List dataSource={this.state.homeworkList}
                               itemLayout='vertical'
@@ -200,10 +212,21 @@ class HomeworkList extends React.Component {
                                                   <IconText type="profile" text={"布置范围："+item.range} />
                                               ]}
 
-                                          extra={((this.state.delete === false && this.state.role === 'teacher')? [<Button type="danger" onClick={()=>{
-                                              //delete
-                                              this.deleteTeacherHomeworkOne(item.homeworkId)
-                                          }}>删除</Button>]:[])}
+                                          extra={((this.state.delete === false && this.state.role === 'teacher')?[
+                                              <div>
+                                                  <Button type="danger" onClick={()=>{this.deleteTeacherHomeworkOne(item.homeworkId)}}>删除</Button>
+                                              </div>
+                                          ]:(this.SetCon(item) === "已结束")?[
+                                              <div>
+                                                  <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
+                                                       width={80} alt="logo"
+                                                       src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
+                                              </div>]
+                                              :[<div>
+                                                  <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
+                                                       width={80} alt="logo"
+                                                       src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
+                                              </div>])}
                                           >
                                           <List.Item.Meta
                                               title={this.state.role === 'student' ? <a style={{

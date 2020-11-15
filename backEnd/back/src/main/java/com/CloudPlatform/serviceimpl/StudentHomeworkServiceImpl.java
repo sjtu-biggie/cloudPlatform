@@ -153,7 +153,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         String upload = object.getString("upload");
 
         StudentHomework hw = new StudentHomework(homeworkId, courseId, studentId, title,
-                startTime, endTime, nickName, subject);
+                startTime, endTime, nickName, subject,upload);
         return studenthomeworkDao.addOne(hw);
     }
 
@@ -217,7 +217,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
 
     @Override
     public String upload(MultipartFile file, String userId) {
-        String pathName = "/homework/" + "/homeworks/"+userId + "/";//想要存储文件的地址
+        String pathName = "/homework/"+userId + "/";//想要存储文件的地址
         String pname = file.getOriginalFilename();//获取文件名（包括后缀）
         FileOutputStream fos = null;
         try {

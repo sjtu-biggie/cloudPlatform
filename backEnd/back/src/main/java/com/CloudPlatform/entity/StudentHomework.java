@@ -28,7 +28,7 @@ public class StudentHomework {
 
     public StudentHomework(int _homeworkId,int _courseId, String _studentId, String _title,
                            Date _startTime, Date _endTime, String _nickname, String _subject
-                           ){
+                           ,String _upload){
         homeworkId = _homeworkId;
         courseId = _courseId;
         studentId = _studentId;
@@ -37,6 +37,7 @@ public class StudentHomework {
         EndTime = _endTime;
         Subject = _subject;
         nickName = _nickname;
+        Upload = _upload;
     }
 
     public StudentHomework(String _studentId, int _homeworkId, int _courseId,

@@ -118,7 +118,7 @@ class LoginForm extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
-    if(message1===null||message1===""){
+    if(message1===null||message1===""||message1===undefined){
       message.error("用户名不存在！");
       return;
     }

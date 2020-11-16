@@ -62,6 +62,9 @@ class AddBulletin extends React.Component {
         disabled: false,
 
     };
+    componentWillMount= ()=> {
+        console.log(this.props.classes);
+    };
     timer = 0;
     handleSubmit = async (e) => {
         e.preventDefault();
@@ -129,6 +132,7 @@ class AddBulletin extends React.Component {
     };
 
     componentWillUnmount() {
+        console.log(this.props.classes);
         clearInterval(this.timer)
     }
 

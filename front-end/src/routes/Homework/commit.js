@@ -1,5 +1,20 @@
 import React from 'react'
-import {Card, Col, Row, Button, Tooltip, notification, Select,message, Typography,List,Divider, Icon, Avatar} from 'antd'
+import {
+    Card,
+    Col,
+    Row,
+    Button,
+    Tooltip,
+    notification,
+    Select,
+    message,
+    Typography,
+    List,
+    Divider,
+    Icon,
+    Avatar,
+    Collapse
+} from 'antd'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import TypingCard from '../../components/TypingCard'
@@ -213,7 +228,31 @@ class HomeworkCommit extends React.Component{
 
     }
     renderObj = (syllabus) =>{
-        return 1;
+        if(syllabus===undefined||syllabus===null){
+            return;
+        }
+        let chapterList = [];
+        let i =1;
+        while (1) {
+            let str = 'syllabus.chapter' + i;
+            let contents = eval(str);
+            if (contents === undefined || contents === null) break;
+            chapterList.push(contents);
+            ++i;
+        }
+        return (
+            <Collapse>{chapterList.map((value, index) => {
+                return (<Collapse.Panel header={value.title} key={index}>
+                    <List
+                        bordered
+                        dataSource={value.content}
+                        renderItem={item => (
+                            <List.Item>
+                                {item}
+                            </List.Item>
+                        )}
+                    /></Collapse.Panel>)
+            })}</Collapse>);
         //TODO
         // return syllabus;
     };
@@ -249,8 +288,8 @@ class HomeworkCommit extends React.Component{
                     <Card title="作业内容" >
                         <p>{this.state.teacherHomework.type==="主观题"?this.state.teacherHomework.content:this.renderObj(this.state.teacherHomework.syllabus)}</p>
                     </Card>
-                    {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><Card title={"作答区域"}>
-                        <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:this.state.homework.content}</p>
+                    {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><br/><Card title={"作答区域"}>
+                        <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:"我的答案 : "+this.state.homework.content}</p>
                         <RichText parent={this}/>
                         <Upload  parent={this}><Button>{this.state.homework.handinTime===null?null:'重新'}上传作业图片</Button></Upload>
                         <br/>

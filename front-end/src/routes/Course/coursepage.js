@@ -1024,12 +1024,6 @@ const styles = {
         fontSize:24
     },
 };
-const IconText = ({type, text}) => (
-    <span>
-    <Icon type={type} style={{marginRight: 8}}/>
-        {text}
-  </span>
-);
 const deadCourse = {
     course: {
         id: 1,
@@ -1038,40 +1032,14 @@ const deadCourse = {
         endDate: '2020-10-10',
     },
     courseInfo: {
-        textbook: "人教版七年级数学上册",
-        detail: '加载中~',
+        textbook: "加载中",
+        detail: '加载中',
         syllabus: {
-            chapterNum: 4,
+            chapterNum: 1,
             chapter1: {
-                title: "一百以内算术",
+                title: "加载中",
                 content: [
-                    "加法",
-                    "减法", "乘法", "除法"
-                ]
-            },
-            chapter2: {
-                title: "微积分",
-                content: [
-                    "微分",
-                    "积分", "偏微分"
-                ]
-            },
-            chapter3: {
-                title: "数学史",
-                content: [
-                    "时间简史",
-                    "二战史",
-                    "线性代数史"
-                ]
-            },
-            chapter4: {
-                title: "提高篇",
-                content: [
-                    "矩阵",
-                    "行列式",
-                    "特征向量",
-                    "正交矩阵",
-                    "正定矩阵"
+                    "加载中"
                 ]
             },
         },
@@ -1092,19 +1060,6 @@ for (let i = 0; i < 15; i++) {
     })
 }
 //TODO:add pagination support
-const steps = [
-    {
-        title: 'First',
-        content: 'First-content',
-    },
-    {
-        title: 'Second',
-        content: 'Second-content',
-    },
-    {
-        title: 'Last',
-        content: 'Last-content',
-    }];
 
 
 export default CoursePageDemo

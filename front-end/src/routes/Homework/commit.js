@@ -53,12 +53,25 @@ class HomeworkCommit extends React.Component{
             homework:homework,
             content:homework.content,
         });
-        console.log(homework.correct);
+        // this.downloadDoc(homework.file,"test.jpeg");
+        console.log(homework);
         if(homework.correct!==""&&homework.correct!==undefined&&homework.correct!==null){
             this.saveableCanvas.loadSaveData(homework.correct)
         }
     };
-
+    downloadDoc = function(content, filename) {
+        var eleLink = document.createElement('a');
+        eleLink.download = filename;
+        eleLink.style.display = 'none';
+        // 字符内容转变成blob地址
+        var blob = new Blob([content]);
+        eleLink.href = URL.createObjectURL(blob);
+        // 自动触发点击
+        document.body.appendChild(eleLink);
+        eleLink.click();
+        // 然后移除
+        document.body.removeChild(eleLink);
+    };
     getUploadMsg = (result, fileList) => {
         // console.log(result, msg)
         // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
@@ -184,7 +197,9 @@ class HomeworkCommit extends React.Component{
     componentDidMount() {
 
     }
-
+    renderObj = (syllabus) =>{
+        return syllabus;
+    };
     render(){
         let defaultProps = {
             lazyRadius: this.state.penLazy,
@@ -198,7 +213,7 @@ class HomeworkCommit extends React.Component{
             canvasWidth: 900,
             canvasHeight: 1000,
             disabled: false,
-            imgSrc: require("../../pic/deadHomework1.jpg"),
+            imgSrc: this.state.homework.file,
             saveData: null,
             immediateLoading: false,
             hideInterface: false
@@ -214,7 +229,7 @@ class HomeworkCommit extends React.Component{
                     </Card>:<br/>}
 
                     <Card title="作业内容" >
-                        <p>{this.state.content}</p>
+                        <p>{this.state.homework.type==="主观题"?this.state.content:this.renderObj(this.state.homework.syllabus)}</p>
                     </Card> <br/>
                     <Card title="批改内容"  >
                         <CanvasDraw

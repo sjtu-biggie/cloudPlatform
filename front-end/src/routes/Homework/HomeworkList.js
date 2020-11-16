@@ -31,13 +31,28 @@ class HomeworkList extends React.Component {
         this.getData2();
     }
 
-    // formatTime = (list)=>{
-    //     let l = new Array.from(list);
-    //     l.map(item=>{
-    //         item.startTime = this.format(item.startTime);
-    //         item.endTime = this.format(item.endTime);
-    //     })
-    // }
+    getStudentInfo = async (homework)=>{
+        let ob = {
+            classIds: homework.range.split(',')
+        }
+        console.log(ob);
+        let config = {
+            method: 'post',
+            data : ob,
+            url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const studentInfo = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        this.deleteStudentHomeworkOne(homework.homeworkId,studentInfo);
+    }
 
     add0=(m)=>{return m<10?'0'+m:m };
 
@@ -74,12 +89,13 @@ class HomeworkList extends React.Component {
         this.setState({
             userInfo:user,
         })
+
     };
 
-    deleteTeacherHomeworkOne=async (homeworkId)=>{
+    deleteTeacherHomeworkOne=async (homework)=>{
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383/deleteTeacherHomeworkOne?homeworkId=' + homeworkId,
+            url: 'http://106.13.209.140:8383/deleteTeacherHomeworkOne?homeworkId=' + homework.homeworkId,
             headers: {
                 withCredentials: true,
             }
@@ -93,9 +109,28 @@ class HomeworkList extends React.Component {
                 console.log(error);
             });
         console.log(hw);
-        this.setState({
-            homework:hw,
-        })
+        this.getStudentInfo(homework);
+    };
+
+    deleteStudentHomeworkOne=async (homeworkId,studentInfo)=>{
+        for (let i = 0 ;i < studentInfo.length; ++i){
+            let config = {
+                method: 'post',
+                url: 'http://106.13.209.140:8383/deleteTeacherHomeworkOne?homeworkId=' + homeworkId + '&studentId=' + studentInfo[i].username,
+                headers: {
+                    withCredentials: true,
+                }
+            };
+            const hw = await axios(config)
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            console.log(hw);
+        }
     };
 
     getData2 = () => {
@@ -214,7 +249,7 @@ class HomeworkList extends React.Component {
 
                                           extra={((this.state.delete === false && this.state.role === 'teacher')?[
                                               <div>
-                                                  <Button type="danger" onClick={()=>{this.deleteTeacherHomeworkOne(item.homeworkId)}}>删除</Button>
+                                                  <Button type="danger" onClick={()=>{this.deleteTeacherHomeworkOne(item)}}>删除</Button>
                                               </div>
                                           ]:(this.SetCon(item) === "已结束")?[
                                               <div>

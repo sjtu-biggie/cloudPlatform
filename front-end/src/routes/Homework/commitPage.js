@@ -151,10 +151,11 @@ class commitPage extends React.Component{
 
             <div>
                     <Row>
-                        <Col span={4}>{new Date(Date.parse(this.state.homework.endTime))<new Date()?"已截止 |":"未截止 |"}{this.state.homework.handinTime!==null?" 已提交":" 未提交"}<br/></Col>
+                        <Col span={4}>{new Date(Date.parse(this.state.homework.endTime))<new Date()?"已截止 |":"未截止 |"}{this.state.homework.handinTime!==null?" 已提交":" 未提交"}</Col>
                     </Row>
                     <Row>
                         <Text type={"secondary"}>{"截止日期："+this.state.homework.endTime}</Text>
+                        <br/>
                     </Row>
             </div>
         )

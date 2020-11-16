@@ -243,13 +243,15 @@ class HomeworkCommit extends React.Component{
         }
         return (
             <Collapse>{chapterList.map((value, index) => {
-                return (<Collapse.Panel header={value.title} key={index}>
+                return (<Collapse.Panel header={value.type+(index+1)} key={index}>
+                    <p style={{marginBottom:'15px'}}>{value.text}</p>
+
                     <List
                         bordered
                         dataSource={value.content}
                         renderItem={item => (
-                            <List.Item>
-                                {item}
+                            <List.Item actions={value.type==='选择题'?[<Button></Button>]:[]} >
+                                {value.type==='选择题'?item:<input/>}
                             </List.Item>
                         )}
                     /></Collapse.Panel>)

@@ -277,7 +277,8 @@ class Assign extends React.Component {
             endTime:homework.endTime,
             subject:homework.subject,
             title:homework.title,
-        }
+        };
+        console.log(this.state.student);
         for (let i = 0; i < this.state.student.length; ++i){
             this.addStudentHomework(stHw,this.state.student[i].username,this.state.student[i].nickname);
         }
@@ -658,7 +659,11 @@ class Assign extends React.Component {
                                             bordered
                                             dataSource={value.content}
                                             renderItem={item => (
-                                                <List.Item actions={[<Button onClick={() => {
+                                                <List.Item actions={value.type==='选择题'?[<Button onClick={() => {
+                                                    this.setAnswer(index, item)
+                                                }} style={{marginLeft: '10px',color : value.answer===item?'green':'black'}}>设为答案</Button>,<Button onClick={() => {
+                                                    this.deleteSmall(index, item)
+                                                }} style={{marginLeft: '10px'}}>删除选项</Button>]:[<Button onClick={() => {
                                                     this.deleteSmall(index, item)
                                                 }} style={{marginLeft: '10px'}}>删除选项</Button>]}>
                                                     <List.Item.Meta
@@ -692,6 +697,17 @@ class Assign extends React.Component {
             </div>
         )
     }
+    setAnswer = (index, smallName) => {
+        let chapterName = 'chapter' + (index + 1);
+        let modifiedSyllabus = this.state.syllabus;
+        for (let a in modifiedSyllabus) {
+            if (a === chapterName) {
+                modifiedSyllabus[a].answer = smallName;
+            }
+        }
+        console.log(modifiedSyllabus);
+        this.setState({syllabus: modifiedSyllabus});
+    };
     deleteSmall = (index, smallName) => {
         let chapterName = 'chapter' + (index + 1);
         let modifiedSyllabus = this.state.syllabus;

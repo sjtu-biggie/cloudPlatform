@@ -80,15 +80,15 @@ public class CourseServiceImpl implements CourseService {
             course = new Course(id,userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
         }else{
             if(courseDao.findCount()==0){
-                _id = 1;
+                _id = 0;
             }else{
                 _id= courseDao.findMaxId();
             }
-            courseInfo = new CourseInfo(_id,detail,introduction,syllabus,textbook);
+            courseInfo = new CourseInfo(_id+1,detail,introduction,syllabus,textbook);
         }
         courseDao.save(course);
         courseDao.saveInfo(courseInfo);
-        return _id;
+        return (_id+1);
     }
     @Override
     public Page<CourseBulletin> getPageBulletin(String id, Pageable p){

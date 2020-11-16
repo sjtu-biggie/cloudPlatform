@@ -359,6 +359,7 @@ export default class ClassManage extends Component {
                 }
             }).then(msg => {
                 console.log(msg);
+                alert(this.state.createClass+"已经创建");
             }).catch(err => {
                 console.log(err);
             })
@@ -492,7 +493,7 @@ export default class ClassManage extends Component {
 
         return (
             <div className={styles.normal}>
-                <Card title={<div style={{textAlign: "center"}}>管理班级名单</div>}>
+                <Card title={<div style={{textAlign: "center", fontSize:'25px',fontWeight:'bold'}}>管理班级名单</div>}>
                     <Card className={styles.control} bordered={false} style={{marginBottom: 10}}>
                         <Row>
                             <Col span={10}>
@@ -587,7 +588,7 @@ export default class ClassManage extends Component {
                         /></Card> : ''}
 
                     {this.state.classChoose===''?
-                        <Card style={{textAlign:'center',fontWeight:"bold",fontSize:'30px'}}>
+                        <Card style={{textAlign:'center',fontSize:'30px'}}>
                             请先选择班级
                         </Card>
                         :

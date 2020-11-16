@@ -246,6 +246,7 @@ class AddCourse extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
+        return user;
     };
     renderStep = () => {
         const menu1 = (

@@ -81,17 +81,18 @@ class AddBulletin extends React.Component {
                     }
                 };
                 const user = await axios(config)
-                    .then(function (response) {
+                    .then( (response)=> {
                         if(values.note === false){
                             console.log("not send");
                             return;
                         }
+                        console.log(this.props);
                         console.log(response.data);
                         axios({
                             method: 'POST',
-                            url: 'http://106.13.209.140:8000/getAllStudentsByTheClass',
+                            url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
                             data: {
-                                "theClass": "F1803702"
+                                "classIds": this.props.classes
                             }
                         }).then(msg => {
                             console.log(msg.data);
@@ -105,14 +106,13 @@ class AddBulletin extends React.Component {
                                 url:'http://106.13.209.140:8000/sendNotice',
                                 data:{
                                     "tos":tos,
-                                    "context":values.content,
+                                    "context":"公告已发布",
                                 }
                             }).then(msg=>{
                                 console.log(msg.data);
                             }).catch(err=>{
                                 console.log(err)
                             })
-
 
                         }).catch(err => {
                             console.log(err);

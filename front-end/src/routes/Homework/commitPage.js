@@ -81,27 +81,11 @@ class commitPage extends React.Component{
             homework:hw
         })
         this.toParent();
-
         let file = hw.file[0];
         let src = "data:image/png;base64,"+ file;
 
-        let blob1 = new Blob([file]);
         document.getElementById("file_img").src = src;
         console.log(document.getElementById("file_img"));
-        if(!!file){
-            // let objecturl =  window.URL.createObjectURL(blob1);
-            // document.getElementById("file_img").src = objecturl;
-            // console.log(document.getElementById("file_img"));
-            // let reader = new FileReader();
-            // // 将图片转成DataURL格式
-            // reader.readAsDataURL(blob1);
-            // reader.onload = function(){
-            //     //读取完毕后输出结果
-            //     document.getElementById("file_img").src = reader.result; //显示上传的图片
-            //     console.log(document.getElementById("file_img"));
-            //     console.log(reader.result);
-            // }
-            }
     }
 
     toParent = () => {

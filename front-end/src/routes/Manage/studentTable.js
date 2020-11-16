@@ -214,7 +214,7 @@ export default class Manager extends Component {
         };
 
         this.registerClass = (students) => {
-            console.log(students);
+            console.log(students,this.state.courseId);
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8787/course/register',
@@ -268,10 +268,19 @@ export default class Manager extends Component {
         }
     }
 
+    componentWillReceiveProps=(nextProps, nextContext) =>{
+        this.setState({
+            courseId:nextProps.courseId,
+        });
+        console.log(nextProps)
 
-    componentDidMount() {
+    };
 
+    componentWillMount=()=> {
         const myCourseId = this.props.courseId;
+        this.setState({
+            courseId:myCourseId
+        })
         const mySids = new Array();
         const myclassIds = this.props.class.split(',');
         console.log(myclassIds);
@@ -301,7 +310,7 @@ export default class Manager extends Component {
                 console.log(item);
                 mySids.push(item.sid);
                 return item;
-            })
+            });
             console.log(mySids);
             var filterData = data2.filter(item => {
                     // console.log(item.sid);
@@ -320,7 +329,6 @@ export default class Manager extends Component {
                 orData2: filterData,
                 renderData2: filterData,
                 sid: mySids,
-                courseId: myCourseId,
                 classIds: myclassIds,
             })
             // this.setState({

@@ -153,6 +153,12 @@ class HomeworkCommit extends React.Component{
                 console.log(error);
             });
         console.log(hw.comment);
+        if(hw.file===null||hw.file===undefined){
+            this.setState({
+                src:""
+            });
+            return;
+        }
         let file = hw.file[0];
         let src = "data:image/png;base64,"+ file;
         this.setState({
@@ -320,10 +326,10 @@ class HomeworkCommit extends React.Component{
                     </Card>
                     {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><br/><Card title={"作答区域"}>
                         <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:"我的答案 : "+this.state.content}</p>
-                        <Button style={{marginBottom:'10px'}} onClick={()=>{this.setState({edit:true})}}>修改</Button>
+                        {!this.state.homework.handinTime===null?<Button style={{marginBottom:'10px'}} onClick={()=>{this.setState({edit:true})}}>修改</Button>:null}
                         <br/>
-                        {this.state.edit===true?<RichText parent={this}/>:null}
-                        {this.state.edit===true?<Upload  parent={this}><Button>{this.state.homework.handinTime===null?null:'重新'}上传作业图片</Button></Upload>
+                        {this.state.edit===true||this.state.homework.handinTime===null?<RichText parent={this}/>:null}
+                        {this.state.edit===true||this.state.homework.handinTime===null?<Upload  parent={this}><Button>{this.state.homework.handinTime===null?null:'重新'}上传作业图片</Button></Upload>
                             :null}
                             <br/>
                         {this.state.homework.file!==null?<Button onClick={()=>{this.downloadDoc(this.state.homework.file)}}>下载已上传的图片附件</Button>:null}

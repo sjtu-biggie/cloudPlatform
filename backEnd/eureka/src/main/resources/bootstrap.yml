@@ -4,8 +4,6 @@ spring:
   cloud:
     inetutils: ## 网卡设置
       ignoredInterfaces:  ## 忽略的网卡
-        - docker0
         - veth.*
-        - VM.*
       preferredNetworks:  ## 优先的网段
         - 192.168

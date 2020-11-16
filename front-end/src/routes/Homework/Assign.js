@@ -227,9 +227,12 @@ class Assign extends React.Component {
     };
 
     addStudentHomework = async (homework) => {
+        console.log(this.state.student);
+        console.log(this.state.student[0].email);
         let tos=[];
         for (let i = 0; i < this.state.student.length; ++i){
-            tos.push(this.state.student.email)
+            tos.push(this.state.student[i].email)
+            console.log(tos);
             homework.studentId = this.state.student[i].username;
             homework.nickname = this.state.student[i].nickname;
             console.log(homework);
@@ -255,7 +258,8 @@ class Assign extends React.Component {
             url:'http://106.13.209.140:8000/sendNotice',
             method:'POST',
             data:{
-                "tos":tos
+                "tos":tos,
+                "context":"作业已发布，请及时查收",
             }
         }).then(res=>{
             console.log(res);

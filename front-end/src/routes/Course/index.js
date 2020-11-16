@@ -151,6 +151,11 @@ class CourseDemo extends React.Component {
                         message.error("failure loading courses!");
                         return;
                     }
+                    if(res.length===0){
+                        this.setState({
+                            loading:false,
+                        });
+                    }
                     for (let i = 0; i < res.length; ++i) {
                         if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
                             console.log(new Date(res[i].course.endDate));
@@ -186,6 +191,11 @@ class CourseDemo extends React.Component {
                             message.error("failure loading courses!");
                             return;
                         }
+                        if(res.length===0){
+                            this.setState({
+                                loading:false,
+                            });
+                        }
                         for (let i = 0; i < res.length; ++i) {
                             if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
                                 console.log(new Date(res[i].course.endDate));
@@ -217,6 +227,11 @@ class CourseDemo extends React.Component {
                         if (res === null || res === undefined) {
                             message.error("failure loading courses!");
                             return;
+                        }
+                        if(res.length===0){
+                            this.setState({
+                                loading:false,
+                            });
                         }
                         for (let i = 0; i < res.length; ++i) {
                             if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
@@ -262,6 +277,11 @@ class CourseDemo extends React.Component {
                             message.error("failure loading courses!");
                             return;
                         }
+                        if(res.length===0){
+                            this.setState({
+                                loading:false,
+                            });
+                        }
                         for (let i = 0; i < res.length; ++i) {
                             if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
                                 console.log(new Date(res[i].course.endDate));
@@ -293,6 +313,11 @@ class CourseDemo extends React.Component {
                         if (res === null || res === undefined) {
                             message.error("failure loading courses!");
                             return;
+                        }
+                        if(res.length===0){
+                            this.setState({
+                                loading:false,
+                            });
                         }
                         for (let i = 0; i < res.length; ++i) {
                             if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {

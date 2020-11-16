@@ -99,7 +99,7 @@ class AddBulletin extends React.Component {
                             msg.data.map(item => {
                                 tos.push(item.email);
                             });
-                            console.log(tos)
+                            console.log(tos);
                             axios({
                                 method:'POST',
                                 url:'http://106.13.209.140:8000/sendNotice',

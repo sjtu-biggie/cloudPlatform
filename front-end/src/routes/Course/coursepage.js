@@ -839,7 +839,7 @@ class CoursePageDemo extends React.Component {
                     }}>返回</Button>
                 </Card> : null}
                 {this.state.addBulletin ?
-                    <AddBulletin course_id={this.state.course.course.id}/> : this.state.bulletins.length === 0 ?
+                    <AddBulletin course_id={this.state.course.course.id} classes = {this.state.course.course.classes.split(',')}/> : this.state.bulletins.length === 0 ?
                         <Empty style={{marginTop: '80px'}} description={"暂无公告"}/> :
                         <div>
                             <Collapse style={{marginBottom: "10px"}}

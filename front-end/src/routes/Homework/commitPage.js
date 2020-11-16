@@ -13,7 +13,7 @@ const { Text, Link } = Typography;
 class commitPage extends React.Component{
 
     state={
-        content: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
+        content: {},
         editorState: EditorState.createEmpty(),
         size: 'default',
         homeworkId:"",
@@ -53,8 +53,8 @@ class commitPage extends React.Component{
             });
         console.log(hw);
         this.setState({
-            content:hw.content,
-        })
+            content:hw,
+        });
         this.toParent();
     };
 
@@ -84,7 +84,7 @@ class commitPage extends React.Component{
 
     toParent = () => {
         // console.log(this.props.parent.getChildrenMsg.bind(this, this.state.msg))
-        this.props.parent.getChildrenMsg(this,this.state.homework)
+        this.props.parent.getChildrenMsg(this,this.state.homework,this.state.content)
     }
 
     componentWillMount() {
@@ -151,7 +151,7 @@ class commitPage extends React.Component{
 
             <div>
                     <Row>
-                        <Col span={20}>{this.state.content}</Col>
+                        <Col span={20}>作业内容</Col>
                         <Col span={4}>{new Date(Date.parse(this.state.homework.endTime))<new Date()?"已截止 |":"未截止 |"}{this.state.homework.handinTime!==null?" 已提交":" 未提交"}</Col>
                     </Row>
                     <Row>

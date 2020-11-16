@@ -39,6 +39,7 @@ class HomeworkCommit extends React.Component{
         penLazy:5,
         penSize:5,
         saveableCanvas:"",
+        teacherHomework: {}
     };
 
     uploadFilesChange(file) {
@@ -46,15 +47,16 @@ class HomeworkCommit extends React.Component{
         console.log(file);
     }
 
-    getChildrenMsg = (result, homework) => {
+    getChildrenMsg = (result, homework,teacherHomework) => {
         // console.log(result, msg)
         // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
         this.setState({
             homework:homework,
             content:homework.content,
+            teacherHomework : teacherHomework
         });
         // this.downloadDoc(homework.file,"test.jpeg");
-        console.log(homework);
+        console.log(homework,teacherHomework);
         if(homework.correct!==""&&homework.correct!==undefined&&homework.correct!==null){
             this.saveableCanvas.loadSaveData(homework.correct)
         }
@@ -229,7 +231,7 @@ class HomeworkCommit extends React.Component{
                     </Card>:<br/>}
 
                     <Card title="作业内容" >
-                        <p>{this.state.homework.type==="主观题"?this.state.content:this.renderObj(this.state.homework.syllabus)}</p>
+                        <p>{this.state.teacherHomework.type==="主观题"?this.state.teacherHomework.content:this.renderObj(this.state.teacherHomework.syllabus)}</p>
                     </Card> <br/>
                     <Card title="批改内容"  >
                         <CanvasDraw

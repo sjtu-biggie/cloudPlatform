@@ -6,46 +6,9 @@ import TypingCard from '../../components/TypingCard'
 import { Chart, Axis, Geom, Tooltip, Coord, Label, Legend, G2 } from 'bizcharts'
 import { View } from '@antv/data-set'
 
-const data = [
-    {date: '9/1', value: '3%'},
-    {date: '9/2', value: '4%'},
-    {date: '9/3', value: '3.5%'},
-    {date: '9/4', value: '5%'},
-    {date: '9/5', value: '4.9%'},
-    {date: '9/6', value: '5%'},
-    {date: '9/7', value: '6%'},
-    {date: '9/8', value: '3%'},
-    {date: '9/9', value: '4%'}
-];
-
 const cols = {
     'value': {min: 0},
     'date': {range: [0, 1]}
-}
-
-const data3 = [];
-for (let i = 0; i < 23; i++) {
-    data3.push({
-        type:"数学",
-        id:1,
-        title: `数学${i}`,
-        avatar: '../../assets/img/mistakes.png',
-        description: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
-        contexts:[["证明："],[<br/>],["∵∠PAD=∠PDA"],[<br/>],["∴AP=PD"],[<br/>],["∴PB=PC"],[<br/>],["∴得证"],],
-        time: `2020/9/27`,
-/*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*/
-    })
-}
-
-for (let i = 0; i < 6; i++) {
-    data3.push({
-        type: '语文',
-        title: `语文${i}`,
-        id: 1,
-        description: '给括号前面的字注音:一棵枫树，表皮灰暗而粗犷（  ），发着苦涩（  ）气息',
-        contexts:[["guang(三声)"],["se(四声)"]],
-        time: `2020/9/27`,
-    })
 }
 
 const IconText = ({ type, text }) => (
@@ -56,15 +19,15 @@ const IconText = ({ type, text }) => (
 );
 
 class Mistakes extends React.Component {
-
     state = {
         size: 'default',
         bordered: true,
         data2: [],
         loading: false,
         loadingMore: false,
-        displayMistakes:null,
-        mistakes:data3,
+        displayMistakes:[],
+        mistakes:[],
+        data:[]
     }
 
     getMistakes=()=>{
@@ -103,6 +66,31 @@ class Mistakes extends React.Component {
         });
     };
 
+    getTeacherHomeworkOne=async (hid,i)=>{
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId='+hid,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        let mis=this.state.displayMistakes;
+        mis[i].title=hw.content;
+        mis[i].remarks=hw.answer;
+        this.setState({
+            displayMistakes:mis,
+            mistakes:mis,
+        });
+    };
+
     componentWillMount() {
         //TODO:get role from local storage
         this.setState({
@@ -118,10 +106,26 @@ class Mistakes extends React.Component {
         });
     }
 
+    add0=(m)=>{
+        return m<10?'0'+m:m
+    }
+
+    format=(shijianchuo)=>
+    {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth()+1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
+    }
+
     getMistakes=async (username)=>{
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getStudentHomeworkAll?studentId='+username,
+            url: 'http://106.13.209.140:8383/getMistakenHomework?studentId='+username,
             headers: {
                 withCredentials: true,
             }
@@ -136,6 +140,21 @@ class Mistakes extends React.Component {
             });
         this.setState({
             mistakes:hw,
+            displayMistakes:hw,
+        })
+        for(let i=0;i<hw.length;i++){
+            this.getTeacherHomeworkOne(hw[i].homeworkId,i)
+            console.log(this.format(hw[i].endTime))
+        }
+
+        console.log(this.state.mistakes)
+        let data=[]
+        for(let i=0;i<hw.length;i++){
+            data.push({date:i+1,value:100-hw[i].score})
+        }
+        console.log(data)
+        this.setState({
+            data:data,
         })
     };
 
@@ -264,8 +283,8 @@ class Mistakes extends React.Component {
                                 <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
                             </Dropdown>
                 </Card>
-                <Card title='错误率' bordered={false} className='card-item'>
-                <Chart height={400} data={data} scale={cols} forceFit>
+                <Card title='错误率%' bordered={false} className='card-item'>
+                <Chart height={400} data={this.state.data} scale={cols} forceFit>
                     <Axis name="date"/>
                     <Axis name="value"/>
                     <Tooltip crosshairs={{type: 'y'}}/>
@@ -283,13 +302,13 @@ class Mistakes extends React.Component {
                               return (
                                   <List.Item
                                       /*actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}*/
-                                      extra={<img /*width={275}*/ alt="logo" src={require("../../assets/img/mistakes.png")}/>}>
+                                      extra={<img /*width={275}*/ /*alt="logo"*/ /*src={item.correct}*//>}>
 
                                           <row>
                                       <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>
-                                              <p style={{fontSize:'5px',fontWeight:'bold',display:'block'}}>{item.time}</p>
-                                      <p style={{marginTop:'10px'}}>{item.description}</p>
-                                      <p style={{marginTop:'10px'}}>{item.contexts}</p>
+                                              <p style={{fontSize:'5px',display:'block'}}>{"结束时间："+this.format(item.endTime)}</p>
+                                              <p style={{marginTop:'10px'}}>{"作答内容："+item.content}</p>
+                                              <p style={{marginTop:'10px'}}>{"参考答案："+item.remarks}</p>
                                           </row>
                                       {/*{item.content}*/}
                                   </List.Item>

@@ -16,7 +16,6 @@ public interface TeacherHomeworkService {
     int addTeacherHomework(JSONObject object);
     void deleteTeacherHomeworkAll(int courseId);
     void deleteTeacherHomeworkOne(int homeworkId);
-    String upload(MultipartFile file, String userId);
     int UpdateHandinAlready(int homeworkId);
 
 }

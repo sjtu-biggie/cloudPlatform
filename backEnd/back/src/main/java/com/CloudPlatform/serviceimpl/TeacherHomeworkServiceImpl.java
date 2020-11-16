@@ -54,13 +54,14 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         String subject= object.getString("subject");
         int handinAmount = object.getInteger("handinAmount");
         int handinAlready = object.getInteger("handinAlready");
+        int Delayable = object.getInteger("Delayable");
         Date startTime = object.getDate("startTime");
         Date endTime = object.getDate("endTime");
         String conUpload= object.getString("conUpload");
         String ansUpload= object.getString("ansUpload");
 
         TeacherHomework hw = new TeacherHomework(homeworkId,courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,handinAlready,content,syllabus,answer,Id, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,handinAlready,Delayable,content,syllabus,answer,Id, conUpload, ansUpload);
         return teacherhomeworkDao.editOne(hw);
     }
 
@@ -86,7 +87,7 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
             syllabus = null;
         }
         TeacherHomework hw = new TeacherHomework(courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,0,content,syllabus,answer, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,0,1,content,syllabus,answer, conUpload, ansUpload);
         return teacherhomeworkDao.addOne(hw);
     }
 
@@ -98,34 +99,6 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
     @Override
     public void deleteTeacherHomeworkOne(int homeworkId){
         teacherhomeworkDao.deleteOne(homeworkId);
-    }
-
-    @Override
-    public String upload(MultipartFile file,String userId){
-        String pathName = "/homework/"+userId+"/";//想要存储文件的地址
-        String pname = file.getOriginalFilename();//获取文件名（包括后缀）
-        FileOutputStream fos = null;
-        try {
-            File ffile=new File(pathName);
-            if(!ffile.exists()){//如果文件夹不存在
-                ffile.mkdir();//创建文件夹
-            }
-            pathName+=System.currentTimeMillis();
-            pathName += pname;
-            fos = new FileOutputStream(pathName);
-            fos.write(file.getBytes()); // 写入文件
-            System.out.println("文件上传成功");
-            return pathName;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override

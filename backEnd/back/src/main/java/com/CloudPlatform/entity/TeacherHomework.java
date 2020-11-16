@@ -24,7 +24,7 @@ public class TeacherHomework implements Serializable {
 
     public TeacherHomework(int _courseId, String _teacherId, String _title, String _range,
                            Date _startTime, Date _endTime,String _type,String _subject,
-                           int _handinAmount, int _handinAlready, String _content,JSONObject _syllabus,String _answer,
+                           int _handinAmount, int _handinAlready, int _delayable,String _content,JSONObject _syllabus,String _answer,
                            String _ContentUpload, String _AnswerUpload){
         courseId = _courseId;
         teacherId = _teacherId;
@@ -36,6 +36,7 @@ public class TeacherHomework implements Serializable {
         Subject = _subject;
         HandinAmount = _handinAmount;
         HandinAlready=_handinAlready;
+        Delayable=_delayable;
         Content = _content;
         syllabus = _syllabus;
         Answer = _answer;
@@ -43,26 +44,6 @@ public class TeacherHomework implements Serializable {
         AnswerUpload = _AnswerUpload;
     }
 
-    public TeacherHomework(int _courseId, String _teacherId, String _title, String _range,
-                           Date _startTime, Date _endTime,String _type,String _subject,
-                           int _handinAmount, String _content,JSONObject _syllabus,String _answer,
-                           String _Id, String _ContentUpload, String _AnswerUpload){
-        courseId = _courseId;
-        teacherId = _teacherId;
-        Title = _title;
-        Range = _range;
-        StartTime = _startTime;
-        EndTime = _endTime;
-        Type = _type;
-        Subject = _subject;
-        HandinAmount = _handinAmount;
-        Content = _content;
-        syllabus = _syllabus;
-        Answer = _answer;
-        id = _Id;
-        ContentUpload = _ContentUpload;
-        AnswerUpload = _AnswerUpload;
-    }
 
     @Id
     @Column(name = "HOMEWORKID")
@@ -99,6 +80,9 @@ public class TeacherHomework implements Serializable {
 
     @Column(name = "HANDINALREADY")
     private int HandinAlready;
+
+    @Column(name = "DELAYABLE")
+    private int Delayable;
 
     @Transient
     @Column(name = "CONTENT")

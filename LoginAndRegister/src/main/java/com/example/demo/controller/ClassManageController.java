@@ -58,4 +58,10 @@ public class ClassManageController {
         return theClassIds;
     }
 
+    @RequestMapping(value = "/getAllClass",method = RequestMethod.POST)
+    public List<String> getAllClass(){
+        return classManageMapper.getAllClass();
+    }
+
+
 }

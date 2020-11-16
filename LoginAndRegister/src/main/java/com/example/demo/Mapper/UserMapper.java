@@ -55,4 +55,6 @@ public interface UserMapper {
 
     @Update("update userdemo set type=#{type} where username=#{username}")
     void setUserType(String username, String type);
+
+
 }

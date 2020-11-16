@@ -24,4 +24,7 @@ public interface ClassManageMapper {
 
     @Select("select classNo from classmanage where classManagers=#{sid}")
     List<ClassManage> getAllClassByManager(String sid);
+
+    @Select("select classNo from classmanage")
+    List<String> getAllClass();
 }

@@ -1,0 +1,14 @@
+server:
+  port: 4000
+eureka:
+  instance:
+    hostname: eureka-center
+    appname: registerCenter
+  client:
+    registerWithEureka: false # 单点的时候设置为 false 禁止注册自身
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://localhost:4000/eureka
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 4000

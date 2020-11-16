@@ -15,8 +15,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class Course {
     @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "ID")
     private int id;
     @Column(name = "USER_ID")

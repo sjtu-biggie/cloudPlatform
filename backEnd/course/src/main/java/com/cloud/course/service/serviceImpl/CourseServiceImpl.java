@@ -70,25 +70,26 @@ public class CourseServiceImpl implements CourseService {
         String type = object.getString("type");
         String grade = object.getString("grade");
         String modify = object.getString("modify");
-        Course course = new Course(userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
+        int _id = 0;
+        Course course;
         CourseInfo courseInfo;
-        Integer _id = 0;
+        if(courseDao.findCount()==0){
+            _id = 1;
+        }else{
+            _id= courseDao.findMaxId()+1;
+        }
         if(modify!=null&&!modify.equals("")){
             int id = parseInt(object.getString("id"));
             _id = id;
             courseInfo = new CourseInfo(id,detail,introduction,syllabus,textbook);
             course = new Course(id,userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
         }else{
-            if(courseDao.findCount()==0){
-                _id = 0;
-            }else{
-                _id= courseDao.findMaxId();
-            }
-            courseInfo = new CourseInfo(_id+1,detail,introduction,syllabus,textbook);
+            courseInfo = new CourseInfo(_id,detail,introduction,syllabus,textbook);
+            course= new Course(_id,userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
         }
         courseDao.save(course);
         courseDao.saveInfo(courseInfo);
-        return (_id+1);
+        return (_id);
     }
     @Override
     public Page<CourseBulletin> getPageBulletin(String id, Pageable p){

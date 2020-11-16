@@ -248,7 +248,7 @@ class HomeworkCommit extends React.Component{
                     <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
                     <Card title="作业内容" >
                         <p>{this.state.teacherHomework.type==="主观题"?this.state.teacherHomework.content:this.renderObj(this.state.teacherHomework.syllabus)}</p>
-                    </Card> <br/>
+                    </Card>
                     {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><Card title={"作答区域"}>
                         <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:this.state.homework.content}</p>
                         <RichText parent={this}/>

@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: zuul-gateway
+
+server:
+  port: 5000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://user:123456@eureka1:8761/eureka/,http://user:123456@eureka2:8761/eureka/
+  instance:
+    prefer-ip-address: true #默认是hostname注册，这里改成IP注册
+
+
+zuul:
+  routes:
+    eureka-provider:
+      path: /provider/**
+      #url: http://127.0.0.1:8081/  #把包含path中的路径的请求跳转到url对应地址
+

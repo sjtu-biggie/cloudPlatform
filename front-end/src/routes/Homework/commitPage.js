@@ -17,7 +17,8 @@ class commitPage extends React.Component{
         editorState: EditorState.createEmpty(),
         size: 'default',
         homeworkId:"",
-        homework:[]
+        homework:[],
+        image:null
     };
 
     format = (shijianchuo) => {
@@ -80,7 +81,28 @@ class commitPage extends React.Component{
             homework:hw
         })
         this.toParent();
-    };
+
+        let file = hw.file[0];
+        let src = "data:image/png;base64,"+ file;
+
+        let blob1 = new Blob([file]);
+        document.getElementById("file_img").src = src;
+        console.log(document.getElementById("file_img"));
+        if(!!file){
+            // let objecturl =  window.URL.createObjectURL(blob1);
+            // document.getElementById("file_img").src = objecturl;
+            // console.log(document.getElementById("file_img"));
+            // let reader = new FileReader();
+            // // 将图片转成DataURL格式
+            // reader.readAsDataURL(blob1);
+            // reader.onload = function(){
+            //     //读取完毕后输出结果
+            //     document.getElementById("file_img").src = reader.result; //显示上传的图片
+            //     console.log(document.getElementById("file_img"));
+            //     console.log(reader.result);
+            // }
+            }
+    }
 
     toParent = () => {
         // console.log(this.props.parent.getChildrenMsg.bind(this, this.state.msg))
@@ -153,10 +175,14 @@ class commitPage extends React.Component{
                     <Row>
                         <Col span={4}>{new Date(Date.parse(this.state.homework.endTime))<new Date()?"已截止 |":"未截止 |"}{this.state.homework.handinTime!==null?" 已提交":" 未提交"}</Col>
                     </Row>
+
                     <Row>
                         <Text type={"secondary"}>{"截止日期："+this.state.homework.endTime}</Text>
                         <br/>
                     </Row>
+                <Row>
+                    <img  id = "file_img"  width='50%' height='50%'/>
+                </Row>
             </div>
         )
     }

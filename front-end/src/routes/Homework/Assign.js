@@ -227,28 +227,31 @@ class Assign extends React.Component {
 
     };
 
-    addStudentHomework = async (homework,studentId,nickname) => {
-        homework.studentId = studentId;
-        homework.nickname = nickname;
-        console.log(homework);
-        let config = {
-            method: 'post',
-            url: 'http://106.13.209.140:8383/addStudentHomework',
-            //url: 'http://localhost:8080/addStudentHomework',
-            data: homework,
-            headers: {
-                withCredentials: true,
-            }
-        };
-        const hw = await axios(config)
-            .then(function (response) {
-                console.log(response.data);
-                return response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        console.log(hw);
+    addStudentHomework = async (homework) => {
+        for (let i = 0; i < this.state.student.length; ++i){
+            homework.studentId = this.state.student[i].username;
+            homework.nickname = this.state.student[i].nickname;
+            console.log(homework);
+            let config = {
+                method: 'post',
+                url: 'http://106.13.209.140:8383/addStudentHomework',
+                //url: 'http://localhost:8080/addStudentHomework',
+                data: homework,
+                headers: {
+                    withCredentials: true,
+                }
+            };
+            const hw = await axios(config)
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            console.log(hw);
+        }
+
     };
 
     addHomework = async (homework) => {
@@ -279,9 +282,8 @@ class Assign extends React.Component {
             title:homework.title,
         };
         console.log(this.state.student);
-        for (let i = 0; i < this.state.student.length; ++i){
-            this.addStudentHomework(stHw,this.state.student[i].username,this.state.student[i].nickname);
-        }
+        this.addStudentHomework(stHw);
+
         this.setState({
             homeworkId: hwId,
             syllabus: {

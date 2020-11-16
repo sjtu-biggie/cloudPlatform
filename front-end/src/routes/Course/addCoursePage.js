@@ -496,26 +496,6 @@ class AddCourse extends React.Component {
                                     )
                                 }
                             </FormItem>
-                            {/*<FormItem label="课程图片" valuePropName="fileList"*/}
-                            {/*          getValueFromEvent={normFile} {...formItemLayout}>*/}
-                            {/*    {*/}
-                            {/*        getFieldDecorator('pic', {*/}
-                            {/*            rules: [*/}
-                            {/*                {*/}
-                            {/*                    required: true,*/}
-                            {/*                    message: '请上传课程简介图片'*/}
-                            {/*                }*/}
-                            {/*            ]*/}
-                            {/*        })(*/}
-                            {/*            <Upload.Dragger name="files" action="//jsonplaceholder.typicode.com/posts/">*/}
-                            {/*                <p className="ant-upload-drag-icon">*/}
-                            {/*                </p>*/}
-                            {/*                <p className="ant-upload-text">Click or drag file to this area to upload</p>*/}
-                            {/*            </Upload.Dragger>*/}
-                            {/*        )*/}
-                            {/*    }*/}
-
-                            {/*</FormItem>*/}
                             <FormItem label='开始时间' {...formItemLayout} required>
                                 {
                                     getFieldDecorator('startDate', {

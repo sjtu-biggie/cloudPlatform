@@ -28,7 +28,8 @@ public class StudentHomework {
 
     public StudentHomework(int _homeworkId,int _courseId, String _studentId, String _title,
                            Date _startTime, Date _endTime, String _nickname, String _subject
-                           ,String _upload){
+                           ,String _upload, String _content, String _correct, String _comment,
+                           String _remarks){
         homeworkId = _homeworkId;
         courseId = _courseId;
         studentId = _studentId;
@@ -38,6 +39,10 @@ public class StudentHomework {
         Subject = _subject;
         nickName = _nickname;
         Upload = _upload;
+        Content = _content;
+        Correct = _correct;
+        Comment = _comment;
+        Remarks = _remarks;
     }
 
     public StudentHomework(String _studentId, int _homeworkId, int _courseId,

@@ -65,7 +65,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
                 homework.getTitle(),
                 homework.getType(),
                 homework.getCourseId(),
-                homework.getTeacherId(),maxId);
+                homework.getTeacherId(),maxId,homework.getHandinAlready());
 
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = maxId;

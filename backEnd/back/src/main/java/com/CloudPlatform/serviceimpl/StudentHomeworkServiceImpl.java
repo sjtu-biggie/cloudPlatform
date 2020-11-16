@@ -89,7 +89,6 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
 //            });
 //        }
         String[] path = studentHomework.getUpload().split(",");
-        System.out.println(Arrays.toString(path));
         List fileList = new ArrayList<>();
         File file = null;
         for (String filepath : path) {
@@ -105,9 +104,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
                 System.out.println("文件读取异常！");
             }
         }
-
         studentHomework.setFile(fileList);
-        System.out.println(studentHomework.getFile());
         return studentHomework;
     }
 
@@ -153,7 +150,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         String upload = object.getString("upload");
 
         StudentHomework hw = new StudentHomework(homeworkId, courseId, studentId, title,
-                startTime, endTime, nickName, subject,upload);
+                startTime, endTime, nickName, subject,upload,null,null,null,null);
         return studenthomeworkDao.addOne(hw);
     }
 

@@ -74,11 +74,11 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setCourseId(csId);
         homeworkDetail.setHomeworkId(hwId);
         homeworkDetail.setStudentId(t_id);
-//        homeworkDetail.setContent(homework.getContent());
-//        homeworkDetail.setComment(homework.getComment());
-//        homeworkDetail.setRemarks(homework.getRemarks());
-//        homeworkDetail.setCorrect(homework.getCorrect());
-//        homeworkDetail.setUpload(homework.getUpload());
+        homeworkDetail.setContent(homework.getContent());
+        homeworkDetail.setComment(homework.getComment());
+        homeworkDetail.setRemarks(homework.getRemarks());
+        homeworkDetail.setCorrect(homework.getCorrect());
+        homeworkDetail.setUpload(homework.getUpload());
         studenthomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }

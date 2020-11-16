@@ -17,8 +17,8 @@ public interface TeacherHomeworkRepository extends JpaRepository<TeacherHomework
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value ="insert into teacherhomework (endtime, handinamount, `range`, starttime, subject, title, type, courseid, teacherid, homeworkid) values (?1, ?2,?3, ?4, ?5, ?6,?7, ?8, ?9,?10)")
-    void Insert(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int homeworkid);
+    @Query(nativeQuery = true,value ="insert into teacherhomework (endtime, handinamount, `range`, starttime, subject, title, type, courseid, teacherid, homeworkid, handinalready) values (?1, ?2,?3, ?4, ?5, ?6,?7, ?8, ?9,?10,?11)")
+    void Insert(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int homeworkid, int handinalready);
 
     @Transactional
     @Modifying

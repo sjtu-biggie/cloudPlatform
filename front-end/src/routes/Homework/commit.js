@@ -58,6 +58,7 @@ class HomeworkCommit extends React.Component{
         teacherHomework: {},
         loading:true,
         edit:false,
+        src:[]
     };
 
     uploadFilesChange(file) {
@@ -134,6 +135,30 @@ class HomeworkCommit extends React.Component{
         });
         console.log(this.state.homework)
     };
+
+    getStudentHomeworkOne=async (sid,hid)=>{
+        let config = {
+            method: 'get',
+            url: 'http://106.13.209.140:8383/getStudentHomeworkOne?studentId='+sid+"&homeworkId="+hid,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw.comment);
+        let file = hw.file[0];
+        let src = "data:image/png;base64,"+ file;
+        this.setState({
+            src:src
+        })
+    }
 
     postObject = async() => {
         if(this.state.homework.handinTime===null){
@@ -223,6 +248,8 @@ class HomeworkCommit extends React.Component{
         this.setState({
             homeworkId:this.props.match.params[0].substr(1)
         });
+        let sid=localStorage.getItem("username")
+        this.getStudentHomeworkOne(sid,this.props.match.params[0].substr(1));
     }
 
     componentDidMount() {
@@ -272,7 +299,7 @@ class HomeworkCommit extends React.Component{
             canvasWidth: 900,
             canvasHeight: 1000,
             disabled: false,
-            imgSrc: this.state.homework.file,
+            imgSrc: this.state.src,
             saveData: null,
             immediateLoading: false,
             hideInterface: false

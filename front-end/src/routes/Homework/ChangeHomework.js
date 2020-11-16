@@ -64,6 +64,21 @@ class ChangeHomework extends React.Component {
         this.getHomeworkOne(this.props.homeworkId);
     };
 
+    format = (shijianchuo) => {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth() + 1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
+    };
+
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
+    }
+
     getUserInfo = async (username)=>{
         let config = {
             method: 'post',
@@ -268,24 +283,10 @@ class ChangeHomework extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <DatePicker.RangePicker disabled={this.state.ableState} placeholder={[this.state.homework.startTime, this.state.homework.endTime]}/>
+                                    <DatePicker.RangePicker disabled={this.state.ableState} placeholder={[this.format(this.state.homework.startTime), this.format(this.state.homework.endTime)]}/>
                                 )
                             }
                         </FormItem>
-                        {/*<FormItem label='定时发布' {...formItemLayout} >*/}
-                        {/*    {*/}
-                        {/*        getFieldDecorator('type', {*/}
-                        {/*            rules: [*/}
-                        {/*                {*/}
-                        {/*                    message: '请选择定时发布的时间'*/}
-                        {/*                }*/}
-                        {/*            ]*/}
-                        {/*        })*/}
-                        {/*        (*/}
-                        {/*            <DatePicker disabled={this.state.ableState}/>*/}
-                        {/*        )*/}
-                        {/*    }*/}
-                        {/*</FormItem>*/}
                         <FormItem style={display2} label='作业详情' {...DraftLayout} >
                             {
                                 (

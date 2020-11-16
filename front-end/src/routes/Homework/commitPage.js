@@ -81,11 +81,8 @@ class commitPage extends React.Component{
             homework:hw
         })
         this.toParent();
-        let file = hw.file[0];
-        let src = "data:image/png;base64,"+ file;
 
-        document.getElementById("file_img").src = src;
-        console.log(document.getElementById("file_img"));
+
     }
 
     toParent = () => {
@@ -157,6 +154,7 @@ class commitPage extends React.Component{
 
             <div>
                     <Row>
+                        <Col span={20}>作业内容</Col>
                         <Col span={4}>{new Date(Date.parse(this.state.homework.endTime))<new Date()?"已截止 |":"未截止 |"}{this.state.homework.handinTime!==null?" 已提交":" 未提交"}</Col>
                     </Row>
 
@@ -164,9 +162,6 @@ class commitPage extends React.Component{
                         <Text type={"secondary"}>{"截止日期："+this.state.homework.endTime}</Text>
                         <br/>
                     </Row>
-                <Row>
-                    <img  id = "file_img"  width='50%' height='50%'/>
-                </Row>
             </div>
         )
     }

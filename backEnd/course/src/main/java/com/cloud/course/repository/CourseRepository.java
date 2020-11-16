@@ -30,6 +30,9 @@ public interface CourseRepository extends CrudRepository<Course,Integer> {
     @Query(nativeQuery = true,value="select id from course where id >= all (select id from course)")
     int findMaxId();
 
+    @Query(nativeQuery = true,value="select count(*) from course")
+    int findCount();
+
 
     Page<Course> findAll(Pageable p);
 

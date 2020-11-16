@@ -79,7 +79,11 @@ public class CourseServiceImpl implements CourseService {
             courseInfo = new CourseInfo(id,detail,introduction,syllabus,textbook);
             course = new Course(id,userId,name,start_date,end_date,type,grade,classes,noteHomeworkAssign,noteHomeworkDue,noteHomeworkRatify,seeCourseAverage,seeHomeworkAverage);
         }else{
-            _id= courseDao.findMaxId();
+            if(courseDao.findCount()==0){
+                _id = 1;
+            }else{
+                _id= courseDao.findMaxId();
+            }
             courseInfo = new CourseInfo(_id,detail,introduction,syllabus,textbook);
         }
         courseDao.save(course);

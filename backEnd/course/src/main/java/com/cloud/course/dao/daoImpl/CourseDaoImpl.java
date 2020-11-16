@@ -85,6 +85,10 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
+    public int findCount(){
+        return courseRepository.findCount();
+    }
+    @Override
     public void saveInfo(CourseInfo courseInfo){
         courseInfoRepository.save(courseInfo);
     }

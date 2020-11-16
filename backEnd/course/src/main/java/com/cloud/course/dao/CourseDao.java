@@ -65,4 +65,6 @@ public interface CourseDao {
     List<WholeCourse> getStudentEndCourses(String student_id);
 
     List<WholeCourse> getTeacherEndCourses(String teacher_id);
+
+    int findCount();
 }

@@ -57,6 +57,7 @@ class HomeworkCommit extends React.Component{
         saveableCanvas:"",
         teacherHomework: {},
         loading:true,
+        edit:false,
     };
 
     uploadFilesChange(file) {
@@ -289,10 +290,13 @@ class HomeworkCommit extends React.Component{
                         <p>{this.state.teacherHomework.type==="主观题"?this.state.teacherHomework.content:this.renderObj(this.state.teacherHomework.syllabus)}</p>
                     </Card>
                     {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><br/><Card title={"作答区域"}>
-                        <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:"我的答案 : "+this.state.homework.content}</p>
-                        <RichText parent={this}/>
-                        <Upload  parent={this}><Button>{this.state.homework.handinTime===null?null:'重新'}上传作业图片</Button></Upload>
+                        <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:"我的答案 : "+this.state.content}</p>
+                        <Button style={{marginBottom:'10px'}} onClick={()=>{this.setState({edit:true})}}>修改</Button>
                         <br/>
+                        {this.state.edit===true?<RichText parent={this}/>:null}
+                        {this.state.edit===true?<Upload  parent={this}><Button>{this.state.homework.handinTime===null?null:'重新'}上传作业图片</Button></Upload>
+                            :null}
+                            <br/>
                         {this.state.homework.file!==null?<Button onClick={()=>{this.downloadDoc(this.state.homework.file)}}>下载已上传的图片附件</Button>:null}
                         <br/>
                     </Card><br/></div>:<div><br/></div>}

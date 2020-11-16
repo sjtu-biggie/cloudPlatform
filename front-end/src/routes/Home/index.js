@@ -2,6 +2,7 @@ import React from 'react'
 import {Card, Carousel, Col, Icon, List, Row} from 'antd'
 import './style.css'
 import axios from "axios";
+import Loading2 from "../../components/Loading2";
 
 const imgs = [
     '../../pic/home2.png',
@@ -75,6 +76,7 @@ class Home extends React.Component {
         this.setState({
             userInfo: user,
             role:user.type,
+            loading:false,
         })
     };
 
@@ -86,7 +88,12 @@ class Home extends React.Component {
     };
 
     render() {
-        return (
+        if(this.state.loading){
+            return  <div>
+                <h3 style={styles.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
+                <Loading2/>
+            </div>
+        }else return (
             <div style={styles.bg} className='home'>
                 <Carousel arrows effect='fade' className='size'>
                     {imgs.map(item => <div key={item}>
@@ -246,7 +253,16 @@ const styles = {
         border: '2px solid',
         marginTop: '155px',
         height: '600px'
-    }
+    },loadingTitle:{
+        position:'fixed',
+        top:'50%',
+        left:'50%',
+        marginLeft: -45,
+        marginTop: -18,
+        color:'#000',
+        fontWeight:500,
+        fontSize:24
+    },
 };
 
 export default Home

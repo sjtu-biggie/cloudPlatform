@@ -101,6 +101,11 @@ class RegisterForm extends React.Component {
           alert("验证码错误");
           return null;
         }
+        if(this.state.to!==values.registerEmail&&this.state.to!==values.registerPhoneNumber)
+        {
+          alert("现在邮箱或者手机与发送验证码的不一致");
+          return null;
+        }
           const obj =  {
             username: values.registerUsername,
             password: values.registerPassword,
@@ -305,7 +310,7 @@ class RegisterForm extends React.Component {
                         addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 5 ? styles.focus : {}}/>}/>
                   </Col>
                   <Col span={8}>
-                    <Button type={'primary'} id={"code"} onClick={()=>{this.sendVeriCode()}} style={{width:'110px',textAlign:'center'}} disabled={this.state.count!==0} >发送验证码</Button>
+                    <Button type={'primary'} id="code" onClick={()=>{this.sendVeriCode()}} style={{width:'110px',textAlign:'center'}} disabled={this.state.count!==0} >发送验证码</Button>
                   </Col>
 
                 </Row>

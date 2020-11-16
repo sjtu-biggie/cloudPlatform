@@ -224,7 +224,6 @@ class Assign extends React.Component {
             option:options1,
             course:course.course
         })
-
     };
 
     addStudentHomework = async (homework) => {

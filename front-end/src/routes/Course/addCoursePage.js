@@ -50,37 +50,11 @@ class AddCourse extends React.Component {
         disabled: false,
         step: 0,
         syllabus: {
-            chapterNum: 4,
+            chapterNum: 1,
             chapter1: {
-                title: "一百以内算术",
+                title: "请添加章节",
                 content: [
-                    "加法",
-                    "减法", "乘法", "除法"
-                ]
-            },
-            chapter2: {
-                title: "微积分",
-                content: [
-                    "微分",
-                    "积分", "偏微分"
-                ]
-            },
-            chapter3: {
-                title: "数学史",
-                content: [
-                    "时间简史",
-                    "二战史",
-                    "线性代数史"
-                ]
-            },
-            chapter4: {
-                title: "提高篇",
-                content: [
-                    "矩阵",
-                    "行列式",
-                    "特征向量",
-                    "正交矩阵",
-                    "正定矩阵"
+                    "请添加小节",
                 ]
             },
         }
@@ -208,15 +182,31 @@ class AddCourse extends React.Component {
         });
     };
 
-    componentWillMount() {
-        const children = [];
-        for (let i = 10; i < 36; i++) {
-            children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+    componentWillMount=async()=> {
+        let config = {
+            method: 'post',
+            url: 'http://106.13.209.140:8000/getAllClass',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const classes = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        let options1 = [];
+        for (let i = 0; i < classes.length; ++i){
+            options1.push(
+                <Option key={classes[i]}>{classes[i]}</Option>
+            )
         }
         this.setState({
-            classes: children
+            classes:options1,
         })
-    }
+    };
 
     componentWillUnmount() {
         clearInterval(this.timer)
@@ -497,8 +487,8 @@ class AddCourse extends React.Component {
                                     getFieldDecorator('detail', {
                                         rules: [
                                             {
-                                                max: 80,
-                                                message: '详细介绍不能超过三百个字'
+                                                max: 200,
+                                                message: '详细介绍不能超过二百个字'
                                             },
                                         ]
                                     })(

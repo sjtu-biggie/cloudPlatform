@@ -234,13 +234,14 @@ export default class Manager extends Component {
         this.deleteRegister = (record) => {
             console.log("调用从班级删除学生");
             console.log(record);
-            console.log(this.state.delUserId);
+            console.log(this.state.courseId);
+            console.log(record.username);
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8787/course/deleteCourseStudent',
                 data: {
                     "courseId": this.state.courseId,
-                    "userId": this.state.delUserId
+                    "userId": record.userId
                 }
             }).then(msg => {
                 console.log(msg)

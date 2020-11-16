@@ -241,7 +241,7 @@ class HomeworkCommit extends React.Component{
                     {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><Card title={"作答区域"}>
                         <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:this.state.homework.content}</p>
                         <RichText parent={this}/>
-                        <Upload parent={this}/>
+                        <Upload  parent={this}><Button>{this.state.homework.handinTime===null?null:'重新'}上传作业图片</Button></Upload>
                         <br/>
                         {this.state.homework.file!==null?<Button onClick={()=>{this.downloadDoc(this.state.homework.file)}}>下载已上传的图片附件</Button>:null}
                         <br/>

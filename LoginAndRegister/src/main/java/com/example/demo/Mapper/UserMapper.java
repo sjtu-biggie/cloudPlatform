@@ -1,12 +1,9 @@
 package com.example.demo.Mapper;
 
-import com.alibaba.fastjson.JSONArray;
 import com.example.demo.model.User;
 import org.apache.ibatis.annotations.*;
-import org.omg.CORBA.PUBLIC_MEMBER;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.jws.soap.SOAPBinding;
+
 import java.util.List;
 
 @Mapper

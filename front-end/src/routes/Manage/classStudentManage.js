@@ -355,7 +355,7 @@ export default class ClassManage extends Component {
                 data: {
                     classNo: this.state.createClass,
                     number: 0,
-                    classManager: "518030910213",
+                    classManager: window.localStorage.getItem("sid"),
                 }
             }).then(msg => {
                 console.log(msg);
@@ -409,7 +409,7 @@ export default class ClassManage extends Component {
             url: 'http://106.13.209.140:8000/getAllClassByManager',
             method: 'POST',
             data: {
-                sid: "518030910213"
+                sid: window.localStorage.getItem("sid")
             }
         }).then(msg => {
             console.log(msg.data);

@@ -53,6 +53,7 @@ public class RegisterController {
             loginService.setUseIcon(new UserIcon(username, defaultJpg));
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("无头像储存");
             return "头像未储存";
         }
         return "注册成功";

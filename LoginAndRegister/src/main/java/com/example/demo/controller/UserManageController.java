@@ -73,10 +73,9 @@ public class UserManageController {
         for(Object s:classIds){
             String classId=s.toString();
             List<User> tmp=userMapper.getAllStudentsByClass(classId);
-            System.out.println(tmp);
             users.addAll(tmp);
         }
-        System.out.println(users);
+        System.out.println("获取全部学生完成");
         return users;
     }
 

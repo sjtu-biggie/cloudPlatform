@@ -11,6 +11,7 @@ import {fileToObject} from "antd/es/upload/utils";
 import axios from "axios";
 import Upload from "./upload"
 import CanvasDraw from "react-canvas-draw";
+import Loading2 from "../../components/Loading2";
 
 const { Text, Link } = Typography;
 
@@ -39,7 +40,8 @@ class HomeworkCommit extends React.Component{
         penLazy:5,
         penSize:5,
         saveableCanvas:"",
-        teacherHomework: {}
+        teacherHomework: {},
+        loading:true,
     };
 
     uploadFilesChange(file) {
@@ -53,10 +55,16 @@ class HomeworkCommit extends React.Component{
         this.setState({
             homework:homework,
             content:homework.content,
-            teacherHomework : teacherHomework
+            teacherHomework : teacherHomework,
         });
-        // this.downloadDoc(homework.file,"test.jpeg");
         console.log(homework,teacherHomework);
+
+        if(homework.title!==null&&homework.title!==undefined&&teacherHomework.title!==undefined){
+            this.setState({
+                loading:false
+            })
+        }
+        // this.downloadDoc(homework.file,"test.jpeg");
         if(homework.correct!==""&&homework.correct!==undefined&&homework.correct!==null){
             this.saveableCanvas.loadSaveData(homework.correct)
         }
@@ -230,11 +238,14 @@ class HomeworkCommit extends React.Component{
         const { editorState,contentState } = this.state;
         return (
             <div>
+                {this.state.loading?<div>
+                    <h3 style={styles.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
+                    <Loading2/>
+
+                </div> :null}
                 <CustomBreadcrumb arr={['作业','提交']}/>
                 <Card  bordered={false} className='card-item' title={this.state.homework.title} style={{minHeight:200}}>
-
                     <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
-
                     <Card title="作业内容" >
                         <p>{this.state.teacherHomework.type==="主观题"?this.state.teacherHomework.content:this.renderObj(this.state.teacherHomework.syllabus)}</p>
                     </Card> <br/>
@@ -261,5 +272,16 @@ class HomeworkCommit extends React.Component{
         )
     }
 }
-
+const styles = {
+  loadingTitle:{
+        position:'fixed',
+        top:'50%',
+        left:'50%',
+        marginLeft: -45,
+        marginTop: -18,
+        color:'#000',
+        fontWeight:500,
+        fontSize:24
+    },
+};
 export default HomeworkCommit

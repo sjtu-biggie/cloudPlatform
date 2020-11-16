@@ -148,7 +148,7 @@ class Home extends React.Component {
                                                         fontSize: '40px',
                                                         fontWeight: 'bold',
                                                         marginTop: '30px'
-                                                    }}>学生用户-{this.state.userInfo.nickname}</p>
+                                                    }}>学生用户 {this.state.userInfo.nickname}</p>
                                                     <p style={{
                                                         textAlign: 'center',
                                                         fontSize: '25px',

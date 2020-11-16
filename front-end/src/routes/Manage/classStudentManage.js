@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {Component, createRef} from 'react';
-import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form, Drawer} from 'antd';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Form, Drawer,message} from 'antd';
 import styles from './index.css';
 import {Router} from "react-router-dom";
 import axios from "axios";
@@ -359,7 +359,10 @@ export default class ClassManage extends Component {
                 }
             }).then(msg => {
                 console.log(msg);
-                alert(this.state.createClass+"已经创建");
+                message.info(this.state.createClass+"已经创建");
+                this.setState({
+                    visible: false,
+                });
             }).catch(err => {
                 console.log(err);
             })

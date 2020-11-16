@@ -136,7 +136,7 @@ public class StudentHomework {
     @Transient
     private int handinRank;
     @Transient
-    List<MultipartFile> file;
+    List<String> file;
 
 
 }

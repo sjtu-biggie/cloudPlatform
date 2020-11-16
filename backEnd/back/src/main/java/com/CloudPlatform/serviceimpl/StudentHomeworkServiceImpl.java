@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -67,27 +68,8 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         if (studentHomework.getUpload() == null){
             return studentHomework;
         }
-//        String[] path = studentHomework.getUpload().split(",");
-//        System.out.println(Arrays.toString(path));
-//        List<MultipartFile> fileList = new ArrayList<>();
-//        for (String filepath : path) {
-//            ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
-//            File file = new File(filepath);//File类型可以是文件也可以是文件夹
-//            fixedThreadPool.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        FileInputStream fileInputStream = null;
-//                        fileInputStream = new FileInputStream(file);
-//                        MultipartFile multipartFile = new MockMultipartFile(filepath,filepath,
-//                                ContentType.APPLICATION_OCTET_STREAM.toString(), fileInputStream);
-//                        fileList.add(multipartFile);
-//                    } catch (Exception e) {
-//                        System.out.println(e.getMessage());
-//                    }
-//                }
-//            });
-//        }
+        BASE64Encoder encoder = new BASE64Encoder();
+
         String[] path = studentHomework.getUpload().split(",");
         List fileList = new ArrayList<>();
         File file = null;
@@ -95,15 +77,17 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
             try {
                 file = ResourceUtils.getFile(filepath);
                 // 获取文件输入流
-                InputStream inputStream = new FileInputStream(file);
-                List<String> fList = IOUtils.readLines(inputStream);
-                fileList.add(fList);
+                FileInputStream inputStream = new FileInputStream(file);
+                byte[] buffer=new byte[inputStream.available()];
+                inputStream.read(buffer);
+                fileList.add(encoder.encode(buffer));
             } catch (FileNotFoundException e) {
                 System.out.println("文件不存在！");
             } catch (IOException e) {
                 System.out.println("文件读取异常！");
             }
         }
+        System.out.println("SetFile");
         studentHomework.setFile(fileList);
         return studentHomework;
     }

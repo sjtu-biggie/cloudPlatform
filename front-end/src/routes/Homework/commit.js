@@ -61,18 +61,23 @@ class HomeworkCommit extends React.Component{
             this.saveableCanvas.loadSaveData(homework.correct)
         }
     };
-    downloadDoc = function(content, filename) {
-        var eleLink = document.createElement('a');
-        eleLink.download = filename;
-        eleLink.style.display = 'none';
-        // 字符内容转变成blob地址
-        var blob = new Blob([content]);
-        eleLink.href = URL.createObjectURL(blob);
-        // 自动触发点击
-        document.body.appendChild(eleLink);
-        eleLink.click();
-        // 然后移除
-        document.body.removeChild(eleLink);
+    downloadDoc = function(content) {
+        let i =0;
+        for (let file of content){
+            var eleLink = document.createElement('a');
+            eleLink.download = "picture"+i;
+            i=i+1;
+            eleLink.style.display = 'none';
+            // 字符内容转变成blob地址
+            var blob = new Blob([file]);
+            eleLink.href = URL.createObjectURL(blob);
+            // 自动触发点击
+            document.body.appendChild(eleLink);
+            eleLink.click();
+            // 然后移除
+            document.body.removeChild(eleLink);
+        }
+
     };
     getUploadMsg = (result, fileList) => {
         // console.log(result, msg)
@@ -200,7 +205,9 @@ class HomeworkCommit extends React.Component{
 
     }
     renderObj = (syllabus) =>{
-        return syllabus;
+        return 1;
+        //TODO
+        // return syllabus;
     };
     render(){
         let defaultProps = {
@@ -225,23 +232,29 @@ class HomeworkCommit extends React.Component{
             <div>
                 <CustomBreadcrumb arr={['作业','提交']}/>
                 <Card  bordered={false} className='card-item' title={this.state.homework.title} style={{minHeight:200}}>
+
                     <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
-                    {new Date(Date.parse(this.state.homework.endTime))>new Date()?<Card bordered={false} className='card-item'>
-                        <RichText parent={this}></RichText>
-                    </Card>:<br/>}
 
                     <Card title="作业内容" >
                         <p>{this.state.teacherHomework.type==="主观题"?this.state.teacherHomework.content:this.renderObj(this.state.teacherHomework.syllabus)}</p>
                     </Card> <br/>
+                    {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><Card title={"作答区域"}>
+                        <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:this.state.homework.content}</p>
+                        <RichText parent={this}/>
+                        <Upload parent={this}/>
+                        <br/>
+                        {this.state.homework.file!==null?<Button onClick={()=>{this.downloadDoc(this.state.homework.file)}}>下载已上传的图片附件</Button>:null}
+                        <br/>
+                    </Card><br/></div>:<div><br/></div>}
                     <Card title="批改内容"  >
-                        <CanvasDraw
-                            ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/>
+                        {this.state.homework.score===null?<p style ={{color:'red'}}>未批改!</p>:this.state.homework.file===(null||undefined)?<p style ={{color:'red'}}>未提交图片附件！</p>:<CanvasDraw
+                            ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/>}
+
                     </Card><br/>
                     <Card title="作业评论" >
                         <p>{this.state.homework.comment===null?'暂无评论':this.state.homework.comment}</p>
                     </Card><br/>
-                    <Upload parent={this}></Upload>
-                    <br></br>
+
                     <Button type="primary"  onClick={()=>this.postObject()}>{this.state.homework.handinTime!==null?"重新提交":"提交"}</Button>&emsp;
                 </Card>
             </div>

@@ -45,7 +45,7 @@ class Mistakes extends React.Component {
             return null;
         }else{
             for(let mistake of this.state.mistakes){
-                if(mistake.type===subject){
+                if(mistake.subject.indexOf(subject)){
                     modifiedList.push(mistake);
                 }
             }
@@ -215,6 +215,7 @@ class Mistakes extends React.Component {
         const { SubMenu } = Menu;
         const menu2 = (
             <Menu onClick={this.handleMenuClick}>
+                <SubMenu title="所有"></SubMenu>
                 <SubMenu title="一年级">
                 <Menu.Item key="10">一年级上</Menu.Item>
                 <Menu.Item key="11">一年级下</Menu.Item>

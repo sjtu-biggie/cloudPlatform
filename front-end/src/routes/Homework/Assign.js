@@ -227,14 +227,15 @@ class Assign extends React.Component {
     };
 
     addStudentHomework = async (homework) => {
+        let tos=[];
         for (let i = 0; i < this.state.student.length; ++i){
+            tos.push(this.state.student.email)
             homework.studentId = this.state.student[i].username;
             homework.nickname = this.state.student[i].nickname;
             console.log(homework);
             let config = {
                 method: 'post',
                 url: 'http://106.13.209.140:8383/addStudentHomework',
-                //url: 'http://localhost:8080/addStudentHomework',
                 data: homework,
                 headers: {
                     withCredentials: true,
@@ -250,6 +251,17 @@ class Assign extends React.Component {
                 });
             console.log(hw);
         }
+        axios({
+            url:'http://106.13.209.140:8000/sendNotice',
+            method:'POST',
+            data:{
+                "tos":tos
+            }
+        }).then(res=>{
+            console.log(res);
+        }).catch(err=>{
+            console.log(err);
+        })
 
     };
 

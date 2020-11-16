@@ -208,6 +208,9 @@ class HomeworkDemo extends React.Component {
                 console.log(error);
             });
         console.log(hw);
+        this.setState({
+            loading:false
+        });
         switch(type){
             case 0:{
                 break;

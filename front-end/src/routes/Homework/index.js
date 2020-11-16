@@ -4,6 +4,7 @@ import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 
 import HomeworkList from './HomeworkList'
+import Loading2 from "../../components/Loading2";
 const { Search } = Input;
 
 const deathHomework = [];
@@ -29,7 +30,8 @@ class HomeworkDemo extends React.Component {
         userInfo: {
             sid:1,
         },
-        role: null
+        role: null,
+        loading:true,
     };
 
     searchFun=(value)=>{
@@ -121,6 +123,9 @@ class HomeworkDemo extends React.Component {
                 console.log(error);
             });
         console.log(hw);
+        this.setState({
+            loading:false
+        });
         let index = 0;
         for (let _hw of hw){
             if(_hw.type==='客观题'){
@@ -481,8 +486,12 @@ class HomeworkDemo extends React.Component {
                 </Menu.SubMenu>
             </Menu>
         );
-
-        return (
+        if(this.state.loading){
+            return  <div>
+                <h3 style={style.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
+                <Loading2/>
+            </div>
+        }else return (
             <div>
                 <div>
                     <CustomBreadcrumb arr={['课程', this.state.type===0?"所有作业":this.state.type===1?"已提交":this.state.type===2?"未提交":this.state.type===3?"已截止":"未截止"]}/>
@@ -519,6 +528,18 @@ class HomeworkDemo extends React.Component {
             </div>
         )
     }
-}
 
+}
+const style = {
+    loadingTitle:{
+        position:'fixed',
+        top:'50%',
+        left:'50%',
+        marginLeft: -45,
+        marginTop: -18,
+        color:'#000',
+        fontWeight:500,
+        fontSize:24
+    },
+}
 export default HomeworkDemo

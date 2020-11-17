@@ -188,7 +188,13 @@ public class CourseServiceImpl implements CourseService {
         }
         for(int i=0;i<studentId.size();++i){
             JSONObject student = studentId.getJSONObject(i);
-            courseDao.register(courseId,student.getString("username"),join_date,student.getString("nickname"),student.getString("theClass"),student.getString("sid"));
+            String name="";
+            if (student.getString("username")==null){
+                name=student.getString("userId");
+            }else {
+                name=student.getString("username");
+            }
+            courseDao.register(courseId,name,join_date,student.getString("nickname"),student.getString("theClass"),student.getString("sid"));
         }
     }
     @Override

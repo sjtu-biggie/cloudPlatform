@@ -314,7 +314,7 @@ class HomeworkCommit extends React.Component{
                         <p>{this.state.teacherHomework.type==="主观题"?<iframe style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.teacherHomework.content}/>:this.renderObj(this.state.teacherHomework.syllabus)}</p>
                     </Card>
                     {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><br/><Card title={"作答区域"}>
-                        <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:"我的答案 : "+<iframe style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.content}/>}</p>
+                        <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:<iframe style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.content}/>}</p>
                         {!this.state.homework.handinTime===null?<Button style={{marginBottom:'10px'}} onClick={()=>{this.setState({edit:true})}}>修改</Button>:null}
                         <br/>
                         {this.state.edit===true||this.state.homework.handinTime===null?<RichText parent={this}/>:null}

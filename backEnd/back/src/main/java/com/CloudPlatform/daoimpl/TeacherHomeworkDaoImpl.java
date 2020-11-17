@@ -56,7 +56,13 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
 
     @Override
     public int addOne(TeacherHomework homework){
-        int maxId = teacherhomeworkRepository.getMaxId()+1;
+        int maxId = 0;
+        if (teacherhomeworkRepository.getMaxId() == null){
+            maxId = 1;
+        }
+        else{
+            maxId = teacherhomeworkRepository.getMaxId()+1;
+        }
         teacherhomeworkRepository.Insert(homework.getEndTime(),
                 homework.getHandinAmount(),
                 homework.getRange(),

@@ -108,13 +108,12 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         String remarks = object.getString("remarks");
         String subject = object.getString("subject");
         String correct = object.getString("correct");
-        double score = object.getDouble("score");
         Date startTime = object.getDate("startTime");
         Date endTime = object.getDate("endTime");
         Date handinTime = object.getDate("handinTime");
         String upload = object.getString("upload");
         StudentHomework hw = new StudentHomework(studentId, homeworkId, courseId, nickName, handinTime,
-                startTime, endTime, score, title, subject, content, correct, comment, remarks, Id, upload,
+                startTime, endTime, 0, title, subject, content, correct, comment, remarks, Id, upload,
                 finishHomework, handinRank);
         return studenthomeworkDao.editOne(hw);
     }
@@ -210,7 +209,6 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
             pathName += pname;
             fos = new FileOutputStream(pathName);
             fos.write(file.getBytes()); // 写入文件
-            System.out.println("文件上传成功");
             return pathName;
         } catch (Exception e) {
             e.printStackTrace();

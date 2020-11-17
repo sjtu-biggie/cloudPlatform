@@ -566,7 +566,7 @@ export default class ClassManage extends Component {
                             key: 'del',
                             render: record => (
                                 <Button onClick={() => {
-                                    record["theClass"] = "F1803702";
+                                    record["theClass"] = this.state.classChoose;
                                     let addDataFilter=addData.filter(item=>item.username!==record.username);
                                     let addDataRenderFilter=addDataRender.filter(item=>item.username!==record.username);
                                     console.log(record);

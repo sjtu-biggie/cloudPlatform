@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Transient;
+
 
 @Data
 public class User {
@@ -86,4 +88,9 @@ public class User {
         this.theClass = theClass;
     }
 
+    @Transient
+    private String iconBase64;
+    public String getIconBase64(){return iconBase64;}
+    public void setIconBase64(String iconBase64){
+        this.iconBase64=iconBase64;}
     }

@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -15,13 +17,13 @@ public class ClassManageController {
 
     @RequestMapping(value = "/addClass",method = RequestMethod.POST)
     public String addClass(@RequestBody JSONObject obj){
-        String id=  obj.getString("id");
         String classNo=obj.getString("classNo");
         int number=obj.getIntValue("number");
+        String classManager=obj.getString("classManager");
         ClassManage classManage=new ClassManage();
-        classManage.setId(id);
         classManage.setClassNo(classNo);
         classManage.setNumber(number);
+        classManage.setClassManagers(classManager);
         classManageMapper.addClass(classManage);
         return "添加班级成功";
     }
@@ -42,9 +44,24 @@ public class ClassManageController {
 
     @RequestMapping(value = "/updateClass",method = RequestMethod.POST)
     public String updateClass(@RequestBody JSONObject obj){
-        String getId=obj.getString("id");
+        String classNo=obj.getString("classNo");
         int n=obj.getIntValue("number");
-        classManageMapper.updateClass(getId,n);
+        classManageMapper.updateClass(classNo,n);
         return "成功增加学生人数";
     }
+
+
+    @RequestMapping(value = "/getAllClassByManager",method = RequestMethod.POST)
+    public List<ClassManage> getAllClassByManager(@RequestBody JSONObject obj){
+        String sid= obj.getString("sid");
+        List<ClassManage> theClassIds=classManageMapper.getAllClassByManager(sid);
+        return theClassIds;
+    }
+
+    @RequestMapping(value = "/getAllClass",method = RequestMethod.POST)
+    public List<String> getAllClass(){
+        return classManageMapper.getAllClass();
+    }
+
+
 }

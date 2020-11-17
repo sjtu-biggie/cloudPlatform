@@ -196,6 +196,7 @@ class HomeworkDemo extends React.Component {
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/getStudentHomeworkAll?studentId=' + studentId,
+            //url: 'http://localhost:8080/getStudentHomeworkAll?studentId=' + studentId,
             headers: {
                 withCredentials: true,
             }

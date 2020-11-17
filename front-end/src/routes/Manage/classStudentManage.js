@@ -91,6 +91,7 @@ export default class ClassManage extends Component {
             createClass: '',
             menu: '',
             classChoose: '',
+            delEmail:'',
         };
         this.searchInput = createRef();
 
@@ -283,6 +284,18 @@ export default class ClassManage extends Component {
                 }
             }).then(msg => {
                 console.log("删除学生用户" + this.state.delData)
+                let tos=[];
+                tos.push(this.state.delEmail);
+                axios({
+                    url:'http://106.13.209.140:8000/sendNotice',
+                    method:'POST',
+                    tos:tos
+                }).then(res=>{
+                    console.log(res);
+                }).catch(err=>{
+                    console.log(err);
+                })
+
             }).catch(err => {
                 console.log(err)
             })
@@ -627,14 +640,19 @@ export default class ClassManage extends Component {
                                         var newOrData = orData.filter(item => item.username !== record.username);
                                         console.log(record);
                                         var newRenderData = renderData.filter(item => item.username !== record.username);
-
+                                        record["theClass"]="";
+                                        var newAddData=[record,...this.state.addData];
+                                        var newAddDataRender=[record,...this.state.addDataRender];
                                         console.log(newOrData);
                                         console.log(newRenderData);
                                         console.log(this.state.record);
                                         this.setState({
                                             renderData: newRenderData,
                                             orData: newOrData,
+                                            addData:newAddData,
+                                            addDataRender:newAddDataRender,
                                             delData: record.username,
+                                            delEmail:record.email,
                                         }, () => {
                                             this.deleteStudent();
                                             this.handleSearch();

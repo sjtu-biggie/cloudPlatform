@@ -225,6 +225,7 @@ export default class Manager extends Component {
                 }
             }).then(msg => {
                 console.log(msg)
+
             }).catch(err => {
                 console.log(err)
             })
@@ -234,17 +235,45 @@ export default class Manager extends Component {
         this.deleteRegister = (record) => {
             console.log("调用从班级删除学生");
             console.log(record);
+            let name;
+            if(record.username===undefined){
+                name=record.userId;
+            }else {
+                name=record.username;
+            }
+            console.log(name);
             console.log(this.state.courseId);
-            console.log(record.username);
             axios({
                 method: 'POST',
                 url: 'http://106.13.209.140:8787/course/deleteCourseStudent',
                 data: {
                     "courseId": this.state.courseId,
-                    "userId": record.userId
+                    "userId": name
                 }
             }).then(msg => {
                 console.log(msg)
+                axios({
+                    method:'POST',
+                    url:'http://106.13.209.140:8000/getUserMessage',
+                    data:{
+                        "username":name
+                    }
+                }).then(res=>{
+                    let tos=[];
+                    tos.push(res.data.email);
+                    axios({
+                        method:'POST',
+                        url:'http://106.13.209.140:8000/sendNotice',
+                        data:{
+                            tos:tos,
+                            "context":"已经把你从课程"+this.state.courseId+"删除",
+                        }
+                    }).then(res=>{
+                        console.log(res);
+                    }).catch(err=>{
+                        console.log(err);
+                    })
+                })
             }).catch(err => {
                 console.log(err)
             })
@@ -332,111 +361,10 @@ export default class Manager extends Component {
                 sid: mySids,
                 classIds: myclassIds,
             })
-            // this.setState({
-            //         orData: res[0].data,
-            //         renderData: res[0].data,
-            //         orData2: res[1].data,
-            //         renderData2: res[1].data,
-            //         sid: mySids,
-            //         courseId: myCourseId,
-            //         classIds: myclassIds,
-            //
-            // })
-
         }).catch(err => {
             console.log(err);
         })
 
-
-        // axios.interceptors.request.use(config => {
-        //     console.log("进入请求拦截器");
-        //     console.log(config);
-        //     if (config.url==='http://106.13.209.140:8000/getAllUsersByClassIds')
-        //     {
-        //
-        //         // if (this.state.sids.length!==0)
-        //         // {
-        //         //     console.log(this.state.sids);
-        //         //     return config;
-        //         // }
-        //         var i=0;
-        //         while (this.state.sids.length===0)
-        //         {
-        //             console.log(this.state.sids.length);
-        //             i=i+1;
-        //             if (this.state.sids.length!==0)
-        //             {
-        //                 return config;
-        //             }
-        //             if (i>20){
-        //                 return  config;
-        //             }
-        //         }
-        //     }
-        //     else {
-        //         return config;			//必须要返回，否则就无法进入下一个步骤,也就是一定要放行
-        //     }
-        //
-        // }, err => {
-        //     console.log("请求方向失败");
-        //     console.log(err);
-        //     return err;
-        // })
-        //
-        //
-        //
-        // axios({
-        //     method: 'GET',
-        //     url: 'http://106.13.209.140:8787/course/getCourseStudent',
-        //     params: {
-        //         courseId: myCourseId
-        //     }
-        // }).then(msg => {
-        //     console.log(msg.data)
-        //     msg.data.map(item => {
-        //         console.log(item);
-        //         mySids.push(item.sid);
-        //         return item;
-        //     })
-        //     console.log(mySids);
-        //     this.setState({
-        //         orData: msg.data,
-        //         renderData: msg.data,
-        //         sid: mySids,
-        //         courseId: myCourseId,
-        //         classIds: myclassIds,
-        //     })
-        // }).catch(err => {
-        //     console.log(err)
-        // })
-        //
-        //
-        // axios({
-        //     method: 'POST',
-        //     url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
-        //     data: {
-        //         classIds: myclassIds
-        //     }
-        // }).then(msg => {
-        //     console.log(msg.data);
-        //     console.log(mySids);
-        //     // var filterData = msg.data.filter(item => {
-        //     //         console.log(item.sid);
-        //     //         console.log(mySids.indexOf(item.sid.toLocaleString()));
-        //     //         console.log(mySids.includes(item.sid));
-        //     //         if (!mySids.includes(item.sid)) {
-        //     //             return item;
-        //     //         }
-        //     //     }
-        //     // );
-        //     // console.log(filterData);
-        //     this.setState({
-        //         orData2: msg.data,
-        //         renderData2: msg.data,
-        //     })
-        // }).catch(err => {
-        //     console.log(err)
-        // })
     }
 
 

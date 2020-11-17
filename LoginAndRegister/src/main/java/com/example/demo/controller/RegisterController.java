@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Mapper.UserMapper;
 import com.example.demo.model.User;
@@ -117,6 +118,16 @@ public class RegisterController {
         return "更新成功";
     }
 
+    @RequestMapping(value = "/registerByManager",method = RequestMethod.POST)
+    public String registerByManager(@RequestBody JSONObject obj){
+        System.out.println("开始调用管理员注册用户");
+        JSONArray users=obj.getJSONArray("users");
+        User user1;
+        for (Object s:users){
+            System.out.println(s);
+        }
+        return "注册成功";
+    }
 
 
 }

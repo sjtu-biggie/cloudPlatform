@@ -1,5 +1,6 @@
 package com.example.demo.Mapper;
 
+import com.alibaba.fastjson.JSONArray;
 import com.example.demo.model.User;
 import org.apache.ibatis.annotations.*;
 
@@ -57,4 +58,5 @@ public interface UserMapper {
     void setUserType(String username, String type);
 
 
+    void registerByManager(JSONArray users);
 }

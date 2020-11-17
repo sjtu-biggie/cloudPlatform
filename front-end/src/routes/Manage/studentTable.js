@@ -225,7 +225,6 @@ export default class Manager extends Component {
                 }
             }).then(msg => {
                 console.log(msg)
-                let tos1=[];
                 students.map(item=>{
                     if (item.username===undefined){
                         axios({
@@ -236,27 +235,43 @@ export default class Manager extends Component {
                             }
                         }).then(res=>{
                             console.log(res);
-                            tos1.push(res.data.email);
+                            let tos=[];
+                            tos.push(res.data.email);
+                            console.log(tos);
+                            axios({
+                                method:'POST',
+                                url:'http://106.13.209.140:8000/sendNotice',
+                                data:{
+                                    "tos":tos,
+                                    "context":"已经把你添加到课程"+this.state.courseId
+                                }
+                            }).then(res=>{
+                                console.log(res);
+                            }).catch(err=>{
+                                console.log(err);
+                            })
                         }).catch(err=>{
                             console.log(err);
                         })
                     }else {
-                        tos1.push(item.email);
+                        let tos=[];
+                        tos.push(item.email);
+                        console.log(tos);
+                        axios({
+                            method:'POST',
+                            url:'http://106.13.209.140:8000/sendNotice',
+                            data:{
+                                "tos":tos,
+                                "context":"已经把你添加到课程"+this.state.courseId
+                            }
+                        }).then(res=>{
+                            console.log(res);
+                        }).catch(err=>{
+                            console.log(err);
+                        })
                     }
                 })
-                console.log(tos1);
-                axios({
-                    method:'POST',
-                    url:'http://106.13.209.140:8000/sendNotice',
-                    data:{
-                        "tos":tos1,
-                        "context":"已经把你添加到课程"+this.state.courseId
-                    }
-                }).then(res=>{
-                    console.log(res);
-                }).catch(err=>{
-                    console.log(err);
-                })
+
             }).catch(err => {
                 console.log(err)
             })

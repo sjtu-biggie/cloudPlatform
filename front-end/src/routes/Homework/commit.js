@@ -170,7 +170,7 @@ class HomeworkCommit extends React.Component{
         nImg.src = src;
         let w = nImg.width;
         let h = nImg.height;
-        console.log(w + "  " + h)
+        console.log(w + "  " + h,src);
         this.setState({
             height:h*900/w
         })
@@ -326,8 +326,9 @@ class HomeworkCommit extends React.Component{
                         <br/>
                     </Card><br/></div>:<div><br/></div>}
                     <Card title="批改内容"  >
-                        {this.state.homework.score===null?<p style ={{color:'red'}}>未批改!</p>:this.state.homework.file===(null||undefined)?<p style ={{color:'red'}}>未提交图片附件！</p>:<CanvasDraw
-                            ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/>}
+                        {this.state.homework.score===null?<p style ={{color:'red'}}>未批改!</p>:null}
+                        {this.state.homework.file===null?<p style ={{color:'red'}}>未提交图片附件！</p>:<div><CanvasDraw
+                            ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/></div>}
 
                     </Card><br/>
                     <Card title="作业评论" >

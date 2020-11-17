@@ -114,11 +114,11 @@ class RegisterForm extends React.Component {
           const obj =  {
             username: values.registerUsername,
             password: values.registerPassword,
+            nickname: values.registerNickname,
             sid:values.registerStudentNumber,
             email:values.registerEmail,
             telephone:values.registerPhoneNumber,
           };
-        values=null;
           this.register(obj);
 
       }
@@ -192,7 +192,23 @@ class RegisterForm extends React.Component {
                 addonBefore={<span className='iconfont icon-User' style={focusItem === 0 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>
-
+          <Form.Item help={getFieldError('registerNickname') && <PromptBox info={getFieldError('registerNickname')}
+                                                                           width={calculateWidth(getFieldError('registerNickname'))}/>}>
+            {getFieldDecorator('registerNickname', {
+              validateFirst: true,
+              rules: [
+                {required: true, message: '昵称不能为空'},
+                {pattern: '^[^ ]+$', message: '不能输入空格'},
+              ]
+            })(
+                <Input
+                    onFocus={() => this.setState({focusItem: 0})}
+                    onBlur={() => this.setState({focusItem: -1})}
+                    maxLength={16}
+                    placeholder='用户名'
+                    addonBefore={<span className='iconfont icon-User' style={focusItem === 0 ? styles.focus : {}}/>}/>
+            )}
+          </Form.Item>
           <Form.Item help={getFieldError('registerStudentNumber') && <PromptBox info={getFieldError('registerStudentNumber')}
                                                                            width={calculateWidth(getFieldError('registerStudentNumber'))}/>}>
             {getFieldDecorator('registerStudentNumber', {

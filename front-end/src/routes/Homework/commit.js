@@ -84,9 +84,14 @@ class HomeworkCommit extends React.Component{
             })
         }
         // this.downloadDoc(homework.file,"test.jpeg");
+        let sid=localStorage.getItem("username")
+        this.getStudentHomeworkOne(sid,this.props.match.params[0].substr(1));
         if(homework.correct!==""&&homework.correct!==undefined&&homework.correct!==null){
+            console.log(12345);
             this.saveableCanvas.loadSaveData(homework.correct)
+
         }
+
     };
     downloadDoc = function(content) {
         let i =0;
@@ -125,6 +130,8 @@ class HomeworkCommit extends React.Component{
             homework: homework
         });
         console.log(homework)
+        let sid=localStorage.getItem("username")
+        this.getStudentHomeworkOne(sid,this.props.match.params[0].substr(1));
     };
 
     getEditorMsg = (result, editorContent) => {
@@ -170,6 +177,9 @@ class HomeworkCommit extends React.Component{
         nImg.src = src;
         let w = nImg.width;
         let h = nImg.height;
+        if(w===0||h===0){
+            return;
+        }
         console.log(w + "  " + h,src);
         this.setState({
             height:h*900/w

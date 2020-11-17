@@ -32,6 +32,7 @@ const status = {
 
 class Rating extends React.Component {
     state = {
+        src:"",
         saveableCanvas:"",
         visibleHomework:false,
         visibleAnswer:false,
@@ -50,7 +51,8 @@ class Rating extends React.Component {
         penLazy: 1,
         index: 0,
         average: 0,
-        assignHomework:{}
+        assignHomework:{},
+        rateNum:0,
     };
     add0 = (m) => {
         return m < 10 ? '0' + m : m
@@ -152,6 +154,10 @@ class Rating extends React.Component {
         if(this.state.assignHomework==={}||this.state.assignHomework.content===undefined){
             this.getHomework(nextProps.homework.homeworkId);
         }
+        let src = "data:image/png;base64,"+ nextProps.homework.file;
+        this.setState({
+            src:src
+        });
         this.setState({
             loading: false
         });
@@ -168,12 +174,12 @@ class Rating extends React.Component {
             gridColor: "rgba(150,150,150,0.17)",
             hideGrid: false,
             canvasWidth: 900,
-            canvasHeight: 1000,
             disabled: false,
-            imgSrc: require("../../pic/deadHomework1.jpg"),
+            imgSrc: this.state.src,
             saveData: null,
             immediateLoading: false,
-            hideInterface: false
+            hideInterface: true,
+            overflow: 'scroll',
         };
         const {penSize} = this.state;
         const {penLazy} = this.state;
@@ -221,8 +227,8 @@ class Rating extends React.Component {
                             }} hoverable={false}>
                                 <p style={{fontSize: 20, color: 'white', fontWeight: 'bold'}}>已批/未批</p>
                                 <Statistic style={{marginBottom: '30px', transform: 'translateY(-60%)'}}
-                                           valueStyle={{color: 'white', fontWeight: 'bold'}} value={35}
-                                           suffix="/ 50"/>
+                                           valueStyle={{color: 'white', fontWeight: 'bold'}} value={this.state.rateNum}
+                                           suffix={'/'+this.state.handinAlready}/>
                             </Card.Grid>
                             <Card.Grid style={{
                                 width: '10%',
@@ -263,7 +269,7 @@ class Rating extends React.Component {
                             {this.state.status === status.DRAWING ? <CanvasDraw
                                 ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/> : this.state.status === status.NOTING ? null :
                                 <img style={{overflow: 'scroll'}} width={900} alt="logo"
-                                     src={require("../../pic/deadHomework1.jpg")}/>}
+                                     src={this.state.src}/>}
                             {/**/}
 
                         </Card>
@@ -278,7 +284,7 @@ class Rating extends React.Component {
                                 </Button>,
                             ]}
                         >
-                            <p>{this.state.assignHomework.content}</p>
+                            <iframe style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.assignHomework.content}/>
                         </Modal>
                         <Modal
                             title="作业答案"
@@ -291,13 +297,14 @@ class Rating extends React.Component {
                                 </Button>,
                             ]}
                         >
-                            <p>{this.state.assignHomework.answer}</p>
+                            <iframe style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.assignHomework.answer}/>
+
                         </Modal>
                     </Col>
                     <Col span={7}>
                         <Card style={{height: '800px'}}>
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>作业类型 : </span>
-                                {this.state.homework.accessmentalgorithms}</p>
+                                {this.state.assignHomework.type}</p>
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>截止时间 : </span>
                                 {this.format(this.state.homework.endTime)}</p>
                             <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>提交时间 : </span>
@@ -481,6 +488,9 @@ class Rating extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
+        this.setState({
+            rateNum:this.state.rateNum+1
+        })
     };
     showModalHomework = () => {
         this.setState({

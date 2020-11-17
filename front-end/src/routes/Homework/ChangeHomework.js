@@ -34,13 +34,13 @@ const options2 = [
 
 
 const Hw = {
-    title: '第一次作业',
-    class: '一年级3班',
-    type: '主观题',
-    content: '作业内容',
-    answer: '参考答案',
-    startTime: '2020-10-10 00:00:00',
-    endTime: '2020-10-12 00:00:00',
+    title: '加载中',
+    class: '加载中',
+    type: '加载中',
+    content: '加载中',
+    answer: '加载中',
+    startTime: '加载中',
+    endTime: '加载中',
 
 }
 

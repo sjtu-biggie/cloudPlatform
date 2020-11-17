@@ -137,6 +137,8 @@ export default class STable extends Component {
         };
 
         this.getStudentInfo = async (obj,indexStudentHomeworks)=>{
+            let already = 0;
+            let sum = 0;
             if(indexStudentHomeworks.length===0){
                 // message.error("fuck!");
                 return null;
@@ -167,6 +169,11 @@ export default class STable extends Component {
             let list2 = Array.from(indexStudentHomeworks);
             console.log(list1);
             console.log(list2);
+
+            for (let j of list2){
+                if (j.score !==null) already+=1;
+            }
+            console.log(already,list2.length);
             let data = [];
             for (let i = 0; i < list1.length; ++i){
                 let j;

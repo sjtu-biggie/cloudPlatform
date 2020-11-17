@@ -58,7 +58,7 @@ class HomeworkCommit extends React.Component{
         teacherHomework: {},
         loading:true,
         edit:false,
-        src:[],
+        src:"",
         width:900,
         height:1000,
     };

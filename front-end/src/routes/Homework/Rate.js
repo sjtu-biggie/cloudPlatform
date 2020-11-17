@@ -167,10 +167,17 @@ class Rating extends React.Component {
          nImg.src = src;
         let w = nImg.width;
         let h = nImg.height;
-        console.log(w + "  " + h)
-        this.setState({
-            height:h*900/w
-        })
+        console.log(w + "  " + h);
+        if(w===0||h===0){
+            this.setState({
+                height:1000
+            })
+        }else{
+            this.setState({
+                height:h*900/w
+            })
+        }
+
     }
 
     render = () => {

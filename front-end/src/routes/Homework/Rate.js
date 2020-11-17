@@ -32,6 +32,8 @@ const status = {
 
 class Rating extends React.Component {
     state = {
+        width:900,
+        height:1000,
         src:"",
         saveableCanvas:"",
         visibleHomework:false,
@@ -161,6 +163,14 @@ class Rating extends React.Component {
         this.setState({
             loading: false
         });
+        var nImg = new Image();
+         nImg.src = src;
+        let w = nImg.width;
+        let h = nImg.height;
+        console.log(w + "  " + h)
+        this.setState({
+            height:h*900/w
+        })
     }
 
     render = () => {
@@ -173,13 +183,15 @@ class Rating extends React.Component {
             catenaryColor: "#0a0302",
             gridColor: "rgba(150,150,150,0.17)",
             hideGrid: false,
-            canvasWidth: 900,
+            canvasWidth: this.state.width,
+            canvasHeight: this.state.height,
             disabled: false,
             imgSrc: this.state.src,
             saveData: null,
             immediateLoading: false,
             hideInterface: true,
-            overflow: 'scroll',
+            overflowX: 'scroll',
+            overflowY: 'scroll',
         };
         const {penSize} = this.state;
         const {penLazy} = this.state;
@@ -268,7 +280,7 @@ class Rating extends React.Component {
                         <Card style={{height: '800px', overflow: 'scroll'}}>
                             {this.state.status === status.DRAWING ? <CanvasDraw
                                 ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/> : this.state.status === status.NOTING ? null :
-                                <img style={{overflow: 'scroll'}} width={900} alt="logo"
+                                <img id='iimg' style={{overflow: 'scroll'}} width={900} alt="logo"
                                      src={this.state.src}/>}
                             {/**/}
 

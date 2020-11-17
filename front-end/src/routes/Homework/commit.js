@@ -58,7 +58,9 @@ class HomeworkCommit extends React.Component{
         teacherHomework: {},
         loading:true,
         edit:false,
-        src:[]
+        src:[],
+        width:900,
+        height:1000,
     };
 
     uploadFilesChange(file) {
@@ -163,8 +165,16 @@ class HomeworkCommit extends React.Component{
         let src = "data:image/png;base64,"+ file;
         this.setState({
             src:src
+        });
+        var nImg = new Image();
+        nImg.src = src;
+        let w = nImg.width;
+        let h = nImg.height;
+        console.log(w + "  " + h)
+        this.setState({
+            height:h*900/w
         })
-    }
+    };
 
     postObject = async() => {
         if(this.state.homework.handinTime===null){
@@ -280,8 +290,8 @@ class HomeworkCommit extends React.Component{
             catenaryColor: "#0a0302",
             gridColor: "rgba(150,150,150,0.17)",
             hideGrid: false,
-            canvasWidth: 900,
-            canvasHeight: 1000,
+            canvasWidth: this.state.width,
+            canvasHeight: this.state.height,
             disabled: false,
             imgSrc: this.state.src,
             saveData: null,

@@ -234,7 +234,7 @@ class Assign extends React.Component {
             tos.push(this.state.student[i].email)
             console.log(tos);
             homework.studentId = this.state.student[i].username;
-            homework.nickname = this.state.student[i].nickname;
+            homework.nickName = this.state.student[i].nickname;
             console.log(homework);
             let config = {
                 method: 'post',

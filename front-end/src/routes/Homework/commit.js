@@ -322,7 +322,8 @@ class HomeworkCommit extends React.Component{
                 <Card  bordered={false} className='card-item' title={this.state.homework.title} style={{minHeight:200}}>
                     <CommitPage homeworkId={this.state.homeworkId} parent={this}/>
                     <Card title="作业内容" >
-                        <p>{this.state.teacherHomework.type==="主观题"?this.state.teacherHomework.content:this.renderObj(this.state.teacherHomework.syllabus)}</p>
+
+                        <p>{this.state.teacherHomework.type==="主观题"?<iframe style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.teacherHomework.content}/>:this.renderObj(this.state.teacherHomework.syllabus)}</p>
                     </Card>
                     {new Date(Date.parse(this.state.homework.endTime))>new Date()?<div><br/><Card title={"作答区域"}>
                         <p>{this.state.homework.handinTime===null?<p style ={{color:'red'}}>未提交!</p>:"我的答案 : "+this.state.content}</p>

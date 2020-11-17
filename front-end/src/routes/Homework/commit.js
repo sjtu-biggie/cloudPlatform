@@ -198,14 +198,15 @@ class HomeworkCommit extends React.Component{
             let homework=this.state.homework;
             homework.handinTime=new Date();
             this.setState({
-                homework: homework
+                homework: homework,
             });
         }
 
         let homework=this.state.homework;
         homework.handinTime=new Date();
         this.setState({
-            homework: homework
+            homework: homework,
+            content:homework.content,
         });
 
         console.log(this.state.homework);

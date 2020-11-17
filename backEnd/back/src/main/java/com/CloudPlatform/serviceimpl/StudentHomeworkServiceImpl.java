@@ -113,7 +113,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         Date handinTime = object.getDate("handinTime");
         String upload = object.getString("upload");
         StudentHomework hw = new StudentHomework(studentId, homeworkId, courseId, nickName, handinTime,
-                startTime, endTime, 0, title, subject, content, correct, comment, remarks, Id, upload,
+                startTime, endTime, title, subject, content, correct, comment, remarks, Id, upload,
                 finishHomework, handinRank);
         return studenthomeworkDao.editOne(hw);
     }

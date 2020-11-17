@@ -26,6 +26,31 @@ import java.util.List;
 public class StudentHomework {
     private static final long serialVersionUID = 1L;
 
+    public StudentHomework(String _studentId, int _homeworkId, int _courseId,
+                           String _nickName, Date _handinTime, Date _startTime,
+                           Date _endTime, String _title,
+                           String _subject, String _content, String _correct,
+                           String _comment, String _remarks, String _id,
+                           String _upload, int _finishHomework, int _handinRank) {
+        studentId = _studentId;
+        homeworkId = _homeworkId;
+        courseId = _courseId;
+        nickName = _nickName;
+        HandinTime = _handinTime;
+        StartTime = _startTime;
+        EndTime = _endTime;
+        Title = _title;
+        Subject = _subject;
+        Content = _content;
+        Comment = _comment;
+        Correct = _correct;
+        Remarks = _remarks;
+        id = _id;
+        Upload = _upload;
+        finishHomework = _finishHomework;
+        handinRank = _handinRank;
+    }
+
     public StudentHomework(int _homeworkId,int _courseId, String _studentId, String _title,
                            Date _startTime, Date _endTime, String _nickname, String _subject
                            ,String _upload, String _content, String _correct, String _comment,

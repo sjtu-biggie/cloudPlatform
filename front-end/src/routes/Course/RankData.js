@@ -260,7 +260,7 @@ class RankData extends React.Component {
                 </Row>
                 <Row gutter={10} style={{marginTop: '10px'}}>
                     <Col span={12}>
-                        <Card title='作业排名变化' bordered={false} className='card-item' style={{width: '833px'}}>
+                        <Card title='作业排名变化' bordered={false} className='card-item' style={{width: '950px'}}>
                             {this.props.seeHomeworkAverage ?
                                 <Chart height={400} data={this.state.homeworkRankChange} scale={cols} forceFit>
                                     <Axis name="num" title={"作业"}/>
@@ -280,7 +280,7 @@ class RankData extends React.Component {
                         </Card>
                     </Col>
                     <Col span={12}>
-                        <Card title='作业得分变化' bordered={false} className='card-item' style={{width: '833px'}}>
+                        <Card title='作业得分变化' bordered={false} className='card-item' style={{width: '950px'}}>
                             <Chart height={400} data={this.state.homeworkScoreChange} scale={cols2} forceFit>
                                 <Axis name="num" title={"作业"} label={{style: {textAlign: 'end'}}}/>
                                 <Axis name="value" title={"成绩"} label={{
@@ -294,7 +294,7 @@ class RankData extends React.Component {
                         </Card>
                     </Col>
                     <Col span={12}>
-                        <Card title='提交时间变化' bordered={false} className='card-item' style={{width: '833px'}}>
+                        <Card title='提交时间变化' bordered={false} className='card-item' style={{width: '950px'}}>
                             <Chart height={400} data={this.state.handinChange} scale={col3} forceFit>
                                 <Axis name="num" title={"提交时间"}/>
                                 <Axis name="value" title={"排名"} label={{
@@ -311,7 +311,8 @@ class RankData extends React.Component {
                         </Card>
                     </Col>
                     <Col span={12}>
-                        <Card title='截止前时间变化' bordered={false} className='card-item' style={{width: '833px'}}>
+                        /*TODO: width shoule be change*/
+                        <Card title='截止前时间变化' bordered={false} className='card-item' style={{width: '950px'}}>
                             <Chart height={400} data={this.state.ddlChange} scale={col3} forceFit>
                                 <Axis name="num" title={"提交时间"}/>
                                 <Axis name="value" title={"排名"} label={{

@@ -286,10 +286,14 @@ export default class ClassManage extends Component {
                 console.log("删除学生用户" + this.state.delData)
                 let tos=[];
                 tos.push(this.state.delEmail);
+                console.log(tos);
                 axios({
                     url:'http://106.13.209.140:8000/sendNotice',
                     method:'POST',
-                    tos:tos
+                    data:{
+                        tos:tos,
+                        context: "你的班级已经变动",
+                    }
                 }).then(res=>{
                     console.log(res);
                 }).catch(err=>{

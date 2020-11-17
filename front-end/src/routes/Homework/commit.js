@@ -326,8 +326,8 @@ class HomeworkCommit extends React.Component{
                         <br/>
                     </Card><br/></div>:<div><br/></div>}
                     <Card title="批改内容"  >
-                        {this.state.homework.score===null?<p style ={{color:'red'}}>未批改!</p>:null}
-                        {this.state.homework.file===null?<p style ={{color:'red'}}>未提交图片附件！</p>:<div><CanvasDraw
+                        {this.state.homework.score===null?<div><p style ={{color:'red'}}>未批改!</p>{this.state.homework.file===null?<p style ={{color:'red'}}>未提交图片附件！</p>:<div><img
+                            src={this.state.src}/></div>}</div>:this.state.homework.file===null?<p style ={{color:'red'}}>未提交图片附件！</p>:<div><CanvasDraw
                             ref={canvasDraw => (this.saveableCanvas = canvasDraw)} {...defaultProps}/></div>}
 
                     </Card><br/>

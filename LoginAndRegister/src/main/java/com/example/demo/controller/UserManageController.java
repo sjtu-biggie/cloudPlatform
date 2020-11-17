@@ -46,7 +46,7 @@ public class UserManageController {
             loginService.setUseIcon(new UserIcon(username, defaultJpgTeacher));
         }else if(type.equals("student")){
             loginService.setUseIcon(new UserIcon(username,defaultJpgStudent));
-            System.out.println("学生");
+            System.out.println("开始设置学生头像");
         }
         try {
             userMapper.setUserType(username,type);

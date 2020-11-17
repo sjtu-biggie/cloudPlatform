@@ -57,6 +57,6 @@ public interface UserMapper {
     @Update("update userdemo set type=#{type} where username=#{username}")
     void setUserType(String username, String type);
 
-
-    void registerByManager(JSONArray users);
+    @Insert("insert into userdemo (username,password,sid,type,email,telephone,nickname,theClass,theGrade) values (#{username},#{password},#{sid},#{type},#{email},#{telephone},#{nickname},#{theClass},#{theGrade})")
+    void registerByManager(User users);
 }

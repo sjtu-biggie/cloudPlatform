@@ -122,12 +122,21 @@ public class RegisterController {
     public String registerByManager(@RequestBody JSONObject obj){
         System.out.println("开始调用管理员注册用户");
         JSONArray users=obj.getJSONArray("users");
-        User user1;
-        for (Object s:users){
-            System.out.println(s);
+        for (int i=0;i<users.size();++i){
+            JSONObject getUser=users.getJSONObject(i);
+            User registerUser=new User();
+            registerUser.setUsername(getUser.getString("username"));
+            registerUser.setPassword(getUser.getString("password"));
+            registerUser.setEmail(getUser.getString("email"));
+            registerUser.setSid(getUser.getString("sid"));
+            registerUser.setTelephone(getUser.getString("telephone"));
+            registerUser.setType(getUser.getString("type"));
+            registerUser.setNickname(getUser.getString("nickname"));
+            registerUser.setTheClass(getUser.getString("theClass"));
+            registerUser.setTheGrade(getUser.getString("theGrade"));
+            userMapper.registerByManager(registerUser);
         }
         return "注册成功";
     }
-
 
 }

@@ -56,6 +56,9 @@ class ChangeHomework extends React.Component {
         userInfo: null,
         role: null
     };
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.getHomeworkOne(nextProps.homeworkId);
+    }
 
     getData2 = () => {
         let storage = window.localStorage;

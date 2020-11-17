@@ -54,7 +54,12 @@ class ChangeHomework extends React.Component {
         ableState: true,
         buttonName:'修改作业',
         userInfo: null,
-        role: null
+        role: null,
+        content: null,
+        answer: null,
+        loading: false,
+        conUpload: null,
+        ansUpload: null,
     };
     componentWillReceiveProps(nextProps, nextContext) {
         this.getHomeworkOne(nextProps.homeworkId);
@@ -105,6 +110,68 @@ class ChangeHomework extends React.Component {
         })
     };
 
+    getStudentInfo = async (values)=>{
+        let ob = {
+            classIds: values.ran
+        }
+        console.log(ob);
+        let config = {
+            method: 'post',
+            data : ob,
+            url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const studentInfo = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        let list1 = Array.from(studentInfo);
+        let list2 = [];
+        for (let i = 0; i < list1.length;++i){
+            if (list1[i].type === 'student'){
+                list2.push(list1[i]);
+            }
+        }
+        console.log(list2);
+        this.setState({
+            handinAmount: list2.length,
+            student:list2
+        })
+        values.startTime = this.format(values.startDate);
+        values.endTime = this.format(values.endDate);
+        values.handinAmount = this.state.handinAmount;
+        values.teacherId = this.state.userInfo.username;
+        let tp = this.state.course.type;
+        let gra = this.state.course.grade;
+        values.subject = gra+tp;
+        if (values.startDate > values.endDate) {
+            message.error('开始时间不能晚于结束时间');
+        } else {
+            values.courseId = this.props.course.course.id;
+            if(values.type === '主观题'){
+                values.content = this.state.content;
+                values.conUpload = this.state.conUpload;
+            }else{
+                values.syllabus = this.state.syllabus;
+            }
+            values.answer = this.state.answer;
+            values.ansUpload = this.state.ansUpload;
+            this.setState({
+                homework: values,
+            });
+            console.log(values);
+            this.addHomework(values);
+            message.success('提交成功');
+        }
+    };
+
+    
+
     getHomeworkOne = async (homeworkId)=>{
         let config = {
             method: 'post',
@@ -115,22 +182,31 @@ class ChangeHomework extends React.Component {
         };
         const hw = await axios(config)
             .then(function (response) {
-                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(hw);
         this.setState({
             homework:hw,
         })
     };
 
-    getConUpload = (result, fileList) => {
+    getContent = (result, t) => {
+        console.log(t);
         this.setState({
-            conFile:fileList,
+            content: t
         })
+    };
+
+    getAnswer = (result, t) => {
+        console.log(t);
+        this.setState({
+            answer: t
+        })
+    };
+
+    getConUpload = (result, fileList) => {
         let conPath = [];
         for(let i=0;i<fileList.length;i++){
             conPath.push(fileList[i].response)
@@ -142,9 +218,6 @@ class ChangeHomework extends React.Component {
     }
 
     getAnsUpload = (result, fileList) => {
-        this.setState({
-            ansFile:fileList,
-        })
         let ansPath = [];
         for(let i=0;i<fileList.length;i++){
             ansPath.push(fileList[i].response)
@@ -156,12 +229,32 @@ class ChangeHomework extends React.Component {
     }
 
     editHomework = async (homework)=>{
+        console.log(homework);
+        let obj = {
+            answer: this.state.answer === null ? this.state.homework.answer : this.state.answer,
+            answerUpload:  this.state.ansUpload === null ? this.state.homework.answerUpload:this.state.ansUpload,
+            content: this.state.content === null ? this.state.homework.content : this.state.content,
+            contentUpload: this.state.conUpload === null ? this.state.homework.contentUpload:this.state.conUpload,
+            courseId: this.state.homework.courseId,
+            Delayable: this.state.homework.delayable,
+            endTime: homework.endTime,
+            startTime: homework.startTime,
+            handinAlready: this.state.homework.handinAlready,
+            handinAmount: this.state.homework.handinAmount,
+            id: this.state.homework.id,
+            range: this.state.homework.range,
+            syllabus: this.state.homework.syllabus,
+            subject:this.state.homework.subject,
+            title: homework.title,
+            type: this.state.homework.type,
+            homeworkId: this.state.homework.homeworkId,
+            teacherId: this.state.homework.teacherId
+        }
+        console.log(obj);
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383//editTeacherHomework',
-            data:{
-                'homework':homework
-            },
+            url: 'http://106.13.209.140:8383/editTeacherHomework',
+            data:obj,
             headers: {
                 withCredentials: true,
             }
@@ -174,7 +267,6 @@ class ChangeHomework extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(hw);
         this.setState({
             homework:hw,
         })
@@ -188,10 +280,10 @@ class ChangeHomework extends React.Component {
                 message.warning('请先填写正确的表单')
             } else {
                 message.success('提交成功');
-                values.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
-                values.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
-                this.setState({homeworkJson:values});
+                values.startTime = this.format(values.startDate);
+                values.endTime = this.format(values.endDate);
                 console.log(values);
+                this.editHomework(values);
             }
         });
     }
@@ -248,7 +340,6 @@ class ChangeHomework extends React.Component {
                         <FormItem label='作业名称' {...formItemLayout} required>
                             {
                                 getFieldDecorator('title', {
-                                    initialValue:this.state.homework === null ? '暂无': this.state.homework.title,
                                     rules: [
                                         {
                                             required: true,
@@ -256,7 +347,7 @@ class ChangeHomework extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <Input disabled={this.state.ableState}/>
+                                    <Input disabled={this.state.ableState} placeholder={this.state.homework.title}/>
                                 )
                             }
                         </FormItem>
@@ -275,46 +366,70 @@ class ChangeHomework extends React.Component {
                                 )
                             }
                         </FormItem>
-                        <FormItem label='起止时间' {...formItemLayout} required>
+                        <FormItem label='开始时间' {...formItemLayout} required>
                             {
-                                getFieldDecorator('time', {
-                                    // initialValue:[this.state.homework.startTime, this.state.homework.endTime],
+                                getFieldDecorator('startDate', {
                                     rules: [
                                         {
                                             required: true,
-                                            message: '请选择起止时间'
+                                            message: '请选择开始时间'
                                         }
                                     ]
                                 })(
-                                    <DatePicker.RangePicker disabled={this.state.ableState} placeholder={[this.format(this.state.homework.startTime), this.format(this.state.homework.endTime)]}/>
+                                    <DatePicker disabled={this.state.ableState} placeholder={this.format(this.state.homework.startTime)} onChange={() => {
+
+                                    }}> </DatePicker>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem label='结束时间' {...formItemLayout} required>
+                            {
+                                getFieldDecorator('endDate', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请选择结束时间'
+                                        }
+                                    ]
+                                })(
+                                    <DatePicker  disabled={this.state.ableState} placeholder={this.format(this.state.homework.endTime)} onChange={() => {
+
+                                    }}> </DatePicker>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem label='作业内容' {...formItemLayout} required>
+                            {
+                                (
+                                    <iframe disabled={this.state.ableState} style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.homework.content}/>
                                 )
                             }
                         </FormItem>
                         <FormItem style={display2} label='作业详情' {...DraftLayout} >
                             {
                                 (
-                                    <DraftDemo/>
+                                    <DraftDemo parent={this} flag='content'/>
                                 )
                             }
                         </FormItem>
                         <FormItem label='上传作业附件' {...formItemLayout} style={display2} >
                             {
                                 (
-                                    <UploadDemo/>
+                                    <UploadDemo parent={this} flag='content'/>
                                 )
                             }
                         </FormItem>
                         <FormItem style={display2} label='参考答案'  {...DraftLayout}>
                             {
                                 (
-                                    <DraftDemo disabled='true' placeholder = {this.state.homework.answer}/>
+                                    <DraftDemo parent={this} flag='answer'/>
                                 )
                             }
                         </FormItem>
                         <FormItem label='上传答案附件' {...formItemLayout} style={display2}>
                             {
                                 (
-                                    <UploadDemo/>
+                                    <UploadDemo parent={this} flag='answer'/>
                                 )
                             }
                         </FormItem>

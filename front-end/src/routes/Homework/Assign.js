@@ -315,14 +315,12 @@ class Assign extends React.Component {
     };
 
     getContent = (result, t) => {
-        console.log(t);
         this.setState({
             content: t
         })
     };
 
     getAnswer = (result, t) => {
-        console.log(t);
         this.setState({
             answer: t
         })

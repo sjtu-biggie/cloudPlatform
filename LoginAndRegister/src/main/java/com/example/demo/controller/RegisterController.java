@@ -30,6 +30,7 @@ public class RegisterController {
         if (user1 != null) {
             return "账户名称已存在";
         }
+        String nickname= obj.getString("nickname");
         String password = obj.getString("password");
         String sid = obj.getString("sid");
         User user2 = userMapper.testSid(sid);
@@ -44,11 +45,13 @@ public class RegisterController {
         String telephone = obj.getString("telephone");
         User user = new User();
         user.setUsername(username);
+        user.setNickname(nickname);
         user.setPassword(password);
         user.setEmail(email);
         user.setSid(sid);
-        userMapper.save(user);
         user.setTelephone(telephone);
+        userMapper.save(user);
+
 //        try {
 //            System.out.println("进入储存尝试");
 //            loginService.setUseIcon(new UserIcon(username, defaultJpg));

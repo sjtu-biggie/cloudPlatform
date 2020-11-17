@@ -33,7 +33,7 @@ public class UserManageController {
     public String delUser(@RequestBody JSONObject obj){
         String username=obj.getString("name");
         userMapper.delUser(username);
-        return "Fsadf";
+        return "删除成功";
     }
 
     @RequestMapping(value = "/setUserType",method = RequestMethod.POST)
@@ -73,7 +73,7 @@ public class UserManageController {
     @RequestMapping(value = "/deleteStudentFromClass",method = RequestMethod.POST)
     public String deleteStudentFromClass(@RequestBody JSONObject obj){
         String username=obj.getString("username");
-        userMapper.delUser(username);
+        userMapper.delStudentFromClass(username);
         return "已经删除用户";
     }
 

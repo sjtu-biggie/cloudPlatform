@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    @Insert("insert into userdemo (username,password,sid,email,telephone) values (#{username},#{password},#{sid},#{email},#{telephone})")
+    @Insert("insert into userdemo (username,nickname,password,sid,email,telephone) values (#{username},#{nickname},#{password},#{sid},#{email},#{telephone})")
     public void save(User user);
 
     @Select("select * from userdemo where username=#{username} and password =#{password}")
@@ -59,4 +59,7 @@ public interface UserMapper {
 
     @Insert("insert into userdemo (username,password,sid,type,email,telephone,nickname,theClass,theGrade) values (#{username},#{password},#{sid},#{type},#{email},#{telephone},#{nickname},#{theClass},#{theGrade})")
     void registerByManager(User users);
+
+    @Update("update userdemo set theClass=null where username=#{username}")
+    void delStudentFromClass(String username);
 }

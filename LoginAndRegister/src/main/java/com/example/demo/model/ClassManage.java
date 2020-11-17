@@ -7,6 +7,7 @@ public class ClassManage {
     private String id;
     private int number;
     private String classNo;
+    private String classManagers;
 
     public String getId() {
         return id;
@@ -30,6 +31,14 @@ public class ClassManage {
 
     public void setClassNo(String classNo) {
         this.classNo = classNo;
+    }
+
+    public String getClassManagers() {
+        return classManagers;
+    }
+
+    public void setClassManagers(String classManagers) {
+        this.classManagers = classManagers;
     }
 
 }

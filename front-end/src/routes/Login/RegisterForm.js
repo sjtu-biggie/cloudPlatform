@@ -202,11 +202,11 @@ class RegisterForm extends React.Component {
               ]
             })(
                 <Input
-                    onFocus={() => this.setState({focusItem: 0})}
+                    onFocus={() => this.setState({focusItem: 6})}
                     onBlur={() => this.setState({focusItem: -1})}
                     maxLength={16}
                     placeholder='昵称'
-                    addonBefore={<span className='iconfont icon-User' style={focusItem === 0 ? styles.focus : {}}/>}/>
+                    addonBefore={<span className='iconfont icon-User' style={focusItem === 6 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>
           <Form.Item help={getFieldError('registerStudentNumber') && <PromptBox info={getFieldError('registerStudentNumber')}

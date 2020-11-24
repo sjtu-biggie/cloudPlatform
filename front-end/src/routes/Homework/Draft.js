@@ -25,7 +25,7 @@ class Draft extends React.Component{
         else if (this.props.flag === 'answer'){
             this.props.parent.getAnswer(this, editorContent);
         }
-        console.log(editorContent);
+
     };
     onContentStateChange =  (contentState) => {
         this.setState({

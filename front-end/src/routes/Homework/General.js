@@ -172,7 +172,7 @@ class ListDemo extends React.Component {
       <div>
         <CustomBreadcrumb arr={['作业', '提交情况']}/>
         <Card bordered={false} title='作业内容' style={{marginBottom: 15}} id='verticalStyle'>
-          <ChangeHomework homeworkId ={this.state.homework.homeworkId}/>
+          <ChangeHomework homeworkId ={this.props.match.params.homeworkId}/>
         </Card>
         <Card bordered={false} title='提交情况' style={{marginBottom: 15}} id='verticalStyle'>
           <Col span={24}>

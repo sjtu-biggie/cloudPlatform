@@ -60,9 +60,9 @@ class ChangeHomework extends React.Component {
         loading: false,
         conUpload: null,
         ansUpload: null,
+        student:null,
     };
     componentWillReceiveProps(nextProps, nextContext) {
-        this.getHomeworkOne(nextProps.homeworkId);
     }
 
     getData2 = () => {
@@ -70,6 +70,32 @@ class ChangeHomework extends React.Component {
         let username = storage.getItem("username");
         this.getUserInfo(username);
         this.getHomeworkOne(this.props.homeworkId);
+    };
+
+    getHomeworkOne = async (homeworkId)=>{
+        console.log(this.props.homeworkId);
+        let config = {
+            method: 'post',
+            url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        let classIds = hw.range.split(',');
+        hw.classIds = classIds;
+        console.log(hw);
+        this.setState({
+            homework:hw,
+        })
+        this.getStudentInfo(classIds);
+
     };
 
     format = (shijianchuo) => {
@@ -112,9 +138,8 @@ class ChangeHomework extends React.Component {
 
     getStudentInfo = async (values)=>{
         let ob = {
-            classIds: values.ran
+            classIds: values
         }
-        console.log(ob);
         let config = {
             method: 'post',
             data : ob,
@@ -130,77 +155,19 @@ class ChangeHomework extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        let list1 = Array.from(studentInfo);
-        let list2 = [];
-        for (let i = 0; i < list1.length;++i){
-            if (list1[i].type === 'student'){
-                list2.push(list1[i]);
-            }
-        }
-        console.log(list2);
         this.setState({
-            handinAmount: list2.length,
-            student:list2
-        })
-        values.startTime = this.format(values.startDate);
-        values.endTime = this.format(values.endDate);
-        values.handinAmount = this.state.handinAmount;
-        values.teacherId = this.state.userInfo.username;
-        let tp = this.state.course.type;
-        let gra = this.state.course.grade;
-        values.subject = gra+tp;
-        if (values.startDate > values.endDate) {
-            message.error('开始时间不能晚于结束时间');
-        } else {
-            values.courseId = this.props.course.course.id;
-            if(values.type === '主观题'){
-                values.content = this.state.content;
-                values.conUpload = this.state.conUpload;
-            }else{
-                values.syllabus = this.state.syllabus;
-            }
-            values.answer = this.state.answer;
-            values.ansUpload = this.state.ansUpload;
-            this.setState({
-                homework: values,
-            });
-            console.log(values);
-            this.addHomework(values);
-            message.success('提交成功');
-        }
-    };
-
-    
-
-    getHomeworkOne = async (homeworkId)=>{
-        let config = {
-            method: 'post',
-            url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
-            headers: {
-                withCredentials: true,
-            }
-        };
-        const hw = await axios(config)
-            .then(function (response) {
-                return response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        this.setState({
-            homework:hw,
+            student:studentInfo,
         })
     };
+
 
     getContent = (result, t) => {
-        console.log(t);
         this.setState({
             content: t
         })
     };
 
     getAnswer = (result, t) => {
-        console.log(t);
         this.setState({
             answer: t
         })
@@ -225,6 +192,48 @@ class ChangeHomework extends React.Component {
         let ansUpload = ansPath.join(',')
         this.setState({
             ansUpload: ansUpload
+        })
+    }
+
+    editStudentHomework = async (homework)=>{
+        console.log(this.state.student[0].email);
+        let tos=[];
+        for (let i = 0; i < this.state.student.length; ++i){
+            tos.push(this.state.student[i].email)
+            console.log(tos);
+            homework.studentId = this.state.student[i].username;
+            homework.nickName = this.state.student[i].nickname;
+            console.log(homework);
+            let config = {
+                method: 'post',
+                url: 'http://106.13.209.140:8383/editStudentHomeworkByTeacher',
+                //url: 'http://localhost:8080/editStudentHomeworkByTeacher',
+                data: homework,
+                headers: {
+                    withCredentials: true,
+                }
+            };
+            const hw = await axios(config)
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            console.log(hw);
+        }
+        axios({
+            url:'http://106.13.209.140:8000/sendNotice',
+            method:'POST',
+            data:{
+                "tos":tos,
+                "context":"作业已修改，请及时查收",
+            }
+        }).then(res=>{
+            console.log(res);
+        }).catch(err=>{
+            console.log(err);
         })
     }
 
@@ -261,7 +270,6 @@ class ChangeHomework extends React.Component {
         };
         const hw = await axios(config)
             .then(function (response) {
-                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {
@@ -270,9 +278,9 @@ class ChangeHomework extends React.Component {
         this.setState({
             homework:hw,
         })
+        this.editStudentHomework(obj);
     };
 
-    timer = 0;
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {

@@ -128,15 +128,15 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
     @Override
     public List<TeacherHomework> findAllByTeacherId(String teacherId) {
         List<TeacherHomework> homeworkList = teacherhomeworkRepository.findAllByTeacherId(teacherId);
-        List<TeacherHomeworkDetail> list1 = teacherhomeworkDetailRepository.findAllByTeacherId(teacherId);
 
         for(int i = 0; i < homeworkList.size();++i){
-            (homeworkList.get(i)).setId(((TeacherHomeworkDetail)list1.get(i)).getId());
-            (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
-            (homeworkList.get(i)).setSyllabus(((TeacherHomeworkDetail)list1.get(i)).getSyllabus());
-            (homeworkList.get(i)).setAnswer(((TeacherHomeworkDetail)list1.get(i)).getAnswer());
-            (homeworkList.get(i)).setAnswerUpload(((TeacherHomeworkDetail)list1.get(i)).getAnswerUpload());
-            (homeworkList.get(i)).setContentUpload(((TeacherHomeworkDetail)list1.get(i)).getContentUpload());
+            TeacherHomeworkDetail detail = teacherhomeworkDetailRepository.findByHomeworkId(Integer.toString(homeworkList.get(i).getHomeworkId()));
+            (homeworkList.get(i)).setId(detail.getId());
+            (homeworkList.get(i)).setContent(detail.getContent());
+            (homeworkList.get(i)).setSyllabus(detail.getSyllabus());
+            (homeworkList.get(i)).setAnswer(detail.getAnswer());
+            (homeworkList.get(i)).setAnswerUpload(detail.getAnswerUpload());
+            (homeworkList.get(i)).setContentUpload(detail.getContentUpload());
         }
 
         return homeworkList;
@@ -144,17 +144,16 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
 
     @Override
     public List<TeacherHomework> findAllOfCourse(int courseId) {
-        String cId = Integer.toString(courseId);
         List<TeacherHomework> homeworkList = teacherhomeworkRepository.findAllByCourseId(courseId);
-        List list1 = teacherhomeworkDetailRepository.findAllByCourseId(cId);
 
         for(int i = 0; i < homeworkList.size();++i){
-            (homeworkList.get(i)).setId(((TeacherHomeworkDetail)list1.get(i)).getId());
-            (homeworkList.get(i)).setContent(((TeacherHomeworkDetail)list1.get(i)).getContent());
-            (homeworkList.get(i)).setSyllabus(((TeacherHomeworkDetail)list1.get(i)).getSyllabus());
-            (homeworkList.get(i)).setAnswer(((TeacherHomeworkDetail)list1.get(i)).getAnswer());
-            (homeworkList.get(i)).setAnswerUpload(((TeacherHomeworkDetail)list1.get(i)).getAnswerUpload());
-            (homeworkList.get(i)).setContentUpload(((TeacherHomeworkDetail)list1.get(i)).getContentUpload());
+            TeacherHomeworkDetail detail = teacherhomeworkDetailRepository.findByHomeworkId(Integer.toString(homeworkList.get(i).getHomeworkId()));
+            (homeworkList.get(i)).setId(detail.getId());
+            (homeworkList.get(i)).setContent(detail.getContent());
+            (homeworkList.get(i)).setSyllabus(detail.getSyllabus());
+            (homeworkList.get(i)).setAnswer(detail.getAnswer());
+            (homeworkList.get(i)).setAnswerUpload(detail.getAnswerUpload());
+            (homeworkList.get(i)).setContentUpload(detail.getContentUpload());
         }
 
         return homeworkList;

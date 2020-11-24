@@ -97,6 +97,13 @@ public class StudentHomeworkController {
         return studenthomeworkService.editStudentHomework(object);
     }
 
+    //老师编辑作业
+    @RequestMapping(value = "/editStudentHomeworkByTeacher")
+    public @ResponseBody
+    StudentHomework editStudentHomeworkByTeacher(@RequestBody JSONObject object){
+        return studenthomeworkService.editStudentHomeworkByTeacher(object);
+    }
+
     //提交作业
     @RequestMapping(value = "/addStudentHomework")
     public @ResponseBody

@@ -96,6 +96,15 @@ public class StudentHomework {
         handinRank = _handinRank;
     }
 
+    public StudentHomework(String _studentId, int _homeworkId,  Date _startTime,
+                           Date _endTime, String _title) {
+        studentId = _studentId;
+        homeworkId = _homeworkId;
+        StartTime = _startTime;
+        EndTime = _endTime;
+        Title = _title;
+    }
+
     @Id
     @Column(name = "STUDENTID")
     private String studentId;

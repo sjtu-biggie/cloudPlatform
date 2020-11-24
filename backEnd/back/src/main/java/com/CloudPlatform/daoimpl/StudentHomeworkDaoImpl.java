@@ -56,6 +56,17 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
     }
 
     @Override
+    public StudentHomework editOneByTeacher(StudentHomework homework){
+        studenthomeworkRepository.UpdateByTeacher(
+                homework.getEndTime(),
+                homework.getStartTime(),
+                homework.getTitle(),
+                homework.getStudentId(),
+                homework.getHomeworkId());
+        return homework;
+    }
+
+    @Override
     public StudentHomework addOne(StudentHomework homework){
         studenthomeworkRepository.Insert(homework.getEndTime(),
                 homework.getStartTime(),
@@ -132,7 +143,6 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
                 }
             }
         }
-        System.out.println(homeworkList);
 
         return homeworkList;
     }

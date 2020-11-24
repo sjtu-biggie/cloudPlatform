@@ -119,6 +119,19 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     }
 
     @Override
+    public StudentHomework editStudentHomeworkByTeacher(JSONObject object) {
+        int homeworkId = object.getInteger("homeworkId");
+        String studentId = object.getString("studentId");
+        String title = object.getString("title");
+        Date startTime = object.getDate("startTime");
+        Date endTime = object.getDate("endTime");
+
+        StudentHomework hw = new StudentHomework(studentId, homeworkId,
+                startTime, endTime, title);
+        return studenthomeworkDao.editOneByTeacher(hw);
+    }
+
+    @Override
     public StudentHomework addStudentHomework(JSONObject object) {
         System.out.println(object);
         int courseId = object.getInteger("courseId");
@@ -131,7 +144,6 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         Date endTime = object.getDate("endTime");
         Date handinTime = object.getDate("handinTime");
         String upload = object.getString("upload");
-
         StudentHomework hw = new StudentHomework(homeworkId, courseId, studentId, title,
                 startTime, endTime, nickName, subject,upload,null,null,null,null);
         return studenthomeworkDao.addOne(hw);

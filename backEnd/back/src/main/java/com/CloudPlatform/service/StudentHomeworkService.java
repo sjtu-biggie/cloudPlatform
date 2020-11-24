@@ -19,6 +19,7 @@ public interface StudentHomeworkService {
     List<StudentHomework> getStudentHomeworkAllOfHomeworkNoMongo(int homeworkId);
     StudentHomework getStudentHomeworkOne(String studentId, int homeworkId) throws IOException;
     StudentHomework editStudentHomework(JSONObject object);
+    StudentHomework editStudentHomeworkByTeacher(JSONObject object);
     StudentHomework addStudentHomework(JSONObject object);
     StudentHomework correctStudentHomework(JSONObject object);
     void deleteStudentHomeworkAll(String studentId, int courseId);

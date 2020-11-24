@@ -13,6 +13,7 @@ public interface StudentHomeworkDao {
     List<StudentHomework> findAllOfHomeworkNoMongo(int homeworkId);
     StudentHomework findOne(String studentId, int homeworkId);
     StudentHomework editOne(StudentHomework homework);
+    StudentHomework editOneByTeacher(StudentHomework homework);
     StudentHomework addOne(StudentHomework homework);
     void deleteAll(String studentId, int courseId);
     void deleteOne(String studentId, int homeworkId);

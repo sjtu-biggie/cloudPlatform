@@ -13,6 +13,7 @@ import {
   Icon,
   Pagination,
   Col,
+    message,
   Statistic, Progress, Row
 } from 'antd'
 import axios from 'axios'
@@ -185,15 +186,36 @@ class ListDemo extends React.Component {
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="适用人群" value={this.state.homework.range} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="开始时间" value={this.format(this.state.homework.startTime)} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="结束时间" value={this.format(this.state.homework.endTime)} />
+              <Button style={{marginTop:'30px',marginLeft:'480px'}} type={"primary"} onClick = {()=>{this.autograde()}}>自动批改</Button>
             </Card>
           </Col>
           {this.state.isLoading === true ? <Col span = {24}>
             <CommitTable homework={this.state.homework} studentHomework={this.state.studentHomework} homeworkId={this.state.homeworkId} handinAlready={this.state.handinAlready}/>
           </Col> : null}
+
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>
       </div>
     )
+  }
+  autograde=async ()=>{
+    if(this.state.homework.type==="主观题"){
+      message.error("主观题无法自动批改！");
+    }
+    let config = {
+      method: 'post',
+      url: 'http://106.13.209.140:8383/autoGrading?homeworkId='+this.state.homeworkId,
+      headers: {
+        withCredentials: true,
+      }
+    };
+    const hw = await axios(config)
+        .then(function (response) {
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
   }
 }
 

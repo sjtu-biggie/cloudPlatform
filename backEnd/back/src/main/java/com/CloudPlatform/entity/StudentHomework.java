@@ -31,7 +31,7 @@ public class StudentHomework {
                            Date _endTime, String _title,
                            String _subject, String _content, String _correct,
                            String _comment, String _remarks, String _id,
-                           String _upload, int _finishHomework, int _handinRank) {
+                           String _upload, int _finishHomework, int _handinRank,JSONObject _ocontent) {
         studentId = _studentId;
         homeworkId = _homeworkId;
         courseId = _courseId;
@@ -49,6 +49,7 @@ public class StudentHomework {
         Upload = _upload;
         finishHomework = _finishHomework;
         handinRank = _handinRank;
+        ocontent = _ocontent;
     }
 
     public StudentHomework(int _homeworkId,int _courseId, String _studentId, String _title,
@@ -95,6 +96,7 @@ public class StudentHomework {
         finishHomework = _finishHomework;
         handinRank = _handinRank;
     }
+
 
     public StudentHomework(String _studentId, int _homeworkId,  Date _startTime,
                            Date _endTime, String _title) {
@@ -170,6 +172,7 @@ public class StudentHomework {
     @Transient
     @Column(name = "OCONTENT")
     private JSONObject ocontent;
+
     @Transient
     private int handinRank;
     @Transient

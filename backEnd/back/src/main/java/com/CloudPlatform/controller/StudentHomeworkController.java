@@ -37,6 +37,12 @@ public class StudentHomeworkController {
         return studenthomeworkService.getStudentHomeworkAll(studentId);
     }
 
+    //同学所有提交的作业
+    @RequestMapping(value = "/autoGrading")
+    public void autoGrading (@RequestParam("homeworkId") int homeworkId) {
+        studenthomeworkService.autoGrading(homeworkId);
+    }
+
     //同学课程的所有提交的作业
     @RequestMapping(value = "/getStudentHomeworkAllOfCourse")
     public List<StudentHomework> getStudentHomeworkAllOfCourse(@RequestParam("studentId") String studentId, @RequestParam("courseId") int courseId) {

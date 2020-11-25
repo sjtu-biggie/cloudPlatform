@@ -1,10 +1,15 @@
 package com.CloudPlatform.serviceimpl;
 
 import com.CloudPlatform.dao.StudentHomeworkDao;
+import com.CloudPlatform.dao.TeacherHomeworkDao;
 import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
+import com.CloudPlatform.entity.TeacherHomework;
 import com.CloudPlatform.service.StudentHomeworkService;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +34,9 @@ import static java.lang.Double.parseDouble;
 public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Autowired
     private StudentHomeworkDao studenthomeworkDao;
+    @Autowired
+    private TeacherHomeworkDao teacherHomeworkDao;
+
 
     @Override
     public List<StudentHomework> getStudentHomeworkAll(String studentId) {
@@ -39,8 +47,8 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     public List<StudentHomework> getStudentMistakenHomework(String studentId) {
         List<StudentHomework> studentHomeworkList = studenthomeworkDao.findAll(studentId);
         List<StudentHomework> res = new ArrayList<>();
-        for (StudentHomework studentHomework : studentHomeworkList){
-            if (studentHomework.getScore() != null && studentHomework.getScore() < 100){
+        for (StudentHomework studentHomework : studentHomeworkList) {
+            if (studentHomework.getScore() != null && studentHomework.getScore() < 100) {
                 res.add(studentHomework);
             }
         }
@@ -65,7 +73,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Override
     public StudentHomework getStudentHomeworkOne(String studentId, int homeworkId) {
         StudentHomework studentHomework = studenthomeworkDao.findOne(studentId, homeworkId);
-        if (studentHomework.getUpload() == null){
+        if (studentHomework.getUpload() == null) {
             return studentHomework;
         }
         BASE64Encoder encoder = new BASE64Encoder();
@@ -78,7 +86,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
                 file = ResourceUtils.getFile(filepath);
                 // 获取文件输入流
                 FileInputStream inputStream = new FileInputStream(file);
-                byte[] buffer=new byte[inputStream.available()];
+                byte[] buffer = new byte[inputStream.available()];
                 inputStream.read(buffer);
                 fileList.add(encoder.encode(buffer));
             } catch (FileNotFoundException e) {
@@ -112,9 +120,11 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         Date endTime = object.getDate("endTime");
         Date handinTime = object.getDate("handinTime");
         String upload = object.getString("upload");
+        JSONObject ocontent;
+        ocontent = object.getJSONObject("ocontent");
         StudentHomework hw = new StudentHomework(studentId, homeworkId, courseId, nickName, handinTime,
                 startTime, endTime, title, subject, content, correct, comment, remarks, Id, upload,
-                finishHomework, handinRank);
+                finishHomework, handinRank, ocontent);
         return studenthomeworkDao.editOne(hw);
     }
 
@@ -145,7 +155,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         Date handinTime = object.getDate("handinTime");
         String upload = object.getString("upload");
         StudentHomework hw = new StudentHomework(homeworkId, courseId, studentId, title,
-                startTime, endTime, nickName, subject,upload,null,null,null,null);
+                startTime, endTime, nickName, subject, upload, null, null, null, null);
         return studenthomeworkDao.addOne(hw);
     }
 
@@ -209,7 +219,7 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
 
     @Override
     public String upload(MultipartFile file, String userId) {
-        String pathName = "/homework/"+userId + "/";//想要存储文件的地址
+        String pathName = "/homework/" + userId + "/";//想要存储文件的地址
         String pname = file.getOriginalFilename();//获取文件名（包括后缀）
         FileOutputStream fos = null;
         try {
@@ -284,5 +294,51 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         meanScore = meanScore / courseHomeworkNum;
         recentMeanScore = recentMeanScore / recentMeanScoreNum;
         return new StudentStat(finishHomework, ongoingHomework, failedHomework, meanScore, recentMeanScore, homeworkRankChange, homeworkScoreChange, handinChange, ddlChange);
+    }
+
+    @Override
+    public void autoGrading(int homeworkId) {
+        TeacherHomework homework = teacherHomeworkDao.findOne(homeworkId);
+        List<StudentHomework> studentHomeworkList = studenthomeworkDao.findAllOfHomework(homeworkId);
+        if (homework.getType().equals("主观题")) {
+            System.out.println("Invalid auto grading type");
+            return;
+        }
+        JSONObject syllabus = homework.getSyllabus();
+        int altogetherQuestions = syllabus.getInteger("chapterNum");
+        int correct = 0;
+        for (StudentHomework studentHomework : studentHomeworkList) {
+            correct = 0;
+            JSONArray ocontents = studentHomework.getOcontent().getJSONArray("array");
+            for(int i =0;i<altogetherQuestions;++i){
+                String chapter = "chapter"+(i+1);
+                String type = syllabus.getJSONObject(chapter).getString("type");
+                if(type.equals("选择题")){
+                    String answer = syllabus.getJSONObject(chapter).getString("answer");
+                    String studentAnswer = ocontents.getJSONArray(i).getString(0);
+                    if(answer.equals(studentAnswer)){
+                        correct++;
+                    }
+                }else{
+                    JSONArray answers = syllabus.getJSONObject(chapter).getJSONArray("content");
+                    JSONArray studentAnswers = ocontents.getJSONArray(i);
+                    boolean yes = true;
+                    for(int j=0;j<answers.size();++j){
+                        String answer = answers.getString(j);
+                        String studentAnswer = studentAnswers.getString(j);
+                        if(!answer.equals(studentAnswer)){
+                            yes = false;
+                        }
+                    }
+                    if(yes){
+                        correct++;
+                    }
+                }
+            }
+            double score = 100*correct/altogetherQuestions;
+            studentHomework.setScore(score);
+            System.out.println(score);
+            studenthomeworkDao.editOne(studentHomework);
+        }
     }
 }

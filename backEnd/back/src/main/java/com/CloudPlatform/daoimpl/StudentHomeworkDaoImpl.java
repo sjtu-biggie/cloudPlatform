@@ -5,6 +5,7 @@ import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentHomeworkDetail;
 import com.CloudPlatform.repository.StudentHomeworkDetailRepository;
 import com.CloudPlatform.repository.StudentHomeworkRepository;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +43,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         int c_id = homework.getCourseId();
         String hwId = Integer.toString(h_id);
         String csId = Integer.toString(c_id);
+        JSONObject ocontent = homework.getOcontent();
         homeworkDetail.setId(homework.getId());
         homeworkDetail.setCourseId(csId);
         homeworkDetail.setHomeworkId(hwId);
@@ -51,6 +53,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homeworkDetail.setRemarks(homework.getRemarks());
         homeworkDetail.setCorrect(homework.getCorrect());
         homeworkDetail.setUpload(homework.getUpload());
+        homeworkDetail.setOcontent(ocontent);
         studenthomeworkDetailRepository.save(homeworkDetail);
         return homework;
     }

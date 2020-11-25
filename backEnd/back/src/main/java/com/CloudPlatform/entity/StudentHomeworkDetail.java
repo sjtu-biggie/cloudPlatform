@@ -1,6 +1,7 @@
 package com.CloudPlatform.entity;
 
 import com.CloudPlatform.utils.multikeys.StudentHomeworkMultiKeys;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -55,4 +56,7 @@ public class StudentHomeworkDetail implements Serializable {
     @Column(name = "UPLOAD")
     private String Upload;
 
+    @Transient
+    @Column(name = "OCONTENT")
+    private JSONObject ocontent;
 }

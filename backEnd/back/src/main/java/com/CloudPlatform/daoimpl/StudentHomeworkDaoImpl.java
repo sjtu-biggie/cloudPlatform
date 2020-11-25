@@ -122,6 +122,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
         homework.setComment(detail.getComment());
         homework.setRemarks(detail.getRemarks());
         homework.setCorrect(detail.getCorrect());
+        homework.setOcontent(detail.getOcontent());
         homework.setUpload(detail.getUpload());
         return homework;
     }
@@ -142,6 +143,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
                     (homeworkList.get(i)).setRemarks(((StudentHomeworkDetail)list1.get(j)).getRemarks());
                     (homeworkList.get(i)).setCorrect(((StudentHomeworkDetail)list1.get(j)).getCorrect());
                     (homeworkList.get(i)).setUpload(((StudentHomeworkDetail)list1.get(j)).getUpload());
+                    (homeworkList.get(i)).setOcontent(((StudentHomeworkDetail)list1.get(j)).getOcontent());
                     break;
                 }
             }
@@ -162,6 +164,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
                 (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
                 (homeworkList.get(i)).setCorrect(studentHomeworkDetail.getCorrect());
                 (homeworkList.get(i)).setUpload(studentHomeworkDetail.getUpload());
+                (homeworkList.get(i)).setOcontent(studentHomeworkDetail.getOcontent());
             }
         }
         return homeworkList;
@@ -179,6 +182,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
                 (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
                 (homeworkList.get(i)).setCorrect(studentHomeworkDetail.getCorrect());
                 (homeworkList.get(i)).setUpload(studentHomeworkDetail.getUpload());
+                (homeworkList.get(i)).setOcontent(studentHomeworkDetail.getOcontent());
             }
         }
         return homeworkList;
@@ -219,6 +223,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
                 (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
                 (homeworkList.get(i)).setCorrect(studentHomeworkDetail.getCorrect());
                 (homeworkList.get(i)).setUpload(studentHomeworkDetail.getUpload());
+                (homeworkList.get(i)).setOcontent(studentHomeworkDetail.getOcontent());
             }
         }
 

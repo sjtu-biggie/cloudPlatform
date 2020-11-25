@@ -309,6 +309,14 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
         int correct = 0;
         for (StudentHomework studentHomework : studentHomeworkList) {
             correct = 0;
+            if(studentHomework.getOcontent()==null){
+                studentHomework.setScore(0.0);
+                studentHomework.setCorrect("");
+                studentHomework.setComment("得分为"+0.0);
+                System.out.println(0.0);
+                studenthomeworkDao.editOne(studentHomework);
+                continue;
+            }
             JSONArray ocontents = studentHomework.getOcontent().getJSONArray("array");
             for(int i =0;i<altogetherQuestions;++i){
                 String chapter = "chapter"+(i+1);
@@ -337,6 +345,8 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
             }
             double score = 100*correct/altogetherQuestions;
             studentHomework.setScore(score);
+            studentHomework.setCorrect("");
+            studentHomework.setComment("得分为"+score);
             System.out.println(score);
             studenthomeworkDao.editOne(studentHomework);
         }

@@ -168,6 +168,9 @@ public class StudentHomework {
     private int finishHomework;
 
     @Transient
+    @Column(name = "OCONTENT")
+    private JSONObject ocontent;
+    @Transient
     private int handinRank;
     @Transient
     List<String> file;

@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -73,10 +74,9 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Override
     public StudentHomework getStudentHomeworkOne(String studentId, int homeworkId) {
         StudentHomework studentHomework = studenthomeworkDao.findOne(studentId, homeworkId);
-        if (studentHomework.getUpload() == null) {
+        if (studentHomework.getUpload() == null){
             return studentHomework;
         }
-        BASE64Encoder encoder = new BASE64Encoder();
 
         String[] path = studentHomework.getUpload().split(",");
         List fileList = new ArrayList<>();
@@ -86,16 +86,15 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
                 file = ResourceUtils.getFile(filepath);
                 // 获取文件输入流
                 FileInputStream inputStream = new FileInputStream(file);
-                byte[] buffer = new byte[inputStream.available()];
+                byte[] buffer=new byte[inputStream.available()];
                 inputStream.read(buffer);
-                fileList.add(encoder.encode(buffer));
+                fileList.add(new Base64().encodeToString(buffer));
             } catch (FileNotFoundException e) {
                 System.out.println("文件不存在！");
             } catch (IOException e) {
                 System.out.println("文件读取异常！");
             }
         }
-        System.out.println("SetFile");
         studentHomework.setFile(fileList);
         return studentHomework;
     }

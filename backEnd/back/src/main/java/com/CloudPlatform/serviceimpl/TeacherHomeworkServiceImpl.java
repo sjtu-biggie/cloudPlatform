@@ -4,13 +4,14 @@ import com.CloudPlatform.dao.TeacherHomeworkDao;
 import com.CloudPlatform.entity.TeacherHomework;
 import com.CloudPlatform.service.TeacherHomeworkService;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,49 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
 
     @Override
     public TeacherHomework getTeacherHomeworkOne(int homeworkId){
-        return teacherhomeworkDao.findOne(homeworkId);
+        TeacherHomework teacherHomework = teacherhomeworkDao.findOne(homeworkId);
+        if (teacherHomework.getContentUpload() != null){
+            String[] path = teacherHomework.getContentUpload().split(",");
+            List fileList = new ArrayList<>();
+            File file = null;
+            for (String filepath : path) {
+                try {
+                    file = ResourceUtils.getFile(filepath);
+                    // 获取文件输入流
+                    FileInputStream inputStream = new FileInputStream(file);
+                    byte[] buffer=new byte[inputStream.available()];
+                    inputStream.read(buffer);
+                    fileList.add(new Base64().encodeToString(buffer));
+                } catch (FileNotFoundException e) {
+                    System.out.println("文件不存在！");
+                } catch (IOException e) {
+                    System.out.println("文件读取异常！");
+                }
+            }
+            teacherHomework.setContentFile(fileList);
+        }
+
+        if (teacherHomework.getAnswerUpload() != null){
+            String[] path = teacherHomework.getAnswerUpload().split(",");
+            List fileList = new ArrayList<>();
+            File file = null;
+            for (String filepath : path) {
+                try {
+                    file = ResourceUtils.getFile(filepath);
+                    // 获取文件输入流
+                    FileInputStream inputStream = new FileInputStream(file);
+                    byte[] buffer=new byte[inputStream.available()];
+                    inputStream.read(buffer);
+                    fileList.add(new Base64().encodeToString(buffer));
+                } catch (FileNotFoundException e) {
+                    System.out.println("文件不存在！");
+                } catch (IOException e) {
+                    System.out.println("文件读取异常！");
+                }
+            }
+            teacherHomework.setAnswerFile(fileList);
+        }
+        return teacherHomework;
     }
 
     @Override

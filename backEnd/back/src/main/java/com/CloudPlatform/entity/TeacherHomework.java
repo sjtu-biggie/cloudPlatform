@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "TEACHERHOMEWORK")
@@ -40,6 +41,30 @@ public class TeacherHomework implements Serializable {
         Content = _content;
         syllabus = _syllabus;
         Answer = _answer;
+        ContentUpload = _ContentUpload;
+        AnswerUpload = _AnswerUpload;
+    }
+
+    public TeacherHomework(int _homeworkId, int _courseId, String _teacherId, String _title, String _range,
+                           Date _startTime, Date _endTime,String _type,String _subject,
+                           int _handinAmount, int _handinAlready, int _delayable,String _content,JSONObject _syllabus,String _answer,
+                           String _id, String _ContentUpload, String _AnswerUpload){
+        homeworkId = _homeworkId;
+        courseId = _courseId;
+        teacherId = _teacherId;
+        Title = _title;
+        Range = _range;
+        StartTime = _startTime;
+        EndTime = _endTime;
+        Type = _type;
+        Subject = _subject;
+        HandinAmount = _handinAmount;
+        HandinAlready=_handinAlready;
+        Delayable=_delayable;
+        Content = _content;
+        syllabus = _syllabus;
+        Answer = _answer;
+        id = _id;
         ContentUpload = _ContentUpload;
         AnswerUpload = _AnswerUpload;
     }
@@ -107,5 +132,11 @@ public class TeacherHomework implements Serializable {
     @Transient
     @Column(name = "ANSWERUPLOAD")
     private String AnswerUpload;
+
+    @Transient
+    List<String> ContentFile;
+
+    @Transient
+    List<String> AnswerFile;
 
 }

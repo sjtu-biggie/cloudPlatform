@@ -25,7 +25,8 @@ public class ClassManageControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        MockMvc mvc = MockMvcBuilders.standaloneSetup(classManageController).build();
+        //暂时还不需要这一步就能够自动注入
+        //MockMvc mvc = MockMvcBuilders.standaloneSetup(classManageController).build();
         testData1 = new JSONObject();
     }
 
@@ -35,7 +36,7 @@ public class ClassManageControllerTest {
 
     @Test
     public void addClass() {
-        testData1.put("classNo", "F1803707");
+        testData1.put("classNo", "F1803711");
         testData1.put("number", 0);
         testData1.put("classManager", "518030910213");
         System.out.println(testData1);
@@ -51,7 +52,7 @@ public class ClassManageControllerTest {
         testData1.put("classNo", "F1803702");
         testData1.put("number", 1);
         System.out.println(testData1);
-        assertEquals("成功增加班级人数", new ClassManageController().updateClass(testData1));
+        assertEquals("成功增加学生人数", classManageController.updateClass(testData1));
     }
 
     @Test

@@ -6,17 +6,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SendEmailTest {
+public class SendMessageTest {
     @Autowired
-    private SendEmail sendEmail;
+    private SendMessage sendMessage;
 
     @Before
     public void setUp() throws Exception {
@@ -24,15 +22,10 @@ public class SendEmailTest {
 
     @After
     public void tearDown() throws Exception {
-    }
-
-
-    @Test
-    public void send() {
-        System.out.println(sendEmail.send("1921209391@qq.com"));
+        System.out.println(sendMessage.sendMessage("15216678607"));
     }
 
     @Test
-    public void sendNotice() {
+    public void sendMessage() {
     }
 }

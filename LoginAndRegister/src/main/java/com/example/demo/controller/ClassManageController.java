@@ -44,8 +44,10 @@ public class ClassManageController {
 
     @RequestMapping(value = "/updateClass",method = RequestMethod.POST)
     public String updateClass(@RequestBody JSONObject obj){
+        System.out.println("进入controller"+obj);
         String classNo=obj.getString("classNo");
         int n=obj.getIntValue("number");
+        System.out.println("classNo为"+classNo+" n为"+n);
         classManageMapper.updateClass(classNo,n);
         return "成功增加学生人数";
     }

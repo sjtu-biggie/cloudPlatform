@@ -24,6 +24,7 @@ public class ClassManageController {
         classManage.setClassNo(classNo);
         classManage.setNumber(number);
         classManage.setClassManagers(classManager);
+
         classManageMapper.addClass(classManage);
         return "添加班级成功";
     }

@@ -12,6 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -21,45 +23,54 @@ public class ClassManageControllerTest {
     private ClassManageController classManageController;
     @Autowired(required = false)
     private ClassManage classManage;
-    JSONObject testData1;
+
+    JSONObject testData;
 
     @Before
     public void setUp() throws Exception {
         //暂时还不需要这一步就能够自动注入
         //MockMvc mvc = MockMvcBuilders.standaloneSetup(classManageController).build();
-        testData1 = new JSONObject();
+        testData = new JSONObject();
+        System.out.println("setUp");
     }
 
     @After
     public void tearDown() throws Exception {
+        testData=null;
+        System.out.println("tearDown");
     }
 
     @Test
     public void addClass() {
-        testData1.put("classNo", "F1803711");
-        testData1.put("number", 0);
-        testData1.put("classManager", "518030910213");
-        System.out.println(testData1);
-        assertEquals("添加班级成功", classManageController.addClass(testData1));
+        testData.put("classNo", "F1803712");
+        testData.put("number", 0);
+        testData.put("classManager", "518030910213");
+        System.out.println(testData);
+        assertEquals("添加班级成功", classManageController.addClass(testData));
     }
 
     @Test
     public void testGetClass() {
+        testData.put("classNo","F1803702");
+        assertEquals("找到这样的班级",classManageController.getClass(testData));
     }
 
     @Test
     public void updateClass() {
-        testData1.put("classNo", "F1803702");
-        testData1.put("number", 1);
-        System.out.println(testData1);
-        assertEquals("成功增加学生人数", classManageController.updateClass(testData1));
+        testData.put("classNo", "F1803702");
+        testData.put("number", 1);
+        System.out.println(testData);
+        assertEquals("成功增加学生人数", classManageController.updateClass(testData));
     }
 
     @Test
     public void getAllClassByManager() {
+        testData.put("sid","518030910213");
+        System.out.println(classManageController.getAllClassByManager(testData));
     }
 
     @Test
     public void getAllClass() {
+        System.out.println(classManageController.getAllClass());
     }
 }

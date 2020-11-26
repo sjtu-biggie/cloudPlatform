@@ -13,8 +13,8 @@ public interface ClassManageMapper {
     @Insert("insert into classmanage (id,number,classNo,classManagers) values (#{id},#{number},#{classNo},#{classManagers})")
     public void addClass(ClassManage classManage);
 
-    @Select("select * from classmanage where id=#{getId} and classNo = #{getclassNo}")
-    public ClassManage getClass(String getId,String getclassNo);
+    @Select("select * from classmanage where classNo = #{getclassNo}")
+    public ClassManage getClass(String getclassNo);
 
     @Update("update classmanage set number=number+ #{n} where classNo=#{classNo}")
     public void updateClass(String classNo,int n);

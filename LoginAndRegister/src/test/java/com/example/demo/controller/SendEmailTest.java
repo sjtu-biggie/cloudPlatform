@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +20,18 @@ public class SendEmailTest {
     @Autowired
     private SendEmail sendEmail;
 
+    private JSONObject testData;
+
     @Before
     public void setUp() throws Exception {
+        testData=new JSONObject();
+        System.out.println("setUp");
     }
 
     @After
     public void tearDown() throws Exception {
+        testData=null;
+        System.out.println("tearDown");
     }
 
 
@@ -34,5 +42,11 @@ public class SendEmailTest {
 
     @Test
     public void sendNotice() {
+        JSONArray tos=new JSONArray();
+        tos.add("1921209391@qq.com");
+        tos.add("ynjgzfly@163.com");
+        testData.put("tos",tos);
+        testData.put("context","junit测试");
+        assertEquals("发送完成",sendEmail.sendNotice(testData));
     }
 }

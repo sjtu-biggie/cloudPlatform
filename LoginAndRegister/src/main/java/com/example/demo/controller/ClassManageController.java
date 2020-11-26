@@ -31,9 +31,8 @@ public class ClassManageController {
 
     @RequestMapping(value = "/getClass",method = RequestMethod.POST)
     public String getClass(@RequestBody JSONObject obj){
-        String getId=obj.getString("id");
         String getclassNo=obj.getString("classNo");
-        ClassManage classManage=classManageMapper.getClass(getId,getclassNo);
+        ClassManage classManage=classManageMapper.getClass(getclassNo);
         if (classManage!=null)
         {
             return  "找到这样的班级";
@@ -65,6 +64,4 @@ public class ClassManageController {
     public List<String> getAllClass(){
         return classManageMapper.getAllClass();
     }
-
-
 }

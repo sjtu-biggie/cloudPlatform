@@ -13,6 +13,7 @@ const columns = [
     { title: '昵称', dataIndex: 'nickname' },
     { title: '班级', dataIndex: 'theClass' },
     { title: '是否提交', dataIndex: 'commit' },
+    { title: '提交时间', dataIndex: 'handinTime' },
     { title: '是否批改', dataIndex: 'correct' },
     { title: '成绩', dataIndex: 'theGrade' },
 ];
@@ -108,6 +109,21 @@ export default class STable extends Component {
             };
         });
 
+        this.format = (shijianchuo) => {
+            let time = new Date(shijianchuo);
+            let y = time.getFullYear();
+            let m = time.getMonth() + 1;
+            let d = time.getDate();
+            let h = time.getHours();
+            let mm = time.getMinutes();
+            let s = time.getSeconds();
+            return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
+        };
+
+        this.add0 = (m) => {
+            return m < 10 ? '0' + m : m
+        }
+
         this.handleSearch = () => {
             const { orData, search } = this.state;
             const filterData = orData.filter(row => {
@@ -191,6 +207,7 @@ export default class STable extends Component {
                         nickname: list1[i].nickname,
                         theClass: list1[i].theClass,
                         theGrade: list2[j].score,
+                        handinTime: this.format(list2[j].handinTime),
                         commit: '已提交',
                         correct:'已批改'
                     })
@@ -204,6 +221,7 @@ export default class STable extends Component {
                             nickname: list1[i].nickname,
                             theClass: list1[i].theClass,
                             theGrade: null,
+                            handinTime: this.format(list2[j].handinTime),
                             commit: '已提交',
                             correct:'未批改'
                         })

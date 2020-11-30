@@ -235,7 +235,7 @@ class HomeworkCommit extends React.Component {
                     str+=(" "+t);
                 }
             }
-            obj.ocontent = this.state.objJson;
+            obj.ocontent ={array:this.state.objJson} ;
             obj.content = str;
         }
         console.log(obj);

@@ -12,7 +12,8 @@ import {
     Upload,
     Icon,
     Popconfirm,
-    Collapse, List, Row, Col, Dropdown, Menu
+    Collapse, List, Row, Col, Dropdown, Menu,
+    Checkbox
 } from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
@@ -160,6 +161,11 @@ class Assign extends React.Component {
             }else{
                 values.syllabus = this.state.syllabus;
             }
+            if(values.delayable === true){
+                values.delayable = 1;
+            }else{
+                values.delayable = 0;
+            }
             values.answer = this.state.answer;
             values.ansUpload = this.state.ansUpload;
             this.setState({
@@ -274,6 +280,7 @@ class Assign extends React.Component {
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/addTeacherHomework',
+            //url: 'http://localhost:8080/addTeacherHomework',
             data: homework,
             headers: {
                 withCredentials: true,
@@ -332,7 +339,6 @@ class Assign extends React.Component {
             if (err) {
                 message.warning('请先填写正确的表单')
             } else {
-
                 values.type = values.tp[0];
                 values.range = values.ran.join(',');
                 let modifiedSyllabus = this.state.syllabus;
@@ -446,6 +452,7 @@ class Assign extends React.Component {
                                 )
                             }
                         </FormItem>
+
                         <FormItem label='布置范围' {...formItemLayout} required>
                             {
                                 getFieldDecorator('ran', {
@@ -468,6 +475,7 @@ class Assign extends React.Component {
                                 )
                             }
                         </FormItem>
+
                         <FormItem label='作业类型' {...formItemLayout} required>
                             {
                                 getFieldDecorator('tp', {
@@ -524,6 +532,20 @@ class Assign extends React.Component {
                                     <DatePicker onChange={() => {
 
                                     }}> </DatePicker>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem label='是否允许迟交' {...formItemLayout} required>
+                            {
+                                getFieldDecorator('delayable', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请填写是否允许迟交'
+                                        }
+                                    ]
+                                })(
+                                    <Checkbox>允许迟交</Checkbox>
                                 )
                             }
                         </FormItem>

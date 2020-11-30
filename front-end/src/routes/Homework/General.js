@@ -175,7 +175,7 @@ class ListDemo extends React.Component {
         <Card bordered={false} title='作业内容' style={{marginBottom: 15}} id='verticalStyle'>
           <ChangeHomework homeworkId ={this.props.match.params.homeworkId}/>
         </Card>
-        <Card bordered={false} title='提交情况' style={{marginBottom: 15}} id='verticalStyle'>
+        <Card bordered={false} title={<span>提交情况<span style={{fontSize:"12px"}}>———标红的作业为迟交作业</span></span>} style={{marginBottom: 15}} id='verticalStyle'>
           <Col span={24}>
             <Card style={{height:'130px'}}>
               <Statistic style={{marginTop:'10px',float:"left"}} title="总人数" value={this.state.handinAmount} />

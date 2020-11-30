@@ -20,6 +20,18 @@ import java.io.Serializable;
 public class TeacherHomeworkDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public TeacherHomeworkDetail(String _homeworkId, String _courseId, String _teacherId, String _content,
+             JSONObject _syllabus, String _answer, String _contentupload, String _answerupload){
+        homeworkId = _homeworkId;
+        courseId = _courseId;
+        teacherId = _teacherId;
+        Content = _content;
+        syllabus = _syllabus;
+        Answer = _answer;
+        ContentUpload = _contentupload;
+        AnswerUpload = _answerupload;
+    }
+
     @Column(name = "HOMEWORKID")
     private String homeworkId;
 

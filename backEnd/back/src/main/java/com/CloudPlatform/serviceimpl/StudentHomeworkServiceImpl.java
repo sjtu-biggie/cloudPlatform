@@ -9,7 +9,6 @@ import com.CloudPlatform.service.StudentHomeworkService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonGenerationException;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.entity.ContentType;

@@ -71,6 +71,18 @@ public class StudentHomework {
         Remarks = _remarks;
     }
 
+    public StudentHomework(int _homeworkId,int _courseId, String _studentId, String _title,
+                           Date _startTime, Date _endTime, String _nickname, String _subject){
+        homeworkId = _homeworkId;
+        courseId = _courseId;
+        studentId = _studentId;
+        Title = _title;
+        StartTime = _startTime;
+        EndTime = _endTime;
+        Subject = _subject;
+        nickName = _nickname;
+    }
+
     public StudentHomework(String _studentId, int _homeworkId, int _courseId,
                            String _nickName, Date _handinTime, Date _startTime,
                            Date _endTime, double _score, String _title,

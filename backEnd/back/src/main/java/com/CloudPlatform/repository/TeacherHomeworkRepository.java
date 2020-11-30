@@ -17,13 +17,13 @@ public interface TeacherHomeworkRepository extends JpaRepository<TeacherHomework
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value ="insert into teacherhomework (endtime, handinamount, `range`, starttime, subject, title, type, courseid, teacherid, homeworkid, handinalready) values (?1, ?2,?3, ?4, ?5, ?6,?7, ?8, ?9,?10,?11)")
-    void Insert(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int homeworkid, int handinalready);
+    @Query(nativeQuery = true,value ="insert into teacherhomework (endtime, handinamount, `range`, starttime, subject, title, type, courseid, teacherid, homeworkid, handinalready, delayable) values (?1, ?2,?3, ?4, ?5, ?6,?7, ?8, ?9,?10,?11,?12)")
+    void Insert(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int homeworkid, int handinalready, int delayable);
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value ="update teacherhomework set endtime=?1, handinamount=?2, `range`=?3, starttime=?4, subject=?5, title=?6, type=?7, courseid=?8, teacherid=?9, handinalready=?10 where homeworkid = ?11")
-    void Update(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int handinalready, int homeworkid);
+    @Query(nativeQuery = true,value ="update teacherhomework set endtime=?1, handinamount=?2, `range`=?3, starttime=?4, subject=?5, title=?6, type=?7, courseid=?8, teacherid=?9, handinalready=?10 , delayable = ?11 where homeworkid = ?12")
+    void Update(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int handinalready,  int delayable, int homeworkid);
 
     @Transactional
     @Modifying

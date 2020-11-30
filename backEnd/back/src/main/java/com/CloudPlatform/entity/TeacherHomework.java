@@ -25,6 +25,22 @@ public class TeacherHomework implements Serializable {
 
     public TeacherHomework(int _courseId, String _teacherId, String _title, String _range,
                            Date _startTime, Date _endTime,String _type,String _subject,
+                           int _handinAmount, int _handinAlready, int _delayable){
+        courseId = _courseId;
+        teacherId = _teacherId;
+        Title = _title;
+        Range = _range;
+        StartTime = _startTime;
+        EndTime = _endTime;
+        Type = _type;
+        Subject = _subject;
+        HandinAmount = _handinAmount;
+        HandinAlready=_handinAlready;
+        Delayable=_delayable;
+    }
+
+    public TeacherHomework(int _courseId, String _teacherId, String _title, String _range,
+                           Date _startTime, Date _endTime,String _type,String _subject,
                            int _handinAmount, int _handinAlready, int _delayable,String _content,JSONObject _syllabus,String _answer,
                            String _ContentUpload, String _AnswerUpload){
         courseId = _courseId;

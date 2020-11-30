@@ -60,6 +60,7 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
 
     @Override
     public StudentHomework editOneByTeacher(StudentHomework homework){
+        System.out.println(homework);
         studenthomeworkRepository.UpdateByTeacher(
                 homework.getEndTime(),
                 homework.getStartTime(),

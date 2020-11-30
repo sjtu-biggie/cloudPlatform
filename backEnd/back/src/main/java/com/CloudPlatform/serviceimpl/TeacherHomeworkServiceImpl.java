@@ -97,14 +97,14 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         String subject= object.getString("subject");
         int handinAmount = object.getInteger("handinAmount");
         int handinAlready = object.getInteger("handinAlready");
-        int Delayable = object.getInteger("Delayable");
+        int delayable = object.getInteger("delayable");
         Date startTime = object.getDate("startTime");
         Date endTime = object.getDate("endTime");
         String conUpload= object.getString("conUpload");
         String ansUpload= object.getString("ansUpload");
 
         TeacherHomework hw = new TeacherHomework(homeworkId,courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,handinAlready,Delayable,content,syllabus,answer,Id, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,handinAlready,delayable,content,syllabus,answer,Id, conUpload, ansUpload);
         return teacherhomeworkDao.editOne(hw);
     }
 
@@ -123,6 +123,7 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         Date endTime = object.getDate("endTime");
         String conUpload= object.getString("conUpload");
         String ansUpload= object.getString("ansUpload");
+        int delayable= object.getInteger("delayable");
         JSONObject syllabus;
         if(type.equals("客观题")){
             syllabus = object.getJSONObject("syllabus");
@@ -130,7 +131,7 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
             syllabus = null;
         }
         TeacherHomework hw = new TeacherHomework(courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,0,1,content,syllabus,answer, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,0,delayable,content,syllabus,answer, conUpload, ansUpload);
         return teacherhomeworkDao.addOne(hw);
     }
 

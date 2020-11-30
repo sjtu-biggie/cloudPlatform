@@ -16,9 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Random;
 
+
+/**
+ * 注解javadoc演示
+ *
+ * @since 1.8
+ * @author zf
+ * @version 1.8
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class SendMessage {
+
+
+    /**
+     * 给指定手机号码发送短信验证码
+     * @param to 手机号码
+     * @return 验证码
+     */
     @RequestMapping(value = "/sendMessage",method = RequestMethod.POST)
     public String sendMessage(String to){
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4G4H6Qdjm6tE3PW3bpL9", "e8Y5IUcTAG5wRlXD3OXMssePWug5Au");

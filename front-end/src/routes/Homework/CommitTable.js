@@ -363,11 +363,7 @@ export default class STable extends Component {
                         rowKey={'id'}
                         columns={[...columns.map(item => ({
                             ...item,
-                            render: (text, record) => <EditText onChange={value => {
-                                const newData = [...orData];
-                                newData.find(col => col.id === record.id)[item.dataIndex] = value;
-                                this.setState({ orData: newData });
-                            }}>{text}</EditText>,
+                            render: (text) => <a style={text === '迟交' ? {color:'red'}:{color:'black'}}>{text}</a>,
                         })), {
                             name: '操作',
                             key: 'del',

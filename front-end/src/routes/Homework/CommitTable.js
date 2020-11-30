@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { Component, createRef ,useState} from 'react';
-import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload, Tag} from 'antd';
 import styles from './index.css';
 import axios from 'axios'
 import * as XLSX from 'xlsx';
@@ -8,14 +8,35 @@ import * as XLSX from 'xlsx';
 import {Router} from "react-router-dom";
 
 const columns = [
-    { title: '用户名', dataIndex: 'username' },
-    { title: '学号', dataIndex: 'sid' },
-    { title: '昵称', dataIndex: 'nickname' },
-    { title: '班级', dataIndex: 'theClass' },
-    { title: '是否提交', dataIndex: 'commit' },
-    { title: '提交时间', dataIndex: 'handinTime' },
-    { title: '是否批改', dataIndex: 'correct' },
-    { title: '成绩', dataIndex: 'theGrade' },
+    { title: '用户名', dataIndex: 'username',key:'username' },
+    { title: '学号', dataIndex: 'sid' , key: 'sid'},
+    { title: '昵称', dataIndex: 'nickname' , key: 'nickname'},
+    { title: '班级', dataIndex: 'theClass' , key: 'theClass'},
+    { title: '提交状态', dataIndex: 'commit', key: 'commit',
+        render: commit => <a style={{fontStyle:'#FF0000'}}>{commit}</a>
+        ,
+        // render: tags => {
+        //         commit.map(com => {
+        //         let color;
+        //         if (com === "未提交") {
+        //         color = 'volcano';
+        //     }
+        //         else if (com === "迟交"){
+        //         color = 'volcano';
+        //     }
+        //         else {
+        //         color = 'volcano';
+        //     }
+        //         return (
+        //         <Tag color={color}>
+        //         {com}
+        //         </Tag>
+        //         );
+        //     })}
+    },
+    { title: '提交时间', dataIndex: 'handinTime',key: 'handinTime'},
+    { title: '是否批改', dataIndex: 'correct' , key: 'correct' },
+    { title: '成绩', dataIndex: 'theGrade', key: 'theGrade' },
 ];
 
 
@@ -200,31 +221,68 @@ export default class STable extends Component {
                 }
                 if(j===list2.length) continue;
                 if (list2[j].score !== null){
-                    data.push({
-                        _index:list2[j]._index,
-                        username: list1[i].username,
-                        sid: list1[i].sid,
-                        nickname: list1[i].nickname,
-                        theClass: list1[i].theClass,
-                        theGrade: list2[j].score,
-                        handinTime: this.format(list2[j].handinTime),
-                        commit: '已提交',
-                        correct:'已批改'
-                    })
-                }
-                else{
-                    if (list2[j].handinTime !== null){
+                    if (list2[j].handinTime <= this.props.homework.endTime){
                         data.push({
                             _index:list2[j]._index,
                             username: list1[i].username,
                             sid: list1[i].sid,
                             nickname: list1[i].nickname,
                             theClass: list1[i].theClass,
-                            theGrade: null,
+                            theGrade: list2[j].score,
                             handinTime: this.format(list2[j].handinTime),
                             commit: '已提交',
-                            correct:'未批改'
+                            correct:'已批改',
+                            tags: ['迟交'],
+                            endTime: this.props.homework.endTime
                         })
+                    }
+                    else {
+                        data.push({
+                            _index:list2[j]._index,
+                            username: list1[i].username,
+                            sid: list1[i].sid,
+                            nickname: list1[i].nickname,
+                            theClass: list1[i].theClass,
+                            theGrade: list2[j].score,
+                            handinTime: this.format(list2[j].handinTime),
+                            commit: '迟交',
+                            tags: ['迟交'],
+                            correct:'已批改',
+                            endTime: this.props.homework.endTime
+                        })
+                    }
+                }
+                else{
+                    if (list2[j].handinTime !== null){
+                        if (list2[j].handinTime <= this.props.homework.endTime){
+                            data.push({
+                                _index:list2[j]._index,
+                                username: list1[i].username,
+                                sid: list1[i].sid,
+                                nickname: list1[i].nickname,
+                                theClass: list1[i].theClass,
+                                theGrade: list2[j].score,
+                                handinTime: this.format(list2[j].handinTime),
+                                commit: '已提交',
+                                tags: ['已提交'],
+                                correct:'未批改',
+                                endTime: this.props.homework.endTime
+                            })
+                        }
+                        else {
+                            data.push({
+                                _index:list2[j]._index,
+                                username: list1[i].username,
+                                sid: list1[i].sid,
+                                nickname: list1[i].nickname,
+                                theClass: list1[i].theClass,
+                                theGrade: null,
+                                handinTime: this.format(list2[j].handinTime),
+                                commit: '迟交',
+                                tags: ['迟交'],
+                                correct:'未批改',
+                            })
+                        }
                     }
                     else{
                         data.push({
@@ -235,7 +293,7 @@ export default class STable extends Component {
                             theClass: list1[i].theClass,
                             theGrade: null,
                             commit: '未提交',
-                            correct:'未批改'
+                            correct:'未批改',
                         })
                     }
                 }

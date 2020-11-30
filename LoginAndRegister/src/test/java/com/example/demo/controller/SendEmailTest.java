@@ -35,10 +35,6 @@ public class SendEmailTest {
     }
 
 
-    @Test
-    public void send() {
-        System.out.println(sendEmail.send("1921209391@qq.com"));
-    }
 
     @Test
     public void sendNotice() {

@@ -19,30 +19,6 @@ public class SendEmail {
     private String from;
     private String subject="学易-云作业平台";
 
-    @RequestMapping("/sendEmail")
-    public String send(String to){
-        String code=getCode();
-        String context="你的验证码为"+code;
-        SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
-        simpleMailMessage.setText(context);
-        simpleMailMessage.setTo(to);
-        simpleMailMessage.setSubject(subject);
-        simpleMailMessage.setFrom(from);
-        javaMailSender.send(simpleMailMessage);
-        return code;
-    }
-
-    private String getCode(){
-        String result="";
-        Random random=new Random();
-        for (int i=0;i<6;++i)
-        {
-            result+=random.nextInt(10);
-        }
-        return result;
-    }
-
-
     @RequestMapping(value = "/sendNotice",method= RequestMethod.POST)
     public String sendNotice(@RequestBody JSONObject obj){
         JSONArray tos=obj.getJSONArray("tos");

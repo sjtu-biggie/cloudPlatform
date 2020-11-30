@@ -46,21 +46,6 @@ public class RegisterControllerTest {
         System.out.println("tearDown");
     }
 
-    @Test
-    public void register() {
-        testData.put("username","manager");
-        testData.put("password","test");
-        testData.put("nickname","test");
-        testData.put("sid","541234324243");
-        testData.put("email","11481042653@qq.com");
-        assertEquals("账户名称已存在",registerController.register(testData));
-        testData.put("username","test");
-        assertEquals("学号已存在",registerController.register(testData));
-        testData.put("sid","5180309101011");
-        assertEquals("邮箱已存在",registerController.register(testData));
-        testData.put("email","45276@qq.com");
-        assertEquals("注册成功",registerController.register(testData));
-    }
 
     @Test
     public void updateUser() {

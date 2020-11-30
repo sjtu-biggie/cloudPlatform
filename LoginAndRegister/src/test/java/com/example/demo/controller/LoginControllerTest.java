@@ -41,16 +41,7 @@ public class LoginControllerTest {
         System.out.println("tearDown");
     }
 
-    @Test
-    public void login() {
-        testData.put("username","manager");
-        testData.put("password","manager");
-        assertEquals("成功登陆",loginController.login(testData));
-        testData.put("password","fgjsdafhgj");
-        assertEquals("密码错误",loginController.login(testData));
-        testData.put("username","xyfgasdjgfsd");
-        assertEquals("用户名称错误",loginController.login(testData));
-    }
+
 
     @Test
     public void getUserMessage() {

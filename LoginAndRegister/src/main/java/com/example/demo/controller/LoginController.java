@@ -24,22 +24,6 @@ public class LoginController {
     @Autowired(required = false)
     private LoginService loginService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestBody JSONObject obj) {
-        String username = obj.getString("username");
-        String password = obj.getString("password");
-        User user1 = userMapper.testUsername(username);
-        if (user1 == null) {
-            return "用户名称错误";
-        }
-        User user = userMapper.getUser(username, password);
-        if (user != null) {
-            return "成功登陆";
-        } else {
-            return "密码错误";
-        }
-    }
-
     @RequestMapping(value = "/getUserMessage", method = RequestMethod.POST)
     public User getUserMessage(@RequestBody JSONObject obj) {
         String username = obj.getString("username");

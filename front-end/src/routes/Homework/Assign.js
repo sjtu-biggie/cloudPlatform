@@ -332,8 +332,18 @@ class Assign extends React.Component {
             if (err) {
                 message.warning('请先填写正确的表单')
             } else {
+
                 values.type = values.tp[0];
                 values.range = values.ran.join(',');
+                let modifiedSyllabus = this.state.syllabus;
+                for (let i = modifiedSyllabus.chapterNum; i > 0; --i) {
+                    let prvChapter = 'chapter' + i
+                    if(modifiedSyllabus[prvChapter].type!=="选择题") continue;
+                    if(modifiedSyllabus[prvChapter].answer===undefined||modifiedSyllabus[prvChapter].answer===null){
+                        message.warning('有未设置答案的选择题！')
+                        return;
+                    }
+                }
                 this.getStudentInfo(values);
             }
         });
@@ -623,9 +633,7 @@ class Assign extends React.Component {
                                             /> : null}
                                         <Row>
                                             <Col span={18}>
-                                                <TextArea id='assignTextarea' defaultValue={value.text} style={{height:'80px'}} onSubmit={(e)=>{
-                                                    this.submitContent(e)
-                                                }}/>
+                                                <TextArea id='assignTextarea' defaultValue={value.text} style={{height:'80px'}} onChange={(e)=>{this.submitContent(index,e.target.value)}}/>
                                             </Col>
                                             <Col span={2} offset={1}>
                                                 <Dropdown overlay={ (<Menu>
@@ -654,9 +662,7 @@ class Assign extends React.Component {
                                                 </Menu>)}>
                                                 <Button>{value.type}</Button>
                                                 </Dropdown>
-                                                <Button  onClick={() => {
-                                                    this.submitContent(index)
-                                                }} style={{marginTop: '10px'}}>保存题干</Button>
+
                                             </Col>
                                             <Col span={2} offset={1}>
                                                 <Button type="primary" onClick={() => {
@@ -783,10 +789,10 @@ class Assign extends React.Component {
         this.setState({syllabus: modifiedSyllabus});
     };
 
-    submitContent(index) {
-        let value = document.getElementById('assignTextarea').value;
+    submitContent(index,value) {
         let chapterString = 'chapter' + (index + 1);
         let modifiedSyllabus = this.state.syllabus;
+        console.log(modifiedSyllabus);
         let chapterName = modifiedSyllabus[chapterString];
         chapterName.text = value;
         modifiedSyllabus[chapterString] = chapterName;

@@ -90,7 +90,7 @@ public class RegisterControllerTest {
         testData.put("theClass","");
         assertEquals("没有这样的用户名称",registerController.updateUser(testData));
         testData.put("username","manager");
-        assertEquals("更新成功",registerController.updateUser(testData));
+        assertEquals("更新成功",registerController.updateUserByTeacher(testData));
     }
 
     @Test

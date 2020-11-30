@@ -42,7 +42,7 @@ public class ClassManageControllerTest {
 
     @Test
     public void addClass() {
-        testData.put("classNo", "F1803712");
+        testData.put("classNo", "F18037212");
         testData.put("number", 0);
         testData.put("classManager", "518030910213");
         System.out.println(testData);

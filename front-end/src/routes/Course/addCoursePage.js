@@ -200,7 +200,7 @@ class AddCourse extends React.Component {
         let options1 = [];
         for (let i = 0; i < classes.length; ++i){
             options1.push(
-                <Option key={classes[i]}>{classes[i]}</Option>
+                <Option key={classes[i]} value={classes[i]}>{classes[i]}</Option>
             )
         }
         this.setState({

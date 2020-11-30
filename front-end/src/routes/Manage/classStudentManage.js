@@ -376,9 +376,30 @@ export default class ClassManage extends Component {
                 }
             }).then(msg => {
                 console.log(msg);
+                let newRawMenu=this.state.menu.props.children[0];
+                let newMenu =
+                    <Menu onClick={this.handleClick}>
+                        {
+                            newRawMenu.map(function (item){
+                                if(item.key==-1) return ;
+                                return(<Menu.Item key={item.key} icon={<UserOutlined/>}>
+                                    {item.key}
+                                </Menu.Item>)
+                            })
+                        }
+                        <Menu.Item key={this.state.createClass} icon={<UserOutlined/>}>
+                            {this.state.createClass}
+                        </Menu.Item>
+                        <Menu.Item key="-1" onClick={this.showDrawer}>
+                            创建班级
+                        </Menu.Item>
+                    </Menu>;
                 message.info(this.state.createClass+"已经创建");
+                console.log("创建完成");
+                console.log(newMenu);
                 this.setState({
                     visible: false,
+                    menu:newMenu,
                 });
             }).catch(err => {
                 console.log(err);
@@ -432,19 +453,21 @@ export default class ClassManage extends Component {
             console.log(msg.data);
             var menu =
                 <Menu onClick={this.handleClick}>
-                    {msg.data.map(function (item) {
-                            return (
-                                <Menu.Item key={item.classNo} icon={<UserOutlined/>}>
-                                    {item.classNo}
-                                </Menu.Item>
-                            )
-                        }
-                    )}
+                    {msg.data.map(function (item){
+                        return(
+                            <Menu.Item key={item.classNo} icon={<UserOutlined/>}>
+                                {item.classNo}
+                            </Menu.Item>
+                        )
+                    })}
                     <Menu.Item key="-1" onClick={this.showDrawer}>
                          创建班级
                     </Menu.Item>
                 </Menu>;
             console.log(menu);
+            console.log(menu.props.children);
+            console.log(menu.props.children[0]);
+            console.log(menu.props.children[0][0].key);
             this.setState({
                 menu: menu
             })

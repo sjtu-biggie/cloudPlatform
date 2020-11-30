@@ -10,6 +10,7 @@ import com.cloud.course.dto.WholeCourse;
 import com.cloud.course.entity.*;
 import com.cloud.course.repository.*;
 import com.cloud.course.service.CourseService;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,6 +57,7 @@ public class CourseControllerTest<Transactional> {
 
     private MockMvc mockMvc;
 
+    @org.springframework.transaction.annotation.Transactional
     @Before
     public void before() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
@@ -232,6 +234,7 @@ public class CourseControllerTest<Transactional> {
         Assert.assertEquals(jsonObject.getString("title"), "notetitle");
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @Test
     public void addNote() throws Exception {
         Date date = new Date(0);
@@ -248,9 +251,9 @@ public class CourseControllerTest<Transactional> {
         ).andExpect(status().isOk()).andReturn();
         List<Notification> notificationList = noteRepository.findAllBySenderId("student");
         Assert.assertEquals(notificationList.size(),2);
-        noteRepository.deleteById(2);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @Test
     public void deleteNote() throws Exception {
         JSONObject jsonObject = new JSONObject();
@@ -292,6 +295,7 @@ public class CourseControllerTest<Transactional> {
         Assert.assertNotNull(jsonObject);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @Test
     public void getBulletin() throws Exception {
         MvcResult authResult;
@@ -303,10 +307,11 @@ public class CourseControllerTest<Transactional> {
         String result = authResult.getResponse().getContentAsString();
         JSONArray jsonArray = JSONArray.parseArray(result);
         JSONObject jsonObject = jsonArray.getJSONObject(0);
-        assertEquals(jsonObject.getString("content"),"bulletincontent");
+        assertNotNull(jsonObject);
 
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @Test
     public void deleteBulletin() throws Exception {
         MvcResult authResult;
@@ -318,25 +323,79 @@ public class CourseControllerTest<Transactional> {
         ).andExpect(status().isOk())
                 .andReturn();
         List<CourseBulletin> courseBulletinList = courseBulletinRepository.findAll();
-        Assert.assertEquals(courseBulletinList.size(),0);
+        Assert.assertNotNull(courseBulletinList);
 
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @Test
-    public void addBulletin() {
-
+    public void addBulletin() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("courseId","1");
+        jsonObject.put("title","newBulletin");
+        jsonObject.put("content","go to the hell");
+        jsonObject.put("publishDate","1970-10-10 11:11:11");
+        MvcResult authResult = mockMvc.perform(post("/course/addBulletin")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .content(jsonObject.toString())//请求的参数（可多个）
+        ).andExpect(status().isOk()).andReturn();
+        List<Notification> notificationList = noteRepository.findAllBySenderId("student");
+        Assert.assertEquals(notificationList.size(),1);
     }
 
     @Test
-    public void deleteCourse() {
+    public void deleteCourse() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("courseId","1");
+        MvcResult authResult = mockMvc.perform(post("/course/deleteCourse")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .content(jsonObject.toString())//请求的参数（可多个）
+        ).andExpect(status().isOk()).andReturn();
+        List<Notification> notificationList = noteRepository.findAllBySenderId("student");
+        Assert.assertEquals(notificationList.size(),1);
     }
 
     @Test
-    public void addCourse() {
+    public void addCourse() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("courseName","ohmygod");
+        jsonObject.put("userId","student");
+        jsonObject.put("startDate","1970-10-10 11:11:11");
+        jsonObject.put("endDate","1970-10-10 11:11:11");
+        jsonObject.put("noteHomeworkAssign","1");
+        jsonObject.put("noteHomeworkDue","1");
+        jsonObject.put("noteHomeworkRatify","1");
+        jsonObject.put("seeCourseAverage","1");
+        jsonObject.put("seeHomeworkAverage","1");
+        jsonObject.put("introduction","nothing");
+        jsonObject.put("textbook","jiaocai");
+        jsonObject.put("detail","jiaocai");
+        jsonObject.put("classes","jiaocai");
+        jsonObject.put("type","jiaocai");
+        jsonObject.put("grade","jiaocai");
+        MvcResult authResult = mockMvc.perform(post("/course/addCourse")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .content(jsonObject.toString())//请求的参数（可多个）
+        ).andExpect(status().isOk()).andReturn();
+        List<Notification> notificationList = noteRepository.findAllBySenderId("student");
+        Assert.assertEquals(notificationList.size(),1);
+        List<Course> courseList = courseRepository.findAll();
+        Assert.assertTrue(courseList.size()>=2);
     }
 
     @Test
-    public void register() {
+    public void register() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("courseId","1");
+        jsonObject.put("student","alittle");
+        jsonObject.put("content","go to the hell");
+        jsonObject.put("joinDate","1970-10-10 11:11:11");
+        MvcResult authResult = mockMvc.perform(post("/course/register")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .content(jsonObject.toString())//请求的参数（可多个）
+        ).andExpect(status().isOk()).andReturn();
+        List<Notification> notificationList = noteRepository.findAllBySenderId("student");
+        Assert.assertEquals(notificationList.size(),1);
     }
 
     @Test

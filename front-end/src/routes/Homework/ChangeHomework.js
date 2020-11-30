@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker} from 'antd'
+import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Checkbox} from 'antd'
 import DraftDemo from './Draft'
 import UploadDemo from './upload'
 import axios from "axios";
@@ -245,7 +245,7 @@ class ChangeHomework extends React.Component {
             content: this.state.content === null ? this.state.homework.content : this.state.content,
             contentUpload: this.state.conUpload === null ? this.state.homework.contentUpload:this.state.conUpload,
             courseId: this.state.homework.courseId,
-            Delayable: this.state.homework.delayable,
+            delayable: homework.delayable,
             endTime: homework.endTime,
             startTime: homework.startTime,
             handinAlready: this.state.homework.handinAlready,
@@ -263,6 +263,7 @@ class ChangeHomework extends React.Component {
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/editTeacherHomework',
+            //url: 'http://localhost:8080/editTeacherHomework',
             data:obj,
             headers: {
                 withCredentials: true,
@@ -290,6 +291,11 @@ class ChangeHomework extends React.Component {
                 message.success('提交成功');
                 values.startTime = this.format(values.startDate);
                 values.endTime = this.format(values.endDate);
+                if(values.delayable === true){
+                    values.delayable = 1;
+                }else{
+                    values.delayable = 0;
+                }
                 console.log(values);
                 this.editHomework(values);
             }
@@ -403,6 +409,20 @@ class ChangeHomework extends React.Component {
                                     <DatePicker  disabled={this.state.ableState} placeholder={this.format(this.state.homework.endTime)} onChange={() => {
 
                                     }}> </DatePicker>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem label='是否允许迟交' {...formItemLayout} required>
+                            {
+                                getFieldDecorator('delayable', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请填写是否允许迟交'
+                                        }
+                                    ]
+                                })(
+                                    <Checkbox disabled={this.state.ableState} defaultchecked = {this.state.homework.delayable}>允许迟交</Checkbox>
                                 )
                             }
                         </FormItem>

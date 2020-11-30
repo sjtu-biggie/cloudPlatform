@@ -381,7 +381,6 @@ export default class ClassManage extends Component {
                     <Menu onClick={this.handleClick}>
                         {
                             newRawMenu.map(function (item){
-                                if(item.key==-1) return ;
                                 return(<Menu.Item key={item.key} icon={<UserOutlined/>}>
                                     {item.key}
                                 </Menu.Item>)
@@ -467,7 +466,6 @@ export default class ClassManage extends Component {
             console.log(menu);
             console.log(menu.props.children);
             console.log(menu.props.children[0]);
-            console.log(menu.props.children[0][0].key);
             this.setState({
                 menu: menu
             })

@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SendMessageTest {
-    @Autowired
+    @Autowired(required = false)
     private SendMessage sendMessage;
 
     @Before
@@ -22,10 +22,10 @@ public class SendMessageTest {
 
     @After
     public void tearDown() throws Exception {
-        System.out.println(sendMessage.sendMessage("15216678607"));
     }
 
     @Test
     public void sendMessage() {
+        System.out.println(sendMessage.sendMessage("15216678607"));
     }
 }

@@ -1,11 +1,9 @@
 package com.example.bulletin.demo.service.serviceImpl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.bulletin.demo.dao.BulletinDao;
 import com.example.bulletin.demo.entity.CourseBulletin;
 import com.example.bulletin.demo.service.BulletinService;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,12 +27,12 @@ public class BulletinServiceImpl implements BulletinService {
     @Override
     public Page<CourseBulletin> getPageBulletin(String id, Pageable p){
         int courseId = parseInt(id);
-        return BulletinDao.getPageBulletin(courseId,p);
+        return bulletinDao.getPageBulletin(courseId,p);
     }
     @Override
     public List<CourseBulletin> getBulletin(String id){
         int courseId = parseInt(id);
-        return BulletinDao.getBulletin(courseId);
+        return bulletinDao.getBulletin(courseId);
     }
     @Override
     public void addBulletin(JSONObject object){
@@ -50,12 +48,12 @@ public class BulletinServiceImpl implements BulletinService {
             e.printStackTrace();
         }
         CourseBulletin courseBulletin=new CourseBulletin(courseId,title,content,publish_date);
-        BulletinDao.saveBulletin(courseBulletin);
+        bulletinDao.saveBulletin(courseBulletin);
     }
     @Override
     public void deleteBulletin(String id){
         int bulletinId = parseInt(id);
-        CourseBulletin courseBulletin = BulletinDao.getOneBulletin(bulletinId);
-        BulletinDao.deleteBulletin(courseBulletin);
+        CourseBulletin courseBulletin = bulletinDao.getOneBulletin(bulletinId);
+        bulletinDao.deleteBulletin(courseBulletin);
     }
 }

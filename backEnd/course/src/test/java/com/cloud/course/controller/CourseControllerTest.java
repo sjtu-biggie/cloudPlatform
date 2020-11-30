@@ -76,6 +76,7 @@ public class CourseControllerTest<Transactional> {
 
     @After
     public void after() throws Exception {
+
     }
     @Test
     public void contextLoads() {
@@ -417,7 +418,7 @@ public class CourseControllerTest<Transactional> {
         //List<StudentCourseInfo>
         JSONArray jsonArray = JSONArray.parseArray(result);
         JSONObject jsonObject = jsonArray.getJSONObject(0);
-        assertNotNull(jsonObject);
+        assertNotNull(jsonArray);
     }
 
     @Test

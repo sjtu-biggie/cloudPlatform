@@ -386,8 +386,14 @@ public class CourseControllerTest<Transactional> {
     @Test
     public void register() throws Exception {
         JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("nickname","shuai");
+        jsonObject2.put("theClass","F1803422");
+        jsonObject2.put("sid","sshuai");
         jsonObject.put("courseId","1");
-        jsonObject.put("student","alittle");
+        JSONArray jsonArray=new JSONArray();
+        jsonArray.add(jsonObject2);
+        jsonObject.put("student",jsonArray);
         jsonObject.put("content","go to the hell");
         jsonObject.put("joinDate","1970-10-10 11:11:11");
         MvcResult authResult = mockMvc.perform(post("/course/register")//使用get方式来调用接口。
@@ -396,17 +402,52 @@ public class CourseControllerTest<Transactional> {
         ).andExpect(status().isOk()).andReturn();
         List<Notification> notificationList = noteRepository.findAllBySenderId("student");
         Assert.assertEquals(notificationList.size(),1);
+        Assert.assertNotNull(authResult);
     }
 
     @Test
-    public void getCourseStudent() {
+    public void getCourseStudent() throws Exception {
+        MvcResult authResult;
+        authResult = mockMvc.perform(get("/course/getCourseStudent")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .param("courseId", "1")//请求的参数（可多个）
+        ).andExpect(status().isOk())
+                .andReturn();
+        String result = authResult.getResponse().getContentAsString();
+        //List<StudentCourseInfo>
+        JSONArray jsonArray = JSONArray.parseArray(result);
+        JSONObject jsonObject = jsonArray.getJSONObject(0);
+        assertNotNull(jsonObject);
     }
 
     @Test
-    public void deleteCourseStudent() {
+    public void deleteCourseStudent() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("courseId","1");
+        jsonObject.put("userId","student");
+        MvcResult authResult = mockMvc.perform(post("/course/deleteCourseStudent")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .content(jsonObject.toString())//请求的参数（可多个）
+        ).andExpect(status().isOk()).andReturn();
+        List<Notification> notificationList = noteRepository.findAllBySenderId("student");
+        Assert.assertEquals(notificationList.size(),1);
+        List<StudentCourseInfo> studentCourseInfoList = studentCourseRepository.getCourseStudent(1);
+        assertTrue(studentCourseInfoList.size()>0);
     }
 
     @Test
-    public void updateCourseStudent() {
+    public void updateCourseStudent() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("courseId","1");
+        jsonObject.put("userId","student");
+        jsonObject.put("grade","100");
+        MvcResult authResult = mockMvc.perform(post("/course/updateCourseStudent")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .content(jsonObject.toString())//请求的参数（可多个）
+        ).andExpect(status().isOk()).andReturn();
+        List<Notification> notificationList = noteRepository.findAllBySenderId("student");
+        Assert.assertEquals(notificationList.size(),1);
+        List<StudentCourseInfo> studentCourseInfoList = studentCourseRepository.getCourseStudent(1);
+        assertTrue(studentCourseInfoList.size()>0);
     }
 }

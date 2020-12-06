@@ -32,6 +32,9 @@ const IconText = ({ type, text }) => (
 class ListDemo extends React.Component {
   state = {
     size: 'default',
+    role:"teacher",
+    step:0,
+    helpType:0,
     bordered: true,
     data2: [],
     loading: false,
@@ -40,26 +43,12 @@ class ListDemo extends React.Component {
   };
 
   componentDidMount() {
+    let storage = window.localStorage;
+    let role = storage.getItem("type");
     this.setState({
-      loading: true,
+      role: role
     });
-    this.getData2();
-    this.setState({
-      loading: false
-    })
   }
-
-  getData2 = () => {
-    this.setState({
-      loadingMore: true
-    });
-    axios.get('https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo').then(res => {
-      this.setState({
-        data2: this.state.data2.concat(res.data.results),
-        loadingMore: false
-      })
-    })
-  };
 
   render() {
       const { editorState,contentState } = this.state;
@@ -73,15 +62,62 @@ class ListDemo extends React.Component {
       </div>
     );
     return (
-      <div>
+      <Card>
         <CustomBreadcrumb arr={['帮助']}/>
-          <Card  bordered={false} className='card-item' title={this.state.title} style={{minHeight:200}}>
-
-              <Row>
-                  <Col span={20}>{this.state.content}</Col>
-              </Row>
-          </Card>
-      </div>
+          <div  className='card-item'  style={{minHeight:70}}>
+            <p   style={{position:"absolute",fontSize:70,left:"25%",fontFamily:"黑体"}}>
+              学易-云作业平台 ® 帮助文档
+            </p>
+          </div>
+        <Row gutter={10}>
+          <Col span={12}  >
+            <Card     cover={
+              <img
+                  height={350}
+                  alt="example"
+                  src={require("../../../pic/courseset.jpg")}
+              />
+            } bordered={false} className='card-item' style={{height:350}} >
+              <p style={{position:'absolute',left:"35%",top:"50%",fontSize:'70px',fontWeight:'bold',color:"white"}} onClick={()=>{this.setState({helpType:1})}}> 课程创建 </p>
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card     cover={
+              <img
+                  height={350}
+                  alt="example"
+                  src={require("../../../pic/coursemanage.jpg")}
+              />
+            } bordered={false} className='card-item' style={{height:350}} >
+              <p style={{position:'absolute',left:"35%",top:"50%",fontSize:'70px',fontWeight:'bold',color:"white"}}onClick={()=>{this.setState({helpType:2})}}> 课程管理 </p>
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={10}>
+          <Col span={12}  >
+            <Card     cover={
+              <img
+                  height={350}
+                  alt="example"
+                  src={require("../../../pic/homeworkassign.jpg")}
+              />
+            } bordered={false} className='card-item' style={{height:350}} >
+              <p style={{position:'absolute',left:"35%",top:"50%",fontSize:'70px',fontWeight:'bold',color:"white"}} onClick={()=>{this.setState({helpType:3})}}> 作业布置 </p>
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card     cover={
+              <img
+                  height={350}
+                  alt="example"
+                  src={require("../../../pic/gradeBackground.jpg")}
+              />
+            } bordered={false} className='card-item' style={{height:350}} >
+              <p style={{position:'absolute',left:"35%",top:"50%",fontSize:'70px',fontWeight:'bold',color:"white"}} onClick={()=>{this.setState({helpType:4})}}> 作业批改 </p>
+            </Card>
+          </Col>
+        </Row>
+      </Card>
     )
   }
 }

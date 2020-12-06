@@ -77,12 +77,15 @@ class HomeworkCommit extends React.Component {
         });
         console.log(homework, teacherHomework,);
         let objJson = [];
-        for (let i =0;i<teacherHomework.syllabus.chapterNum;++i){
-            objJson.push([]);
+        if(teacherHomework!==null&&teacherHomework.type==='客观题'){
+            for (let i =0;i<teacherHomework.syllabus.chapterNum;++i){
+                objJson.push([]);
+            }
         }
         this.setState({
             objJson:objJson
-        })
+        });
+
         if (homework.title !== null && homework.title !== undefined && teacherHomework.title !== undefined) {
             this.setState({
                 loading: false

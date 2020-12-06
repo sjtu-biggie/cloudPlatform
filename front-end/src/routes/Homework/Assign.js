@@ -58,7 +58,7 @@ class Assign extends React.Component {
         },
         //0 主观题，1 客观题
         homeworkType: 1,
-        text: '加载中',
+        text: '',
         dfileList: [],
         disabled: false,
         homeworkId:null,
@@ -115,7 +115,7 @@ class Assign extends React.Component {
     getStudentInfo = async (values)=>{
         let ob = {
             classIds: values.ran
-        }
+        };
         console.log(ob);
         let config = {
             method: 'post',
@@ -341,14 +341,22 @@ class Assign extends React.Component {
             } else {
                 values.type = values.tp[0];
                 values.range = values.ran.join(',');
-                let modifiedSyllabus = this.state.syllabus;
-                for (let i = modifiedSyllabus.chapterNum; i > 0; --i) {
-                    let prvChapter = 'chapter' + i
-                    if(modifiedSyllabus[prvChapter].type!=="选择题") continue;
-                    if(modifiedSyllabus[prvChapter].answer===undefined||modifiedSyllabus[prvChapter].answer===null){
-                        message.warning('有未设置答案的选择题！')
-                        return;
+                if(values.type==='客观题'){
+                    let modifiedSyllabus = this.state.syllabus;
+                    for (let i = modifiedSyllabus.chapterNum; i > 0; --i) {
+                        let prvChapter = 'chapter' + i
+                        if(modifiedSyllabus[prvChapter].type!=="选择题") continue;
+                        if(modifiedSyllabus[prvChapter].answer===undefined||modifiedSyllabus[prvChapter].answer===null){
+                            message.warning('有未设置答案的选择题！')
+                            return;
+                        }
                     }
+                }else{
+                    let t = document.getElementById("ttextarea")
+                    values.content = t.value;
+                    this.setState({
+                        content:t.value
+                    })
                 }
                 this.getStudentInfo(values);
             }
@@ -550,71 +558,79 @@ class Assign extends React.Component {
                             }
                         </FormItem>
                         {this.state.homeworkType === 0 ?
-                            <div><FormItem style={{width: '100%', margin: '0 auto'}} label='作业详情' {...DraftLayout}>
-                                {
-                                    (
-                                        <DraftDemo parent={this} flag='content'/>
-                                    )
-                                }
-                            </FormItem>
-                                <Upload
-                                    flieList={this.state.dfileList}
-                                    accept=".png,.jpg,.jpeg"
-                                    action={'http://106.13.209.140:8383/uploadNotSave'}
-                                    onChange={({file, fileList}) => {
-                                        if (file.status !== 'uploading') {
-                                            console.log(file, file.originFileObj, fileList);
-                                            let fr = new FileReader();
-                                            fr.onload = async (e) => {
-                                                // target.result 该属性表示目标对象的DataURL
-                                                console.log(e.target.result);
-                                                let config = {
-                                                    method: 'post',
-                                                    data: {
-                                                        "img": e.target.result,
-                                                        //"url": "F:/Documentation/Courseware/Software Introduction 2021/cloudPlatform/front-end/src/pic/deadHomework1.jpg",
-                                                        //是否需要识别结果中每一行的置信度，默认不需要。 true：需要 false：不需要
-                                                        "prob": false,
-                                                        //是否需要单字识别功能，默认不需要。 true：需要 false：不需要
-                                                        "charInfo": false,
-                                                        //是否需要自动旋转功能，默认不需要。 true：需要 false：不需要
-                                                        "rotate": false,
-                                                        //是否需要表格识别功能，默认不需要。 true：需要 false：不需要
-                                                        "table": false,
-                                                        //字块返回顺序，false表示从左往右，从上到下的顺序，true表示从上到下，从左往右的顺序，默认false
-                                                        "sortPage": false
-                                                    },
-                                                    url: 'https://ocrapi-advanced.taobao.com/ocrservice/advanced',
-                                                    headers: {
-                                                        Authorization: 'APPCODE 41d14f8d1c4e405bb2c800e1cfb72272'
-                                                    }
-                                                };
-                                                const result = await axios(config)
-                                                    .then(function (response) {
-                                                        console.log(response.data);
-                                                        return response.data;
-                                                    })
-                                                    .catch(function (error) {
-                                                        console.log(error);
-                                                    });
-                                                file.status = 'removed';
+                            <div>
+                                <FormItem label='作业内容' {...formItemLayout} >
+                                    {
+                                        getFieldDecorator('content', {
+                                            rules: [
+                                                {
+                                                    required: true,
+                                                    message: ''
+                                                }
+                                            ]
+                                        })(
+                                            <div>
+                                                <TextArea id={"ttextarea"} style={{height:'150px'}}  parent={this} flag='content'  />
+                                                <Upload
+                                                    flieList={this.state.dfileList}
+                                                    accept=".png,.jpg,.jpeg"
+                                                    action={'http://106.13.209.140:8383/uploadNotSave'}
+                                                    onChange={({file, fileList}) => {
+                                                        if (file.status !== 'uploading') {
+                                                            console.log(file, file.originFileObj, fileList);
+                                                            let fr = new FileReader();
+                                                            fr.onload = async (e) => {
+                                                                // target.result 该属性表示目标对象的DataURL
+                                                                console.log(e.target.result);
+                                                                let config = {
+                                                                    method: 'post',
+                                                                    data: {
+                                                                        "img": e.target.result,
+                                                                        //"url": "F:/Documentation/Courseware/Software Introduction 2021/cloudPlatform/front-end/src/pic/deadHomework1.jpg",
+                                                                        //是否需要识别结果中每一行的置信度，默认不需要。 true：需要 false：不需要
+                                                                        "prob": false,
+                                                                        //是否需要单字识别功能，默认不需要。 true：需要 false：不需要
+                                                                        "charInfo": false,
+                                                                        //是否需要自动旋转功能，默认不需要。 true：需要 false：不需要
+                                                                        "rotate": false,
+                                                                        //是否需要表格识别功能，默认不需要。 true：需要 false：不需要
+                                                                        "table": false,
+                                                                        //字块返回顺序，false表示从左往右，从上到下的顺序，true表示从上到下，从左往右的顺序，默认false
+                                                                        "sortPage": false
+                                                                    },
+                                                                    url: 'https://ocrapi-advanced.taobao.com/ocrservice/advanced',
+                                                                    headers: {
+                                                                        Authorization: 'APPCODE 41d14f8d1c4e405bb2c800e1cfb72272'
+                                                                    }
+                                                                };
+                                                                const result = await axios(config)
+                                                                    .then(function (response) {
+                                                                        console.log(response.data);
+                                                                        return response.data;
+                                                                    })
+                                                                    .catch(function (error) {
+                                                                        console.log(error);
+                                                                    });
+                                                                file.status = 'removed';
+                                                                this.setState({
+                                                                    text: this.state.text+result.content
+                                                                })
+                                                                let a = document.getElementById("ttextarea");
+                                                                a.value=a.value+result.content;
+                                                            };
+                                                            fr.readAsDataURL(file.originFileObj);
 
-                                                this.setState({
-                                                    text: result.content
-                                                })
-                                            };
-                                            fr.readAsDataURL(file.originFileObj);
+                                                        }
 
-                                        }
-
-                                    }}
-                                >
-                                    <Popconfirm placement="top" title={this.state.text} okText="确认">
-                                        <Button style={{transform: 'translateX(900px)'}}
-                                        ><Icon type="upload"/>从图片中识别作业内容</Button>
-                                    </Popconfirm>
-
-                                </Upload>
+                                                    }}
+                                                >
+                                                    <Button
+                                                    ><Icon type="upload"/>从图片中识别作业内容</Button>
+                                                </Upload>
+                                            </div>
+                                        )
+                                    }
+                                </FormItem>
                                 <FormItem label='上传作业附件' {...formItemLayout} >
                                     {
                                         (
@@ -738,7 +754,7 @@ class Assign extends React.Component {
                 <BackTop visibilityHeight={200} style={{right: 50}}/>
             </div>
         )
-    }
+    };
     setAnswer = (index, smallName) => {
         let chapterName = 'chapter' + (index + 1);
         let modifiedSyllabus = this.state.syllabus;

@@ -222,7 +222,7 @@ class RegisterForm extends React.Component {
                     onFocus={() => this.setState({focusItem: 4})}
                     onBlur={() => this.setState({focusItem: -1})}
                     maxLength={16}
-                    placeholder='学号'
+                    placeholder='学号/工号'
                     addonBefore={<span className='iconfont icon-fenlei' style={focusItem === 4 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>

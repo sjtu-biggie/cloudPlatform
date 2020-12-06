@@ -20,6 +20,7 @@ import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
 import CommitTable from './CommitTable'
 import Rating from "./Rate";
+import {withRouter} from 'react-router'
 class RatePage extends React.Component {
   state = {
     size: 'default',
@@ -65,10 +66,11 @@ class RatePage extends React.Component {
   render=()=> {
     return (
       <div>
-        <CustomBreadcrumb arr={['作业', '批改']}/>
+        <CustomBreadcrumb arr={['作业', '批改']} style={{display:'inline'}}/>
         <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
           <Rating homework = {this.state.homework} index={this.props.match.params.index} handinAlready={this.props.match.params.handinAlready}/>
         </Card>
+        <Button style={{display:'inline'}} type="dashed" size={'big'} onClick={()=>{this.props.history.push("/home/homework/General/"+this.state.homework.homeworkId)}}>返回</Button>
         <BackTop visibilityHeight={200} style={{right: 50}}/>
       </div>
     )
@@ -93,4 +95,4 @@ const styles = {
   },
 };
 
-export default RatePage
+export default withRouter(RatePage)

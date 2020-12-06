@@ -49,7 +49,7 @@ class Home extends React.Component {
         }).catch(err=>{
             console.log(err)
         })
-
+        window.location.reload();
     };
 
     getUserInfo = async (username) => {
@@ -87,7 +87,7 @@ class Home extends React.Component {
 
     };
 
-    render() {
+    render=()=> {
         if(this.state.loading){
             return  <div>
                 <h3 style={styles.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
@@ -142,7 +142,8 @@ class Home extends React.Component {
                                             marginTop: '155px',
                                             height: '600px',
                                             width: '800px'
-                                        }}>
+                                        }}
+                                        >
                                             <Row>
                                                 <Col span={6}>
                                                     <img /*width={275}*/ alt="logo" height={530}

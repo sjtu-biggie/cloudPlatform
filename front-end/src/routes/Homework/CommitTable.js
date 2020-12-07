@@ -6,6 +6,7 @@ import axios from 'axios'
 import * as XLSX from 'xlsx';
 
 import {Router} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
 const columns = [
     { title: '用户名', dataIndex: 'username',key:'username' },
@@ -75,8 +76,8 @@ class EditText extends Component {
     }
 };
 
-
-export default class STable extends Component {
+@withRouter
+export default class  STable extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -384,7 +385,17 @@ export default class STable extends Component {
                             key: 'cor',
                             render: (text,record,index) => (
                                 record.commit === "已提交"?
-                                <a href={"/home/homework/rate/"+this.state.handinAlready+"/"+this.state.homeworkId+"/"+record.username+"/"+record._index+"/"}>批改</a>:null),
+                                <Button style={{}} onClick={()=>{
+                                    let assignList = [];
+                                    let i =0;
+                                    for (let homework of this.state.studentHomework){
+                                        if(homework.handinTime!==null){
+                                            assignList.push(i);
+                                        }
+                                        ++i;
+                                    }
+                                    localStorage.setItem("assignList",assignList.toString());
+                                    this.props.history.push("/home/homework/rate/"+this.state.handinAlready+"/"+this.state.homeworkId+"/"+record.username+"/"+record._index+"/")}}>批改</Button>:null),
                         }]}
                         dataSource={renderData}/>
                 </Card>

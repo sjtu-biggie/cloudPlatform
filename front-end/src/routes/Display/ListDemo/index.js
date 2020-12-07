@@ -68,8 +68,8 @@ class ListDemo extends React.Component {
               <Card>
                 <CustomBreadcrumb arr={['帮助']}/>
                 <div  className='card-item'  style={{minHeight:70}}>
-                  <p   style={{position:"absolute",fontSize:70,left:"25%",fontFamily:"黑体"}}>
-                    学易-云作业平台 ® 帮助文档
+                  <p   style={{position:"absolute",fontSize:70,left:"20%",fontFamily:"黑体"}}>
+                    学易-云作业平台 ® 教师帮助文档
                   </p>
                 </div>
                 <Row gutter={10}>
@@ -122,6 +122,65 @@ class ListDemo extends React.Component {
                 </Row>
               </Card>
           )
+        }else{
+            return (
+                <Card>
+                    <CustomBreadcrumb arr={['帮助']}/>
+                    <div  className='card-item'  style={{minHeight:70}}>
+                        <p   style={{position:"absolute",fontSize:70,left:"20%",fontFamily:"黑体"}}>
+                            学易-云作业平台 ® 学生帮助文档
+                        </p>
+                    </div>
+                    <Row gutter={10}>
+                        <Col span={12}  >
+                            <Card     cover={
+                                <img
+                                    height={350}
+                                    alt="example"
+                                    src={require("../../../pic/coursehandin.jpg")}
+                                />
+                            } bordered={false} className='card-item' style={{height:350}} >
+                                <p style={{position:'absolute',left:"35%",top:"50%",fontSize:'70px',fontWeight:'bold',color:"black"}} onClick={()=>{this.setState({helpType:1})}}> 提交作业 </p>
+                            </Card>
+                        </Col>
+                        <Col span={12}>
+                            <Card     cover={
+                                <img
+                                    height={350}
+                                    alt="example"
+                                    src={require("../../../pic/homeworkassign.png")}
+                                />
+                            } bordered={false} className='card-item' style={{height:350}} >
+                                <p style={{position:'absolute',left:"35%",top:"50%",fontSize:'70px',fontWeight:'bold',color:"black"}} onClick={()=>{this.setState({helpType:2})}}> 查看作业 </p>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row gutter={10}>
+                        <Col span={12}  >
+                            <Card     cover={
+                                <img
+                                    height={350}
+                                    alt="example"
+                                    src={require("../../../pic/coursemanage.png")}
+                                />
+                            } bordered={false} className='card-item' style={{height:350}} >
+                                <p style={{position:'absolute',left:"35%",top:"50%",fontSize:'70px',fontWeight:'bold',color:"black"}} onClick={()=>{this.setState({helpType:3})}}> 浏览课程 </p>
+                            </Card>
+                        </Col>
+                        <Col span={12}>
+                            <Card     cover={
+                                <img
+                                    height={350}
+                                    alt="example"
+                                    src={require("../../../pic/gradeBackground.png")}
+                                />
+                            } bordered={false} className='card-item' style={{height:350}} >
+                                <p style={{position:'absolute',left:"35%",top:"50%",fontSize:'70px',fontWeight:'bold',color:"black"}} onClick={()=>{this.setState({helpType:4})}}> 统计数据 </p>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Card>
+            )
         }
         break;
       case 1:
@@ -183,6 +242,45 @@ class ListDemo extends React.Component {
               </Card>
 
           )
+        }else{
+            return (
+                <Card style={{fontSize:20}}>
+                    <CustomBreadcrumb arr={['帮助']}/>
+                    <h1 style={{fontWeight:'bold'}}>提交作业</h1>
+                    <p>
+                        进入一个课程的作业页面有两种方式：1.从主页左侧导航栏的“作业”栏目点击进入 2.从每个课程的主页上方的“作业”版块点击进入。<br/>
+                        作业页面的每项作业栏目内会显示提交与批改的情况，点击一次未提交的作业开始进行作业提交。<br/>
+                        客观题的提交较为简单，如果是选择题，你需要在每个题目下面的选择框中点击选择你认为正确的选项；如果是填空题，你需要在题目下方的答题框中依次填入每个空的答案。<br/>
+                        完成后点击页面下方的“提交”按钮。系统会根据你的教师上传的答案自动为你批改。
+                    </p>
+                    <img
+                        height={500}
+                        alt="example"
+                        src={require("../../../pic/g1.png")}
+                    />
+                    <br/>
+                    <p>
+                        主观题的提交界面如图所示，你可以选择在下方的文本框中键入你的答案。<br/>
+                        云作业平台支持不同形式的作业的提交以减轻学生工作量，所以你同样可以选择上传本地作业文件而不是花费时间打字——点击文本框左下角的“上传附件”按钮选择本地文件进行上传。<br/>
+                        云作业平台支持上传的文件类型有pdf与doc文档、图片。完成作业后点击页面下方的“提交”按钮。系统会把你的作业上传到教师端由教师进行批改。
+                    </p>
+                    <img
+                        height={500}
+                        alt="example"
+                        src={require("../../../pic/g2.png")}
+                    />
+                    <br/>
+                    <p>
+                        已经提交过的作业，只要未截止都可以按照上述的相同流程重新提交。
+                    </p>
+                    <Button type={"dashed"} style={{float:"left"}} onClick={()=>{this.setState({helpType:0})}} >
+                        返回帮助主页
+                    </Button>
+                    <Button type={"dashed"} style={{float:"left",marginLeft:15}} >
+                        反馈文档错误
+                    </Button>
+                </Card>
+            )
         }
         break;
       case 2:
@@ -225,8 +323,54 @@ class ListDemo extends React.Component {
               </Card>
 
           )
+        }else{
+            return (
+                <Card style={{fontSize:20}}>
+                    <CustomBreadcrumb arr={['帮助']}/>
+                    <h1 style={{fontWeight:'bold'}}>查看作业</h1>
+                    <p>
+                        进入一个课程的作业页面有两种方式：1.从主页左侧导航栏的“作业”栏目点击进入 2.从每个课程的主页上方的“作业”版块点击进入。<br/>
+                        作业页面的每项作业栏目内会显示提交与批改的情况，点击一次未提交的作业开始进行作业提交。<br/>
+                    </p>
+                    <img
+                        height={500}
+                        alt="example"
+                        src={require("../../../pic/g1.png")}
+                    />
+                    <br/>
+                    <p>
+                        ①作业页面的每项作业栏目内会显示提交与批改的情况，点击一次已批改的作业查看作业批改情况。<br/>
+                        页面从上到下会分别显示题干内容、你的答案、本次得分，以及教师对本次作业的评语。如果本次作业上传了图片文件，反馈给学生端的原图还会附带有教师直接做在上面的批注。<br/>
+                        已批改的作业只能查看不能做编辑操作。
+                    </p>
+                    <img
+                        height={500}
+                        alt="example"
+                        src={require("../../../pic/h1.png")}
+                    />
+                    <br/>
+                    <p>
+                        ②在左侧的导航栏有“错题”栏目，点击可以进入错题本。错题本统计了你每次作业的错题情况，并收集了所有你在作业中没有得满分的题目。<br/>
+                        如图所示，页面上半部分会显示你各次作业的错题率，横轴为时间，纵轴为错题率。下半部分是收集的错题,包括题干内容和正确答案。<br/>
+                        最上方有搜索栏，可以输入题目关键词，点击“搜索”查找错题中的具体题目。
+                    </p>
+                    <img
+                        height={500}
+                        alt="example"
+                        src={require("../../../pic/h2.png")}
+                    />
+                    <p>
+                        ③以上是查看作业的全部内容。
+                    </p>
+                    <Button type={"dashed"} style={{float:"left"}} onClick={()=>{this.setState({helpType:0})}} >
+                        返回帮助主页
+                    </Button>
+                    <Button type={"dashed"} style={{float:"left",marginLeft:15}} >
+                        反馈文档错误
+                    </Button>
+                </Card>
+            )
         }
-        break;
       case 3:
         if(this.state.role==='teacher'){
           return (
@@ -283,8 +427,47 @@ class ListDemo extends React.Component {
               </Card>
 
           )
+        }else{
+            return (
+                <Card style={{fontSize:20}}>
+                    <CustomBreadcrumb arr={['帮助']}/>
+                    <h1 style={{fontWeight:'bold'}}>浏览课程</h1>
+                    <p>
+                        ①从侧边栏中选中课程项，点击一门课程进入该课程的主页。<br/>
+                        你可以进入任何一位老师开设的课程，但是部分信息只有在你参加的课程中才能看到。<br/>
+                        主页所显示的是课程的基本信息与课程大纲。你可以点击下方的课程大纲查看教学计划，并以此为基础进行预习复习。<br/>
+                    </p>
+                    <img
+                        height={500}
+                        alt="example"
+                        src={require("../../../pic/i1.png")}
+                    />
+                    <br/>
+                    <p>
+                        ②点击页面上方“公告”进入公告版块。里面是本课程教师发布的所有公告，可以点击查看。公告内容一般为课程学习要求、课前预习任务、作业修改通知等等。<br/>
+                        比较要紧的公告发布时你会在主页右上角的通知栏收到提醒。<br/>
+                        ③页面上方“作业”对应作业版块，已在第2、3节详细介绍，不再赘述。<br/>
+                        ④点击页面上方的“数据”查看你历次作业的数据统计。包括作历次作业的得分、排名、提交时间等等。<br/>
+                        考虑到部分课程的教师不愿向学生公布作业排名（或者认为这一数据没有意义），此时该页面的“位次比例”、“总排名、“作业排名变化”这几项均显示为“上锁”图标（如下图所示），表示排名位次不公布。
+                    </p>
+                    <img
+                        height={500}
+                        alt="example"
+                        src={require("../../../pic/i2.png")}
+                    />
+                    <br/>
+                    <p>
+                        ⑤课程页面会显示你的所有课程，包括之前已结课的课程。我们相信这有助于你初三或高三的回顾与复习。查看历史课程的流程与查看正在上的课程的流程相同，不再赘述
+                    </p>
+                    <Button type={"dashed"} style={{float:"left"}} onClick={()=>{this.setState({helpType:0})}} >
+                        返回帮助主页
+                    </Button>
+                    <Button type={"dashed"} style={{float:"left",marginLeft:15}} >
+                        反馈文档错误
+                    </Button>
+                </Card>
+            )
         }
-        break;
       case 4:
         if(this.state.role==='teacher'){
           return (
@@ -328,6 +511,22 @@ class ListDemo extends React.Component {
               </Card>
 
           )
+        }else{
+            return (
+                <Card style={{fontSize:20}}>
+                    <CustomBreadcrumb arr={['帮助']}/>
+                    <h1 style={{fontWeight:'bold'}}>统计数据</h1>
+                    <p>
+                        学易-云作业平台为学生用户提供了多种多样的统计数据，包括错题率，课程作业完成率，课程作业平均分，作业提交时间记录等等。
+                    </p>
+                    <Button type={"dashed"} style={{float:"left"}} onClick={()=>{this.setState({helpType:0})}} >
+                        返回帮助主页
+                    </Button>
+                    <Button type={"dashed"} style={{float:"left",marginLeft:15}} >
+                        反馈文档错误
+                    </Button>
+                </Card>
+            )
         }
         break;
     }

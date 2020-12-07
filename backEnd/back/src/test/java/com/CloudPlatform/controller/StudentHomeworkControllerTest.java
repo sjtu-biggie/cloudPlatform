@@ -63,6 +63,63 @@ public class StudentHomeworkControllerTest<Transactional> {
     }
 
     @Test
+    public void getPageHomeworkOfStudents() throws Exception {
+        MvcResult authResult;
+        authResult = mockMvc.perform(get("/getPageHomeworkOfStudents")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .param("homeworkId", "1")
+                .param("page", "1")
+                .param("size", "1")
+        ).andExpect(status().isOk())
+                .andReturn();
+        String result = authResult.getResponse().getContentAsString();
+
+        assertNotNull(result);
+    }
+
+    @Test
+    public void getStudentHomeworkOne() throws Exception {
+        MvcResult authResult;
+        authResult = mockMvc.perform(get("/getStudentHomeworkOne")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .param("studentId", "student")
+                .param("homeworkId", "1")
+        ).andExpect(status().isOk())
+                .andReturn();
+        String result = authResult.getResponse().getContentAsString();
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        Assert.assertNotNull(jsonObject);
+    }
+
+    @Test
+    public void getStudentStatistics() throws Exception {
+        MvcResult authResult;
+        authResult = mockMvc.perform(get("/getStudentStatistics")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .param("studentId", "student")
+                .param("courseId", "1")
+                .param("times", "1")
+        ).andExpect(status().isOk())
+                .andReturn();
+        String result = authResult.getResponse().getContentAsString();
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        assertNotNull(jsonObject);
+    }
+
+
+    @Test
+    public void getHomeworkOfStudentsNoMongo() throws Exception {
+        MvcResult authResult;
+        authResult = mockMvc.perform(get("/getHomeworkOfStudents")//使用get方式来调用接口。
+                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+                .param("homeworkId", "1")
+        ).andExpect(status().isOk())
+                .andReturn();
+        String result = authResult.getResponse().getContentAsString();
+        assertNotNull(result);
+    }
+
+    @Test
     public void getMistakenHomework() throws Exception {
         MvcResult authResult;
         authResult = mockMvc.perform(get("/getMistakenHomework")//使用get方式来调用接口。
@@ -108,28 +165,11 @@ public class StudentHomeworkControllerTest<Transactional> {
         ).andExpect(status().isOk())
                 .andReturn();
         String result = authResult.getResponse().getContentAsString();
-        JSONArray jsonArray = JSONArray.parseArray(result);
-        System.out.println(jsonArray.getJSONObject(0));
-        for (int i = 0 ; i < jsonArray.size(); ++i){
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            assertNotNull(jsonObject);
-        }
+        assertNotNull(result);
 
     }
 
-    @Test
-    public void getStudentHomeworkOne() throws Exception {
-        MvcResult authResult;
-        authResult = mockMvc.perform(get("/getStudentHomeworkOne")//使用get方式来调用接口。
-                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
-                .param("studentId", "student")
-                .param("homeworkId", "1")
-        ).andExpect(status().isOk())
-                .andReturn();
-        String result = authResult.getResponse().getContentAsString();
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        Assert.assertNotNull(jsonObject);
-    }
+
 
     @Test
     public void upload() throws Exception {
@@ -200,41 +240,7 @@ public class StudentHomeworkControllerTest<Transactional> {
 
     }
 
-    @Test
-    public void getPageHomeworkOfStudents() throws Exception {
-        MvcResult authResult;
-        authResult = mockMvc.perform(get("/getPageHomeworkOfStudents")//使用get方式来调用接口。
-                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
-                .param("homeworkId", "1")
-                .param("page", "1")
-                .param("size", "1")
-        ).andExpect(status().isOk())
-                .andReturn();
-        String result = authResult.getResponse().getContentAsString();
-        JSONArray jsonArray = JSONArray.parseArray(result);
-        System.out.println(jsonArray.getJSONObject(0));
-        for (int i = 0 ; i < jsonArray.size(); ++i){
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            assertNotNull(jsonObject);
-        }
-    }
 
-    @Test
-    public void getHomeworkOfStudentsNoMongo() throws Exception {
-        MvcResult authResult;
-        authResult = mockMvc.perform(get("/getHomeworkOfStudents")//使用get方式来调用接口。
-                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
-                .param("homeworkId", "1")
-        ).andExpect(status().isOk())
-                .andReturn();
-        String result = authResult.getResponse().getContentAsString();
-        JSONArray jsonArray = JSONArray.parseArray(result);
-        System.out.println(jsonArray.getJSONObject(0));
-        for (int i = 0 ; i < jsonArray.size(); ++i){
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            assertNotNull(jsonObject);
-        }
-    }
 
     @Test
     public void editStudentHomework() throws Exception {
@@ -328,20 +334,6 @@ public class StudentHomeworkControllerTest<Transactional> {
         Assert.assertNull(homework);
     }
 
-    @Test
-    public void getStudentStatistics() throws Exception {
-        MvcResult authResult;
-        authResult = mockMvc.perform(get("/getStudentStatistics")//使用get方式来调用接口。
-                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
-                .param("studentId", "student")
-                .param("courseId", "1")
-                .param("times", "1")
-        ).andExpect(status().isOk())
-                .andReturn();
-        String result = authResult.getResponse().getContentAsString();
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        assertNotNull(jsonObject);
-    }
 
     @Test
     public void getAverage() throws Exception {

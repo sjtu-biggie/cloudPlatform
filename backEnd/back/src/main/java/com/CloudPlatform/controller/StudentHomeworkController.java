@@ -3,6 +3,7 @@ import com.CloudPlatform.entity.StudentHomework;
 import com.CloudPlatform.entity.StudentStat;
 import com.CloudPlatform.service.StudentHomeworkService;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.exceptions.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.PageRequest;
@@ -11,13 +12,13 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import com.CloudPlatform.config.PicOssUrl;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -57,8 +58,15 @@ public class StudentHomeworkController {
     }
 
     @PostMapping(value = "/upload")
-    public String upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId) {
-        return studenthomeworkService.upload(file,userId);
+    public List<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId) throws IOException, ClientException {
+        String path = studenthomeworkService.upload(file,userId);
+        List<String> res = new ArrayList<>();
+        res.add(path);
+        if (path != null){
+            String Sharpness = PicOssUrl.testUploadFile(path);
+            res.add(Sharpness);
+        }
+        return res;
     }
 
 

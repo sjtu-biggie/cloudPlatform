@@ -153,14 +153,14 @@ public class TeacherHomeworkControllerTest<Transactional> {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
                 .content(jsonObject.toString())//请求的参数（可多个）
         ).andExpect(status().isOk()).andReturn();
-        TeacherHomework homework = teacherHomeworkRepository.findByHomeworkId(1);
-        assertNotNull(homework);
+        TeacherHomework homework = teacherHomeworkRepository.findByHomeworkId(4);
+        Assert.assertNotNull(homework);
     }
 
     @Test
     public void addTeacherHomework() throws Exception {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("homeworkId","4");
+        jsonObject.put("homeworkId","5");
         jsonObject.put("courseId","1");
         jsonObject.put("teacherId","Teacher");
         jsonObject.put("title","数学第二次迭代");
@@ -177,35 +177,32 @@ public class TeacherHomeworkControllerTest<Transactional> {
         jsonObject.put("handinAmount","1");
         jsonObject.put("ansUpload",null);
         jsonObject.put("conUpload",null);
-        MvcResult authResult = mockMvc.perform(post("/editTeacherHomework")//使用get方式来调用接口。
+        MvcResult authResult = mockMvc.perform(post("/addTeacherHomework")//使用get方式来调用接口。
                 .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
                 .content(jsonObject.toString())//请求的参数（可多个）
         ).andExpect(status().isOk()).andReturn();
-        TeacherHomework homework = teacherHomeworkRepository.findByHomeworkId(1);
-        assertNotNull(homework);
+        TeacherHomework homework = teacherHomeworkRepository.findByHomeworkId(5);
+        Assert.assertNotNull(homework);
     }
 
     @Test
     public void deleteTeacherHomeworkAll() throws Exception {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("courseId","1");
 
         MvcResult authResult = mockMvc.perform(post("/deleteTeacherHomeworkAll")//使用get方式来调用接口。
                 .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
-                .content(jsonObject.toString())//请求的参数（可多个）
-        ).andExpect(status().is(400)).andReturn();
+                .param("courseId", "1")
+        ).andExpect(status().isOk()).andReturn();
         List<TeacherHomework> homeworkList = teacherHomeworkRepository.findAllByCourseId(1);
-        Assert.assertEquals(homeworkList.size(),1);
+        Assert.assertEquals(homeworkList.size(),0);
     }
 
     @Test
     public void deleteTeacherHomeworkOne() throws Exception {
-        JSONObject jsonObject = new JSONObject();
 
         MvcResult authResult = mockMvc.perform(post("/deleteTeacherHomeworkOne")//使用get方式来调用接口。
                 .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
-                .content(jsonObject.toString())//请求的参数（可多个）
-        ).andExpect(status().is(400)).andReturn();
+                .param("homeworkId", "1")
+        ).andExpect(status().isOk()).andReturn();
         TeacherHomework homework = teacherHomeworkRepository.findByHomeworkId(1);
         Assert.assertNull(homework);
     }

@@ -8,25 +8,21 @@ import com.CloudPlatform.entity.TeacherHomework;
 import com.CloudPlatform.service.StudentHomeworkService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonGenerationException;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.apache.commons.codec.binary.Base64;
+
+import com.CloudPlatform.config.PicOssUrl;
+
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 import static java.lang.Double.parseDouble;
 
@@ -228,7 +224,10 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
             pathName += System.currentTimeMillis();
             pathName += pname;
             fos = new FileOutputStream(pathName);
-            fos.write(file.getBytes()); // 写入文件
+            fos.write(file.getBytes());// 写入文件
+//            String[] arg = new String[0];
+//            arg[0] = pathName;
+//            PicOssUrl.main(arg);
             return pathName;
         } catch (Exception e) {
             e.printStackTrace();

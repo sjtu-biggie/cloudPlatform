@@ -1,9 +1,9 @@
 import React from 'react'
-import {Card, Form, Input, Button, message, BackTop, Avatar} from 'antd'
+import {Card, Form, Input, Button, message, BackTop, Avatar, Col, Row} from 'antd'
 import PromptBox from "../../components/PromptBox";
 import {calculateWidth} from "../../utils/utils";
 import axios from "axios";
-
+import PersonalAvatar from './Avatar';
 const FormItem = Form.Item;
 
 @Form.create()
@@ -141,7 +141,12 @@ class PersonalCenter extends React.Component {
                 <Card bordered={false} title='个人信息'>
                     <Form layout='horizontal' style={{width: '70%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                         <Form.Item label = '头像' style={display2} {...formItemLayout} >
+                            <Col >
                             <Avatar size={64} src ={this.state.userInfo.iconBase64}/>
+                            </Col>
+                                <Col>
+                                <PersonalAvatar/>
+                                </Col>
                         </Form.Item>
 
                         <Form.Item label = '用户名' {...formItemLayout}>

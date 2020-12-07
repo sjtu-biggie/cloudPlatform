@@ -74,7 +74,7 @@ const ClassStudentManage=LoadableComponent(()=>import('../../routes/Manage/class
 
 //个人中心
 const PersonalCenter = LoadableComponent(()=>import('../../routes/PersonalCenter/Info'));
-
+const PersonalAvatar = LoadableComponent(()=>import('../../routes/PersonalCenter/Avatar'));
 
 
 @withRouter
@@ -138,6 +138,7 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
 
           <PrivateRoute exact path='/home/personalcenter' component={PersonalCenter}/>
+          <PrivateRoute exact path='/home/personalavatar' component={PersonalAvatar}/>
 
           <PrivateRoute exact path='/home/manage/studentTable' component={StudentTable}/>
           <PrivateRoute exact path='/home/manage/manager' component={Manager}/>

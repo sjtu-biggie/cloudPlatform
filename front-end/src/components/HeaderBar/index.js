@@ -119,7 +119,9 @@ class HeaderBar extends React.Component {
       <Menu className='menu'>
         <Menu.ItemGroup title='用户中心' className='menu-group'>
           <Menu.Item>你好 - {isAuthenticated()}</Menu.Item>
-          <Menu.Item onClick={()=>{this.props.history.push("/home/personalcenter")}}>个人信息</Menu.Item>
+          <Menu.Item onClick={()=>{console.log(this.props.history),
+            this.props.history.push("/home/personalcenter")
+          }}>个人信息</Menu.Item>
           <Menu.Item><p onClick={this.logout}>退出登录</p></Menu.Item>
         </Menu.ItemGroup>
       </Menu>

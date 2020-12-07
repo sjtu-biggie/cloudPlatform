@@ -48,7 +48,7 @@ class ListDemo extends React.Component {
     handinAmount: 0,
     handinAlready: 0,
     isLoading: false,
-  }
+  };
 
   getUserInfo = async (username)=>{
     let config = {
@@ -182,7 +182,7 @@ class ListDemo extends React.Component {
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已提交作业数" value={this.state.handinAlready} suffix={"/ "+this.state.handinAmount}/>
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="缺交作业数" value={this.state.handinAmount-this.state.handinAlready} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已批改作业数" value={this.state.cNum} suffix={"/ "+this.state.handinAmount}/>
-              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="平均得分" value={this.state.average} />
+              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="平均得分" value={this.state.average.toFixed(2)} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="适用人群" value={this.state.homework.range} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="开始时间" value={this.format(this.state.homework.startTime)} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="结束时间" value={this.format(this.state.homework.endTime)} />

@@ -32,12 +32,13 @@ const status = {
 
 class Rating extends React.Component {
     state = {
-        width:900,
-        height:1000,
-        src:"",
-        saveableCanvas:"",
-        visibleHomework:false,
-        visibleAnswer:false,
+        handinOrder: [],
+        width: 900,
+        height: 1000,
+        src: "",
+        saveableCanvas: "",
+        visibleHomework: false,
+        visibleAnswer: false,
         handinAlready: 10000,
         status: 3,
         type: 0,
@@ -53,8 +54,8 @@ class Rating extends React.Component {
         penLazy: 1,
         index: 0,
         average: 0,
-        assignHomework:{},
-        rateNum:0,
+        assignHomework: {},
+        rateNum: 0,
     };
     add0 = (m) => {
         return m < 10 ? '0' + m : m
@@ -80,7 +81,7 @@ class Rating extends React.Component {
         });
     };
     getAverageScore = async (homework) => {
-        if(homework===undefined) return;
+        if (homework === undefined) return;
         let config = {
             method: 'get',
             url: 'http://106.13.209.140:8383/getAverage?homeworkId=' + homework,
@@ -98,14 +99,43 @@ class Rating extends React.Component {
             });
         if (data !== null && data !== undefined && !isNaN(data)) {
             data = data.toFixed(2);
-        }else{
+        } else {
             data = 0;
         }
         this.setState({
             average: data,
         })
     };
-    getHomework = async(homeworkId)=>{
+    haveLeft = (e) => {
+        let handinOrder = this.state.handinOrder;
+        console.log(e,handinOrder);
+        let i = 0;
+        for (let judge of handinOrder) {
+            if(judge===e){
+                if(i===0) return -1;
+                else{
+                    return handinOrder[i-1];
+                }
+            }
+            ++i;
+        }
+    };
+    haveRight = (e) => {
+        let handinOrder = this.state.handinOrder;
+        let i = 0;
+        console.log(e,handinOrder);
+        for (let judge of handinOrder) {
+            console.log(i,judge,e);
+            if(judge===e){
+                if(i===handinOrder.length-1) return -1;
+                else{
+                    return handinOrder[i+1];
+                }
+            }
+            ++i;
+        }
+    };
+    getHomework = async (homeworkId) => {
         let config = {
             method: 'get',
             url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
@@ -122,7 +152,7 @@ class Rating extends React.Component {
                 console.log(error);
             });
         this.setState({
-            assignHomework:data,
+            assignHomework: data,
         })
     };
     componentWillMount = () => {
@@ -134,11 +164,17 @@ class Rating extends React.Component {
         });
         console.log(this.props.homework);
         this.setState({
-            assignHomework:this.props.homework
+            assignHomework: this.props.homework
         });
         this.setState({
             loading: false
         });
+        let handinOrder = localStorage.getItem("assignList");
+        handinOrder = handinOrder.split(',');
+        console.log(handinOrder);
+        this.setState({
+            handinOrder: handinOrder,
+        })
     };
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -149,32 +185,32 @@ class Rating extends React.Component {
             index: nextProps.index
         });
         console.log(nextProps.homework);
-        if(nextProps.homework===undefined){
+        if (nextProps.homework === undefined) {
             return;
         }
         this.getAverageScore(nextProps.homework.homeworkId);
-        if(this.state.assignHomework==={}||this.state.assignHomework.content===undefined){
+        if (this.state.assignHomework === {} || this.state.assignHomework.content === undefined) {
             this.getHomework(nextProps.homework.homeworkId);
         }
-        let src = "data:image/png;base64,"+ nextProps.homework.file;
+        let src = "data:image/png;base64," + nextProps.homework.file;
         this.setState({
-            src:src
+            src: src
         });
         this.setState({
             loading: false
         });
         var nImg = new Image();
-         nImg.src = src;
+        nImg.src = src;
         let w = nImg.width;
         let h = nImg.height;
         console.log(w + "  " + h);
-        if(w===0||h===0){
+        if (w === 0 || h === 0) {
             this.setState({
-                height:1000
+                height: 1000
             })
-        }else{
+        } else {
             this.setState({
-                height:h*900/w
+                height: h * 900 / w
             })
         }
 
@@ -247,7 +283,7 @@ class Rating extends React.Component {
                                 <p style={{fontSize: 20, color: 'white', fontWeight: 'bold'}}>已批/未批</p>
                                 <Statistic style={{marginBottom: '30px', transform: 'translateY(-60%)'}}
                                            valueStyle={{color: 'white', fontWeight: 'bold'}} value={this.state.rateNum}
-                                           suffix={'/'+this.state.handinAlready}/>
+                                           suffix={'/' + this.state.handinAlready}/>
                             </Card.Grid>
                             <Card.Grid style={{
                                 width: '10%',
@@ -265,17 +301,17 @@ class Rating extends React.Component {
                                 textAlign: 'center',
                                 height: '90px'
                             }} hoverable={false}>
-                                {this.state.index == 0 ? null :
+                                {this.haveLeft(this.state.index)===-1 ? null :
                                     <Icon type={'left'} onClick={
                                         () => {
-                                            this.getNewHomework(Number(this.state.index) - 1, -1);
+                                            this.getNewHomework(this.haveLeft(this.state.index), -1);
                                         }
                                     } style={{float: 'left', marginTop: '5px'}}/>}
                                 {this.state.homework.nickName}
-                                {this.state.index == (this.state.handinAlready - 1) ? null :
+                                {this.haveRight(this.state.index)===-1? null :
                                     <Icon type={'right'} onClick={
                                         () => {
-                                            this.getNewHomework(Number(this.state.index) + 1, 1);
+                                            this.getNewHomework(this.haveRight(this.state.index), 1);
                                         }
                                     } style={{float: 'right', marginTop: '5px'}}/>}
 
@@ -303,7 +339,8 @@ class Rating extends React.Component {
                                 </Button>,
                             ]}
                         >
-                            <iframe style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.assignHomework.content}/>
+                            <iframe style={{width: '100%'}} title={"s"}
+                                    src={'data:text/html;charset=UTF-8,' + this.state.assignHomework.content}/>
                         </Modal>
                         <Modal
                             title="作业答案"
@@ -316,7 +353,8 @@ class Rating extends React.Component {
                                 </Button>,
                             ]}
                         >
-                            <iframe style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.assignHomework.answer}/>
+                            <iframe style={{width: '100%'}} title={"s"}
+                                    src={'data:text/html;charset=UTF-8,' + this.state.assignHomework.answer}/>
 
                         </Modal>
                     </Col>
@@ -333,9 +371,10 @@ class Rating extends React.Component {
                                     <div>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评分 : </span>
                                             <InputNumber style={{marginLeft: '20px'}} id={'inputNumber'} min={0}
-                                                        defaultValue={this.state.homework.score} max={100}/> /100</p>
+                                                         defaultValue={this.state.homework.score} max={100}/> /100</p>
                                         <p style={{fontSize: '20px'}}><span style={{fontWeight: 'bold'}}>评价 : </span>
-                                            <TextArea defaultValue={this.state.homework.comment} style={{height: '200px', marginTop: '15px'}} id={'textarea'}/></p>
+                                            <TextArea defaultValue={this.state.homework.comment}
+                                                      style={{height: '200px', marginTop: '15px'}} id={'textarea'}/></p>
                                     </div>
                                     :
                                     <div style={{height: '320px'}}>
@@ -365,7 +404,6 @@ class Rating extends React.Component {
                                         </p>
                                     </div>
                             }
-
                             <div style={{height: '200px'}}>
                                 {
                                     this.state.status === status.DRAWING ? <div>
@@ -426,15 +464,15 @@ class Rating extends React.Component {
                                                     let homework = this.state.homework;
                                                     homework.correct = this.saveableCanvas.getSaveData();
                                                     this.setState({
-                                                        saveableCanvas:this.saveableCanvas.getSaveData(),
-                                                        homework:homework
+                                                        saveableCanvas: this.saveableCanvas.getSaveData(),
+                                                        homework: homework
                                                     });
                                                     console.log(this.saveableCanvas.getSaveData());
                                                 }} style={{fontWeight: 'bold', marginLeft: '10px'}}> 保存画布 </Button>
                                             </Col>
                                             <Col offset={3} span={3}>
                                                 <Button onClick={() => {
-                                                    if(this.state.homework.correct!==""&&this.state.homework.correct!==null){
+                                                    if (this.state.homework.correct !== "" && this.state.homework.correct !== null) {
                                                         this.saveableCanvas.loadSaveData(this.state.homework.correct)
                                                     }
 
@@ -466,22 +504,21 @@ class Rating extends React.Component {
                                          src={require("../../pic/market-svg/013-backup.svg")}/>
                                 </Col>
                             </Row>
-
                         </Card>
                     </Col>
                 </Row>
             </div>
         )
     };
-    submitRate= async()=>{
-        if(!(this.state.homework.score === null)){
+    submitRate = async () => {
+        if (!(this.state.homework.score === null)) {
             message.error("请先点击重新评价，再提交批改");
             return 1;
         }
         let score = document.getElementById("inputNumber").value;
         let comment = document.getElementById("textarea").value;
         let drawing = this.state.saveableCanvas;
-        if (score===""||score===null||comment===""||comment===null){
+        if (score === "" || score === null || comment === "" || comment === null) {
             message.error("请填写正确的分数和评语！");
             return 1;
         }
@@ -494,7 +531,7 @@ class Rating extends React.Component {
         let config = {
             method: 'post',
             url: 'http://106.13.209.140:8383/CorrectHomework',
-            data:homework,
+            data: homework,
             headers: {
                 withCredentials: true,
             }
@@ -508,7 +545,7 @@ class Rating extends React.Component {
                 console.log(error);
             });
         this.setState({
-            rateNum:this.state.rateNum+1
+            rateNum: this.state.rateNum + 1
         })
     };
     showModalHomework = () => {
@@ -547,7 +584,7 @@ class Rating extends React.Component {
                 console.log(error);
             });
         this.props.history.push("/home/homework/rate/" + this.state.handinAlready + "/" + this.state.homework.homeworkId + "/" + data[0].studentId + "/" + newIndex + "/");
-        this.setState({homework: data[0], index: newIndex,saveableCanvas:""})
+        this.setState({homework: data[0], index: newIndex, saveableCanvas: ""})
     }
 }
 

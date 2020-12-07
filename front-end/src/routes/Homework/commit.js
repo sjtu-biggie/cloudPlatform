@@ -131,14 +131,19 @@ class HomeworkCommit extends React.Component {
         this.setState({
             path: []
         });
+        let Sharpness = [];
         for (let i = 0; i < fileList.length; i++) {
-            this.state.path.push(fileList[i].response)
+            if (fileList[i].response != null){
+                this.state.path.push(fileList[i].response[0]);
+                Sharpness.push(fileList[i].response[1]);
+            }
         }
+        console.log(Sharpness);
         homework.upload = this.state.path.join(',');
         this.setState({
             homework: homework
         });
-        console.log(homework)
+        console.log(homework);
         let sid = localStorage.getItem("username")
         this.getStudentHomeworkOne(sid, this.props.match.params[0].substr(1));
     };

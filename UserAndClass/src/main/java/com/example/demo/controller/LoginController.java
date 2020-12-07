@@ -42,6 +42,5 @@ public class LoginController {
         String username=obj.getString("username");
         System.out.println("进入controller获取用户头像");
         return loginService.getUserIcon(username);
-
     }
 }

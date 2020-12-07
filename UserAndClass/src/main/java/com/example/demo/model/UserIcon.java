@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Document(collection = "userIcon")
 public class UserIcon {
+    @Id
     private String username;
     private String iconBase64;
 

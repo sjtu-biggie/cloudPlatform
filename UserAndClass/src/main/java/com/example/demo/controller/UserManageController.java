@@ -36,6 +36,14 @@ public class UserManageController {
         return "删除成功";
     }
 
+    @RequestMapping(value = "/setUserIcon",method = RequestMethod.POST)
+    public String setUserIcon(@RequestBody JSONObject obj){
+        String username=obj.getString("username");
+        String icon=obj.getString("icon");
+        loginService.setUseIcon((new UserIcon(username,icon)));
+        return "添加成功";
+    }
+
     @RequestMapping(value = "/setUserType",method = RequestMethod.POST)
     public String setUserType(@RequestBody JSONObject obj){
         String username=obj.getString("username");
@@ -118,7 +126,5 @@ public class UserManageController {
         }
         return "添加完成";
     }
-
-
 
 }

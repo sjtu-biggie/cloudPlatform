@@ -359,6 +359,9 @@ class ListDemo extends React.Component {
                         alt="example"
                         src={require("../../../pic/h2.png")}
                     />
+                    <p>
+                        ③以上是查看作业的全部内容。
+                    </p>
                     <Button type={"dashed"} style={{float:"left"}} onClick={()=>{this.setState({helpType:0})}} >
                         返回帮助主页
                     </Button>

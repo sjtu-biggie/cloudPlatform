@@ -24,7 +24,6 @@ function beforeUpload(file) {
 }
 
 
-
 class PersonalAvatar extends React.Component {
     state = {
         loading: false,

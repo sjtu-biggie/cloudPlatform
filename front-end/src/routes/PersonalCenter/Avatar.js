@@ -2,7 +2,7 @@ import React from "react";
 import { Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Modal, Button } from 'antd';
-
+import axios from 'axios';
 function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
@@ -56,6 +56,19 @@ class PersonalAvatar extends React.Component {
     handOk=()=>{
         console.log("确定上传");
         console.log(this.state.imageUrl);
+        axios({
+            url:'http://106.13.209.140:8000/setUserIcon',
+            method:'POST',
+            data:{
+                "icon":this.state.imageUrl,
+                "username":"teacher",
+            }
+        }).then(msg=>{
+            console.log(msg);
+        }).catch(err=>{
+            console.log(err);
+        })
+
         this.setState({
             visible:false,
             imageUrl:null

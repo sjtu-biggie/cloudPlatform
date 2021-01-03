@@ -5,10 +5,10 @@ eureka:
     hostname: eureka-center
     appname: registerCenter
   client:
-    registerWithEureka: false # µ¥µãµÄÊ±ºòÉèÖÃÎª false ½ûÖ¹×¢²á×ÔÉí
+    registerWithEureka: false # ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª false ï¿½ï¿½Ö¹×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     fetchRegistry: false
     serviceUrl:
-      defaultZone: http://106.13.209.140:4000/eureka
+      defaultZone: http://124.70.201.12:4000/eureka
   server:
     enableSelfPreservation: false
     evictionIntervalTimerInMs: 4000

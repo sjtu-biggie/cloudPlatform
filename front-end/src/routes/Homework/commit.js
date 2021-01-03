@@ -162,7 +162,7 @@ class HomeworkCommit extends React.Component {
     getStudentHomeworkOne = async (sid, hid) => {
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getStudentHomeworkOne?studentId=' + sid + "&homeworkId=" + hid,
+            url: 'http://124.70.201.12:8383/getStudentHomeworkOne?studentId=' + sid + "&homeworkId=" + hid,
             headers: {
                 withCredentials: true,
             }
@@ -205,7 +205,7 @@ class HomeworkCommit extends React.Component {
             console.log("handin")
             let config0 = {
                 method: 'post',
-                url: 'http://106.13.209.140:8383/UpdateHandinAlready?homeworkId=' + this.state.homework.homeworkId,
+                url: 'http://124.70.201.12:8383/UpdateHandinAlready?homeworkId=' + this.state.homework.homeworkId,
                 headers: {
                     withCredentials: true,
                 }
@@ -250,7 +250,7 @@ class HomeworkCommit extends React.Component {
         let config1 = {
             method: 'post',
             data: obj,
-            url: 'http://106.13.209.140:8383/editStudentHomework',
+            url: 'http://124.70.201.12:8383/editStudentHomework',
             //url: 'http://localhost:8080/editStudentHomework',
             headers: {
                 withCredentials: true,

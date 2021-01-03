@@ -45,7 +45,7 @@ class RatePage extends React.Component {
   getHomework=async()=>{
     let config2 = {
       method: 'get',
-      url: 'http://106.13.209.140:8383/getStudentHomeworkOne?studentId='+this.props.match.params.userId+'&homeworkId='+this.props.match.params.homeworkId,
+      url: 'http://124.70.201.12:8383/getStudentHomeworkOne?studentId='+this.props.match.params.userId+'&homeworkId='+this.props.match.params.homeworkId,
       headers: {
         withCredentials: true,
       }

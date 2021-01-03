@@ -185,7 +185,7 @@ export default class  STable extends Component {
             let config = {
                 method: 'post',
                 data : obj,
-                url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
+                url: 'http://124.70.201.12:8000/getAllUsersByClassIds',
                 headers: {
                     withCredentials: true,
                 }

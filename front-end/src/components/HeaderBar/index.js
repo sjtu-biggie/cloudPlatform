@@ -29,7 +29,7 @@ class HeaderBar extends React.Component {
 
   componentDidMount(){
     axios({
-      url:'http://106.13.209.140:8000/getUserMessageAndIcon',
+      url:'http://124.70.201.12:8000/getUserMessageAndIcon',
       method:'POST',
       data:{
         'username':window.localStorage.getItem("username")
@@ -50,7 +50,7 @@ class HeaderBar extends React.Component {
   getNoteInfo=async (username)=>{
     let config = {
       method: 'get',
-      url: 'http://106.13.209.140:8787/course/getNoteByUser?userId='+username,
+      url: 'http://124.70.201.12:8787/course/getNoteByUser?userId='+username,
       headers: {
         withCredentials: true,
       }

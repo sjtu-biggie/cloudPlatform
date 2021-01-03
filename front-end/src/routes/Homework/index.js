@@ -59,7 +59,7 @@ class HomeworkDemo extends React.Component {
             data :{
                 'username':username
             },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            url: 'http://124.70.201.12:8000/getUserMessage',
             headers: {
                 withCredentials: true,
             }
@@ -110,7 +110,7 @@ class HomeworkDemo extends React.Component {
     getTeacherHomeworkAll = async (type,teacherId)=>{
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383/getHomeworkAll?teacherId='+teacherId,
+            url: 'http://124.70.201.12:8383/getHomeworkAll?teacherId='+teacherId,
             //url: 'http://localhost:8080/getHomeworkAll?teacherId='+teacherId,
             headers: {
                 withCredentials: true,
@@ -196,7 +196,7 @@ class HomeworkDemo extends React.Component {
         console.log(studentId);
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383/getStudentHomeworkAll?studentId=' + studentId,
+            url: 'http://124.70.201.12:8383/getStudentHomeworkAll?studentId=' + studentId,
             //url: 'http://localhost:8080/getStudentHomeworkAll?studentId=' + studentId,
             headers: {
                 withCredentials: true,

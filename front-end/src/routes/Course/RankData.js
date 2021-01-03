@@ -70,7 +70,7 @@ class RankData extends React.Component {
         let times = value;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getStudentStatistics?studentId=' + this.props.userId + '&courseId=' + this.props.courseId + '&times=' + times,
+            url: 'http://124.70.201.12:8383/getStudentStatistics?studentId=' + this.props.userId + '&courseId=' + this.props.courseId + '&times=' + times,
             headers: {
                 withCredentials: true,
             }
@@ -166,7 +166,7 @@ class RankData extends React.Component {
     getRankStat = async () => {
         let config = {
             method: 'get',
-                url: 'http://106.13.209.140:8787/course/getRank?courseId=' + this.props.courseId + '&userId=' + this.props.userId,
+                url: 'http://124.70.201.12:8787/course/getRank?courseId=' + this.props.courseId + '&userId=' + this.props.userId,
                 headers: {
                 withCredentials: true,
             }

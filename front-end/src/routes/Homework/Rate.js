@@ -84,7 +84,7 @@ class Rating extends React.Component {
         if (homework === undefined) return;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getAverage?homeworkId=' + homework,
+            url: 'http://124.70.201.12:8383/getAverage?homeworkId=' + homework,
             headers: {
                 withCredentials: true,
             }
@@ -138,7 +138,7 @@ class Rating extends React.Component {
     getHomework = async (homeworkId) => {
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
+            url: 'http://124.70.201.12:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
             headers: {
                 withCredentials: true,
             }
@@ -530,7 +530,7 @@ class Rating extends React.Component {
         console.log(homework);
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383/CorrectHomework',
+            url: 'http://124.70.201.12:8383/CorrectHomework',
             data: homework,
             headers: {
                 withCredentials: true,
@@ -570,7 +570,7 @@ class Rating extends React.Component {
     getNewHomework = async (newIndex, value) => {
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getPageHomeworkOfStudents?homeworkId=' + this.state.homework.homeworkId + '&page=' + newIndex + '&size=1',
+            url: 'http://124.70.201.12:8383/getPageHomeworkOfStudents?homeworkId=' + this.state.homework.homeworkId + '&page=' + newIndex + '&size=1',
             headers: {
                 withCredentials: true,
             }

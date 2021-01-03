@@ -89,7 +89,7 @@ class CoursePageDemo extends React.Component {
                 data: {
                     'username': ans
                 },
-                url: 'http://106.13.209.140:8000/getUserMessageAndIcon',
+                url: 'http://124.70.201.12:8000/getUserMessageAndIcon',
                 headers: {
                     withCredentials: true,
                 }
@@ -112,7 +112,7 @@ class CoursePageDemo extends React.Component {
 
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCourseById?courseId=' + courseId,
+            url: 'http://124.70.201.12:8787/course/getCourseById?courseId=' + courseId,
             headers: {
                 withCredentials: true,
             }
@@ -127,7 +127,7 @@ class CoursePageDemo extends React.Component {
         console.log(course);
         let config2 = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCoursesByUser?userId=' + username,
+            url: 'http://124.70.201.12:8787/course/getCoursesByUser?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -148,7 +148,7 @@ class CoursePageDemo extends React.Component {
             });
         let config3 = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getEndCoursesByUser?userId=' + username,
+            url: 'http://124.70.201.12:8787/course/getEndCoursesByUser?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -195,7 +195,7 @@ class CoursePageDemo extends React.Component {
     getHomeworkAllByCourse = async (courseId) => {
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383/getTeacherHomeworkAll?courseId=' + courseId,
+            url: 'http://124.70.201.12:8383/getTeacherHomeworkAll?courseId=' + courseId,
             headers: {
                 withCredentials: true,
             }
@@ -255,7 +255,7 @@ class CoursePageDemo extends React.Component {
             data: {
                 bulletinId: this.state.bulletins[index].bulletinId
             },
-            url: 'http://106.13.209.140:8787/course/deleteBulletin',
+            url: 'http://124.70.201.12:8787/course/deleteBulletin',
             headers: {
                 withCredentials: true,
             }
@@ -275,7 +275,7 @@ class CoursePageDemo extends React.Component {
     getPageBulletin = async (page, pageSize) => {
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getPageBulletin?courseId='
+            url: 'http://124.70.201.12:8787/course/getPageBulletin?courseId='
                 + this.state.course.course.id + "&page=" + (page - 1) + "&size=" + pageSize,
             headers: {
                 withCredentials: true,
@@ -427,7 +427,7 @@ class CoursePageDemo extends React.Component {
                 let config = {
                     method: 'post',
                     data: courseJson,
-                    url: 'http://106.13.209.140:8787/course/addCourse',
+                    url: 'http://124.70.201.12:8787/course/addCourse',
                     headers: {
                         withCredentials: true,
                     }
@@ -586,7 +586,7 @@ class CoursePageDemo extends React.Component {
                             let config = {
                                 method: 'post',
                                 data: courseJson,
-                                url: 'http://106.13.209.140:8787/course/addCourse',
+                                url: 'http://124.70.201.12:8787/course/addCourse',
                                 headers: {
                                     withCredentials: true,
                                 }

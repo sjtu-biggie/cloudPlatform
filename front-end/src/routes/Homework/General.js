@@ -56,7 +56,7 @@ class ListDemo extends React.Component {
       data :{
         'username':username
       },
-      url: 'http://106.13.209.140:8000/getUserMessage',
+      url: 'http://124.70.201.12:8000/getUserMessage',
       headers: {
         withCredentials: true,
       }
@@ -76,7 +76,7 @@ class ListDemo extends React.Component {
   getHomeworkOne = async (homeworkId)=>{
     let config = {
       method: 'post',
-      url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
+      url: 'http://124.70.201.12:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
       headers: {
         withCredentials: true,
       }
@@ -126,7 +126,7 @@ class ListDemo extends React.Component {
   getHomeworkOfStudents=async (homeworkId)=>{
     let config = {
       method: 'post',
-      url: 'http://106.13.209.140:8383/getHomeworkOfStudentsNoMongo?homeworkId='+homeworkId,
+      url: 'http://124.70.201.12:8383/getHomeworkOfStudentsNoMongo?homeworkId='+homeworkId,
       headers: {
         withCredentials: true,
       }
@@ -204,7 +204,7 @@ class ListDemo extends React.Component {
     }
     let config = {
       method: 'post',
-      url: 'http://106.13.209.140:8383/autoGrading?homeworkId='+this.state.homeworkId,
+      url: 'http://124.70.201.12:8383/autoGrading?homeworkId='+this.state.homeworkId,
       headers: {
         withCredentials: true,
       }

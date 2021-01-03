@@ -362,7 +362,7 @@ class CourseDemo extends React.Component {
             data: {
                 'username': username
             },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            url: 'http://124.70.201.12:8000/getUserMessage',
             headers: {
                 withCredentials: true,
             }
@@ -386,7 +386,7 @@ class CourseDemo extends React.Component {
         const that = this;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCoursesByUser?userId=' + username,
+            url: 'http://124.70.201.12:8787/course/getCoursesByUser?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -406,7 +406,7 @@ class CourseDemo extends React.Component {
         const that = this;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCoursesByTeacher?userId=' + username,
+            url: 'http://124.70.201.12:8787/course/getCoursesByTeacher?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -426,7 +426,7 @@ class CourseDemo extends React.Component {
         const that = this;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getEndCoursesByTeacher?userId=' + username,
+            url: 'http://124.70.201.12:8787/course/getEndCoursesByTeacher?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -446,7 +446,7 @@ class CourseDemo extends React.Component {
         const that = this;
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getEndCoursesByUser?userId=' + username,
+            url: 'http://124.70.201.12:8787/course/getEndCoursesByUser?userId=' + username,
             headers: {
                 withCredentials: true,
             }
@@ -465,7 +465,7 @@ class CourseDemo extends React.Component {
         console.log("getAllcourses");
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getCourses',
+            url: 'http://124.70.201.12:8787/course/getCourses',
             headers: {
                 withCredentials: true,
             }

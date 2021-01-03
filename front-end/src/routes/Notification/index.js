@@ -113,7 +113,7 @@ class Notification extends React.Component {
     getNoteInfo=async (username)=>{
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8787/course/getNoteByUser?userId='+username,
+            url: 'http://124.70.201.12:8787/course/getNoteByUser?userId='+username,
             headers: {
                 withCredentials: true,
             }
@@ -142,7 +142,7 @@ class Notification extends React.Component {
         let config = {
             method: 'post',
             data:obj,
-            url: 'http://106.13.209.140:8787/course/addNote',
+            url: 'http://124.70.201.12:8787/course/addNote',
             headers: {
                 withCredentials: true,
             }

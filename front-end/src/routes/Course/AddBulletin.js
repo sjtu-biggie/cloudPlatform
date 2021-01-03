@@ -78,7 +78,7 @@ class AddBulletin extends React.Component {
                 let config = {
                     method: 'post',
                     data: values,
-                    url: 'http://106.13.209.140:8787/course/addBulletin',
+                    url: 'http://124.70.201.12:8787/course/addBulletin',
                     headers: {
                         withCredentials: true,
                     }
@@ -93,7 +93,7 @@ class AddBulletin extends React.Component {
                         console.log(response.data);
                         axios({
                             method: 'POST',
-                            url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
+                            url: 'http://124.70.201.12:8000/getAllUsersByClassIds',
                             data: {
                                 "classIds": this.props.classes
                             }
@@ -106,7 +106,7 @@ class AddBulletin extends React.Component {
                             console.log(tos);
                             axios({
                                 method:'POST',
-                                url:'http://106.13.209.140:8000/sendNotice',
+                                url:'http://124.70.201.12:8000/sendNotice',
                                 data:{
                                     "tos":tos,
                                     "context":"公告已发布",

@@ -39,7 +39,7 @@ class HomeworkList extends React.Component {
         let config = {
             method: 'post',
             data : ob,
-            url: 'http://106.13.209.140:8000/getAllUsersByClassIds',
+            url: 'http://124.70.201.12:8000/getAllUsersByClassIds',
             headers: {
                 withCredentials: true,
             }
@@ -74,7 +74,7 @@ class HomeworkList extends React.Component {
             data :{
                 'username':username
             },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            url: 'http://124.70.201.12:8000/getUserMessage',
             headers: {
                 withCredentials: true,
             }
@@ -95,7 +95,7 @@ class HomeworkList extends React.Component {
     deleteTeacherHomeworkOne=async (homework)=>{
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8383/deleteTeacherHomeworkOne?homeworkId=' + homework.homeworkId,
+            url: 'http://124.70.201.12:8383/deleteTeacherHomeworkOne?homeworkId=' + homework.homeworkId,
             headers: {
                 withCredentials: true,
             }
@@ -116,7 +116,7 @@ class HomeworkList extends React.Component {
         for (let i = 0 ;i < studentInfo.length; ++i){
             let config = {
                 method: 'post',
-                url: 'http://106.13.209.140:8383/deleteTeacherHomeworkOne?homeworkId=' + homeworkId + '&studentId=' + studentInfo[i].username,
+                url: 'http://124.70.201.12:8383/deleteTeacherHomeworkOne?homeworkId=' + homeworkId + '&studentId=' + studentInfo[i].username,
                 headers: {
                     withCredentials: true,
                 }

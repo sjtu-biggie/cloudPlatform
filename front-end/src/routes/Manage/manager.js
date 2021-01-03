@@ -124,7 +124,7 @@ export default class StudentTable extends Component {
             const {delData} =this.state;
             console.log(delData);
             axios({
-                url:'http://106.13.209.140:8000/delUser',
+                url:'http://124.70.201.12:8000/delUser',
                 method:'POST',
                 data:{
                     name:delData
@@ -141,7 +141,7 @@ export default class StudentTable extends Component {
             console.log(record);
             axios({
                 method: 'POST',
-                url: 'http://106.13.209.140:8000/updateUser',
+                url: 'http://124.70.201.12:8000/updateUser',
                 data: record,
             }).then(msg=>{
                 console.log("更新数据库的数据");
@@ -154,7 +154,7 @@ export default class StudentTable extends Component {
         this.getAlLUsers=()=>{
             axios({
                 method:'POST',
-                url:'http://106.13.209.140:8000/getAllUsers'
+                url:'http://124.70.201.12:8000/getAllUsers'
             }).then(msg=>{
                 console.log(msg);
                 this.setState({orData:msg.data});
@@ -213,7 +213,7 @@ export default class StudentTable extends Component {
     componentWillMount(){
         axios({
             method:'POST',
-            url:'http://106.13.209.140:8000/getAllUsers'
+            url:'http://124.70.201.12:8000/getAllUsers'
         }).then(msg=>{
             console.log(msg);
             this.setState({orData:msg.data});

@@ -69,7 +69,7 @@ class Mistakes extends React.Component {
     getTeacherHomeworkOne=async (hid,i)=>{
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getTeacherHomeworkOne?homeworkId='+hid,
+            url: 'http://124.70.201.12:8383/getTeacherHomeworkOne?homeworkId='+hid,
             headers: {
                 withCredentials: true,
             }
@@ -125,7 +125,7 @@ class Mistakes extends React.Component {
     getMistakes=async (username)=>{
         let config = {
             method: 'get',
-            url: 'http://106.13.209.140:8383/getMistakenHomework?studentId='+username,
+            url: 'http://124.70.201.12:8383/getMistakenHomework?studentId='+username,
             headers: {
                 withCredentials: true,
             }

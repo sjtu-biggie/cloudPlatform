@@ -185,7 +185,7 @@ class AddCourse extends React.Component {
     componentWillMount=async()=> {
         let config = {
             method: 'post',
-            url: 'http://106.13.209.140:8000/getAllClass',
+            url: 'http://124.70.201.12:8000/getAllClass',
             headers: {
                 withCredentials: true,
             }
@@ -233,7 +233,7 @@ class AddCourse extends React.Component {
         let config = {
             method: 'post',
             data: this.state.courseJson,
-            url: 'http://106.13.209.140:8787/course/addCourse',
+            url: 'http://124.70.201.12:8787/course/addCourse',
             headers: {
                 withCredentials: true,
             }

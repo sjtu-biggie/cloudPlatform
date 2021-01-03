@@ -105,7 +105,7 @@ class LoginForm extends React.Component {
       data: {
         'username': username
       },
-      url: 'http://106.13.209.140:8000/getUserMessageAndIcon',
+      url: 'http://124.70.201.12:8000/getUserMessageAndIcon',
       headers: {
         withCredentials: true,
       }

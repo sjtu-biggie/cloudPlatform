@@ -23,6 +23,7 @@ import TextArea from "antd/es/input/TextArea";
 import StudenTable from '../Manage/studentTable'
 import Search from "antd/es/input/Search";
 import axios from "axios";
+import {withRouter} from "react-router-dom";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -34,7 +35,7 @@ const genExtra = () => (
         }}
     />
 );
-
+@withRouter
 @Form.create()
 class AddCourse extends React.Component {
     state = {
@@ -627,6 +628,10 @@ class AddCourse extends React.Component {
                                     this.setState({addChapter: !this.state.addChapter})
                                 }} style={{}}>在此添加章节</Button>
                                 <Button type="danger" onClick={() => {
+                                    if(this.state.syllabus.chapterNum===1){
+                                        message.warning("不能删除最后一个章节！");
+                                        return;
+                                    }
                                     this.deleteBig(index)
                                 }} style={{marginLeft: '10px', marginBottom: '20px'}}>删除这个章节</Button>
                                 <List
@@ -728,9 +733,8 @@ class AddCourse extends React.Component {
                         </Row>
                         <Row>
                             <Col offset={10}>
-                                <Button onClick={() => {
+                                <Button onClick={() => {this.props.history.push("/home/course/class="+this.state.courseId)
                                 }} style={{marginTop: '20px', size: 'large'}} type="primary">进入课程主页</Button>
-
                             </Col>
                         </Row>
                     </Card>
@@ -750,4 +754,4 @@ class AddCourse extends React.Component {
     }
 }
 
-export default AddCourse
+export default withRouter(AddCourse)

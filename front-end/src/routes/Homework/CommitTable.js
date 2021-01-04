@@ -16,24 +16,6 @@ const columns = [
     { title: '提交状态', dataIndex: 'commit', key: 'commit',
         render: commit => <a style={{fontStyle:'#FF0000'}}>{commit}</a>
         ,
-        // render: tags => {
-        //         commit.map(com => {
-        //         let color;
-        //         if (com === "未提交") {
-        //         color = 'volcano';
-        //     }
-        //         else if (com === "迟交"){
-        //         color = 'volcano';
-        //     }
-        //         else {
-        //         color = 'volcano';
-        //     }
-        //         return (
-        //         <Tag color={color}>
-        //         {com}
-        //         </Tag>
-        //         );
-        //     })}
     },
     { title: '提交时间', dataIndex: 'handinTime',key: 'handinTime'},
     { title: '是否批改', dataIndex: 'correct' , key: 'correct' },

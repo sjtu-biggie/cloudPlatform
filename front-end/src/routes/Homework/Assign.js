@@ -368,9 +368,15 @@ class Assign extends React.Component {
             conFile:fileList,
         })
         let conPath = [];
+        let Sharpness = [];
         for(let i=0;i<fileList.length;i++){
-            conPath.push(fileList[i].response)
+            if (fileList[i].response != null){
+                conPath.push(fileList[i].response[0]);
+                Sharpness.push(fileList[i].response[1]);
+            }
+
         }
+        console.log(Sharpness);
         let conUpload=conPath.join(',')
         this.setState({
             conUpload: conUpload
@@ -382,9 +388,14 @@ class Assign extends React.Component {
             ansFile:fileList,
         })
         let ansPath = [];
+        let Sharpness = [];
         for(let i=0;i<fileList.length;i++){
-            ansPath.push(fileList[i].response)
+            if (fileList[i].response != null){
+                ansPath.push(fileList[i].response[0]);
+                Sharpness.push(fileList[i].response[1]);
+            }
         }
+        console.log(Sharpness);
         let ansUpload = ansPath.join(',')
         this.setState({
             ansUpload: ansUpload

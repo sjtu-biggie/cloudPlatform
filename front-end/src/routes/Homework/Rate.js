@@ -404,7 +404,7 @@ class Rating extends React.Component {
                                         </p>
                                     </div>
                             }
-                            <div style={{height: '200px'}}>
+                            <div style={{height: '190px'}}>
                                 {
                                     this.state.status === status.DRAWING ? <div>
                                         <span style={{fontWeight: 'bold'}}> 画笔大小</span>
@@ -483,12 +483,13 @@ class Rating extends React.Component {
                                     </div> : null
                                 }
                             </div>
-                            <Row>
+                            <Row style={{marginBottom:'10px'}}>
                                 <Col offset={1} span={7}>
                                     <img onClick={() => {
                                         this.setState({status: status.DRAWING})
-                                    }} style={{float: 'left'}} width={80} alt="logo"
+                                    }} style={{float: 'left'}} width={75} alt="logo"
                                          src={require("../../pic/school-svg/002-marker.svg")}/>
+
                                 </Col>
                                 <Col offset={1} span={7}>
                                     <img onClick={() => {
@@ -502,6 +503,16 @@ class Rating extends React.Component {
                                         this.submitRate();
                                     }} style={{float: 'left'}} width={80} alt="logo"
                                          src={require("../../pic/market-svg/013-backup.svg")}/>
+                                </Col>
+
+                                <Col offset={1} span={7}>
+                                    <p style={{fontWeight:'bold'}}>批改模式</p>
+                                </Col>
+                                <Col offset={1} span={7}>
+                                    <p style={{marginLeft:'10px',fontWeight:'bold'}}>查看模式</p>
+                                </Col>
+                                <Col offset={1} span={7}>
+                                    <p style={{marginLeft:'10px',fontWeight:'bold'}}>保存批改</p>
                                 </Col>
                             </Row>
                         </Card>

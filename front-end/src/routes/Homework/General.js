@@ -188,8 +188,8 @@ class ListDemo extends React.Component {
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="开始时间" value={this.format(this.state.homework.startTime)} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="结束时间" value={this.format(this.state.homework.endTime)} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="答案发布" value={this.state.homework.anspost===0?"未发布":"已发布"} />
-              {this.state.homework.type==="主观题"?<Button style={{marginTop:'30px',marginLeft:'540px'}} disabled={true} onClick = {()=>{this.autograde()}}>自动批改</Button>
-                  :<Button style={{marginTop:'30px',marginLeft:'540px'}} onClick = {()=>{this.autograde()}}>自动批改</Button>
+              {this.state.homework.type==="主观题"?<Button style={{marginTop:'30px',marginLeft:'470px'}} disabled={true} onClick = {()=>{this.autograde()}}>自动批改</Button>
+                  :<Button style={{marginTop:'30px',marginLeft:'470px'}} onClick = {()=>{this.autograde()}}>自动批改</Button>
               }
             </Card>
           </Col>

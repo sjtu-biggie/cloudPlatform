@@ -2,6 +2,7 @@ package com.CloudPlatform.service;
 
 import com.CloudPlatform.entity.TeacherHomework;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,4 +19,9 @@ public interface TeacherHomeworkService {
     void deleteTeacherHomeworkOne(int homeworkId);
     int UpdateHandinAlready(int homeworkId);
 
+    List<TeacherHomework> getHomeworkAllPage(String teacherId, Pageable p);
+
+    List<TeacherHomework> getTeacherHomeworkAllPage(int courseId, Pageable p);
+
+    int UpdateAnspost(int homeworkId);
 }

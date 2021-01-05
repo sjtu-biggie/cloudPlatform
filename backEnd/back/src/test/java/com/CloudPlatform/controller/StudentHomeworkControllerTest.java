@@ -171,20 +171,20 @@ public class StudentHomeworkControllerTest<Transactional> {
 
 
 
-    @Test
-    public void upload() throws Exception {
-        MvcResult authResult;
-        authResult = mockMvc.perform(get("/upload")//使用get方式来调用接口。
-                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
-                .param("userId", "student")
-                .param("file", "WechatIMG859.jpeg")
-        ).andExpect(status().isOk())
-                .andReturn();
-        String result = authResult.getResponse().getContentAsString();
-        JSONArray jsonArray = JSONArray.parseArray(result);
-        System.out.println(jsonArray.getJSONObject(0));
-        assertNotNull(jsonArray);
-    }
+//    @Test
+//    public void upload() throws Exception {
+//        MvcResult authResult;
+//        authResult = mockMvc.perform(get("/upload")//使用get方式来调用接口。
+//                .contentType(MediaType.APPLICATION_JSON_VALUE)//请求参数的类型
+//                .param("userId", "student")
+//                .param("file", "WechatIMG859.jpeg")
+//        ).andExpect(status().isOk())
+//                .andReturn();
+//        String result = authResult.getResponse().getContentAsString();
+//        JSONArray jsonArray = JSONArray.parseArray(result);
+//        System.out.println(jsonArray.getJSONObject(0));
+//        assertNotNull(jsonArray);
+//    }
 
     @Test
     public void correctHomework() throws Exception {

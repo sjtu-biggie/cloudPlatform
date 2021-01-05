@@ -38,7 +38,14 @@ public class StudentHomeworkController {
         return studenthomeworkService.getStudentHomeworkAll(studentId);
     }
 
-    //同学所有提交的作业
+    //分页获取同学所有提交的作业
+    @RequestMapping(value = "/getPageStudentHomeworkAll")
+    public List<StudentHomework> getPageStudentHomeworkAll(@RequestParam("studentId") String studentId,@RequestParam("page") int page, @RequestParam("size") int size) {
+        Pageable p = PageRequest.of(page,size);
+        return studenthomeworkService.getStudentHomeworkAllPage(studentId,p);
+    }
+
+    //自动批改
     @RequestMapping(value = "/autoGrading")
     public void autoGrading (@RequestParam("homeworkId") int homeworkId) {
         studenthomeworkService.autoGrading(homeworkId);
@@ -84,7 +91,6 @@ public class StudentHomeworkController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));// CustomDateEditor为自定义日期编辑器
     }
 
-
     //获取课程某次所有学生提交的的作业
     @RequestMapping(value = "/getHomeworkOfStudents")
     public List<StudentHomework> getHomeworkOfStudents(@RequestParam("homeworkId") int homeworkId) {
@@ -102,6 +108,13 @@ public class StudentHomeworkController {
     @RequestMapping(value = "/getHomeworkOfStudentsNoMongo")
     public List<StudentHomework> getHomeworkOfStudentsNoMongo(@RequestParam("homeworkId") int homeworkId) {
         return studenthomeworkService.getStudentHomeworkAllOfHomeworkNoMongo(homeworkId);
+    }
+
+    //分页获取课程某次所有学生提交的的作业没有mongo
+    @RequestMapping(value = "/getPageHomeworkOfStudentsNoMongo")
+    public List<StudentHomework> getPageHomeworkOfStudentsNoMongo(@RequestParam("homeworkId") int homeworkId, @RequestParam("page") int page, @RequestParam("size") int size) {
+        Pageable p = PageRequest.of(page,size);
+        return studenthomeworkService.getPageHomeworkOfStudentsNoMongo(homeworkId,p);
     }
 
     //编辑作业

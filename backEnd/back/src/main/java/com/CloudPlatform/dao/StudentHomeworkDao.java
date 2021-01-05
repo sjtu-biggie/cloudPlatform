@@ -22,6 +22,9 @@ public interface StudentHomeworkDao {
     Integer getCourseHomeworkNum(int courseId);
     Integer getStudentHomeworkNum(String studentId,int courseId);
 
-
     List<StudentHomework> findByHomeworkId(int homeworkId, Pageable p);
+
+    List<StudentHomework> findAllPage(String studentId, Pageable p);
+
+    List<StudentHomework> findAllOfHomeworkNoMongoPage(int homeworkId, Pageable p);
 }

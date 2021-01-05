@@ -55,7 +55,7 @@ public class TeacherHomeworkControllerTest<Transactional> {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         Date date = new Date(0);
         TeacherHomework homework = new TeacherHomework(1,"Teacher","数学第一次迭代","F1803704",
-                date,date,"主观题","一年级上数学",0,0,1);
+                date,date,"主观题","一年级上数学",0,0,1,0);
         TeacherHomeworkDetail teacherHomeworkDetail = new TeacherHomeworkDetail("4","1","Teacher","作业内容马保国",null,"答案耗子尾汁","/homework/teacher/1605603327495WechatIMG859.jpeg",
                 "/homework/teacher/1605603334829WechatIMG859.jpeg");
         int maxId = 0;
@@ -75,7 +75,8 @@ public class TeacherHomeworkControllerTest<Transactional> {
                 homework.getCourseId(),
                 homework.getTeacherId(),maxId,
                 homework.getHandinAlready(),
-                homework.getDelayable());
+                homework.getDelayable(),
+                homework.getAnspost());
         teacherHomeworkDetailRepository.save(teacherHomeworkDetail);
     }
 

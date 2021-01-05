@@ -6,6 +6,7 @@ import com.CloudPlatform.service.TeacherHomeworkService;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,13 +99,20 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         int handinAmount = object.getInteger("handinAmount");
         int handinAlready = object.getInteger("handinAlready");
         int delayable = object.getInteger("delayable");
+        int Anspost;
+        if (object.getInteger("Anspost") != null){
+            Anspost = object.getInteger("Anspost");
+        }
+        else {
+            Anspost = 0;
+        }
         Date startTime = object.getDate("startTime");
         Date endTime = object.getDate("endTime");
         String conUpload= object.getString("conUpload");
         String ansUpload= object.getString("ansUpload");
 
         TeacherHomework hw = new TeacherHomework(homeworkId,courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,handinAlready,delayable,content,syllabus,answer,Id, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,handinAlready,delayable,Anspost,content,syllabus,answer,Id, conUpload, ansUpload);
         return teacherhomeworkDao.editOne(hw);
     }
 
@@ -124,6 +132,13 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         String conUpload= object.getString("conUpload");
         String ansUpload= object.getString("ansUpload");
         int delayable= object.getInteger("delayable");
+        int Anspost;
+        if (object.getInteger("Anspost") != null){
+            Anspost = object.getInteger("Anspost");
+        }
+        else {
+            Anspost = 0;
+        }
         JSONObject syllabus;
         if(type.equals("客观题")){
             syllabus = object.getJSONObject("syllabus");
@@ -131,7 +146,7 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
             syllabus = null;
         }
         TeacherHomework hw = new TeacherHomework(courseId,teacherId,title,range,
-                startTime,endTime,type,subject,handinAmount,0,delayable,content,syllabus,answer, conUpload, ansUpload);
+                startTime,endTime,type,subject,handinAmount,0,delayable,Anspost,content,syllabus,answer, conUpload, ansUpload);
         return teacherhomeworkDao.addOne(hw);
     }
 
@@ -152,6 +167,30 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         teaHw.setHandinAlready(num);
         teacherhomeworkDao.updateHandinAlready(teaHw);
         return num;
+    }
+
+    @Override
+    public List<TeacherHomework> getHomeworkAllPage(String teacherId, Pageable p) {
+        return teacherhomeworkDao.findAllByTeacherIdPage(teacherId,p);
+    }
+
+    @Override
+    public List<TeacherHomework> getTeacherHomeworkAllPage(int courseId, Pageable p) {
+        return teacherhomeworkDao.findAllByCourseIdPage(courseId,p);
+    }
+
+    @Override
+    public int UpdateAnspost(int homeworkId) {
+        TeacherHomework teaHw = teacherhomeworkDao.findOne(homeworkId);
+        int num = teaHw.getAnspost();
+        if (num == 0){
+            teaHw.setAnspost(1);
+        }
+        else if (num == 1){
+            teaHw.setAnspost(0);
+        }
+        teacherhomeworkDao.updateHandinAlready(teaHw);
+        return teaHw.getAnspost();
     }
 
 }

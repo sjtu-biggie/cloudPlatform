@@ -8,6 +8,8 @@ import com.CloudPlatform.repository.TeacherHomeworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Repository
@@ -74,7 +76,8 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
                 homework.getCourseId(),
                 homework.getTeacherId(),maxId,
                 homework.getHandinAlready(),
-                homework.getDelayable());
+                homework.getDelayable(),
+                homework.getAnspost());
 
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
         int h_id = maxId;
@@ -112,6 +115,40 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         String hwId = Integer.toString(homeworkId);
         teacherhomeworkRepository.deleteByHomeworkId(homeworkId);
         teacherhomeworkDetailRepository.deleteByHomeworkId(hwId);
+    }
+
+    @Override
+    public List<TeacherHomework> findAllByTeacherIdPage(String teacherId, Pageable p) {
+        List<TeacherHomework> homeworkList = teacherhomeworkRepository.findByTeacherId(teacherId,p).getContent();
+
+        for(int i = 0; i < homeworkList.size();++i){
+            TeacherHomeworkDetail detail = teacherhomeworkDetailRepository.findByHomeworkId(Integer.toString(homeworkList.get(i).getHomeworkId()));
+            (homeworkList.get(i)).setId(detail.getId());
+            (homeworkList.get(i)).setContent(detail.getContent());
+            (homeworkList.get(i)).setSyllabus(detail.getSyllabus());
+            (homeworkList.get(i)).setAnswer(detail.getAnswer());
+            (homeworkList.get(i)).setAnswerUpload(detail.getAnswerUpload());
+            (homeworkList.get(i)).setContentUpload(detail.getContentUpload());
+        }
+
+        return homeworkList;
+    }
+
+    @Override
+    public List<TeacherHomework> findAllByCourseIdPage(int courseId, Pageable p) {
+        List<TeacherHomework> homeworkList = teacherhomeworkRepository.findByCourseId(courseId,p).getContent();
+
+        for(int i = 0; i < homeworkList.size();++i){
+            TeacherHomeworkDetail detail = teacherhomeworkDetailRepository.findByHomeworkId(Integer.toString(homeworkList.get(i).getHomeworkId()));
+            (homeworkList.get(i)).setId(detail.getId());
+            (homeworkList.get(i)).setContent(detail.getContent());
+            (homeworkList.get(i)).setSyllabus(detail.getSyllabus());
+            (homeworkList.get(i)).setAnswer(detail.getAnswer());
+            (homeworkList.get(i)).setAnswerUpload(detail.getAnswerUpload());
+            (homeworkList.get(i)).setContentUpload(detail.getContentUpload());
+        }
+
+        return homeworkList;
     }
 
     @Override

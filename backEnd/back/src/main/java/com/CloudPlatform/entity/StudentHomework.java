@@ -189,6 +189,7 @@ public class StudentHomework {
 
     @Transient
     private int handinRank;
+
     @Transient
     List<String> file;
 

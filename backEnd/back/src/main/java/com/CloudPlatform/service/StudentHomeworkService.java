@@ -34,4 +34,8 @@ public interface StudentHomeworkService {
     String upload(MultipartFile file,String userId);
 
     void autoGrading(int homeworkId);
+
+    List<StudentHomework> getStudentHomeworkAllPage(String studentId, Pageable p);
+
+    List<StudentHomework> getPageHomeworkOfStudentsNoMongo(int homeworkId, Pageable p);
 }

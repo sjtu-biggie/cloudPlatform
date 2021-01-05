@@ -33,7 +33,6 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     @Autowired
     private TeacherHomeworkDao teacherHomeworkDao;
 
-
     @Override
     public List<StudentHomework> getStudentHomeworkAll(String studentId) {
         return studenthomeworkDao.findAll(studentId);
@@ -347,5 +346,15 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
             System.out.println(score);
             studenthomeworkDao.editOne(studentHomework);
         }
+    }
+
+    @Override
+    public List<StudentHomework> getStudentHomeworkAllPage(String studentId, Pageable p) {
+        return studenthomeworkDao.findAllPage(studentId, p);
+    }
+
+    @Override
+    public List<StudentHomework> getPageHomeworkOfStudentsNoMongo(int homeworkId, Pageable p) {
+        return studenthomeworkDao.findAllOfHomeworkNoMongoPage(homeworkId,p);
     }
 }

@@ -230,4 +230,29 @@ public class StudentHomeworkDaoImpl implements StudentHomeworkDao {
 
         return homeworkList;
     }
+
+    @Override
+    public List<StudentHomework> findAllPage(String studentId, Pageable p) {
+        List<StudentHomework> homeworkList = studenthomeworkRepository.findAllByStudentId(studentId,p).getContent();
+        for(int i = 0; i < homeworkList.size();++i){
+            StudentHomeworkDetail studentHomeworkDetail = studenthomeworkDetailRepository.findByStudentIdAndHomeworkId(homeworkList.get(i).getStudentId(),Integer.toString(homeworkList.get(i).getHomeworkId()));
+            if(studentHomeworkDetail!=null){
+                (homeworkList.get(i)).setId(studentHomeworkDetail.getId());
+                (homeworkList.get(i)).setContent(studentHomeworkDetail.getContent());
+                (homeworkList.get(i)).setComment(studentHomeworkDetail.getComment());
+                (homeworkList.get(i)).setRemarks(studentHomeworkDetail.getRemarks());
+                (homeworkList.get(i)).setCorrect(studentHomeworkDetail.getCorrect());
+                (homeworkList.get(i)).setUpload(studentHomeworkDetail.getUpload());
+                (homeworkList.get(i)).setOcontent(studentHomeworkDetail.getOcontent());
+            }
+        }
+
+        return homeworkList;
+    }
+
+    @Override
+    public List<StudentHomework> findAllOfHomeworkNoMongoPage(int homeworkId, Pageable p) {
+        List<StudentHomework> homeworkList = studenthomeworkRepository.findAllByHomeworkId(homeworkId,p).getContent();
+        return homeworkList;
+    }
 }

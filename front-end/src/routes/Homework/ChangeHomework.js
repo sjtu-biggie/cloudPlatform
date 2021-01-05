@@ -61,6 +61,7 @@ class ChangeHomework extends React.Component {
         conUpload: null,
         ansUpload: null,
         student:null,
+        iFrameHeight:'100%'
     };
     componentWillReceiveProps(nextProps, nextContext) {
     }
@@ -142,7 +143,6 @@ class ChangeHomework extends React.Component {
         };
         let config = {
             method: 'post',
-            data : {},
             url: 'http://124.70.201.12:8383/UpdateAnspost?homeworkId='+this.state.homeworkId,
             headers: {
                 withCredentials: true,
@@ -456,7 +456,15 @@ class ChangeHomework extends React.Component {
                         <FormItem label='作业内容' {...formItemLayout} required>
                             {
                                 (
-                                    <iframe disabled={this.state.ableState} style={{width:'100%'}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.homework.content}/>
+                                    <iframe disabled={this.state.ableState} style={{width:'100%', height:this.state.iFrameHeight}} title={"s"}
+                                            src={'data:text/html;charset=UTF-8,'+this.state.homework.content}/>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem label='作业答案' {...formItemLayout} required>
+                            {
+                                (
+                                    <iframe disabled={this.state.ableState} style={{width:'100%', height:this.state.iFrameHeight}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.homework.answer}/>
                                 )
                             }
                         </FormItem>
@@ -474,6 +482,7 @@ class ChangeHomework extends React.Component {
                                 )
                             }
                         </FormItem>
+
                         <FormItem style={display2} label='参考答案'  {...DraftLayout}>
                             {
                                 (

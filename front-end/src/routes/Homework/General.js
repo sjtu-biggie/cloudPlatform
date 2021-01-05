@@ -32,7 +32,8 @@ const deadHomework = {
   handinTime: null,
   endTime:'2020-10-12 12:12:13',
   theClass:'加载中',
-  range:'加载中'
+  range:'加载中',
+  Anspost:"加载中"
 };
 
 @withRouter
@@ -186,7 +187,10 @@ class ListDemo extends React.Component {
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="适用人群" value={this.state.homework.range} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="开始时间" value={this.format(this.state.homework.startTime)} />
               <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="结束时间" value={this.format(this.state.homework.endTime)} />
-              <Button style={{marginTop:'30px',marginLeft:'480px'}} type={"primary"} onClick = {()=>{this.autograde()}}>自动批改</Button>
+              <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="答案发布" value={this.state.homework.anspost===0?"未发布":"已发布"} />
+              {this.state.homework.type==="主观题"?<Button style={{marginTop:'30px',marginLeft:'540px'}} disabled={true} onClick = {()=>{this.autograde()}}>自动批改</Button>
+                  :<Button style={{marginTop:'30px',marginLeft:'540px'}} onClick = {()=>{this.autograde()}}>自动批改</Button>
+              }
             </Card>
           </Col>
           {this.state.isLoading === true ? <Col span = {24}>

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: kite-eureka-center
+  cloud:
+    inetutils: ## 网卡设置
+      ignoredInterfaces:  ## 忽略的网卡
+        - veth.*
+      preferredNetworks:  ## 优先的网段
+        - 192.168

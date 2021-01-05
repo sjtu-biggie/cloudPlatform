@@ -44,6 +44,7 @@ class HomeworkCommit extends React.Component {
         },
         homeworkId: "",
         content: "",
+        correct: "",
         comment: "",
         handinTime: "",
         file: [],
@@ -75,8 +76,13 @@ class HomeworkCommit extends React.Component {
             content: homework.content,
             teacherHomework: teacherHomework,
         });
+        if(this.state.correct!==""){
+            this.saveableCanvas.loadSaveData(this.state.correct);
+
+        }
         console.log(homework, teacherHomework,);
         let objJson = [];
+
         if(teacherHomework!==null&&teacherHomework.type==='客观题'){
             for (let i =0;i<teacherHomework.syllabus.chapterNum;++i){
                 objJson.push([]);
@@ -97,10 +103,10 @@ class HomeworkCommit extends React.Component {
         this.getStudentHomeworkOne(sid, this.props.match.params[0].substr(1));
         if (homework.correct !== "" && homework.correct !== undefined && homework.correct !== null) {
             console.log(12345);
-            this.saveableCanvas.loadSaveData(homework.correct)
-
+            this.setState({
+                correct:homework.correct,
+            });
         }
-
     };
     downloadDoc = function (content) {
         let i = 0;
@@ -206,7 +212,11 @@ class HomeworkCommit extends React.Component {
         console.log(w + "  " + h, src);
         this.setState({
             height: h * 900 / w
-        })
+        });
+        console.log(this.state.correct);
+        this.saveableCanvas.loadSaveData(this.state.correct);
+        console.log(this.state.correct);
+
     };
 
     postObject = async () => {
@@ -424,9 +434,15 @@ class HomeworkCommit extends React.Component {
                     <Card title="作业评论">
                         <p>{this.state.homework.comment === null ? '暂无评论' : this.state.homework.comment}</p>
                     </Card><br/>
-
-                    <Button type="primary"
-                            onClick={() => this.postObject()}>{this.state.homework.handinTime !== null ? "重新提交" : "提交"}</Button>&emsp;
+                    <Card title="作业答案">
+                        <p>{this.state.teacherHomework.Anspost === null ||this.state.teacherHomework.Anspost === 0||this.state.teacherHomework.Anspost === undefined ? '答案还未发布！' : this.state.teacherHomework.answer}</p>
+                    </Card><br/>
+                    {this.state.homework.score===null?
+                        <Button type="primary"
+                                onClick={() => this.postObject()}>{this.state.homework.handinTime !== null ? "重新提交" : "提交"}</Button>
+                        :
+                        <Button type="primary" disabled={true}>重新提交</Button>
+                    }&emsp;
                 </Card>
             </div>
         )

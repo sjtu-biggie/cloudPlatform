@@ -1,0 +1,11 @@
+
+.normal {
+  font-family: Georgia, sans-serif;
+  padding: 24px;
+}
+
+.control{
+  display: flex;
+  align-items: center;
+  height: 50px;
+}

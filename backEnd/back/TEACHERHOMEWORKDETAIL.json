@@ -1,0 +1,42 @@
+{
+  "RECORDS": [
+    {
+      "courseId": "1",
+      "teacherId": "1",
+      "homeworkId": "1",
+      "Content": "作业内容",
+      "Answer": "参考答案"
+    },
+    {
+      "courseId": "1",
+      "teacherId": "1",
+      "homeworkId": "2",
+      "Content": "作业内容",
+      "Answer": "参考答案"
+    },    {
+      "courseId": "2",
+      "teacherId": "1",
+      "homeworkId": "3",
+      "Content": "作业内容",
+      "Answer": "参考答案"
+    },    {
+      "courseId": "1",
+      "teacherId": "1",
+      "homeworkId": "4",
+      "Content": "作业内容",
+      "Answer": "参考答案"
+    },    {
+      "courseId": "3",
+      "teacherId": "1",
+      "homeworkId": "5",
+      "Content": "作业内容",
+      "Answer": "参考答案"
+    },    {
+      "courseId": "4",
+      "teacherId": "1",
+      "homeworkId": "6",
+      "Content": "作业内容",
+      "Answer": "参考答案"
+    }
+  ]
+}

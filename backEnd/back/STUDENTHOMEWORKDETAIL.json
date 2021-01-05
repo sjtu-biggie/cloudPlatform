@@ -1,0 +1,52 @@
+{
+  "RECORDS": [
+    {
+      "studentId": "1",
+      "homeworkId": "1",
+      "courseId":"1",
+      "Remarks": "这是我的第一次作业",
+      "Content": "作业内容",
+      "Comment": "老师评论"
+    },
+    {
+      "studentId": "1",
+      "homeworkId": "2",
+      "courseId":"1",
+      "Remarks": "这是我的第一次作业",
+      "Content": "作业内容",
+      "Comment": "老师评论"
+    },
+    {
+      "studentId": "2",
+      "homeworkId": "3",
+      "courseId":"2",
+      "Remarks": "这是我的第一次作业",
+      "Content": "作业内容",
+      "Comment": "老师评论"
+    },
+    {
+      "studentId": "2",
+      "homeworkId": "4",
+      "courseId":"2",
+      "Remarks": "这是我的第一次作业",
+      "Content": "作业内容",
+      "Comment": "老师评论"
+    },
+    {
+      "studentId": "2",
+      "homeworkId": "1",
+      "courseId":"1",
+      "Remarks": "这是我的第一次作业",
+      "Content": "作业内容",
+      "Comment": "老师评论"
+    },
+    {
+      "studentId": "3",
+      "homeworkId": "1",
+      "courseId":"1",
+      "Remarks": "这是我的第一次作业",
+      "Content": "作业内容",
+      "Comment": "老师评论"
+    }
+  ]
+}

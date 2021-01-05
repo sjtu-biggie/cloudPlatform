@@ -44,7 +44,7 @@ class HomeworkCommit extends React.Component {
         },
         homeworkId: "",
         content: "",
-        correct: "",
+        correct: "{}",
         comment: "",
         handinTime: "",
         file: [],
@@ -76,7 +76,7 @@ class HomeworkCommit extends React.Component {
             content: homework.content,
             teacherHomework: teacherHomework,
         });
-        if(this.state.correct!==""){
+        if(this.state.correct!=="{}"){
             this.saveableCanvas.loadSaveData(this.state.correct);
 
         }
@@ -101,7 +101,7 @@ class HomeworkCommit extends React.Component {
         // this.downloadDoc(homework.file,"test.jpeg");
         let sid = localStorage.getItem("username")
         this.getStudentHomeworkOne(sid, this.props.match.params[0].substr(1));
-        if (homework.correct !== "" && homework.correct !== undefined && homework.correct !== null) {
+        if (homework.correct !== "{}" && homework.correct !== undefined && homework.correct !== null) {
             console.log(12345);
             this.setState({
                 correct:homework.correct,
@@ -214,7 +214,7 @@ class HomeworkCommit extends React.Component {
             height: h * 900 / w
         });
         console.log(this.state.correct);
-        this.saveableCanvas.loadSaveData(this.state.correct);
+        if(this.state.correct!=="{}") this.saveableCanvas.loadSaveData(this.state.correct);
         console.log(this.state.correct);
 
     };
@@ -402,7 +402,7 @@ class HomeworkCommit extends React.Component {
                         <p>{this.state.teacherHomework.type === "主观题" ? <iframe style={{width: '100%'}} title={"s"}
                                                                                 src={'data:text/html;charset=UTF-8,' + this.state.teacherHomework.content}/> : this.renderObj(this.state.teacherHomework.syllabus)}</p>
                     </Card>
-                    {new Date(Date.parse(this.state.homework.endTime)) > new Date() ? <div><br/><Card title={"作答区域"}>
+                    {new Date(Date.parse(this.state.homework.endTime)) > new Date() ? <div><br/><Card title={"我的答案"}>
                         <p>{this.state.homework.handinTime === null ? <p style={{color: 'red'}}>未提交!</p> :
                             <iframe style={{width: '100%'}} title={"s"}
                                     src={'data:text/html;charset=UTF-8,' + this.state.content}/>}</p>

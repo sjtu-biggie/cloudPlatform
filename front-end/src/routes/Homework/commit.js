@@ -435,7 +435,7 @@ class HomeworkCommit extends React.Component {
                         <p>{this.state.homework.comment === null ? '暂无评论' : this.state.homework.comment}</p>
                     </Card><br/>
                     <Card title="作业答案">
-                        <p>{this.state.teacherHomework.Anspost === null ||this.state.teacherHomework.Anspost === 0||this.state.teacherHomework.Anspost === undefined ? '答案还未发布！' :   <iframe style={{width: '100%'}} title={"s"}
+                        <p>{this.state.teacherHomework.anspost === null ||this.state.teacherHomework.anspost === 0||this.state.teacherHomework.anspost === undefined ? '答案还未发布！' :   <iframe style={{width: '100%'}} title={"s"}
                                                                                                                                                                                              src={'data:text/html;charset=UTF-8,' + this.state.teacherHomework.answer}/>}</p>
                     </Card><br/>
                     {this.state.homework.score===null?

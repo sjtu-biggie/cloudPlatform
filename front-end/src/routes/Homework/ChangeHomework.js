@@ -142,8 +142,8 @@ class ChangeHomework extends React.Component {
         };
         let config = {
             method: 'post',
-            data : ob,
-            url: 'http://124.70.201.12:8383/UpdateAnspost',
+            data : {},
+            url: 'http://124.70.201.12:8383/UpdateAnspost?homeworkId='+this.state.homeworkId,
             headers: {
                 withCredentials: true,
             }
@@ -156,7 +156,7 @@ class ChangeHomework extends React.Component {
                 console.log(error);
             });
         let homework = this.state.homework;
-        homework.Anspost = newAnspost;
+        homework.anspost = newAnspost;
         this.setState({
             homework:homework
         })
@@ -508,7 +508,7 @@ class ChangeHomework extends React.Component {
                             <Button type="dashed" style={{marginLeft: 50}} onClick={()=>{
                                 this.postAnswer();
                             }}>
-                                {this.state.homework.AnsPost===true?
+                                {this.state.homework.ansPost===true?
                                     "取消答案公布":"公布答案"
                                 }
                             </Button>

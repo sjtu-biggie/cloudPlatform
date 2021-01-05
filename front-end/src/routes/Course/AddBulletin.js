@@ -116,12 +116,9 @@ class AddBulletin extends React.Component {
                             }).catch(err=>{
                                 console.log(err)
                             })
-
                         }).catch(err => {
                             console.log(err);
                         });
-
-
                         return response.data;
                     })
                     .catch(function (error) {

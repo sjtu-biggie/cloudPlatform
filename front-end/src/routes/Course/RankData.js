@@ -311,8 +311,7 @@ class RankData extends React.Component {
                         </Card>
                     </Col>
                     <Col span={12}>
-                        /*TODO: width shoule be change*/
-                        <Card title='截止前时间变化' bordered={false} className='card-item' style={{width: '950px'}}>
+                        <Card title='剩余时间变化' bordered={false} className='card-item' style={{width: '950px'}}>
                             <Chart height={400} data={this.state.ddlChange} scale={col3} forceFit>
                                 <Axis name="num" title={"提交时间"}/>
                                 <Axis name="value" title={"排名"} label={{

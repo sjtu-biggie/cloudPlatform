@@ -93,7 +93,8 @@ class ChangeHomework extends React.Component {
         console.log(hw);
         this.setState({
             homework:hw,
-        })
+            homeworkId:this.props.homeworkId
+        });
         this.getStudentInfo(classIds);
 
     };
@@ -135,11 +136,35 @@ class ChangeHomework extends React.Component {
             userInfo:user,
         })
     };
-
+    postAnswer = async ()=>{
+        let ob = {
+            homeworkId: parseInt(this.state.homeworkId)
+        };
+        let config = {
+            method: 'post',
+            data : ob,
+            url: 'http://124.70.201.12:8383/UpdateAnspost',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const newAnspost = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        let homework = this.state.homework;
+        homework.Anspost = newAnspost;
+        this.setState({
+            homework:homework
+        })
+    };
     getStudentInfo = async (values)=>{
         let ob = {
             classIds: values
-        }
+        };
         let config = {
             method: 'post',
             data : ob,
@@ -178,22 +203,22 @@ class ChangeHomework extends React.Component {
         for(let i=0;i<fileList.length;i++){
             conPath.push(fileList[i].response)
         }
-        let conUpload=conPath.join(',')
+        let conUpload=conPath.join(',');
         this.setState({
             conUpload: conUpload
         })
-    }
+    };
 
     getAnsUpload = (result, fileList) => {
         let ansPath = [];
         for(let i=0;i<fileList.length;i++){
             ansPath.push(fileList[i].response)
         }
-        let ansUpload = ansPath.join(',')
+        let ansUpload = ansPath.join(',');
         this.setState({
             ansUpload: ansUpload
         })
-    }
+    };
 
     editStudentHomework = async (homework)=>{
         console.log(this.state.student[0].email);
@@ -426,6 +451,7 @@ class ChangeHomework extends React.Component {
                                 )
                             }
                         </FormItem>
+
                         <FormItem label='作业内容' {...formItemLayout} required>
                             {
                                 (
@@ -479,6 +505,13 @@ class ChangeHomework extends React.Component {
                                     message.success('取消修改');
                                 }
                             }}>{this.state.buttonName}</Button>
+                            <Button type="dashed" style={{marginLeft: 50}} onClick={()=>{
+                                this.postAnswer();
+                            }}>
+                                {this.state.homework.AnsPost===true?
+                                    "取消答案公布":"公布答案"
+                                }
+                            </Button>
                         </FormItem>
                     </Form>
 

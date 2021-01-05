@@ -150,6 +150,7 @@ class ChangeHomework extends React.Component {
         };
         const newAnspost = await axios(config)
             .then(function (response) {
+                console.log(response.data);
                 return response.data;
             })
             .catch(function (error) {
@@ -508,7 +509,7 @@ class ChangeHomework extends React.Component {
                             <Button type="dashed" style={{marginLeft: 50}} onClick={()=>{
                                 this.postAnswer();
                             }}>
-                                {this.state.homework.ansPost===true?
+                                {this.state.homework.anspost===1?
                                     "取消答案公布":"公布答案"
                                 }
                             </Button>

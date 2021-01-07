@@ -37,6 +37,7 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
                 homework.getTeacherId(),
                 homework.getHandinAlready(),
                 homework.getDelayable(),
+                homework.getAnspost(),
                 homework.getHomeworkId());
 
         TeacherHomeworkDetail homeworkDetail = new TeacherHomeworkDetail();
@@ -149,6 +150,12 @@ public class TeacherHomeworkDaoImpl implements TeacherHomeworkDao {
         }
 
         return homeworkList;
+    }
+
+    @Override
+    public void updateAnspost(TeacherHomework homework) {
+        teacherhomeworkRepository.UpdateAnspost(
+                homework.getAnspost(),homework.getHomeworkId());
     }
 
     @Override

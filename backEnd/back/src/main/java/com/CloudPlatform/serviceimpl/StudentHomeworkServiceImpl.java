@@ -1,5 +1,6 @@
 package com.CloudPlatform.serviceimpl;
 
+import com.CloudPlatform.config.PicReinforce;
 import com.CloudPlatform.dao.StudentHomeworkDao;
 import com.CloudPlatform.dao.TeacherHomeworkDao;
 import com.CloudPlatform.entity.StudentHomework;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -211,7 +213,10 @@ public class StudentHomeworkServiceImpl implements StudentHomeworkService {
     }
 
     @Override
-    public String upload(MultipartFile file, String userId) {
+    public String upload(MultipartFile file, String userId) throws IOException {
+        InputStream fis = file.getInputStream();
+        byte[] bytes = FileCopyUtils.copyToByteArray(fis);
+        String base64 = PicReinforce.Reinforce(bytes);
         String pathName = "/homework/" + userId + "/";//想要存储文件的地址
         String pname = file.getOriginalFilename();//获取文件名（包括后缀）
         FileOutputStream fos = null;

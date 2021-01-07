@@ -189,7 +189,7 @@ public class TeacherHomeworkServiceImpl implements TeacherHomeworkService {
         else if (num == 1){
             teaHw.setAnspost(0);
         }
-        teacherhomeworkDao.updateHandinAlready(teaHw);
+        teacherhomeworkDao.updateAnspost(teaHw);
         return teaHw.getAnspost();
     }
 

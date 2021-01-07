@@ -27,13 +27,18 @@ public interface TeacherHomeworkRepository extends JpaRepository<TeacherHomework
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value ="update teacherhomework set endtime=?1, handinamount=?2, `range`=?3, starttime=?4, subject=?5, title=?6, type=?7, courseid=?8, teacherid=?9, handinalready=?10 , delayable = ?11 where homeworkid = ?12")
-    void Update(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int handinalready,  int delayable, int homeworkid);
+    @Query(nativeQuery = true,value ="update teacherhomework set endtime=?1, handinamount=?2, `range`=?3, starttime=?4, subject=?5, title=?6, type=?7, courseid=?8, teacherid=?9, handinalready=?10 , delayable = ?11, anspost = ?12 where homeworkid = ?13")
+    void Update(Date endTime, int handinamount, String range, Date starttime, String subject, String title, String type, int courseid, String teacherid, int handinalready,  int delayable, int anspost, int homeworkid);
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value ="update teacherhomework set handinalready = ?1 where homeworkid = ?2")
     void UpdateHandinAlready(int handinalready, int homeworkid);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value ="update teacherhomework set anspost = ?1 where homeworkid = ?2")
+    void UpdateAnspost(int anspost, int homeworkid);
 
     @Query(nativeQuery = true,value = "select max(homeworkId) from teacherhomework ")
     Integer getMaxId();

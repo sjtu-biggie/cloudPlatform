@@ -19,6 +19,7 @@ class CourseDemo extends React.Component {
         courses: [],
         gradeCourses: [],
         typeCourses: [],
+        nameCourses: [],
         displayCourses: [],
         type: 0,
         size: 'default',
@@ -27,21 +28,28 @@ class CourseDemo extends React.Component {
         loading: true,
         loadingMore: false,
         deleteCourses: false,
+        subject:"",
+        grade:"",
+        cname:""
     };
     changeGrade = (grade) => {
         let modifiedList = [];
         let modifiedCoursesList = [];
         let courseButton = document.getElementById("gradeButton");
+        this.setState({
+            grade:grade
+        });
         if (grade === "所有") {
             this.setState({
+                grade:"",
                 displayCourses: this.state.typeCourses,
                 gradeCourses: this.state.courses
             });
             courseButton.innerText = "年级";
             return null;
         } else {
-            for (let course of this.state.typeCourses) {
-                if (course.course.grade === grade) {
+            for (let course of this.state.typeCourses){
+                if (course.course.grade === grade&&(this.state.cname===""||course.course.courseName.indexOf(this.state.cname)>0)){
                     modifiedList.push(course);
                 }
             }
@@ -61,8 +69,13 @@ class CourseDemo extends React.Component {
         let modifiedList = [];
         let modifiedCoursesList = [];
         let courseButton = document.getElementById("courseButton");
+        this.setState({
+            subject:subject
+        });
         if (subject === "所有") {
+
             this.setState({
+                subject:"",
                 displayCourses: this.state.gradeCourses,
                 typeCourses: this.state.courses
             });
@@ -70,8 +83,10 @@ class CourseDemo extends React.Component {
             return null;
         } else {
             for (let course of this.state.gradeCourses) {
-                if (course.course.type === subject) {
+                if (course.course.type === subject&&(this.state.cname===""||course.course.courseName.indexOf(this.state.cname))>0) {
                     modifiedList.push(course);
+                }else{
+
                 }
             }
             for (let course of this.state.courses) {
@@ -86,7 +101,18 @@ class CourseDemo extends React.Component {
             displayCourses: modifiedList,
         });
     };
-
+    searchFun = (value) => {
+        let modifiedDisplayList = [];
+        for (let course of this.state.courses) {
+            if ((course.course.courseName.indexOf(value) >0 ||value==="")&&(this.state.grade===""||this.state.grade === course.course.grade) &&(this.state.subject===""||this.state.subject=== course.course.type)) {
+                modifiedDisplayList.push(course);
+            }
+        }
+        this.setState({
+            cname:value,
+            displayCourses:modifiedDisplayList
+        })
+    };
     componentWillReceiveProps(nextProps, nextContext) {
         this.componentWillMount(nextProps.location.pathname);
     }

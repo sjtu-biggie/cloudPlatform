@@ -401,6 +401,7 @@ export default class ClassManage extends Component {
                     menu:newMenu,
                 });
             }).catch(err => {
+                message.info("班级已存在或格式不符合");
                 console.log(err);
             })
         };

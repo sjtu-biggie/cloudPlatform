@@ -133,8 +133,11 @@ class PersonalCenter extends React.Component {
                 },
             },
         }
-        const display2 = {
-            display:(this.state.role === 'teacher') ? 'block' : 'none',
+        // const display2 = {
+        //     display:(this.state.role === 'teacher') ? 'block' : 'none',
+        // }
+        const display2={
+            display:'block',
         }
         return (
             <div>

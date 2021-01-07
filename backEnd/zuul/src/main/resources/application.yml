@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: zuul-gateway
+
+server:
+  port: 5000
+
+
+zuul:
+  routes:
+    eureka-provider:
+      path: /provider/**
+      #url: http://127.0.0.1:8081/  #�Ѱ���path�е�·����������ת��url��Ӧ��ַ
+

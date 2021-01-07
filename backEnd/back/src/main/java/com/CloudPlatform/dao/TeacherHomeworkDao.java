@@ -18,4 +18,6 @@ public interface TeacherHomeworkDao {
     List<TeacherHomework> findAllByTeacherIdPage(String teacherId, Pageable p);
 
     List<TeacherHomework> findAllByCourseIdPage(int courseId, Pageable p);
+
+    void updateAnspost(TeacherHomework homework);
 }

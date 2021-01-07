@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public interface StudentHomeworkService {
 
     double getAverage(int homeworkId);
 
-    String upload(MultipartFile file,String userId);
+    String upload(MultipartFile file,String userId) throws IOException;
 
     void autoGrading(int homeworkId);
 

@@ -148,7 +148,7 @@ class HomeworkCommit extends React.Component {
         if (Sharpness != null){
             index = Sharpness.lastIndexOf(':');
             let num = Sharpness.substring(index+1,Sharpness.length-2);
-            console.log(num);
+            message.success('清晰度已优化',3);
             if (num < 0.67){
                 message.error('清晰度不足，请重新提交',6);
                 return;
@@ -190,7 +190,7 @@ class HomeworkCommit extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(hw.comment);
+
         if (hw.file === null || hw.file === undefined) {
             this.setState({
                 src: ""

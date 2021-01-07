@@ -249,7 +249,9 @@ class HomeworkList extends React.Component {
 
                                           extra={((this.state.delete === false && this.state.role === 'teacher')?[
                                               <div>
-                                                  <Button type="danger" onClick={()=>{this.deleteTeacherHomeworkOne(item)}}>删除</Button>
+                                                  <Button type="danger" onClick={()=>{
+                                                      this.deleteTeacherHomeworkOne(item);
+                                                  }}>删除</Button>
                                               </div>
                                           ]:(this.SetCon(item) === "已结束")?[
                                               <div>

@@ -222,7 +222,6 @@ class ChangeHomework extends React.Component {
     };
 
     editStudentHomework = async (homework)=>{
-        console.log(this.state.student[0].email);
         let tos=[];
         for (let i = 0; i < this.state.student.length; ++i){
             tos.push(this.state.student[i].email)

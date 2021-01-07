@@ -75,7 +75,7 @@ class commitPage extends React.Component{
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(hw.comment);
+
         hw.endTime = this.format(hw.endTime);
         this.setState({
             homework:hw

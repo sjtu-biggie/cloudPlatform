@@ -234,7 +234,6 @@ class Assign extends React.Component {
 
     addStudentHomework = async (homework) => {
         console.log(this.state.student);
-        console.log(this.state.student[0].email);
         let tos=[];
         for (let i = 0; i < this.state.student.length; ++i){
             tos.push(this.state.student[i].email)

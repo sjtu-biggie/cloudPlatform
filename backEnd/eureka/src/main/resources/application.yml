@@ -1,0 +1,14 @@
+server:
+  port: 4000
+eureka:
+  instance:
+    hostname: eureka-center
+    appname: registerCenter
+  client:
+    registerWithEureka: false # �����ʱ������Ϊ false ��ֹע������
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://124.70.201.12:4000/eureka
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 4000

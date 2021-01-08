@@ -108,6 +108,25 @@ class HomeworkCommit extends React.Component {
             });
         }
     };
+    downloadPic(value,name) {//下载图片地址和图片名
+        let image = new Image();
+        // 解决跨域 Canvas 污染问题
+        image.setAttribute("crossOrigin", "anonymous");
+        image.onload = function() {
+            // let canvas = document.createElement("canvas");
+            // canvas.width = image.width;
+            // canvas.height = image.height;
+            // let context = canvas.getContext("2d");
+            // context.drawImage(image, 0, 0, image.width, image.height);
+            let url = value;
+            let a = document.createElement("a"); // 生成一个a元素
+            let event = new MouseEvent("click"); // 创建一个单击事件
+            a.download = name || "photo"; // 设置图片名称
+            a.href = url; // 将生成的URL设置为a.href属性
+            a.dispatchEvent(event); // 触发a的单击事件
+        };
+        image.src = value;
+    }
     downloadDoc = function (content) {
         let i = 0;
         for (let file of content) {
@@ -401,6 +420,9 @@ class HomeworkCommit extends React.Component {
 
                         <p>{this.state.teacherHomework.type === "主观题" ? <iframe style={{width: '100%'}} title={"s"}
                                                                                 src={'data:text/html;charset=UTF-8,' + this.state.teacherHomework.content}/> : this.renderObj(this.state.teacherHomework.syllabus)}</p>
+                        {this.state.teacherHomework.contentFile!==null&&this.state.teacherHomework.contentFile!==undefined&&this.state.teacherHomework.contentFile!==""?
+                                 <Button onClick={()=>{this.downloadPic('data:image/png;base64,'+this.state.teacherHomework.contentFile)}} >下载作业图片</Button>:null
+                    }
                     </Card>
                     {new Date(Date.parse(this.state.homework.endTime)) > new Date() ? <div><br/><Card title={"我的答案"}>
                         <p>{this.state.homework.handinTime === null ? <p style={{color: 'red'}}>未提交!</p> :

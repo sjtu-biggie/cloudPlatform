@@ -127,4 +127,10 @@ public class UserManageController {
         return "添加完成";
     }
 
+    @RequestMapping(value = "/saveAllUsers",method = RequestMethod.POST)
+    public String saveAllUsers(@RequestBody JSONObject obj){
+        System.out.println(obj);
+        return "添加完成";
+    }
+
 }

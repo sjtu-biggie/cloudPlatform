@@ -194,6 +194,18 @@ export default class StudentTable extends Component {
                     data:data.Sheet1
                 });
                 console.log(this.state.data)
+                axios({
+                    method:'POST',
+                    url:'http://124.70.201.12:8000/saveAllUsers',
+                    data:{
+                        users:this.state.data
+                    }
+                }).then(msg=>{
+                    console.log("储存数据成功");
+                }).catch(err=>{
+                    console.log(err);
+                })
+
                 // 最终获取到并且格式化后的 json 数据
                 message.success('上传成功！')
             } catch (e) {

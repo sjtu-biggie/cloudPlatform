@@ -196,7 +196,7 @@ class ListDemo extends React.Component {
           {this.state.isLoading === true ? <Col span = {24}>
             <CommitTable homework={this.state.homework} studentHomework={this.state.studentHomework} homeworkId={this.state.homeworkId} handinAlready={this.state.handinAlready}/>
           </Col> : null}
-
+        <Button onClick={()=>{this.props.history.push("/home/course/class="+this.state.homework.courseId)}}>返回课程主页</Button>
         </Card>
         <BackTop visibilityHeight={200} style={{right: 50}}/>
       </div>

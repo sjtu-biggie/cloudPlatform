@@ -325,13 +325,36 @@ class ChangeHomework extends React.Component {
                 this.editHomework(values);
             }
         });
-    }
+    };
 
     componentWillMount() {
         this.getData2();
     }
-
-    render() {
+    package=(value)=>{
+        if(value===undefined) return "加载中";
+        console.log(value);
+        let tt = [];
+      for(let i = 1;i<=value.chapterNum;++i){
+          let chapter = 'chapter' + i;
+          let string = "";
+          if(value[chapter].type==="选择题"){
+              let title = value[chapter].title;
+              tt.push(<p>选择题：{title}</p>);
+              string = "选项：";
+          }else{
+              let title = value[chapter].text;
+              tt.push(<p>填空题：{title}</p>);
+              string = "答案："
+          }
+          let content = value[chapter].content;
+          for(let j of content){
+              string = string+j+"    ";
+          }
+          tt.push(<p>{string}</p>)
+      }
+      return tt;
+    };
+    render=()=> {
         const display2 = {
             display:(this.state.buttonName === '取消修改') ? 'block' : 'none',
             width: '100%',
@@ -455,18 +478,20 @@ class ChangeHomework extends React.Component {
                         <FormItem label='作业内容' {...formItemLayout} required>
                             {
                                 (
+                                    this.state.homework.type==="主观题"?
                                     <iframe disabled={this.state.ableState} style={{width:'100%', height:this.state.iFrameHeight}} title={"s"}
-                                            src={'data:text/html;charset=UTF-8,'+this.state.homework.content}/>
+                                            src={'data:text/html;charset=UTF-8,'+this.state.homework.content}/>:this.package(this.state.homework.syllabus)
                                 )
                             }
                         </FormItem>
+                        {this.state.homework.type==="主观题"?
                         <FormItem label='作业答案' {...formItemLayout} required>
                             {
                                 (
                                     <iframe disabled={this.state.ableState} style={{width:'100%', height:this.state.iFrameHeight}} title={"s"} src={'data:text/html;charset=UTF-8,'+this.state.homework.answer}/>
                                 )
                             }
-                        </FormItem>
+                        </FormItem>:null }
                         <FormItem style={display2} label='作业详情' {...DraftLayout} >
                             {
                                 (

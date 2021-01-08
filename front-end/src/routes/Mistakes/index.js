@@ -307,14 +307,19 @@ class Mistakes extends React.Component {
 
                                           <row>
                                       <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>
-                                              <p style={{fontSize:'5px',display:'block'}}>{"结束时间："+this.format(item.endTime)}</p>
-                                              <p style={{marginTop:'10px'}}>{"作答内容："+item.content}</p>
-                                              <p style={{marginTop:'10px'}}>{"参考答案："+item.remarks}</p>
+                                              <p style={{display:'block'}}>{"结束时间："+this.format(item.endTime)}</p>
+                                              <p>{"作答内容："}</p>
+                                              <iframe style={{width: '100%'}} title={"s"}
+                                                      src={'data:text/html;charset=UTF-8,' + item.content}/>
+                                              <p>{"参考答案："}<iframe style={{width: '100%'}} title={"s"}
+                                                                                             src={'data:text/html;charset=UTF-8,' + item.remarks}/></p>
+
                                           </row>
                                       {/*{item.content}*/}
                                   </List.Item>
                               )
-                          }}
+                          }
+                          }
                     />
                 </Card>
 

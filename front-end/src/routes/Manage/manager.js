@@ -217,7 +217,6 @@ export default class StudentTable extends Component {
             console.log(tData);
             this.setState({renderData:tData});
         };
-
         // 以二进制方式打开文件
         fileReader.readAsBinaryString(file.file);
     }

@@ -1,26 +1,92 @@
 import React from 'react'
-import { Icon, Badge, Dropdown, Menu, Modal } from 'antd'
+import {Icon, Badge, Dropdown, Menu, Modal, Button, message} from 'antd'
+import { NotificationOutlined } from '@ant-design/icons';
 import screenfull from 'screenfull'
 import { inject, observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
 import { isAuthenticated } from '../../utils/Session'
-
+import  axios from 'axios'
 //withRouter一定要写在前面，不然路由变化不会反映到props中去
 @withRouter @inject('appStore') @observer
 class HeaderBar extends React.Component {
   state = {
     icon: 'arrows-alt',
-    count: 29,
+    count: 0,
     visible: false,
-    avatar: require('./img/04.jpg')
+    // avatar: require('./img/04.jpg')
+    // avatar: window.localStorage.getItem("iconBase64")
+    avatar:''
   };
 
   componentDidMount () {
+
     screenfull.onchange(() => {
       this.setState({
         icon: screenfull.isFullscreen ? 'shrink' : 'arrows-alt'
       })
     })
+  }
+
+  componentDidMount(){
+    axios({
+      url:'http://124.70.201.12:8000/getUserMessageAndIcon',
+      method:'POST',
+      data:{
+        'username':window.localStorage.getItem("username")
+      },
+      headers: {
+        withCredentials: true,
+      }
+
+    }).then(msg=>{
+      console.log("拿到数据");
+      console.log(msg);
+      this.setState({avatar:msg.data.iconBase64});
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
+  getNoteInfo=async (username)=>{
+    let config = {
+      method: 'get',
+      url: 'http://124.70.201.12:8787/course/getNoteByUser?userId='+username,
+      headers: {
+        withCredentials: true,
+      }
+    };
+    return await axios(config)
+        .then(function (response) {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  };
+
+  getNote=()=>{
+    let username=localStorage.getItem("username");
+    console.log(username)
+    this.getNoteInfo(username).then((res) => {
+      if (res === null) {
+        message.success("failure loading courses!");
+        return;
+      }
+      for (let i = 0; i < res.length; ++i) {
+        if(res[i].reading===false){
+          this.setState({
+            count:this.state.count+1
+          })
+        }
+      }
+      console.log(this.state.count)
+    });
+  }
+
+
+  componentWillMount() {
+    this.getNote()
   }
 
   componentWillUnmount () {
@@ -37,7 +103,7 @@ class HeaderBar extends React.Component {
   }
   logout = () => {
     this.props.appStore.toggleLogin(false)
-    this.props.history.push(this.props.location.pathname)
+    this.props.history.push("/login")
   }
 
   render () {
@@ -53,8 +119,10 @@ class HeaderBar extends React.Component {
       <Menu className='menu'>
         <Menu.ItemGroup title='用户中心' className='menu-group'>
           <Menu.Item>你好 - {isAuthenticated()}</Menu.Item>
-          <Menu.Item onClick={()=>{this.props.history.push("/home/personalcenter")}}>个人信息</Menu.Item>
-          <Menu.Item><span onClick={this.logout}>退出登录</span></Menu.Item>
+          <Menu.Item onClick={()=>{console.log(this.props.history),
+            this.props.history.push("/home/personalcenter")
+          }}>个人信息</Menu.Item>
+          <Menu.Item><p onClick={this.logout}>退出登录</p></Menu.Item>
         </Menu.ItemGroup>
       </Menu>
     )
@@ -72,9 +140,9 @@ class HeaderBar extends React.Component {
         <div style={{lineHeight: '64px', float: 'right'}}>
           <ul className='header-ul'>
             <li><Icon type={icon} onClick={this.screenfullToggle}/></li>
-            <li onClick={() => {this.setState({count: 0}),this.props.history.push('/home/notification')}}>
-              <Badge count={appStore.isLogin ? count : 0} overflowCount={99} style={{marginRight: -17}}>
-                <Icon type="notification"/>
+            <li onClick={() => {this.props.history.push('/home/notification')}}>
+              <Badge count={this.state.count} style={{marginRight: -17}}>
+                <NotificationOutlined />
               </Badge>
             </li>
             <li>

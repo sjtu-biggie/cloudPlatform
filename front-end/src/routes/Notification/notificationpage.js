@@ -63,9 +63,11 @@ class NotificationPage extends React.Component {
         data2: [],
         loading: false,
         loadingMore: false,
-        course: deadCourse,
+        notification: deadCourse,
         bulletins: bulletin,
     };
+
+
 
 
 
@@ -81,8 +83,9 @@ class NotificationPage extends React.Component {
                                 fontSize: '20px',
                                 fontWeight: 'bold',
                                 display: 'block'
-                            }}>【通知】{this.state.course.course_name}作业</p>
-                            <a  href={"/home/homework/commit"} style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</a>
+                            }}>{this.state.notification.title}</p>
+                            <p   style={{marginTop: '10px', height: '90px'}}>{this.state.notification.content}</p>
+                            <p>{"发布时间："+this.state.notification.publishDate}</p>
                         </Col>
 
                     </Row>
@@ -153,9 +156,61 @@ class NotificationPage extends React.Component {
             default:
                 return /*this.rankRender()*/;
         }
-
-
     };
+
+    format = (shijianchuo) => {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth() + 1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
+    };
+
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
+    }
+
+    getNote=async (notificationId)=>{
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getNoteById?notificationId='+notificationId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        hw.publishDate = this.format(hw.publishDate);
+        console.log(hw)
+        this.setState({
+            notification:hw,
+        })
+    };
+
+    componentWillMount() {
+        //TODO:get role from local storage
+        this.setState({
+            loading: true,
+        });
+        console.log(this.props.match.params)
+        let notificationId = this.props.match.params[0].substr(1);
+        console.log(notificationId);
+        this.getNote(notificationId);
+        this.setState({
+            displayNotification:this.state.notification,
+            loading: false
+        });
+    }
+
 
     render() {
         const {loadingMore} = this.state
@@ -167,10 +222,12 @@ class NotificationPage extends React.Component {
                 <Button style={!loadingMore ? {} : {display: 'none'}} onClick={() => this.getData2()}>加载更多</Button>
             </div>
         );
+
+
         return (
             <div>
                 <CustomBreadcrumb
-                    arr={['通知', this.state.course.course_name]}/>
+                    arr={['通知'+this.state.notification.notificationId]}/>
                 {this.typeRender()}
 
                 <BackTop visibilityHeight={200} style={{right: 50}}/>

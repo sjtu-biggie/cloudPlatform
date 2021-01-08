@@ -15,13 +15,15 @@ import {
     Row,
     message,
     BackTop,
-    Steps, DatePicker, Upload, Collapse, List, Progress, Dropdown, Menu
+    Steps, DatePicker, Upload, Collapse, List, Progress, Dropdown, Menu, Switch
 } from 'antd'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import TypingCard from '../../components/TypingCard'
 import TextArea from "antd/es/input/TextArea";
 import StudenTable from '../Manage/studentTable'
 import Search from "antd/es/input/Search";
+import axios from "axios";
+import {withRouter} from "react-router-dom";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -33,13 +35,15 @@ const genExtra = () => (
         }}
     />
 );
-
+@withRouter
 @Form.create()
 class AddCourse extends React.Component {
     state = {
-        courseJson:null,
-        grade:'一年级',
-        courseType:'数学',
+        courseId:0,
+        classes: null,
+        courseJson: null,
+        grade: '一年级上',
+        courseType: '数学',
         processChapter: 0,
         addContent: false,
         addChapter: false,
@@ -47,37 +51,11 @@ class AddCourse extends React.Component {
         disabled: false,
         step: 0,
         syllabus: {
-            chapterNum:4,
+            chapterNum: 1,
             chapter1: {
-                title: "一百以内算术",
+                title: "请添加章节",
                 content: [
-                    "加法",
-                    "减法", "乘法", "除法"
-                ]
-            },
-            chapter2: {
-                title: "微积分",
-                content: [
-                    "微分",
-                    "积分", "偏微分"
-                ]
-            },
-            chapter3: {
-                title: "数学史",
-                content: [
-                    "时间简史",
-                    "二战史",
-                    "线性代数史"
-                ]
-            },
-            chapter4: {
-                title: "提高篇",
-                content: [
-                    "矩阵",
-                    "行列式",
-                    "特征向量",
-                    "正交矩阵",
-                    "正定矩阵"
+                    "请添加小节",
                 ]
             },
         }
@@ -118,28 +96,28 @@ class AddCourse extends React.Component {
         this.setState({syllabus: modifiedSyllabus});
     };
     addBig = (index, smallName) => {
-        let chapterString ='chapter' + (index + 2);
-        let chapterName = {title:smallName,content:[]};
+        let chapterString = 'chapter' + (index + 2);
+        let chapterName = {title: smallName, content: []};
         let modifiedSyllabus = this.state.syllabus;
-        for(let i=modifiedSyllabus.chapterNum;i>index+1;--i){
+        for (let i = modifiedSyllabus.chapterNum; i > index + 1; --i) {
             let prvChapter = 'chapter' + i;
             let mdfChapter = 'chapter' + (i + 1);
-            modifiedSyllabus[mdfChapter]=modifiedSyllabus[prvChapter];
+            modifiedSyllabus[mdfChapter] = modifiedSyllabus[prvChapter];
         }
         modifiedSyllabus[chapterString] = chapterName;
-        modifiedSyllabus['chapterNum']=modifiedSyllabus['chapterNum']+1;
+        modifiedSyllabus['chapterNum'] = modifiedSyllabus['chapterNum'] + 1;
         console.log(modifiedSyllabus);
         this.setState({syllabus: modifiedSyllabus});
     };
-    deleteBig = (index)=>{
+    deleteBig = (index) => {
         let modifiedSyllabus = this.state.syllabus;
-        for(let i=index+1;i<modifiedSyllabus.chapterNum;++i){
+        for (let i = index + 1; i < modifiedSyllabus.chapterNum; ++i) {
             let prvChapter = 'chapter' + i;
             let mdfChapter = 'chapter' + (i + 1);
-            modifiedSyllabus[prvChapter]=modifiedSyllabus[mdfChapter];
+            modifiedSyllabus[prvChapter] = modifiedSyllabus[mdfChapter];
         }
-        delete modifiedSyllabus[ 'chapter'+modifiedSyllabus.chapterNum];
-        modifiedSyllabus['chapterNum']=modifiedSyllabus['chapterNum']-1;
+        delete modifiedSyllabus['chapter' + modifiedSyllabus.chapterNum];
+        modifiedSyllabus['chapterNum'] = modifiedSyllabus['chapterNum'] - 1;
         console.log(modifiedSyllabus);
         this.setState({syllabus: modifiedSyllabus});
     };
@@ -170,51 +148,125 @@ class AddCourse extends React.Component {
                 message.warning('请填写正确的课程信息')
             } else {
                 message.success('提交成功');
-                values.type=this.state.courseType;
-                values.grade=this.state.grade;
+                values.type = this.state.courseType;
+                values.grade = this.state.grade;
                 values.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
                 values.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
-                this.setState({step: 1,courseJson:values});
+                if (values.seeHomeworkAverage === undefined) {
+                    values.seeHomeworkAverage = true;
+                }
+                if (values.seeCourseAverage === undefined) {
+                    values.seeCourseAverage = true;
+                }
+                if (values.noteHomeworkAssign === undefined) {
+                    values.noteHomeworkAssign = true;
+                }
+                if (values.noteHomeworkDue === undefined) {
+                    values.noteHomeworkDue = true;
+                }
+                if (values.noteHomeworkRatify === undefined) {
+                    values.noteHomeworkRatify = true;
+                }
+                let classString="";
+                for (let i =0;i<values.classes.length-1;++i){
+                    classString = classString+values.classes[i]+",";
+                }
+                if(values.classes.length>0){
+                    classString = classString + values.classes[values.classes.length-1];
+                }
+                values.classes = classString;
+                let storage = window.localStorage;
+                values.userId = storage.getItem("username");
+                this.setState({step: 1, courseJson: values});
                 console.log(values);
             }
         });
     };
 
+    componentWillMount=async()=> {
+        let config = {
+            method: 'post',
+            url: 'http://124.70.201.12:8000/getAllClass',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const classes = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        let options1 = [];
+        for (let i = 0; i < classes.length; ++i){
+            options1.push(
+                <Option key={classes[i]} value={classes[i]}>{classes[i]}</Option>
+            )
+        }
+        this.setState({
+            classes:options1,
+        })
+    };
+
     componentWillUnmount() {
         clearInterval(this.timer)
+
     }
-    changeSubject=(subject)=>{
-        let courseButton=document.getElementById("courseButton");
+
+    changeSubject = (subject) => {
+        let courseButton = document.getElementById("courseButton");
         this.setState({
-            courseType:subject
+            courseType: subject
         });
         courseButton.innerText = subject;
         return null;
     };
-    changeSubject2=(subject)=>{
-        let courseButton=document.getElementById("courseButton2");
+    changeSubject2 = (subject) => {
+        let courseButton = document.getElementById("courseButton2");
         this.setState({
-            courseType:subject
+            grade: subject
         });
         courseButton.innerText = subject;
         return null;
+    };
+    sendCourseMessage= async()=>{
+        let config = {
+            method: 'post',
+            data: this.state.courseJson,
+            url: 'http://124.70.201.12:8787/course/addCourse',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const user = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        return user;
     };
     renderStep = () => {
         const menu1 = (
-            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+            <Menu onClick={(e) => {
+                this.changeSubject(e.item.props.children)
+            }}>
                 <Menu.SubMenu title="所有">
                     <Menu.Item>所有</Menu.Item>
                     <Menu.Item>语文</Menu.Item>
-                    <Menu.Item >数学</Menu.Item>
+                    <Menu.Item>数学</Menu.Item>
                     <Menu.Item>英语</Menu.Item>
-                    <Menu.Item >物理</Menu.Item>
-                    <Menu.Item >化学</Menu.Item>
+                    <Menu.Item>物理</Menu.Item>
+                    <Menu.Item>化学</Menu.Item>
                     <Menu.Item>生物</Menu.Item>
-                    <Menu.Item >历史</Menu.Item>
-                    <Menu.Item >地理</Menu.Item>
+                    <Menu.Item>历史</Menu.Item>
+                    <Menu.Item>地理</Menu.Item>
                     <Menu.Item>政治</Menu.Item>
-                    <Menu.Item >体育</Menu.Item>
-                    <Menu.Item >心理</Menu.Item>
+                    <Menu.Item>体育</Menu.Item>
+                    <Menu.Item>心理</Menu.Item>
                 </Menu.SubMenu>
                 <Menu.SubMenu title="文科类">
                     <Menu.Item onClick={() => {
@@ -242,7 +294,9 @@ class AddCourse extends React.Component {
             </Menu>
         );
         const menu2 = (
-            <Menu onClick={(e)=>{this.changeSubject2(e.item.props.children)}}>
+            <Menu onClick={(e) => {
+                this.changeSubject2(e.item.props.children)
+            }}>
                 <Menu.Item title="所有">所有
                 </Menu.Item>
                 <Menu.SubMenu title="一年级">
@@ -343,8 +397,8 @@ class AddCourse extends React.Component {
                 return (<div>
                     <Card bordered={false} className='card-item'>
                         <Steps>
-                            <Steps.Step status="process" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
-                            <Steps.Step status="wait" title="添加课程细节"
+                            <Steps.Step status="process" title="添加课程细节" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="wait" title="设计课程大纲"
                                         icon={<Icon type="book"/>}/>
                             <Steps.Step status="wait" title="选取学生加入"
                                         icon={<Icon type="solution"/>}/>
@@ -355,7 +409,7 @@ class AddCourse extends React.Component {
                         <Form layout='horizontal' style={{width: '80%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
                             <FormItem label='课程名称' {...formItemLayout}>
                                 {
-                                    getFieldDecorator('course_name', {
+                                    getFieldDecorator('courseName', {
                                         rules: [
                                             {
                                                 max: 10,
@@ -374,12 +428,10 @@ class AddCourse extends React.Component {
                             <FormItem label='目标年级' {...formItemLayout}>
                                 {
                                     getFieldDecorator('grade', {
-                                        rules: [
-
-                                        ]
+                                        rules: []
                                     })(
                                         <Dropdown overlay={menu2} trigger={['click']}>
-                                            <Button ><span  id="courseButton2">一年级上</span> <Icon type="down"/></Button>
+                                            <Button><span id="courseButton2">一年级上</span> <Icon type="down"/></Button>
                                         </Dropdown>
                                     )
                                 }
@@ -387,12 +439,10 @@ class AddCourse extends React.Component {
                             <FormItem label='课程类型' {...formItemLayout}>
                                 {
                                     getFieldDecorator('type', {
-                                        rules: [
-
-                                        ]
+                                        rules: []
                                     })(
                                         <Dropdown overlay={menu1} trigger={['click']}>
-                                            <Button ><span  id="courseButton">数学</span> <Icon type="down"/></Button>
+                                            <Button><span id="courseButton">数学</span> <Icon type="down"/></Button>
                                         </Dropdown>
                                     )
                                 }
@@ -439,35 +489,14 @@ class AddCourse extends React.Component {
                                     getFieldDecorator('detail', {
                                         rules: [
                                             {
-                                                max: 80,
-                                                message: '详细介绍不能超过三百个字'
+                                                max: 200,
+                                                message: '详细介绍不能超过二百个字'
                                             },
                                         ]
                                     })(
                                         <TextArea style={{height: '150px'}}/>
                                     )
                                 }
-                            </FormItem>
-                            <FormItem label="课程图片" valuePropName="fileList"
-                                      getValueFromEvent={normFile} {...formItemLayout}>
-                                {
-                                    getFieldDecorator('pic', {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: '请上传课程简介图片'
-                                            }
-                                        ]
-                                    })(
-                                        <Upload.Dragger name="files" action="/upload.do">
-                                            <p className="ant-upload-drag-icon">
-                                            </p>
-                                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                                            <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-                                        </Upload.Dragger>
-                                    )
-                                }
-
                             </FormItem>
                             <FormItem label='开始时间' {...formItemLayout} required>
                                 {
@@ -501,6 +530,64 @@ class AddCourse extends React.Component {
                                     )
                                 }
                             </FormItem>
+                            <FormItem label='上课班级' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('classes', {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: '请选择上课班级'
+                                            }
+                                        ]
+                                    })(
+                                        <Select
+                                            mode="multiple"
+                                            style={{width: '100%'}}
+                                            placeholder="选择班级"
+                                            onChange={() => {
+                                            }}
+                                        >
+                                            {this.state.classes}
+                                        </Select>
+                                    )
+                                }
+                            </FormItem>
+
+                            <FormItem label='学生查看课程均分' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('seeCourseAverage', {})(
+                                        <Switch defaultChecked/>
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='学生查看作业均分' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('seeHomeworkAverage', {})(
+                                        <Switch defaultChecked/>
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='发送作业发布通知' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('noteHomeworkAssign', {})(
+                                        <Switch defaultChecked/>
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='发送作业临期通知' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('noteHomeworkDue', {})(
+                                        <Switch defaultChecked/>
+                                    )
+                                }
+                            </FormItem>
+                            <FormItem label='发送作业批改通知' {...formItemLayout} required>
+                                {
+                                    getFieldDecorator('noteHomeworkRatify', {})(
+                                        <Switch defaultChecked/>
+                                    )
+                                }
+                            </FormItem>
                             <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
                                 <Button type="primary" htmlType="submit">下一步</Button>
                             </FormItem>
@@ -511,8 +598,8 @@ class AddCourse extends React.Component {
                 return (<div>
                     <Card bordered={false} className='card-item'>
                         <Steps>
-                            <Steps.Step status="finish" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
-                            <Steps.Step status="process" title="添加课程细节"
+                            <Steps.Step status="finish" title="添加课程细节" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="process" title="设计课程大纲"
                                         icon={<Icon type="book"/>}/>
                             <Steps.Step status="wait" title="选取学生加入"
                                         icon={<Icon type="solution"/>}/>
@@ -540,7 +627,12 @@ class AddCourse extends React.Component {
                                 <Button type="primary" onClick={() => {
                                     this.setState({addChapter: !this.state.addChapter})
                                 }} style={{}}>在此添加章节</Button>
-                                <Button type="danger" onClick={() => {this.deleteBig(index)
+                                <Button type="danger" onClick={() => {
+                                    if(this.state.syllabus.chapterNum===1){
+                                        message.warning("不能删除最后一个章节！");
+                                        return;
+                                    }
+                                    this.deleteBig(index)
                                 }} style={{marginLeft: '10px', marginBottom: '20px'}}>删除这个章节</Button>
                                 <List
                                     rowKey={(text, record) => text.key}
@@ -582,8 +674,13 @@ class AddCourse extends React.Component {
                                 <Button onClick={() => {
                                     let courseValue = this.state.courseJson;
                                     courseValue['syllabus'] = this.state.syllabus;
-                                    this.setState({step: 2,courseJson:courseValue})
+                                    this.setState({step: 2, courseJson: courseValue});
                                     console.log(this.state.courseJson);
+                                    this.sendCourseMessage().then((res)=>{
+                                        this.setState({
+                                            courseId:res,
+                                        })
+                                    });
                                 }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>下一步</Button>
                             </Col>
                         </Row>
@@ -593,22 +690,22 @@ class AddCourse extends React.Component {
                 return <div>
                     <Card bordered={false} className='card-item'>
                         <Steps>
-                            <Steps.Step status="finish" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
-                            <Steps.Step status="finish" title="添加课程细节"
+                            <Steps.Step status="finish" title="添加课程细节" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="finish" title="设计课程大纲"
                                         icon={<Icon type="book"/>}/>
                             <Steps.Step status="process" title="选取学生加入"
                                         icon={<Icon type="solution"/>}/>
                             <Steps.Step status="wait" title="完成" icon={<Icon type="check"/>}/>
                         </Steps>
                     </Card>
-                    <StudenTable/>;
+                    <StudenTable class = {this.state.courseJson.classes} courseId={this.state.courseId} newCourse={true}/>;
                     <Row>
                         <Col offset={10}>
                             <Button onClick={() => {
                                 this.setState({step: 1})
                             }} style={{marginTop: '20px', size: 'large'}}>上一步</Button>
                             <Button onClick={() => {
-                                this.setState({step: 3})
+                                this.setState({step: 3});
                             }} style={{marginTop: '20px', size: 'large', marginLeft: '20px'}}>确认</Button>
                         </Col>
                     </Row>
@@ -617,8 +714,8 @@ class AddCourse extends React.Component {
                 return <div>
                     <Card bordered={false} className='card-item'>
                         <Steps>
-                            <Steps.Step status="finish" title="创建一门课程" icon={<Icon type="plus-circle-o"/>}/>
-                            <Steps.Step status="finish" title="添加课程细节"
+                            <Steps.Step status="finish" title="添加课程细节" icon={<Icon type="plus-circle-o"/>}/>
+                            <Steps.Step status="finish" title="设计课程大纲"
                                         icon={<Icon type="book"/>}/>
                             <Steps.Step status="finish" title="选取学生加入"
                                         icon={<Icon type="solution"/>}/>
@@ -636,9 +733,8 @@ class AddCourse extends React.Component {
                         </Row>
                         <Row>
                             <Col offset={10}>
-                                <Button onClick={() => {
+                                <Button onClick={() => {this.props.history.push("/home/course/class="+this.state.courseId)
                                 }} style={{marginTop: '20px', size: 'large'}} type="primary">进入课程主页</Button>
-
                             </Col>
                         </Row>
                     </Card>
@@ -658,4 +754,4 @@ class AddCourse extends React.Component {
     }
 }
 
-export default AddCourse
+export default withRouter(AddCourse)

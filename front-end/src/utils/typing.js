@@ -51,14 +51,14 @@ class Typing {
       else this.opts.done();
       return;
     }
-    let current = ele.val.shift()  //获取第一个元素，同时删除数组中的第一个元素
+    let current = ele.val.shift(); //获取第一个元素，同时删除数组中的第一个元素
     if (typeof current === 'string') {
       this.print(ele.dom, current, () => {
         this.play(ele); //继续打印下一个字符
       })
     } else {
-      let dom = current.dom.cloneNode() //克隆节点，不克隆节点的子节点，所以不用加参数true
-      ele.dom.appendChild(dom)
+      let dom = current.dom.cloneNode(); //克隆节点，不克隆节点的子节点，所以不用加参数true
+      ele.dom.appendChild(dom);
       this.play({
         parent: ele,
         dom,

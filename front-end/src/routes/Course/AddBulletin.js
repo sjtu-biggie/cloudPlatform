@@ -1,6 +1,7 @@
 import React from 'react'
 import {Card, Cascader, Form, Select, Input, Button, message, BackTop, DatePicker, Switch} from 'antd'
 import TextArea from "antd/es/input/TextArea";
+import axios from "axios";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -19,8 +20,7 @@ const options = [
 /**
  * @return {string}
  */
-function CurentTime()
-{
+function CurentTime() {
     let now = new Date();
 
     let year = now.getFullYear();       //年
@@ -33,17 +33,17 @@ function CurentTime()
 
     let clock = year + "-";
 
-    if(month < 10)
+    if (month < 10)
         clock += "0";
 
     clock += month + "-";
 
-    if(day < 10)
+    if (day < 10)
         clock += "0";
 
     clock += day + " ";
 
-    if(hh < 10)
+    if (hh < 10)
         clock += "0";
 
     clock += hh + ":";
@@ -52,7 +52,7 @@ function CurentTime()
 
     if (ss < 10) clock += '0';
     clock += ss;
-    return(clock);
+    return (clock);
 }
 
 @Form.create()
@@ -62,22 +62,74 @@ class AddBulletin extends React.Component {
         disabled: false,
 
     };
+    componentWillMount= ()=> {
+        console.log(this.props.classes);
+    };
     timer = 0;
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (err) {
                 message.warning('请填写正确的公告内容')
             } else {
-                message.success('提交成功');
-                values.course_id = this.props.course_id;
-                values.publish_date = CurentTime();
-                console.log(values);
+                message.success('公告发布成功');
+                values.courseId = this.props.course_id;
+                values.publishDate = CurentTime();
+                let config = {
+                    method: 'post',
+                    data: values,
+                    url: 'http://124.70.201.12:8787/course/addBulletin',
+                    headers: {
+                        withCredentials: true,
+                    }
+                };
+                const user = await axios(config)
+                    .then( (response)=> {
+                        if(values.note === false){
+                            console.log("not send");
+                            return;
+                        }
+                        console.log(this.props);
+                        console.log(response.data);
+                        axios({
+                            method: 'POST',
+                            url: 'http://124.70.201.12:8000/getAllUsersByClassIds',
+                            data: {
+                                "classIds": this.props.classes
+                            }
+                        }).then(msg => {
+                            console.log(msg.data);
+                            let tos = [];
+                            msg.data.map(item => {
+                                tos.push(item.email);
+                            });
+                            console.log(tos);
+                            axios({
+                                method:'POST',
+                                url:'http://124.70.201.12:8000/sendNotice',
+                                data:{
+                                    "tos":tos,
+                                    "context":"公告已发布",
+                                }
+                            }).then(msg=>{
+                                console.log(msg.data);
+                            }).catch(err=>{
+                                console.log(err)
+                            })
+                        }).catch(err => {
+                            console.log(err);
+                        });
+                        return response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         });
     };
 
     componentWillUnmount() {
+        console.log(this.props.classes);
         clearInterval(this.timer)
     }
 
@@ -144,21 +196,19 @@ class AddBulletin extends React.Component {
                                         }
                                     ]
                                 })(
-                                    <TextArea style={{height:'200px'}}/>
+                                    <TextArea style={{height: '200px'}}/>
                                 )
                             }
                         </FormItem>
                         <FormItem label='是否发送通知' {...formItemLayout} required>
                             {
-                                getFieldDecorator('time', {
-
-                                })(
-                                    <Switch defaultChecked  />
+                                getFieldDecorator('note', {})(
+                                    <Switch defaultChecked/>
                                 )
                             }
                         </FormItem>
                         <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" style={{marginLeft:'100px'}}>发布公告</Button>
+                            <Button type="primary" htmlType="submit" style={{marginLeft: '100px'}}>发布公告</Button>
                         </FormItem>
                     </Form>
                 </Card>

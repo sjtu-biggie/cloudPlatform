@@ -6,46 +6,9 @@ import TypingCard from '../../components/TypingCard'
 import { Chart, Axis, Geom, Tooltip, Coord, Label, Legend, G2 } from 'bizcharts'
 import { View } from '@antv/data-set'
 
-const data = [
-    {date: '9/1', value: '3%'},
-    {date: '9/2', value: '4%'},
-    {date: '9/3', value: '3.5%'},
-    {date: '9/4', value: '5%'},
-    {date: '9/5', value: '4.9%'},
-    {date: '9/6', value: '5%'},
-    {date: '9/7', value: '6%'},
-    {date: '9/8', value: '3%'},
-    {date: '9/9', value: '4%'}
-];
-
 const cols = {
     'value': {min: 0},
-    'date': {range: [0, 1]}
-}
-
-const data3 = [];
-for (let i = 0; i < 23; i++) {
-    data3.push({
-        type:"数学",
-        id:1,
-        title: `数学${i}`,
-        avatar: '../../assets/img/mistakes.png',
-        description: '已知：如图，P是正方形ABCD内点，∠PAD=∠PDA=15° 求证：△PBC是正三角形',
-        contexts:[["证明："],[<br/>],["∵∠PAD=∠PDA"],[<br/>],["∴AP=PD"],[<br/>],["∴PB=PC"],[<br/>],["∴得证"],],
-        time: `2020/9/27`,
-/*        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',*/
-    })
-}
-
-for (let i = 0; i < 6; i++) {
-    data3.push({
-        type: '语文',
-        title: `语文${i}`,
-        id: 1,
-        description: '给括号前面的字注音:一棵枫树，表皮灰暗而粗犷（  ），发着苦涩（  ）气息',
-        contexts:[["guang(三声)"],["se(四声)"]],
-        time: `2020/9/27`,
-    })
+    'date': {range: [0, 1]},
 }
 
 const IconText = ({ type, text }) => (
@@ -62,8 +25,13 @@ class Mistakes extends React.Component {
         data2: [],
         loading: false,
         loadingMore: false,
-        displayCourses:null,
-        courses:data3,
+        displayMistakes:[],
+        mistakes:[],
+        data:[]
+    }
+
+    getMistakes=()=>{
+        let username=localStorage.getItem("username")
     }
 
     changeSubject=(subject)=>{
@@ -71,30 +39,55 @@ class Mistakes extends React.Component {
         let courseButton=document.getElementById("courseButton");
         if(subject==="所有"){
             this.setState({
-                displayCourses:this.state.courses,
+                displayMistakes:this.state.mistakes,
             });
             courseButton.innerText="学科";
             return null;
         }else{
-            for(let course of this.state.courses){
-                if(course.type===subject){
-                    modifiedList.push(course);
+            for(let mistake of this.state.mistakes){
+                if(mistake.subject.indexOf(subject)){
+                    modifiedList.push(mistake);
                 }
             }
         }
         courseButton.innerText=subject;
         this.setState({
-            displayCourses:modifiedList,
+            displayMistakes:modifiedList,
         });
     };
 
     searchFun=()=>{
         let value = document.getElementById("search").value;
-        let modifiedList=this.state.courses.filter(function(item){
+        let modifiedList=this.state.mistakes.filter(function(item){
             return (item.title.indexOf(value)  !== -1)|| item.description.indexOf(value) !==-1||item.time.indexOf(value)!==-1;
         });
         this.setState({
-            displayCourses:modifiedList,
+            displayMistakes:modifiedList,
+        });
+    };
+
+    getTeacherHomeworkOne=async (hid,i)=>{
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8383/getTeacherHomeworkOne?homeworkId='+hid,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        let mis=this.state.displayMistakes;
+        mis[i].title=hw.content;
+        mis[i].remarks=hw.answer;
+        this.setState({
+            displayMistakes:mis,
+            mistakes:mis,
         });
     };
 
@@ -104,11 +97,74 @@ class Mistakes extends React.Component {
             loading: true,
         });
         this.getData2();
+        let username=localStorage.getItem("username");
+        console.log(username);
+        this.getMistakes(username);
         this.setState({
-            displayCourses:this.state.courses,
+            displayMistakes:this.state.mistakes,
             loading: false
         });
     }
+
+    add0=(m)=>{
+        return m<10?'0'+m:m
+    }
+
+    format=(shijianchuo)=>
+    {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth()+1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
+    }
+
+    format1=(shijianchuo)=>
+    {
+        let time = new Date(shijianchuo);
+        let m = time.getMonth()+1;
+        let d = time.getDate();
+        return this.add0(m)+'-'+this.add0(d);
+    }
+
+    getMistakes=async (username)=>{
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8383/getMistakenHomework?studentId='+username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        this.setState({
+            mistakes:hw,
+            displayMistakes:hw,
+        })
+        for(let i=0;i<hw.length;i++){
+            this.getTeacherHomeworkOne(hw[i].homeworkId,i)
+            console.log(this.format(hw[i].endTime))
+        }
+
+        console.log(this.state.mistakes)
+        let data=[]
+        for(let i=0;i<hw.length;i++){
+            data.push({date:this.format1(hw[i].endTime),value:100-hw[i].score})
+        }
+        console.log(data)
+        this.setState({
+            data:data,
+        })
+    };
 
     getData2 = () => {
         this.setState({
@@ -123,6 +179,7 @@ class Mistakes extends React.Component {
     }
 
     render() {
+
         const menu1 = (
             <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
                 <Menu.SubMenu title="所有">
@@ -167,6 +224,7 @@ class Mistakes extends React.Component {
         const { SubMenu } = Menu;
         const menu2 = (
             <Menu onClick={this.handleMenuClick}>
+                <SubMenu title="所有"></SubMenu>
                 <SubMenu title="一年级">
                 <Menu.Item key="10">一年级上</Menu.Item>
                 <Menu.Item key="11">一年级下</Menu.Item>
@@ -235,18 +293,18 @@ class Mistakes extends React.Component {
                                 <Button style={{width:"10%",marginTop:'42.5px',marginLeft:'30px'}}>年级<Icon type="down"/></Button>
                             </Dropdown>
                 </Card>
-                <Card title='错误率' bordered={false} className='card-item'>
-                <Chart height={400} data={data} scale={cols} forceFit>
+                <Card title='错误率%' bordered={false} className='card-item'>
+                <Chart height={400} data={this.state.data} scale={cols} forceFit>
                     <Axis name="date"/>
                     <Axis name="value"/>
                     <Tooltip crosshairs={{type: 'y'}}/>
                     <Geom type="line" position="date*value" size={2}/>
                     <Geom type='point' position="date*value" size={4} shape={'circle'}
-                          style={{stroke: '#fff', lineWidth: 1}}/>
+                          style={{stroke: '#ffffff', lineWidth: 1}}/>
                 </Chart>
             </Card>
-                <Card bordered={false} title='题目' style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={this.state.displayCourses}
+                <Card  bordered={false} title='题目' style={{marginBottom: 15}} id='verticalStyle'>
+                    <List dataSource={this.state.displayMistakes}
                           itemLayout='vertical'
                           pagination={{pageSize: 2}}
                           style={styles.listStyle}
@@ -254,18 +312,23 @@ class Mistakes extends React.Component {
                               return (
                                   <List.Item
                                       /*actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}*/
-                                      extra={<img /*width={275}*/ alt="logo" src={require("../../assets/img/mistakes.png")}/>}>
+                                      extra={<img /*width={275}*/ /*alt="logo"*/ /*src={item.correct}*//>}>
 
                                           <row>
                                       <p style={{fontSize:'20px',fontWeight:'bold'}}>{item.title}</p>
-                                              <p style={{fontSize:'5px',fontWeight:'bold',display:'block'}}>{item.time}</p>
-                                      <p style={{marginTop:'10px'}}>{item.description}</p>
-                                      <p style={{marginTop:'10px'}}>{item.contexts}</p>
+                                              <p style={{display:'block',fontWeight:'bold'}}>{"结束时间："+this.format(item.endTime)}</p>
+                                              <p  style={{fontWeight:'bold'}}>{"作答内容："}
+                                              <iframe style={{width: '100%'}} title={"s"}
+                                                      src={'data:text/html;charset=UTF-8,' + item.content}/></p>
+                                              <p style={{fontWeight:'bold'}}>{"参考答案："}<iframe style={{width: '100%'}} title={"s"}
+                                                                                             src={'data:text/html;charset=UTF-8,' + item.remarks}/></p>
+
                                           </row>
                                       {/*{item.content}*/}
                                   </List.Item>
                               )
-                          }}
+                          }
+                          }
                     />
                 </Card>
 

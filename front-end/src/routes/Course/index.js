@@ -1,61 +1,11 @@
 import React from 'react'
-import {
-    Card,
-    Spin,
-    Button,
-    Radio,
-    List,
-    Switch,
-    Avatar,
-    BackTop,
-    Anchor,
-    Affix,
-    Icon,
-    Form,
-    Input,
-    Menu,
-    Dropdown, Row, Col
-} from 'antd'
+import {BackTop, Button, Card, Col, Dropdown, Form, Icon, List, Menu, Row, Spin, message} from 'antd'
 import axios from 'axios'
+import {withRouter} from 'react-router'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
-import TypingCard from '../../components/TypingCard'
+import Search from "antd/es/input/Search";
+import Loading2 from "../../components/Loading2";
 
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-];
-
-const data3 = [];
-for (let i = 0; i < 6; i++) {
-    data3.push({
-        type: '数学',
-        course_name: `七年级数学 ${i}`,
-        pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        start_date: '1999-10-12',
-        end_date: '2020-10-10',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        nickname: "陈小红",
-        id: 1,
-        grade:"七年级上",
-        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
-    })
-}
-for (let i = 0; i < 6; i++) {
-    data3.push({
-        type: '语文',
-        course_name: `七年级语文 ${i}`,
-        pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        start_date: '1999-11-12',
-        end_date: '2020-10-12',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        nickname: "陈小绿",
-        id: 1,
-        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分"
-    })
-}
 const IconText = ({type, text}) => (
     <span>
     <Icon type={type} style={{marginRight: 8}}/>
@@ -66,82 +16,379 @@ const IconText = ({type, text}) => (
 class CourseDemo extends React.Component {
     state = {
         role: 'student',
-        courses: data3,
-        displayCourses:null,
+        courses: [],
+        gradeCourses: [],
+        typeCourses: [],
+        nameCourses: [],
+        displayCourses: [],
         type: 0,
         size: 'default',
         bordered: true,
         data2: [],
-        loading: false,
+        loading: true,
         loadingMore: false,
-        deleteCourses:false,
+        deleteCourses: false,
+        subject:"",
+        grade:"",
+        cname:""
     };
-    changeSubject=(subject)=>{
-        let modifiedList=[];
-        let courseButton=document.getElementById("courseButton");
-        if(subject==="所有"){
+    changeGrade = (grade) => {
+        let modifiedList = [];
+        let modifiedCoursesList = [];
+        let courseButton = document.getElementById("gradeButton");
+        this.setState({
+            grade:grade
+        });
+        if (grade === "所有") {
             this.setState({
-                displayCourses:this.state.courses,
+                grade:"",
+                displayCourses: this.state.typeCourses,
+                gradeCourses: this.state.courses
             });
-            courseButton.innerText="学科";
+            courseButton.innerText = "年级";
             return null;
-        }else{
-            for(let course of this.state.courses){
-                if(course.type===subject){
+        } else {
+            for (let course of this.state.typeCourses){
+                if (course.course.grade === grade&&(this.state.cname===""||course.course.courseName.indexOf(this.state.cname)>0)){
                     modifiedList.push(course);
                 }
             }
+            for (let course of this.state.courses) {
+                if (course.course.grade === grade) {
+                    modifiedCoursesList.push(course);
+                }
+            }
         }
-        courseButton.innerText=subject;
+        courseButton.innerText = grade;
         this.setState({
-            displayCourses:modifiedList,
+            gradeCourses: modifiedCoursesList,
+            displayCourses: modifiedList,
         });
     };
-    componentWillMount() {
-        //TODO:get role from local storage
+    changeSubject = (subject) => {
+        let modifiedList = [];
+        let modifiedCoursesList = [];
+        let courseButton = document.getElementById("courseButton");
+        this.setState({
+            subject:subject
+        });
+        if (subject === "所有") {
+
+            this.setState({
+                subject:"",
+                displayCourses: this.state.gradeCourses,
+                typeCourses: this.state.courses
+            });
+            courseButton.innerText = "学科";
+            return null;
+        } else {
+            for (let course of this.state.gradeCourses) {
+                if (course.course.type === subject&&(this.state.cname===""||course.course.courseName.indexOf(this.state.cname))>0) {
+                    modifiedList.push(course);
+                }else{
+
+                }
+            }
+            for (let course of this.state.courses) {
+                if (course.course.type === subject) {
+                    modifiedCoursesList.push(course);
+                }
+            }
+        }
+        courseButton.innerText = subject;
+        this.setState({
+            typeCourses: modifiedCoursesList,
+            displayCourses: modifiedList,
+        });
+    };
+    searchFun = (value) => {
+        let modifiedDisplayList = [];
+        for (let course of this.state.courses) {
+            if ((course.course.courseName.indexOf(value) >0 ||value==="")&&(this.state.grade===""||this.state.grade === course.course.grade) &&(this.state.subject===""||this.state.subject=== course.course.type)) {
+                modifiedDisplayList.push(course);
+            }
+        }
+        this.setState({
+            cname:value,
+            displayCourses:modifiedDisplayList
+        })
+    };
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.componentWillMount(nextProps.location.pathname);
+    }
+
+    componentWillMount(param) {
         this.setState({
             loading: true,
         });
-        this.getData2();
+        let storage = window.localStorage;
+        let role = storage.getItem("type");
         this.setState({
-            displayCourses:this.state.courses,
-            loading: false
+            role: role
         });
-        console.log(this.props.location.pathname);
-        if (this.props.location.pathname === "/home/course/overall") {
+        let type;
+        let pathname;
+        if (param === undefined || param === null) {
+            pathname = this.props.location.pathname;
+        } else {
+            pathname = param;
+        }
+
+        if (pathname === "/home/course/overall") {
+            type = 0;
+            console.log("overall");
             this.setState({type: 0});
-            console.log(0);
         }
-        if (this.props.location.pathname === "/home/course/ongoing") {
+        if (pathname === "/home/course/ongoing") {
+            type = 1;
+            console.log("ongoing");
             this.setState({type: 1});
-            console.log(1);
         }
-        if (this.props.location.pathname === "/home/course/end") {
+        if (pathname === "/home/course/end") {
+            type = 2;
+            console.log("end");
             this.setState({type: 2});
-            console.log(2);
         }
+        this.getCourses(type, 0);
+
+
     }
 
-    getData2 = () => {
-        this.setState({
-            loadingMore: true
-        });
-        let storage = window.localStorage;
-        let username = storage.getItem("username");
-        this.getUserInfo(username);
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
     };
-    handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(123);
+    format = (shijianchuo) => {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth() + 1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
     };
-    getUserInfo=async (username)=>{
+    getCourses = (type, page) => {
+        console.log(type);
 
+        switch (type) {
+            case 0: {
+                this.getAllCourses(page).then((res) => {
+                    if (res === null) {
+                        message.error("failure loading courses!");
+                        return;
+                    }
+                    if(res.length===0){
+                        this.setState({
+                            loading:false,
+                        });
+                    }
+                    for (let i = 0; i < res.length; ++i) {
+                        if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                            console.log(new Date(res[i].course.endDate));
+                            console.log(new Date());
+                            res[i].course.end = false;
+                        } else {
+                            res[i].course.end = true;
+                        }
+                        res[i].course.startDate = this.format(res[i].course.startDate);
+                        res[i].course.endDate = this.format(res[i].course.endDate);
+                        this.getUserInfo(res[i].course.userId).then(
+                            (username) => {
+                                res[i].course.nickname = username;
+                                this.setState({
+                                    courses: res,
+                                    displayCourses: res,
+                                    typeCourses: res,
+                                    gradeCourses: res,
+                                    loading:false,
+                                });
+                            }
+                        )
+                    }
+                });
+                break;
+            }
+            case 1: {
+                if (this.state.role === 'teacher') {
+                    let storage = window.localStorage;
+                    let username = storage.getItem("username");
+                    this.getCoursesInfo(username, page).then((res) => {
+                        if (res === null) {
+                            message.error("failure loading courses!");
+                            return;
+                        }
+                        if(res.length===0){
+                            this.setState({
+                                loading:false,
+                            });
+                        }
+                        for (let i = 0; i < res.length; ++i) {
+                            if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                                console.log(new Date(res[i].course.endDate));
+                                console.log(new Date());
+                                res[i].course.end = false;
+                            } else {
+                                res[i].course.end = true;
+                            }
+                            res[i].course.startDate = this.format(res[i].course.startDate);
+                            res[i].course.endDate = this.format(res[i].course.endDate);
+                            this.getUserInfo(res[i].course.userId).then(
+                                (username) => {
+                                    res[i].course.nickname = username;
+                                    this.setState({
+                                        courses: res,
+                                        displayCourses: res,
+                                        typeCourses: res,
+                                        gradeCourses: res,
+                                        loading:false,
+                                    });
+                                }
+                            )
+                        }
+                    });
+                } else if (this.state.role === "student") {
+                    let storage = window.localStorage;
+                    let username = storage.getItem("username");
+                    this.getStudentCourses(username, page).then((res) => {
+                        if (res === null || res === undefined) {
+                            message.error("failure loading courses!");
+                            return;
+                        }
+                        if(res.length===0){
+                            this.setState({
+                                loading:false,
+                            });
+                        }
+                        for (let i = 0; i < res.length; ++i) {
+                            if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                                console.log(new Date(res[i].course.endDate));
+                                console.log(new Date());
+                                res[i].course.end = false;
+                            } else {
+                                res[i].course.end = true;
+                            }
+                            res[i].course.startDate = this.format(res[i].course.startDate);
+                            res[i].course.endDate = this.format(res[i].course.endDate);
+                            this.getUserInfo(res[i].course.userId).then(
+                                (username) => {
+                                    res[i].course.nickname = username;
+                                    this.setState({
+                                        courses: res,
+                                        displayCourses: res,
+                                        typeCourses: res,
+                                        gradeCourses: res,
+                                        loading:false,
+                                    });
+                                }
+                            )
+                        }
+                    });
+                } else {
+                    this.setState({
+                        courses: [],
+                        displayCourses: [],
+                        typeCourses: [],
+                        gradeCourses: [],
+                        loading:false,
+                    });
+                }
+                break;
+            }
+            case 2: {
+                if (this.state.role === 'teacher') {
+                    let storage = window.localStorage;
+                    let username = storage.getItem("username");
+                    this.getEndCoursesTeacher(username, page).then((res) => {
+                        if (res === null) {
+                            message.error("failure loading courses!");
+                            return;
+                        }
+                        if(res.length===0){
+                            this.setState({
+                                loading:false,
+                            });
+                        }
+                        for (let i = 0; i < res.length; ++i) {
+                            if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                                console.log(new Date(res[i].course.endDate));
+                                console.log(new Date());
+                                res[i].course.end = false;
+                            } else {
+                                res[i].course.end = true;
+                            }
+                            res[i].course.startDate = this.format(res[i].course.startDate);
+                            res[i].course.endDate = this.format(res[i].course.endDate);
+                            this.getUserInfo(res[i].course.userId).then(
+                                (username) => {
+                                    res[i].course.nickname = username;
+                                    this.setState({
+                                        courses: res,
+                                        displayCourses: res,
+                                        typeCourses: res,
+                                        gradeCourses: res,
+                                        loading:false,
+                                    });
+                                }
+                            )
+                        }
+                    });
+                } else if (this.state.role === "student") {
+                    let storage = window.localStorage;
+                    let username = storage.getItem("username");
+                    this.getEndCoursesStudent(username, page).then((res) => {
+                        if (res === null || res === undefined) {
+                            message.error("failure loading courses!");
+                            return;
+                        }
+                        if(res.length===0){
+                            this.setState({
+                                loading:false,
+                            });
+                        }
+                        for (let i = 0; i < res.length; ++i) {
+                            if (new Date(res[i].course.endDate).getTime() > (new Date()).getTime()) {
+                                console.log(new Date(res[i].course.endDate));
+                                console.log(new Date());
+                                res[i].course.end = false;
+                            } else {
+                                res[i].course.end = true;
+                            }
+                            res[i].course.startDate = this.format(res[i].course.startDate);
+                            res[i].course.endDate = this.format(res[i].course.endDate);
+                            this.getUserInfo(res[i].course.userId).then(
+                                (username) => {
+                                    res[i].course.nickname = username;
+                                    this.setState({
+                                        courses: res,
+                                        displayCourses: res,
+                                        typeCourses: res,
+                                        gradeCourses: res,
+                                        loading:false,
+                                    });
+                                }
+                            )
+                        }
+                    });
+                } else {
+                    this.setState({
+                        courses: [],
+                        displayCourses: [],
+                        typeCourses: [],
+                        gradeCourses: [],
+                        loading:false,
+                    });
+                }
+                break;
+            }
+        }
+    };
+    getUserInfo = async (username) => {
         let config = {
             method: 'post',
-            data :{
-                'username':username
+            data: {
+                'username': username
             },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            url: 'http://124.70.201.12:8000/getUserMessage',
             headers: {
                 withCredentials: true,
             }
@@ -154,28 +401,131 @@ class CourseDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(user);
-        this.setState({
-            userInfo:user,
-            role:user.type
-        })
+        return user.nickname;
     };
+    handleSubmit = (e) => {
+        e.preventDefault();
+        /* console.log(123);*/
+    };
+    getStudentCourses = async (username, page) => {
+        console.log("getStudentCourses");
+        const that = this;
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getCoursesByUser?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
+    getCoursesInfo = async (username, page) => {
+        console.log("getTeacherCourses");
+        const that = this;
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getCoursesByTeacher?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
+    getEndCoursesTeacher = async (username, page) => {
+        console.log("getTeacherCourses");
+        const that = this;
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getEndCoursesByTeacher?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
+    getEndCoursesStudent = async (username, page) => {
+        console.log("getTeacherCourses");
+        const that = this;
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getEndCoursesByUser?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
+    getAllCourses = async (page) => {
+        console.log("getAllcourses");
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getCourses',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        // console.log(this.state.displayCourses,courseList)
+        return await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                /*   console.log(error);*/
+            });
+    };
+
     render() {
+        const {match, location, history} = this.props
         const menu1 = (
-            <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
+            <Menu onClick={(e) => {
+                this.changeSubject(e.item.props.children)
+            }}>
                 <Menu.SubMenu title="所有">
                     <Menu.Item>所有</Menu.Item>
                     <Menu.Item>语文</Menu.Item>
-                    <Menu.Item >数学</Menu.Item>
+                    <Menu.Item>数学</Menu.Item>
                     <Menu.Item>英语</Menu.Item>
-                    <Menu.Item >物理</Menu.Item>
-                    <Menu.Item >化学</Menu.Item>
+                    <Menu.Item>物理</Menu.Item>
+                    <Menu.Item>化学</Menu.Item>
                     <Menu.Item>生物</Menu.Item>
-                    <Menu.Item >历史</Menu.Item>
-                    <Menu.Item >地理</Menu.Item>
+                    <Menu.Item>历史</Menu.Item>
+                    <Menu.Item>地理</Menu.Item>
                     <Menu.Item>政治</Menu.Item>
-                    <Menu.Item >体育</Menu.Item>
-                    <Menu.Item >心理</Menu.Item>
+                    <Menu.Item>体育</Menu.Item>
+                    <Menu.Item>心理</Menu.Item>
                 </Menu.SubMenu>
                 <Menu.SubMenu title="文科类">
                     <Menu.Item onClick={() => {
@@ -203,7 +553,7 @@ class CourseDemo extends React.Component {
             </Menu>
         );
         const menu2 = (
-            <Menu>
+            <Menu onClick={(e) => this.changeGrade(e.item.props.children)}>
                 <Menu.Item title="所有">所有</Menu.Item>
                 <Menu.SubMenu title="一年级">
                     <Menu.Item>一年级上</Menu.Item>
@@ -243,105 +593,170 @@ class CourseDemo extends React.Component {
                 </Menu.SubMenu>
             </Menu>
         );
-        const {loadingMore} = this.state
-        const loadMore = (
-            <div style={styles.loadMore}>
-                {/*不知道为什么这种写法有问题，会报错*/}
-                {/*{loadingMore ? <Spin/> : <Button onClick={() => this.getData2()}>加载更多</Button>}*/}
-                <Spin style={loadingMore ? {} : {display: 'none'}}/>
-                <Button style={!loadingMore ? {} : {display: 'none'}} onClick={() => this.getData2()}>加载更多</Button>
+        if(this.state.loading){
+            return             <div>
+                <h3 style={styles.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
+                <Loading2/>
             </div>
-        );
+        }else{
+            return (
 
-        return (
-            <div>
-                <CustomBreadcrumb
-                    arr={['课程', this.state.type === 0 ? "所有课程" : this.state.type === 1 ? "正在进行" : "已结束"]}/>
+                <div>
+                    <CustomBreadcrumb
+                        arr={['课程', this.state.type === 0 ? "所有课程" : this.state.type === 1 ? "正在进行" : "已结束"]}/>
 
-                <Card bordered={false} style={{marginBottom: 10}} id="howUse">
+                    <Card bordered={false} style={{marginBottom: 10}} id="howUse">
 
-                    <Form layout='horizontal' style={{width: '70%', float: 'left'}} onSubmit={this.handleSubmit}>
-                        <Form.Item label='搜索'>
-                            {
-                                (
-                                    <Input/>
-                                )
-                            }
-                        </Form.Item>
-                    </Form>
-                    <Dropdown overlay={menu1} trigger={['click']} style={{marginTop: '30px'}}>
-                        <Button style={{width: "10%", marginLeft: '30px'}}><span  id="courseButton">学科</span> <Icon type="down"/></Button>
-                    </Dropdown>
-                    <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
-                        <Button style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
-                            type="down"/></Button>
-                    </Dropdown>
-                </Card>
-                {
-                    this.state.role === 'student' ? null :
-                        <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
-                            <Row/>
-                            <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large'
-                                    onClick={() => {
-                                        this.props.history.push('/home/course/addCourse');
-                                    }}>创建一门新的课程</Button>
+                        <Form layout='horizontal' style={{width: '70%', float: 'left'}} onSubmit={this.handleSubmit}>
+                            <Form.Item label='搜索'>
+                                {
+                                    (
+                                        <Search
+                                            placeholder="输入课程名称"
+                                            enterButton="搜索"
+                                            size="default"
+                                            onSearch={value => {
+                                                this.searchFun(value)
+                                            }}
+                                        />
+                                    )
+                                }
+                            </Form.Item>
+                        </Form>
+                        <Dropdown overlay={menu1} trigger={['click']} style={{marginTop: '30px'}}>
+                            <Button style={{width: "10%", marginLeft: '30px'}}><span id="courseButton">学科</span> <Icon
+                                type="down"/></Button>
+                        </Dropdown>
+                        <Dropdown overlay={menu2} trigger={['click']} style={{marginLeft: '30px'}}>
+                            <Button id="gradeButton" style={{width: "10%", marginTop: '42.5px', marginLeft: '30px'}}>年级<Icon
+                                type="down"/></Button>
+                        </Dropdown>
+                    </Card>
+                    {
+                        this.state.role === 'student' ? null :
+                            <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
+                                <Row/>
+                                <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large'
+                                        onClick={() => {
+                                            this.props.history.push('/home/course/addCourse');
+                                        }}>创建一门新的课程</Button>
 
-                            <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
-                                    size='large'>删除一门已有课程</Button>
-                            <p style={{
-                                float: 'left',
-                                color: 'grey',
-                                marginLeft: '40px',
-                                height: '90px'
-                            }}>各位老师，若要修改具体课程内容，请从下方进入课程主页!</p>
-                        </Card>
-                }
-                <Card>
-                    <span style={{float:'left'}}>课程列表</span>
-                </Card>
-                <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
-                    <List dataSource={this.state.displayCourses}
-                          itemLayout='vertical'
-                          pagination={{pageSize: 3}}
-                          style={styles.listStyle}
-                          renderItem={item => {
-                              return (
-                                  <List.Item style={{height: "210px"}}
-                                             extra={<img width={172} height={170} alt="logo"
-                                                         src={require('../../pic/math1.png')}
-                                                         style={{border: '4px solid grey'}}/>}>
-                                      <Row>
-                                          <Col span={3} style={{fontSize:'15px'}}>
+                                <p style={{
+                                    float: 'left',
+                                    color: 'grey',
+                                    marginLeft: '40px',
+                                    height: '90px'
+                                }}>各位老师，若要修改具体课程内容，请从下方进入课程主页!</p>
+                            </Card>
+                    }
+                    <Card>
+                        <Row>
+                            <Col span={18}>
+                                <span style={{float: 'left'}}>课程列表</span>
+                            </Col>
+                            <Col span={6}>
+                                <img style={{ marginLeft: '80px'}}
+                                     width={30} alt="logo"
+                                     src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
+                                <span style={{ marginLeft: '5px'}}>正在进行</span>
 
-                                              <img width={120} height={120} alt="logo"
-                                                   src={require('../../pic/teacher2.jpg')}
-                                                   style={{}}/>
-                                              <p style={{marginTop:'25px'}}>教师 ：{item.nickname}</p>
-                                          </Col>
-                                          <Col span={21}>
-                                              <a style={{fontSize: '20px', fontWeight: 'bold', display: 'block'}}
-                                                 href={"/home/course/class=" + item.id}>{item.course_name}</a>
-                                              <p style={{marginTop: '10px', height: '90px'}}>{item.introduction}</p>
-                                              <p style={{height: '10px'}}>
-                                                  <span style={{marginRight:'30px',fontSize:15}}>类型： {item.type}</span> <span style={{marginRight:'30px',fontSize:15}}>年级： {item.grade}</span><span style={{marginRight:'30px'}}>开始时间： {item.start_date} </span><span style={{marginRight:'30px'}}>结束时间： {item.end_date}</span></p>
-                                          </Col>
-                                      </Row>
-                                  </List.Item>
-                              )
-                          }}
-                    />
-                </Card>
+                                <img style={{ marginLeft: '80px'}}
+                                     width={30} alt="logo"
+                                     src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
+                                <span  style={{ marginLeft: '5px'}}>已截止</span>
 
-                <BackTop visibilityHeight={200} style={{right: 50}}/>
-                {/*<Affix style={styles.affixBox}>*/}
-                {/*  <Anchor offsetTop={200} affix={false}>*/}
-                {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
-                {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
-                {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
-                {/*  </Anchor>*/}
-                {/*</Affix>*/}
-            </div>
-        )
+                            </Col>
+                        </Row>
+                    </Card>
+                    <Card bordered={false} style={{marginBottom: 15}} id='verticalStyle'>
+                        <List dataSource={this.state.displayCourses}
+                              itemLayout='vertical'
+                              pagination={{pageSize: 3}}
+                              style={styles.listStyle}
+                              renderItem={item => {
+                                  return (
+                                      <List.Item style={{height: "210px"}}>
+                                          <Row>
+                                              <Col span={3} style={{fontSize: '15px'}}>
+                                                  <img width={120} height={120} alt="logo"
+                                                       src={require('../../pic/teacher2.jpg')}
+                                                       style={{marginBottom: '6px'}}/>
+                                                  <p style={{marginTop: '25px'}}><Icon type={"user"}/><span style={{
+                                                      fontWeight: 'bold',
+                                                      fontSize: 20,
+                                                      marginLeft: '10px',
+                                                  }}>教师 ：</span><span style={{fontSize: 20}}>{item.course.nickname}</span>
+                                                  </p>
+                                              </Col>
+                                              <Col span={17}>
+                                                  <a style={{
+                                                      color: 'darkslategray',
+                                                      fontSize: '25px',
+                                                      fontWeight: 'bold',
+                                                      display: 'block'
+                                                  }}
+                                                     href={"/home/course/class=" + item.course.id}>{item.course.courseName}</a>
+                                                  <p style={{
+                                                      fontSize:'18px',
+                                                      marginTop: '10px',
+                                                      height: '90px'
+                                                  }}>{item.courseInfo.introduction}</p>
+                                                  <p style={{height: '20px'}}>
+                                                  <span
+                                                      style={{marginRight: '30px', fontSize: 20}}><span
+                                                      style={{fontWeight: 'bold'}}>类型：</span> {item.course.type}</span>
+                                                      <span style={{
+                                                          marginRight: '30px',
+                                                          fontSize: 20
+                                                      }}><span
+                                                          style={{fontWeight: 'bold'}}>年级： </span>{item.course.grade}</span>
+                                                      <span style={{
+                                                          marginRight: '30px',
+                                                          fontSize: 20
+                                                      }}><span
+                                                          style={{fontWeight: 'bold'}}>上课班级： </span>{item.course.classes}</span>
+                                                  </p>
+                                              </Col>
+                                              <Col span={4}>
+                                                  {item.course.end === true ?
+                                                      <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
+                                                           width={80} alt="logo"
+                                                           src={require("../../pic/elearning-svg/008-online certificate.svg")}/>
+                                                      :
+                                                      <img style={{display: 'block', marginLeft: '80px', marginTop: '20px'}}
+                                                           width={80} alt="logo"
+                                                           src={require("../../pic/elearning-svg/007-live streaming.svg")}/>
+                                                  }
+                                                  <p style={{marginTop: '30px'}}><IconText type={'calendar'}
+                                                                                           text={'开始时间：'}/>
+                                                      <span
+                                                          style={{marginRight: '30px'}}>{item.course.startDate}</span>
+                                                  </p><p><IconText type={'calendar'}
+                                                                   style={{marginLeft: '30px'}}
+                                                                   text={'结束时间：'}/>
+                                                  {item.course.endDate}</p>
+
+                                              </Col>
+                                          </Row>
+
+                                      </List.Item>
+                                  )
+                              }}
+                        />
+                    </Card>
+
+                    <BackTop visibilityHeight={200} style={{right: 50}}/>
+                    {/*<Affix style={styles.affixBox}>*/}
+                    {/*  <Anchor offsetTop={200} affix={false}>*/}
+                    {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
+                    {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
+                    {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
+                    {/*  </Anchor>*/}
+                    {/*</Affix>*/}
+                </div>
+            )
+        }
+
     }
 }
 
@@ -372,7 +787,16 @@ const styles = {
         top: 200,
         right: 50,
         with: 170
-    }
+    },loadingTitle:{
+        position:'fixed',
+        top:'50%',
+        left:'50%',
+        marginLeft: -45,
+        marginTop: -18,
+        color:'#000',
+        fontWeight:500,
+        fontSize:24
+    },
 };
 
-export default CourseDemo
+export default withRouter(CourseDemo)

@@ -16,23 +16,37 @@ import {
     Form,
     Input,
     Menu,
-    Dropdown, Row, Col, Collapse, Avatar, Pagination, Steps, Statistic, Progress, Upload, DatePicker, FormItem, message
+    Dropdown,
+    Row,
+    Col,
+    Collapse,
+    Avatar,
+    Pagination,
+    Steps,
+    Statistic,
+    Progress,
+    Upload,
+    DatePicker,
+    FormItem,
+    message,
+    Empty, Select, Switch
 } from 'antd'
 import axios from 'axios'
 import CustomBreadcrumb from '../../components/CustomBreadcrumb/index'
 import FormDemo1 from '../../routes/Homework/Assign';
 import HomeworkList from '../Homework/HomeworkList';
 import AddBulletin from './AddBulletin'
-import {Axis, Chart, Geom, Tooltip} from "bizcharts";
 import StudenTable from "../Manage/studentTable";
 import TextArea from "antd/es/input/TextArea";
 import Search from "antd/es/input/Search";
+import RankData from "./RankData";
+import Loading2 from "../../components/Loading2";
 
 
 @Form.create()
 class CoursePageDemo extends React.Component {
     state = {
-        step: 0,
+        totalPages: 3,
         //type indicate which content to render
         //parameter is detailed content of one type
         type: 1,
@@ -40,59 +54,91 @@ class CoursePageDemo extends React.Component {
         size: 'default',
         bordered: true,
         data2: [],
-        loading: false,
+        loading: true,
         loadingMore: false,
         course: deadCourse,
         bulletins: bulletin,
-        role: 'student',
+        role: 'watcher',
         addHomework: false,
         deleteHomework: false,
         addBulletin: false,
         deleteBulletin: false,
-        homework:deadHomework,
-        modifyCourse:false,
-        modifySyllabus:false,
-        addChapter:false,
-        addContent:false,
-        displayHomeworkList:deathHomework
+        homework: deadHomework,
+        modifyCourse: false,
+        modifySyllabus: false,
+        addChapter: false,
+        addContent: false,
+        lookStudentData: false,
+        displayHomeworkList: [],
+        teacher:{},
+        end:false,
     };
 
-    componentDidMount() {
-
+    componentWillMount() {
         this.setState({
             loading: true,
         });
-        this.getData2();
-        this.setState({
-            loading: false
+        let storage = window.localStorage;
+        let role = storage.getItem("type");
+        let username = storage.getItem("username");
+        let courseId = this.props.match.params[0].substr(1);
+        this.getCourse(courseId, role, username).then(async(ans) => {
+            console.log(ans);
+            let config = {
+                method: 'post',
+                data: {
+                    'username': ans
+                },
+                url: 'http://124.70.201.12:8000/getUserMessageAndIcon',
+                headers: {
+                    withCredentials: true,
+                }
+            };
+            const user = await axios(config)
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            this.setState({teacher:user})
         });
-        console.log(this.props.location.pathname);
-        if (this.props.location.pathname === "/home/course/overall") {
-            this.setState({type: 0});
-            console.log(0);
-        }
-        if (this.props.location.pathname === "/home/course/ongoing") {
-            this.setState({type: 1});
-            console.log(1);
-        }
-        if (this.props.location.pathname === "/home/course/end") {
-            this.setState({type: 2});
-            console.log(2);
-        }
+
+
     }
-    getUserInfo=async (username)=>{
+
+    getCourse = async (courseId, role, username) => {
 
         let config = {
-            method: 'post',
-            data :{
-                'username':username
-            },
-            url: 'http://106.13.209.140:8000/getUserMessage',
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getCourseById?courseId=' + courseId,
             headers: {
                 withCredentials: true,
             }
         };
-        const user = await axios(config)
+        const course = await axios(config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(course);
+        let config2 = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getCoursesByUser?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        if (course.course.userId === username) {
+            this.setState({role: "teacher"})
+        }
+        if (new Date(course.course.endDate).getTime() < (new Date()).getTime()) {
+            this.setState({end:true})
+        }
+        const courseList = await axios(config2)
             .then(function (response) {
                 console.log(response.data);
                 return response.data;
@@ -100,11 +146,43 @@ class CoursePageDemo extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(user);
+        let config3 = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getEndCoursesByUser?userId=' + username,
+            headers: {
+                withCredentials: true,
+            }
+        };
+
+        const courseList2 = await axios(config3)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        if (course.course.userId === username) {
+            this.setState({role: "teacher"})
+        } else  {
+            for(let _course of courseList){
+                if(_course.course.id.toString() === courseId.toString()){
+                    this.setState({role: "student"})
+                }
+            }
+            for(let _course of courseList2){
+                if(_course.course.id.toString() === courseId.toString()){
+                    this.setState({role: "student"})
+                }
+            }
+        }
+        course.course.startDate = this.format(course.course.startDate);
+        course.course.endDate = this.format(course.course.endDate);
         this.setState({
-            userInfo:user,
-            role:user.type
-        })
+            course: course,
+            loading:false,
+        });
+        return course.course.userId;
     };
     getData2 = () => {
         this.setState({
@@ -114,138 +192,260 @@ class CoursePageDemo extends React.Component {
         let username = storage.getItem("username");
         this.getUserInfo(username);
     };
+    getHomeworkAllByCourse = async (courseId) => {
+        let config = {
+            method: 'post',
+            url: 'http://124.70.201.12:8383/getTeacherHomeworkAll?courseId=' + courseId,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const hw = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(hw);
+        this.setState({
+            displayHomeworkList: hw,
+        })
+    };
     homeworkRender = () => {
         //TODO:传参给FormDemo1
         return (
             <div>
-                <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
-                    <Row/>
-                    <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
-                        this.setState({addHomework: true})
-                    }}>创建新的一次作业</Button>
+                {this.state.role === 'teacher'&&this.state.end ===false ?
+                    <Card bordered={false} style={{marginBottom: 10, height: '90px'}} id="howUse">
+                        <Row/>
+                        <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
+                            this.setState({addHomework: true})
+                        }}>创建新的一次作业</Button>
 
-                    <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
-                            size='large'>删除现有一次作业</Button>
-                    <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
-                        this.setState({
-                            addHomework: false,
-                            deleteHomework: false,
-                            addBulletin: false,
-                            deleteBulletin: false,
-                            modifyCourse: false,
-                            modifySyllabus: false
-                        })
-                    }}>返回</Button>
-                </Card>
+                        <Button onClick={() => {
+                            this.setState({addHomework: false, deleteHomework: true})
+                        }} style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
+                                size='large'>删除现有一次作业</Button>
+                        <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
+                            this.setState({
+                                addHomework: false,
+                                deleteHomework: false,
+                                addBulletin: false,
+                                deleteBulletin: false,
+                                modifyCourse: false,
+                                modifySyllabus: false
+                            })
+                        }}>返回</Button>
+                    </Card> : null}
+
                 {
-                    this.state.addHomework ? <FormDemo1 datas={this.state.type}/> :
-                        <HomeworkList homeworkList={this.state.displayHomeworkList} delete={this.state.deleteHomework}/>
+                    this.state.addHomework ? <FormDemo1 datas={this.state.type} course={this.state.course}/> :
+                        <HomeworkList homeworkList={this.state.displayHomeworkList}
+                                      delete={!this.state.deleteHomework}/>
                 }
 
             </div>
         )
-
+    };
+    deleteBulletin = async (index) => {
+        let config = {
+            method: 'post',
+            data: {
+                bulletinId: this.state.bulletins[index].bulletinId
+            },
+            url: 'http://124.70.201.12:8787/course/deleteBulletin',
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const data = await axios(config)
+            .then(function (response) {
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        let modifyBulletins = this.state.bulletins;
+        modifyBulletins.splice(index, 1);
+        this.setState({
+            bulletins: modifyBulletins
+        })
+    };
+    getPageBulletin = async (page, pageSize) => {
+        let config = {
+            method: 'get',
+            url: 'http://124.70.201.12:8787/course/getPageBulletin?courseId='
+                + this.state.course.course.id + "&page=" + (page - 1) + "&size=" + pageSize,
+            headers: {
+                withCredentials: true,
+            }
+        };
+        const data = await axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        for (let bulletin of data.content) {
+            bulletin.publishDate = this.format(bulletin.publishDate);
+        }
+        this.setState({
+            bulletins: data.content,
+            totalPages: data.totalPages
+        })
     };
     mainRender = () => {
 
         return (
             <div>
-                {this.state.role === 'teacher' ? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
+                {this.state.role === 'teacher' &&this.state.end ===false? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
                     <Row/>
                     <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
-                        this.setState({modifyCourse: true,modifySyllabus:false})
+                        this.setState({modifyCourse: true, modifySyllabus: false})
                     }}>修改课程信息</Button>
                     <Button style={{float: 'left', marginLeft: '20px'}} type="danger" icon="down-circle-o"
                             size='large' onClick={() => {
-                        this.setState({modifySyllabus: true,modifyCourse:false})
+                        this.setState({modifySyllabus: true, modifyCourse: false})
                     }}>修改课程大纲</Button>
                     <Button style={{float: 'left', marginLeft: '20px'}} type="dashed" size='large' onClick={() => {
                         this.setState({modifySyllabus: false, modifyCourse: false,})
                     }}>返回</Button>
                 </Card> : null}
-                {this.state.modifyCourse?this.modifiedCourse():this.state.modifySyllabus?this.modifiedSyllabus():<div>
-                    <Card bordered={false} style={{marginBottom: 10}} id="howUse">
-                        <Row style={{height: "200px"}}>
-                            <Col span={18}>
-                                <p style={{
-                                    fontSize: '20px',
-                                    fontWeight: 'bold',
-                                    display: 'block'
-                                }}>课程名 : {this.state.course.course_name}</p>
-                                <p style={{marginTop: '10px', height: '90px'}}>{this.state.course.introduction}</p>
-                                <p style={{height: '10px'}}>开始时间：{this.state.course.start_date} 结束时间：{this.state.course.end_date}</p>
+                {this.state.modifyCourse ? this.modifiedCourse() : this.state.modifySyllabus ? this.modifiedSyllabus() :
+                    <div>
+                        <Card bordered={false} style={{marginBottom: 10}} id="howUse">
+                            <Row style={{height: "170px"}}>
+                                <Col span={21}>
+                                    <p style={{
+                                        fontSize: '25px',
+                                        fontWeight: 'bold',
+                                        display: 'block'
+                                    }}>课程名 : {this.state.course.course.courseName}</p>
+                                    <p style={{
+                                        marginTop: '10px',
+                                        height: '90px',
+                                        fontSize:'18px'
+                                    }}>{this.state.course.courseInfo.introduction}</p>
+
+                                </Col>
+                                <Col span={3}>
+                                    <p style={{height: '10px'}}><span style={{
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                        display: 'block'
+                                    }}>开始时间：</span>{this.state.course.course.startDate} <span style={{
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                        display: 'block'
+                                    }}>结束时间：</span>{this.state.course.course.endDate}<span style={{
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                        display: 'block'
+                                    }}>授课班级：</span>{this.state.course.course.classes}
+                                    </p>
+                                </Col>
+                            </Row>
+
+                        </Card>
+
+                        <Row style={{}}>
+                            <Col span={5}>
+                                <Card bordered={false} style={{marginBottom: 10, height: "300px"}} id="howUse">
+                                    <p style={{
+                                        fontSize: '20px',
+                                        fontWeight: 'bold',
+                                        display: 'block'
+                                    }}>授课教师 : {this.state.teacher.nickname}</p>
+                                    <img alt="logo"
+                                         src={this.state.teacher.iconBase64}
+                                         style={{height: '190px', width: '210px'}}/>
+                                </Card>
                             </Col>
-                            <Col span={6}>
+                            <Col span={19}>
+                                <Card bordered={false} style={{marginBottom: 10, height: "300px", marginLeft: 10}}
+                                      id="howUse">
+                                    <p style={{
+                                        fontSize: '25px',
+                                        fontWeight: 'bold',
+                                        display: 'block',
+                                        paddingRight: '50px'
+                                    }}>老师有话说 ：</p>
+                                    <p style={{
+                                        fontSize: '18px',
+                                    }}>
+                                        {this.state.course.courseInfo.detail}
+                                    </p>
+                                </Card>
                             </Col>
                         </Row>
+                        <Card bordered={false} style={{marginBottom: 10}} id="howUse">
+                            <p style={{
+                                fontSize: '20px',
+                                fontWeight: 'bold',
+                                display: 'block'
+                            }}>课程大纲 :</p>
+                            {this._renderSyllabus()}
+                        </Card>
 
-                    </Card>
-
-                    <Row style={{}}>
-                        <Col span={5}>
-                            <Card bordered={false} style={{marginBottom: 10, height: "300px"}} id="howUse">
-                                <p style={{
-                                    fontSize: '20px',
-                                    fontWeight: 'bold',
-                                    display: 'block'
-                                }}>授课教师 : {this.state.course.nickname}</p>
-                                <img alt="logo"
-                                     src={require('../../pic/teacher2.jpg')}
-                                     style={{height: '190px', weight: '160px'}}/>
-                            </Card>
-                        </Col>
-                        <Col span={19}>
-                            <Card bordered={false} style={{marginBottom: 10, height: "300px", marginLeft: 10}} id="howUse">
-                                <p style={{
-                                    fontSize: '20px',
-                                    fontWeight: 'bold',
-                                    display: 'block',
-                                    paddingRight: '50px'
-                                }}>老师有话说 ：</p>
-                                <p>
-                                    {this.state.course.detail}
-                                </p>
-                            </Card>
-                        </Col>
-                    </Row>
-                    <Card bordered={false} style={{marginBottom: 10}} id="howUse">
-                        <p style={{
-                            fontSize: '20px',
-                            fontWeight: 'bold',
-                            display: 'block'
-                        }}>课程大纲 :</p>
-                        {this._renderSyllabus()}
-                    </Card>
-
-                </div>}
+                    </div>}
 
 
             </div>
 
         )
     };
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (err) {
                 message.warning('请填写正确的课程信息')
             } else {
                 message.success('提交成功');
                 let modifiedCourse = this.state.course;
-                modifiedCourse.course_name = values.course_name;
-                modifiedCourse.textbook = values.textbook;
-                modifiedCourse.introduction = values.introduction;
-                modifiedCourse.detail = values.detail;
-                modifiedCourse.start_date = values.startDate.format('YYYY-MM-DD HH:mm:ss');
-                modifiedCourse.end_date = values.endDate.format('YYYY-MM-DD HH:mm:ss');
-                this.setState({course: modifiedCourse,modifyCourse:false});
-                console.log(values);
+                modifiedCourse.course.courseName = values.courseName;
+                modifiedCourse.courseInfo.textbook = values.textbook;
+                modifiedCourse.courseInfo.introduction = values.introduction;
+                modifiedCourse.courseInfo.detail = values.detail;
+                modifiedCourse.course.startDate = values.startDate.format('YYYY-MM-DD HH:mm:ss');
+                modifiedCourse.course.endDate = values.endDate.format('YYYY-MM-DD HH:mm:ss');
+                this.setState({course: modifiedCourse, modifyCourse: false});
+                let courseJson = modifiedCourse.course;
+                courseJson.detail = modifiedCourse.courseInfo.detail;
+                courseJson.introduction = modifiedCourse.courseInfo.introduction;
+                courseJson.syllabus = modifiedCourse.courseInfo.syllabus;
+                courseJson.textbook = modifiedCourse.courseInfo.textbook;
+                courseJson.modify = true;
+                courseJson.seeCourseAverage = values.seeCourseAverage;
+                courseJson.seeHomeworkAverage = values.seeHomeworkAverage;
+                courseJson.noteHomeworkAssign = values.noteHomeworkAssign;
+                courseJson.noteHomeworkDue = values.noteHomeworkDue;
+                courseJson.noteHomeworkRatify = values.noteHomeworkRatify;
+                console.log(courseJson);
+                let config = {
+                    method: 'post',
+                    data: courseJson,
+                    url: 'http://124.70.201.12:8787/course/addCourse',
+                    headers: {
+                        withCredentials: true,
+                    }
+                };
+                const user = await axios(config)
+                    .then(function (response) {
+                        console.log(response.data);
+                        return response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         });
     };
     deleteSmall = (index, smallName) => {
         let chapterName = 'chapter' + (index + 1);
-        let modifiedSyllabus = this.state.course.syllabus;
+        let modifiedSyllabus = this.state.course.courseInfo.syllabus;
         for (let a in modifiedSyllabus) {
             if (a === chapterName) {
                 let chapter = modifiedSyllabus[a].content;
@@ -261,12 +461,12 @@ class CoursePageDemo extends React.Component {
             }
         }
         let modifiedCourse = this.state.course;
-        modifiedCourse.syllabus = modifiedSyllabus;
+        modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
     addSmall = (index, smallName) => {
         let chapterName = 'chapter' + (index + 1);
-        let modifiedSyllabus = this.state.course.syllabus;
+        let modifiedSyllabus = this.state.course.courseInfo.syllabus;
         for (let a in modifiedSyllabus) {
             if (a === chapterName) {
                 let chapter = modifiedSyllabus[a].content;
@@ -275,50 +475,50 @@ class CoursePageDemo extends React.Component {
             }
         }
         let modifiedCourse = this.state.course;
-        modifiedCourse.syllabus = modifiedSyllabus;
+        modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
     addBig = (index, smallName) => {
-        let chapterString ='chapter' + (index + 2);
-        let chapterName = {title:smallName,content:[]};
-        let modifiedSyllabus = this.state.course.syllabus;
-        for(let i=modifiedSyllabus.chapterNum;i>index+1;--i){
+        let chapterString = 'chapter' + (index + 2);
+        let chapterName = {title: smallName, content: []};
+        let modifiedSyllabus = this.state.course.courseInfo.syllabus;
+        for (let i = modifiedSyllabus.chapterNum; i > index + 1; --i) {
             let prvChapter = 'chapter' + i;
             let mdfChapter = 'chapter' + (i + 1);
-            modifiedSyllabus[mdfChapter]=modifiedSyllabus[prvChapter];
+            modifiedSyllabus[mdfChapter] = modifiedSyllabus[prvChapter];
         }
         modifiedSyllabus[chapterString] = chapterName;
-        modifiedSyllabus['chapterNum']=modifiedSyllabus['chapterNum']+1;
+        modifiedSyllabus['chapterNum'] = modifiedSyllabus['chapterNum'] + 1;
         let modifiedCourse = this.state.course;
-        modifiedCourse.syllabus = modifiedSyllabus;
+        modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
-    deleteBig = (index)=>{
-        let modifiedSyllabus = this.state.course.syllabus;
-        for(let i=index+1;i<modifiedSyllabus.chapterNum;++i){
+    deleteBig = (index) => {
+        let modifiedSyllabus = this.state.course.courseInfo.syllabus;
+        for (let i = index + 1; i < modifiedSyllabus.chapterNum; ++i) {
             let prvChapter = 'chapter' + i;
             let mdfChapter = 'chapter' + (i + 1);
-            modifiedSyllabus[prvChapter]=modifiedSyllabus[mdfChapter];
+            modifiedSyllabus[prvChapter] = modifiedSyllabus[mdfChapter];
         }
-        delete modifiedSyllabus[ 'chapter'+modifiedSyllabus.chapterNum];
-        modifiedSyllabus['chapterNum']=modifiedSyllabus['chapterNum']-1;
+        delete modifiedSyllabus['chapter' + modifiedSyllabus.chapterNum];
+        modifiedSyllabus['chapterNum'] = modifiedSyllabus['chapterNum'] - 1;
         let modifiedCourse = this.state.course;
-        modifiedCourse.syllabus = modifiedSyllabus;
+        modifiedCourse.courseInfo.syllabus = modifiedSyllabus;
         this.setState({course: modifiedCourse});
     };
-    modifiedSyllabus=()=>{
+    modifiedSyllabus = () => {
         let i = 1;
         let chapterList = [];
         while (1) {
-            let str = 'this.state.course.syllabus.chapter' + i;
+            let str = 'this.state.course.courseInfo.syllabus.chapter' + i;
             let contents = eval(str);
             if (contents === undefined || contents === null) break;
             chapterList.push(contents);
             ++i;
         }
-        return(<div>
+        return (<div>
             <Card bordered={false} className='card-item' title="设计课程大纲">
-                <Collapse defaultActiveKey={['0']} onChange={() => {
+                <Collapse onChange={() => {
                     this.setState({addChapter: false, addContent: false})
                 }}>{chapterList.map((value, index) => {
                     return (<Collapse.Panel header={value.title} key={index}>
@@ -338,7 +538,8 @@ class CoursePageDemo extends React.Component {
                         <Button type="primary" onClick={() => {
                             this.setState({addChapter: !this.state.addChapter})
                         }} style={{}}>在此添加章节</Button>
-                        <Button type="danger" onClick={() => {this.deleteBig(index)
+                        <Button type="danger" onClick={() => {
+                            this.deleteBig(index)
                         }} style={{marginLeft: '10px', marginBottom: '20px'}}>删除这个章节</Button>
                         <List
                             rowKey={(text, record) => text.key}
@@ -374,9 +575,32 @@ class CoursePageDemo extends React.Component {
                 </Collapse>
                 <Row>
                     <Col offset={11}>
-                        <Button onClick={() => {
+                        <Button onClick={async () => {
+                            let courseJson = this.state.course.course;
+                            courseJson.detail = this.state.course.courseInfo.detail;
+                            courseJson.introduction = this.state.course.courseInfo.introduction;
+                            courseJson.syllabus = this.state.course.courseInfo.syllabus;
+                            courseJson.textbook = this.state.course.courseInfo.textbook;
+                            courseJson.modify = true;
+                            console.log(courseJson);
+                            let config = {
+                                method: 'post',
+                                data: courseJson,
+                                url: 'http://124.70.201.12:8787/course/addCourse',
+                                headers: {
+                                    withCredentials: true,
+                                }
+                            };
+                            const user = await axios(config)
+                                .then(function (response) {
+                                    console.log(response.data);
+                                    return response.data;
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
                             this.setState({
-                                modifySyllabus:false
+                                modifySyllabus: false
                             })
                         }} style={{marginTop: '20px', size: 'large'}}>确认修改</Button>
                     </Col>
@@ -384,9 +608,9 @@ class CoursePageDemo extends React.Component {
             </Card>
         </div>);
     };
-    modifiedCourse=()=>{
+    modifiedCourse = () => {
         const FormItem = Form.Item;
-        const {getFieldDecorator, getFieldValue} = this.props.form
+        const {getFieldDecorator, getFieldValue} = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
@@ -410,148 +634,182 @@ class CoursePageDemo extends React.Component {
             },
         };
         const normFile = e => {
-            console.log('Upload event:', e);
+            /*console.log('Upload event:', e);*/
             if (Array.isArray(e)) {
                 return e;
             }
             return e && e.fileList;
         };
         const dateFormat = 'YYYY-MM-DD';
-      return(<div>
-          <Card bordered={false} title='基本信息'>
-              <Form  initialValues={{
-                  ['name']: 3,
-              }} layout='horizontal' style={{width: '80%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
-                  <FormItem name='name' label='课程名称' {...formItemLayout} >
-                      {
-                          getFieldDecorator('course_name', {
-                              initialValue:this.state.course.course_name,
-                              rules: [
-                                  {
-                                      max: 10,
-                                      message: '课程简介不能超过十个字'
-                                  },
-                                  {
-                                      required: true,
-                                      message: '请补充课程名称'
-                                  }
-                              ]
-                          })(
-                              <Input/>
-                          )
-                      }
-                  </FormItem>
-                  <FormItem label='课程教材' {...formItemLayout}>
-                      {
-                          getFieldDecorator('textbook', {
-                              initialValue:this.state.course.textbook,
-                              rules: [
-                                  {
-                                      required: true,
-                                      message: '请补充课程教材'
-                                  }
-                              ]
-                          })(
-                              <TextArea style={{height: '80px'}}/>
-                          )
-                      }
-                  </FormItem>
-                  <FormItem label='课程简介' {...formItemLayout}>
-                      {
-                          getFieldDecorator('introduction', {
-                              initialValue:this.state.course.introduction,
-                              rules: [
-                                  {
-                                      min: 10,
-                                      message: '课程简介不能低于十个字'
-                                  },
-                                  {
-                                      max: 80,
-                                      message: '课程简介不能超过八十个字'
-                                  },
-                                  {
-                                      required: true,
-                                      message: '请补充课程简介'
-                                  }
-                              ]
-                          })(
-                              <Input/>
-                          )
-                      }
-                  </FormItem>
-                  <FormItem label='详细介绍' {...formItemLayout}>
-                      {
-                          getFieldDecorator('detail', {
-                              initialValue:this.state.course.detail,
-                              rules: [
-                                  {
-                                      max: 300,
-                                      message: '详细介绍不能超过三百个字'
-                                  },
-                              ]
-                          })(
-                              <TextArea style={{height: '150px'}}/>
-                          )
-                      }
-                  </FormItem>
-                  <FormItem label='开始时间' {...formItemLayout} required>
-                      {
-                          getFieldDecorator('startDate', {
-                              rules: [
-                                  {
-                                      required: true,
-                                      message: '请选择开始时间'
-                                  }
-                              ]
-                          })(
-                              <DatePicker/>
-                          )
-                      }
-                  </FormItem>
-                  <Row><Col offset ={4} span={10}>
-                      <p style={{marginLeft:'100px'}}>原开始时间：{this.state.course.start_date}</p>
-                  </Col></Row>
-                  <FormItem label='结束时间' {...formItemLayout} required>
-                      {
-                          getFieldDecorator('endDate', {
-                              rules: [
-                                  {
-                                      required: true,
-                                      message: '请选择结束时间'
-                                  }
-                              ]
-                          })(
-                              <DatePicker onChange={() => {
+        return (<div>
+            <Card bordered={false} title='基本信息'>
+                <Form initialValues={{
+                    ['name']: 3,
+                }} layout='horizontal' style={{width: '80%', margin: '0 auto'}} onSubmit={this.handleSubmit}>
+                    <FormItem name='name' label='课程名称' {...formItemLayout} >
+                        {
+                            getFieldDecorator('courseName', {
+                                initialValue: this.state.course.course.courseName,
+                                rules: [
+                                    {
+                                        max: 10,
+                                        message: '课程简介不能超过十个字'
+                                    },
+                                    {
+                                        required: true,
+                                        message: '请补充课程名称'
+                                    }
+                                ]
+                            })(
+                                <Input/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='课程教材' {...formItemLayout}>
+                        {
+                            getFieldDecorator('textbook', {
+                                initialValue: this.state.course.courseInfo.textbook,
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请补充课程教材'
+                                    }
+                                ]
+                            })(
+                                <TextArea style={{height: '80px'}}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='课程简介' {...formItemLayout}>
+                        {
+                            getFieldDecorator('introduction', {
+                                initialValue: this.state.course.courseInfo.introduction,
+                                rules: [
+                                    {
+                                        min: 10,
+                                        message: '课程简介不能低于十个字'
+                                    },
+                                    {
+                                        max: 80,
+                                        message: '课程简介不能超过八十个字'
+                                    },
+                                    {
+                                        required: true,
+                                        message: '请补充课程简介'
+                                    }
+                                ]
+                            })(
+                                <Input/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='详细介绍' {...formItemLayout}>
+                        {
+                            getFieldDecorator('detail', {
+                                initialValue: this.state.course.courseInfo.detail,
+                                rules: [
+                                    {
+                                        max: 300,
+                                        message: '详细介绍不能超过三百个字'
+                                    },
+                                ]
+                            })(
+                                <TextArea style={{height: '150px'}}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='开始时间' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('startDate', {
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请选择开始时间'
+                                    }
+                                ]
+                            })(
+                                <DatePicker/>
+                            )
+                        }
+                    </FormItem>
+                    <Row><Col offset={4} span={10}>
+                        <p style={{marginLeft: '100px'}}>原开始时间：{this.state.course.course.startDate}</p>
+                    </Col></Row>
+                    <FormItem label='结束时间' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('endDate', {
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请选择结束时间'
+                                    }
+                                ]
+                            })(
+                                <DatePicker onChange={() => {
 
-                              }}> </DatePicker>
-                          )
-                      }
-                  </FormItem>
-                  <Row><Col offset ={4} span={10}>
-                      <p style={{marginLeft:'100px'}}>原结束时间：{this.state.course.end_date}</p>
-                  </Col></Row>
-                  <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
-                      <Button htmlType="submit">确认修改</Button>
-                  </FormItem>
-              </Form>
-          </Card>
-      </div>);
+                                }}> </DatePicker>
+                            )
+                        }
+                    </FormItem>
+                    <Row><Col offset={4} span={10}>
+                        <p style={{marginLeft: '100px'}}>原结束时间：{this.state.course.course.endDate}</p>
+                    </Col></Row>
+                    <FormItem label='学生查看课程均分' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('seeCourseAverage', {
+                                initialValue: this.state.course.course.seeCourseAverage,
+                            })(
+                                <Switch defaultChecked={this.state.course.course.seeCourseAverage}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='学生查看作业均分' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('seeHomeworkAverage', {})(
+                                <Switch defaultChecked={this.state.course.course.seeHomeworkAverage}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='发送作业发布通知' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('noteHomeworkAssign', {})(
+                                <Switch defaultChecked={this.state.course.course.noteHomeworkAssign}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='发送作业临期通知' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('noteHomeworkDue', {})(
+                                <Switch defaultChecked={this.state.course.course.noteHomeworkDue}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label='发送作业批改通知' {...formItemLayout} required>
+                        {
+                            getFieldDecorator('noteHomeworkRatify', {})(
+                                <Switch defaultChecked={this.state.course.course.noteHomeworkRatify}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem style={{textAlign: 'center'}} {...tailFormItemLayout}>
+                        <Button htmlType="submit">确认修改</Button>
+                    </FormItem>
+                </Form>
+            </Card>
+        </div>);
     };
     _renderSyllabus = () => {
         let i = 1;
         let chapterList = [];
         while (1) {
-            let str = 'this.state.course.syllabus.chapter' + i;
+            let str = 'this.state.course.courseInfo.syllabus.chapter' + i;
             let contents = eval(str);
             if (contents === undefined || contents === null) break;
-            else {
-                console.log(i);
-            }
             chapterList.push(contents);
             ++i;
         }
         return (
-            <Collapse defaultActiveKey={['1']}>{chapterList.map((value, index) => {
+            <Collapse defaultActiveKey={['0']}>{chapterList.map((value, index) => {
                 return (<Collapse.Panel header={value.title} key={index}>
                     <List
                         bordered
@@ -567,7 +825,7 @@ class CoursePageDemo extends React.Component {
     bulletinRender = () => {
         return (
             <div>
-                {this.state.role === 'teacher' ? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
+                {this.state.role === 'teacher' &&this.state.end ===false? <Card bordered={false} style={{marginBottom: 10, height: '90px'}}>
                     <Row/>
                     <Button style={{float: 'left'}} type="primary" icon="up-circle-o" size='large' onClick={() => {
                         this.setState({addBulletin: true})
@@ -580,18 +838,26 @@ class CoursePageDemo extends React.Component {
                         this.setState({addBulletin: false, deleteBulletin: false,})
                     }}>返回</Button>
                 </Card> : null}
-                {this.state.addBulletin?<AddBulletin course_id={this.state.course.id}/>:
-                    <div>
-                <Collapse style={{marginBottom: "10px"}}
-                          defaultActiveKey={['1']}>{this.state.bulletins.map((value, index) => {
-                    return (<Collapse.Panel header={value.title} key={index}>
-                        <p>{value.bulletin}</p>
-                        <span style={{fontWeight:'bold'}}>发布时间：</span>{value.publish_date}
-                        {this.state.deleteBulletin?<Button type="danger" style={{float:'right'}}>删除</Button>:null}
-                    </Collapse.Panel>)
-                })}</Collapse>
-                <Pagination defaultCurrent={1} total={50}/>
-                    </div>
+                {this.state.addBulletin ?
+                    <AddBulletin course_id={this.state.course.course.id} classes = {this.state.course.course.classes.split(',')}/> : this.state.bulletins.length === 0 ?
+                        <Empty style={{marginTop: '80px'}} description={"暂无公告"}/> :
+                        <div>
+                            <Collapse style={{marginBottom: "10px"}}
+                            >{this.state.bulletins.map((value, index) => {
+                                return (<Collapse.Panel header={value.title} key={index}>
+                                    <p>{value.content}</p>
+                                    <span style={{fontWeight: 'bold'}}>发布时间：</span>{value.publishDate}
+                                    {this.state.deleteBulletin ?
+                                        <Button onClick={() => {
+                                            this.deleteBulletin(index)
+                                        }} type="danger" size={'small'} style={{float: 'right'}}>删除</Button> : null}
+                                </Collapse.Panel>)
+                            })}</Collapse>
+                            <Pagination defaultCurrent={1} total={this.state.totalPages * 10}
+                                        onChange={(page, pageSize) => {
+                                            this.getPageBulletin(page, pageSize)
+                                        }}/>
+                        </div>
                 }
             </div>);
     };
@@ -599,141 +865,23 @@ class CoursePageDemo extends React.Component {
         return null;
     };
     rankRender = () => {
-        const data = [
-            {year: '1991', value: 3},
-            {year: '1992', value: 4},
-            {year: '1993', value: 3.5},
-            {year: '1994', value: 5},
-            {year: '1995', value: 4.9},
-            {year: '1996', value: 6},
-            {year: '1997', value: 7},
-            {year: '1998', value: 9},
-            {year: '1999', value: 13}
-        ]
-        const cols = {
-            'value': {min: 0},
-            'year': {range: [0, 1]}
-        }
-
-        const data2 = [
-            {year: '1951 年', sales: 38},
-            {year: '1952 年', sales: 52},
-            {year: '1956 年', sales: 61},
-            {year: '1957 年', sales: 145},
-            {year: '1958 年', sales: 48},
-            {year: '1959 年', sales: 38},
-            {year: '1960 年', sales: 38},
-            {year: '1962 年', sales: 38},
-        ];
-        const cols2 = {
-            'sales': {tickInterval: 20},
-        };
+        return (
+            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id} seeCourseAverage = {this.state.type==='teacher'?true:this.state.course.course.seeCourseAverage} seeHomeworkAverage ={this.state.course.course.seeHomeworkAverage}/>);
+    };
+    studentTableRender = () => {
         return (
             <div>
-                <Card bordered={false} style={{marginBottom: 10}} id='gradeCard'>
-                    <Row>
-                        <Col span={10} offset={6}>
-
-                            <Steps current={this.state.step} style={{marginTop: '200px', fontWeight: 'bold'}}
-                                   size="large">
-                                <Steps.Step title="提交作业" onClick={() => {
-                                    this.setState({step: 0})
-                                }} description="排名更准确"/>
-                                <Steps.Step title="学习数据" onClick={() => {
-                                    this.setState({step: 1})
-                                }} description="胜败乃兵家常事"/>
-                                <Steps.Step title="数据分析" onClick={() => {
-                                    this.setState({step: 2})
-                                }} description="知己知彼"/>
-                            </Steps>
-
-                        </Col>
-                    </Row>
+                <Card title={"学生管理"} style={{marginBottom: '10px'}}>
+                    点击学生名字，可以看到学生在该门课程中的具体数据！
                 </Card>
-                {
-                    this.state.step>=1?
-                        <Row>
-                            <Col span={16}>
-                                <Card style={{height:'130px'}}>
-                                    <Statistic style={{marginTop:'10px',float:"left"}} title="姓名" value={'陈小红'} />
-                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="已完成作业数" value={12} />
-                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="缺交作业数" value={1} />
-                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="平均得分" value={84.25} />
-                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="近两周平均得分" value={86.75} />
-                                    <Statistic style={{marginTop:'10px',float:"left",marginLeft:'30px'}} title="综合评级" value={'良'} />
-                                </Card>
-                            </Col>
-                            <Col span={4}>
-                                <Card style={{height:'130px'}}>
-                                位次比例
-                                <Progress style={{marginLeft:'10px'}} width={80} type="circle" percent={73} />
-                                </Card>
-                            </Col>
-                            <Col span={4}>
-                                <Card style={{height:'130px'}}>
-                                <Statistic style={{marginTop:'10px',display:'block'}} title="总排名" value={93} suffix="/ 120" />
-                                </Card>
-                                </Col>
-                            <Col span={24}>
-                                <Card style={{marginTop:'10px'}} title={'单次作业排名'}>
-                                    <List
-                                        pagination={{pageSize: 6}}
-                                        dataSource={this.state.homework}
-                                        renderItem={item => (
-                                            <List.Item>
-                                                <List.Item.Meta
-                                                    title={<a href="https://ant.design">{item.title}</a>}
-                                                />
-                                                <div>{item.rank}/120</div>
-                                            </List.Item>
-                                        )}
-                                    >
-                                        {this.state.loading && this.state.hasMore && (
-                                            <div className="demo-loading-container">
-                                                <Spin />
-                                            </div>
-                                        )}
-                                    </List>
-                                </Card>
-                            </Col>
 
-                        </Row>
-                    :null
-                }
-                {
-                    this.state.step >= 2 ?
-                        <Row gutter={10} style={{marginTop:'10px'}}>
-                            <Col span={12}>
-                                <Card title='近一个月排名变化' bordered={false} className='card-item'>
-                                    <Chart height={400} data={data} scale={cols} forceFit>
-                                        <Axis name="year"/>
-                                        <Axis name="value"/>
-                                        <Tooltip crosshairs={{type: 'y'}}/>
-                                        <Geom type="line" position="year*value" size={2}/>
-                                        <Geom type='point' position="year*value" size={4} shape={'circle'}
-                                              style={{stroke: '#fff', lineWidth: 1}}/>
-                                    </Chart>
-                                </Card>
-                            </Col>
-                            <Col span={12}>
-                                <Card title='近一个月作业得分' bordered={false} className='card-item'>
-                                    <Chart height={400} data={data2} scale={cols2} forceFit>
-                                        <Axis name="year"/>
-                                        <Axis name="sales"/>
-                                        <Tooltip crosshairs={{type: 'y'}}/>
-                                        <Geom type="interval" position="year*sales"/>
-                                    </Chart>
-                                </Card>
-                            </Col>
-                        </Row>:
-                        null
-                }
+                <StudenTable class = {this.state.course.course.classes} courseId={this.state.course.course.id} getChildValue={this.childValue} newCourse={false}/>
+
             </div>
-        );
+        )
     };
-
-    studentTableRender=()=>{
-        return(<StudenTable courseId={this.state.course.id}/>)
+    childValue = (username) => {
+        /*     console.log(username);*/
     };
     typeRender = () => {
         switch (this.state.type) {
@@ -753,71 +901,87 @@ class CoursePageDemo extends React.Component {
 
 
     };
+    add0 = (m) => {
+        return m < 10 ? '0' + m : m
+    };
 
-    render() {
+    format = (shijianchuo) => {
+        let time = new Date(shijianchuo);
+        let y = time.getFullYear();
+        let m = time.getMonth() + 1;
+        let d = time.getDate();
+        let h = time.getHours();
+        let mm = time.getMinutes();
+        let s = time.getSeconds();
+        return y + '-' + this.add0(m) + '-' + this.add0(d) + ' ' + this.add0(h) + ':' + this.add0(mm) + ':' + this.add0(s);
+    };
+
+    render=()=> {
         const {loadingMore} = this.state
-        const loadMore = (
-            <div style={styles.loadMore}>
-                {/*不知道为什么这种写法有问题，会报错*/}
-                {/*{loadingMore ? <Spin/> : <Button onClick={() => this.getData2()}>加载更多</Button>}*/}
-                <Spin style={loadingMore ? {} : {display: 'none'}}/>
-                <Button style={!loadingMore ? {} : {display: 'none'}} onClick={() => this.getData2()}>加载更多</Button>
+        if(this.state.loading){
+            return             <div>
+                <h3 style={styles.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
+                <Loading2/>
             </div>
-        );
-        return (
-            <div>
-                <CustomBreadcrumb
-                    arr={['课程', this.state.course.course_name]}/>
-                <Card bordered={false} style={{marginBottom: '10px'}}>
-                    <Menu mode="horizontal" onSelect={() => {
-                        this.setState({addHomework: false, deleteHomework: false})
-                    }}>
-                        <Menu.Item onClick={() => {
-                            this.setState({type: 1})
-                        }}>主页</Menu.Item>
-                        <Menu.Item key="bulletin" onClick={() => {
-                            this.setState({type: 2})
-                        }}><Icon type="appstore"/>公告</Menu.Item>
-                        <Menu.SubMenu key='app' onClick={() => {
-                            this.setState({type: 3})
-                        }} title={<span><Icon type='setting'/><span>作业</span></span>}>
-                            <Menu.Item>总览</Menu.Item>
-                            <Menu.Item>已提交</Menu.Item>
-                            <Menu.Item>未提交</Menu.Item>
-                            <Menu.Item>已截止</Menu.Item>
-                            <Menu.Item>未截止</Menu.Item>
-                        </Menu.SubMenu>
-                        <Menu.SubMenu key='exam' onClick={() => {
-                            this.setState({type: 4})
-                        }} title={<span><Icon type='bar-chart'/><span>考试</span></span>}>
-                            <Menu.Item>总览</Menu.Item>
-                            <Menu.Item>进行中</Menu.Item>
-                            <Menu.Item>已截止</Menu.Item>
-                            <Menu.Item>已批改</Menu.Item>
-                        </Menu.SubMenu>
-                        <Menu.Item onClick={() => {
-                            this.setState({type: 5})
-                        }} key="rank"><Icon type="appstore"/>数据</Menu.Item>
-                        {
-                            this.state.role==='teacher'?                        <Menu.Item onClick={() => {
-                                this.setState({type: 6})
-                            }} key="set"><Icon type="setting"/>管理</Menu.Item>:null
-                        }
+        }else{
+            return (
 
-                    </Menu>
-                </Card>
-                {this.typeRender()}
+                <div>
+                    <CustomBreadcrumb
+                        arr={['课程', this.state.course.course_name]}/>
+                    <Card bordered={false} style={{marginBottom: '10px'}}>
+                        <Menu style={{fontSize: '20px', fontWeight: 'bold'}} mode="horizontal" onSelect={() => {
+                            this.setState({
+                                addHomework: false,
+                                deleteHomework: false,
+                                addBulletin: false,
+                                deleteBulletin: false
+                            })
+                        }}>
+                            <Menu.Item onClick={() => {
+                                this.setState({type: 1})
+                            }}><Icon type="appstore"/>主页</Menu.Item>
+                            <Menu.Item key="bulletin" onClick={() => {
+                                this.getPageBulletin(1, 10);
+                                this.setState({type: 2})
+                            }}><Icon type="align-left"/>公告</Menu.Item>
+                            <Menu.SubMenu key='app' onClick={() => {
+                                if(this.state.displayHomeworkList.length===0){
+                                    this.getHomeworkAllByCourse(this.state.course.course.id);
+                                }
+                                this.setState({type: 3})
+                            }} title={<span><Icon type='snippets'/><span>作业</span></span>}>
+                                <Menu.Item>总览</Menu.Item>
+                                <Menu.Item>已提交</Menu.Item>
+                                <Menu.Item>未提交</Menu.Item>
+                                <Menu.Item>已截止</Menu.Item>
+                                <Menu.Item>未截止</Menu.Item>
+                            </Menu.SubMenu>
+                            {
+                                this.state.role === 'student' ?
+                                    <Menu.Item onClick={() => {
+                                        this.setState({type: 5})
+                                    }} key="rank"><Icon type="appstore"/>数据</Menu.Item> : this.state.role === 'teacher' ?
+                                    <Menu.Item onClick={() => {
+                                        this.setState({type: 6})
+                                    }} key="set"><Icon type="setting"/>管理</Menu.Item> : null
+                            }
+                        </Menu>
+                    </Card>
+                    {this.typeRender()}
 
-                <BackTop visibilityHeight={200} style={{right: 50}}/>
-                {/*<Affix style={styles.affixBox}>*/}
-                {/*  <Anchor offsetTop={200} affix={false}>*/}
-                {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
-                {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
-                {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
-                {/*  </Anchor>*/}
-                {/*</Affix>*/}
-            </div>
-        )
+                    <BackTop visibilityHeight={200} style={{right: 50}}/>
+                    {/*<Affix style={styles.affixBox}>*/}
+                    {/*  <Anchor offsetTop={200} affix={false}>*/}
+                    {/*    <Anchor.Link href='#howUse' title='课程搜索'/>*/}
+                    {/*    <Anchor.Link href='#basicUsage' title='课程列表'/>*/}
+                    {/*    <Anchor.Link href='#remoteLoading' title='公开课'/>*/}
+                    {/*  </Anchor>*/}
+                    {/*</Affix>*/}
+                </div>
+            )
+        }
+
     }
 }
 
@@ -848,170 +1012,54 @@ const styles = {
         top: 200,
         right: 50,
         with: 170
-    }
+    },
+    loadingTitle:{
+        position:'fixed',
+        top:'50%',
+        left:'50%',
+        marginLeft: -45,
+        marginTop: -18,
+        color:'#000',
+        fontWeight:500,
+        fontSize:24
+    },
 };
-const IconText = ({type, text}) => (
-    <span>
-    <Icon type={type} style={{marginRight: 8}}/>
-        {text}
-  </span>
-);
 const deadCourse = {
-    detail:'这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。' +
-        '这门课非常的简单，如果你这都不会的话建议你修读低年级课程。',
-    course_name: `七年级数学`,
-    pic: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    start_date: '1999-10-12',
-    end_date: '2020-10-10',
+    course: {
+        id: 1,
+        courseName: `七年级数学`,
+        startDate: '1999-10-12',
+        endDate: '2020-10-10',
+    },
+    courseInfo: {
+        textbook: "加载中",
+        detail: '加载中',
+        syllabus: {
+            chapterNum: 1,
+            chapter1: {
+                title: "加载中",
+                content: [
+                    "加载中"
+                ]
+            },
+        },
+        introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
+    },
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     nickname: "陈小红",
-    id: 1,
-    textbook: "人教版七年级数学上册",
-    introduction: "这是一门有关数学的基础课程，讲述了和代数、函数有关的知识，是中学数学课程的重要组成部分",
-    syllabus: {
-        chapterNum:4,
-        chapter1: {
-            title: "一百以内算术",
-            content: [
-                "加法",
-                "减法", "乘法", "除法"
-            ]
-        },
-        chapter2: {
-            title: "微积分",
-            content: [
-                "微分",
-                "积分", "偏微分"
-            ]
-        },
-        chapter3: {
-            title: "数学史",
-            content: [
-                "时间简史",
-                "二战史",
-                "线性代数史"
-            ]
-        },
-        chapter4: {
-            title: "提高篇",
-            content: [
-                "矩阵",
-                "行列式",
-                "特征向量",
-                "正交矩阵",
-                "正定矩阵"
-            ]
-        },
-    }
+
+
 };
 const bulletin = [];
-const deadHomework = [
-];
+const deadHomework = [];
 for (let i = 0; i < 15; i++) {
     deadHomework.push({
-        title: '七年级作业' + i,
-        rank: 1+i,
+        title: '七年级上数学作业' + i,
+        rank: 1 + i,
+        score: 72 + i,
     })
 }
 //TODO:add pagination support
-for (let i = 0; i < 10; i++) {
-    bulletin.push({
-        title: '重要通知' + i + '号',
-        bulletin: `值得注意的是，这五大创新技术，包括了全新的“4680”型电池，号称能量密度提高五倍，动力输出提高 6 倍，续航里程可提高 16%。
-　　马斯克称，新电池已经开始在一家工厂生产，将需要一年时间达到 10 千兆瓦时的产能。
-　　另外，早在今年 4 月，马斯克就表示，今年的电池日活动是“特斯拉历史上最让人兴奋的日子之一”，预计将于 2020 年投产一种新型电池，这种电池能够驱动特斯拉汽车行驶百万英里，是普通电池包寿命的2-3 倍。
-　　据悉，这种电池是一种锂离子电池，是宁德时代与特斯拉合作生产的，可以使电动汽车持续行驶 100 万英里。马斯克曾在推特上表示，他将会在“电池技术日”活动上详细介绍一项百万英里电池项目。
-　　但是，直到此次电池日活动结束，投资者高度期待的“百万英里电池”依然不见踪影。特斯拉股价也由上涨5% 转为下跌近7%。`,
-        publish_date: '1999-10-12',
-    })
-}
-const steps = [
-    {
-        title: 'First',
-        content: 'First-content',
-    },
-    {
-        title: 'Second',
-        content: 'Second-content',
-    },
-    {
-        title: 'Last',
-        content: 'Last-content',
-    }];
-const deathHomework = [];
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'数学',
-        grade:'七年级上',
-        title: `七年级上数学作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100'
-    })
-}
 
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'语文',
-        grade:'七年级上',
-        title: `七年级上语文作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100'
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'英语',
-        grade:'七年级上',
-        title: `七年级上英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100'
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'英语',
-        grade:'八年级上',
-        title: `八年级上英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100'
-    })
-}
-
-for(let i=0;i<3;i++){
-    deathHomework.push({
-        type:'英语',
-        grade:'八年级上',
-        title: `八年级下英语作业 ${i}`,
-        content: '同学们记得认真完成按时提交',
-        startTime:'2020-10-11 12:12:12',
-        handinTime: null,
-        endTime:'2020-10-12 12:12:13',
-        accessmentalgorithms:'0',
-        score: '100'
-    })
-}
 
 export default CoursePageDemo

@@ -8,169 +8,157 @@ import axios from "axios";
 class SiderNav extends React.Component {
     state = {
         menus: null,
-        role: "student"
+        role: null,
     };
-    componentWillMount() {
-        this.getData2();
-    }
-    getData2 = () => {
-        this.setState({
-            loadingMore: true
-        });
+    componentWillMount=()=> {
+        console.log("开始渲染边框");
         let storage = window.localStorage;
-        let username = storage.getItem("username");
-        this.getUserInfo(username);
-    };
-    getUserInfo=async (username)=>{
-
-        let config = {
-            method: 'post',
-            data :{
-                'username':username
-            },
-            url: 'http://106.13.209.140:8000/getUserMessage',
-            headers: {
-                withCredentials: true,
-            }
-        };
-        const user = await axios(config)
-            .then(function (response) {
-                console.log(response.data);
-                return response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        console.log(user);
+        let role = storage.getItem("type");
         this.setState({
-            userInfo:user,
-            role:user.type
+            role:role
+        });
+        this.getUserInfo(role);
+    };
+    getUserInfo=(role)=>{
+        console.log(role);
+        if(role==='student'){
+            this.setState({
+                menus: [
+                    {
+                        title: '首页',
+                        icon: 'home',
+                        key: '/home'
+                    },
+                    {
+                        title: '课程',
+                        icon: 'laptop',
+                        key: '/home/course',
+                        subs: [
+                            {key: '/home/course/overall', title: '所有课程', icon: '',},
+                            {
+                                key: '/home/course/ongoing',
+                                title: role === 'student' ? '正在进行' : '正在授课',
+                                icon: '',
+                            },
+                            {key: '/home/course/end', title: '已结束', icon: '',},
+                        ]
+                    },
+                    {
+                        title: '作业',
+                        icon: 'desktop',
+                        key: '/home/homework',
+                        subs: [
+                            {key: '/home/homework/overall', title: '所有作业', icon: ''},
+                            {key: '/home/homework/submitted', title: role === 'student' ? '已交' : '已收齐', icon: ''},
+                            {key: '/home/homework/uncommitted', title: role === 'student' ? '未交' : '未收齐', icon: ''},
+                            {key: '/home/homework/closed', title: '已截止', icon: ''},
+                            {key: '/home/homework/notclosed', title: '未截止', icon: ''},
+                        ]
+                    },
+                    {
+                        title: '错题',
+                        icon: 'info-circle-o',
+                        key: '/home/mistakes'
+                    },
+                    {
+                        title: '帮助',
+                        icon: 'file-unknown',
+                        key: '/home/display/list'
+                    }
+                ]
+            });
+            return;
+        }
+        if(role==='manager'){
+            this.setState({
+                menus: [
+                    {
+                        title: '首页',
+                        icon: 'home',
+                        key: '/home'
+                    },
+                    {
+                        title: '用户管理',
+                        icon: 'solution',
+                        key: '/home/manage/manager'
+                    },
+                    {
+                        title: '帮助',
+                        icon: 'file-unknown',
+                        key: '/home/display/list'
+                    }
+                ]
+            });
+            return;
+        }
+        if(role==='teacher'){
+            this.setState({
+                menus: [
+                    {
+                        title: '首页',
+                        icon: 'home',
+                        key: '/home'
+                    },
+                    {
+                        title: '课程',
+                        icon: 'laptop',
+                        key: '/home/course',
+                        subs: [
+                            {key: '/home/course/overall', title: '所有课程', icon: '',},
+                            {
+                                key: '/home/course/ongoing',
+                                title: role === 'student' ? '正在进行' : '正在授课',
+                                icon: '',
+                            },
+                            {key: '/home/course/end', title: '已结束', icon: '',},
+                        ]
+                    },
+                    {
+                        title: '作业',
+                        icon: 'desktop',
+                        key: '/home/homework',
+                        subs: [
+                            {key: '/home/homework/overall', title: '所有作业', icon: ''},
+                            {key: '/home/homework/submitted', title: role === 'student' ? '已交' : '已收齐', icon: ''},
+                            {key: '/home/homework/uncommitted', title: role === 'student' ? '未交' : '未收齐', icon: ''},
+                            {key: '/home/homework/closed', title: '已截止', icon: ''},
+                            {key: '/home/homework/notclosed', title: '未截止', icon: ''},
+                        ]
+                    },
+                    {
+                        title: '班级',
+                        icon: 'info-circle-o',
+                        key:'/home/manage/classStudentManage'
+                        // key: '/home/mistakes'
+                    },
+                    {
+                        title: '帮助',
+                        icon: 'file-unknown',
+                        key: '/home/display/list'
+                    }
+                ]
+            });
+            return;
+        }
+        this.setState({
+            menus: [
+                {
+                    title: '首页',
+                    icon: 'home',
+                    key: '/home'
+                },
+                {
+                    title: '帮助',
+                    icon: 'file-unknown',
+                    key: '/home/display/list'
+                }
+            ]
         })
     };
-    componentDidMount() {
-        //TODO:get role of user from local storage
-        if(this.state.role==='student'){
-            this.setState({
-                menus: [
-                    {
-                        title: '首页',
-                        icon: 'home',
-                        key: '/home'
-                    },
-                    {
-                        title: '课程',
-                        icon: 'laptop',
-                        key: '/home/course',
-                        subs: [
-                            {key: '/home/course/overall', title: '所有课程', icon: '',},
-                            {
-                                key: '/home/course/ongoing',
-                                title: this.state.role === 'student' ? '正在进行' : '正在授课',
-                                icon: '',
-                            },
-                            {key: '/home/course/end', title: '已结束', icon: '',},
-                        ]
-                    },
-                    {
-                        title: '作业',
-                        icon: 'desktop',
-                        key: '/home/homework',
-                        subs: [
-                            {key: '/home/homework/overall', title: '总览', icon: ''},
-                            {key: '/home/homework/submitted', title: this.state.role === 'student' ? '已交' : '已收齐', icon: ''},
-                            {key: '/home/homework/uncommitted', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
-                            {key: '/home/homework/closed', title: '已截止', icon: ''},
-                            {key: '/home/homework/notclosed', title: '未截止', icon: ''},
-                        ]
-                    },
-                    {
-                        title: '错题',
-                        icon: 'info-circle-o',
-                        key: '/home/mistakes'
-                    },
-                    {
-                        title: '帮助',
-                        icon: 'file-unknown',
-                        key: '/home/display/list'
-                    }
-                ]
-            })
-        }
-        if(this.state.role==='manager'){
-            this.setState({
-                menus: [
-                    {
-                        title: '首页',
-                        icon: 'home',
-                        key: '/home'
-                    },
-                    {
-                        title: '用户管理',
-                        icon: 'solution',
-                        key: '/home/manage/manager'
-                    },
-                    {
-                        title: '帮助',
-                        icon: 'file-unknown',
-                        key: '/home/display/list'
-                    }
-                ]
-            })
-        }
-        if(this.state.role==='teacher'){
-            this.setState({
-                menus: [
-                    {
-                        title: '首页',
-                        icon: 'home',
-                        key: '/home'
-                    },
-                    {
-                        title: '课程',
-                        icon: 'laptop',
-                        key: '/home/course',
-                        subs: [
-                            {key: '/home/course/overall', title: '所有课程', icon: '',},
-                            {
-                                key: '/home/course/ongoing',
-                                title: this.state.role === 'student' ? '正在进行' : '正在授课',
-                                icon: '',
-                            },
-                            {key: '/home/course/end', title: '已结束', icon: '',},
-                        ]
-                    },
-                    {
-                        title: '作业',
-                        icon: 'desktop',
-                        key: '/home/homework',
-                        subs: [
-                            {key: '/home/homework/overall', title: '总览', icon: ''},
-                            {key: '/home/homework/submitted', title: this.state.role === 'student' ? '已交' : '已收齐', icon: ''},
-                            {key: '/home/homework/uncommitted', title: this.state.role === 'student' ? '未交' : '未收齐', icon: ''},
-                            {key: '/home/homework/closed', title: '已截止', icon: ''},
-                            {key: '/home/homework/notclosed', title: '未截止', icon: ''},
-                        ]
-                    },
-                    {
-                        title: '错题',
-                        icon: 'info-circle-o',
-                        key: '/home/mistakes'
-                    },
-                    {
-                        title: '用户管理',
-                        icon: 'solution',
-                        key: '/home/manage/manager'
-                    },
-                    {
-                        title: '帮助',
-                        icon: 'file-unknown',
-                        key: '/home/display/list'
-                    }
-                ]
-            })
-        }
-
-    }
+    // componentDidMount() {
+    //     //TODO:get role of user from local storage
+    //
+    // }
     // {
     //     title: '展示组件',
     //     icon: 'desktop',
@@ -259,7 +247,7 @@ class SiderNav extends React.Component {
                 云作业平台</p></div>
 
                 <div><p
-                    style={{marginLeft: '65px', fontSize: '18px', color: 'white'}}>{this.state.role==='student'?'学生用户':this.state.role==='teacher'?'教师用户':'管理员用户'}</p></div>
+                    style={{marginLeft: '65px', fontSize: '18px', color: 'white'}}>{this.state.role==='student'?'学生用户':this.state.role==='teacher'?'教师用户':this.state.role==='teacher'?'管理员用户':'未认证用户'}</p></div>
                 </div>
                 <img style={{marginLeft:'20px'}} width={160} src={require('../../pic/sjtulogored.png')}/>
 <div style={{marginTop:'30px'}}/>

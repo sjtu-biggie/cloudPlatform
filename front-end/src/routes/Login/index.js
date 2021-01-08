@@ -10,13 +10,12 @@ import 'animate.css'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
-const url = 'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/bg1.jpg?raw=true'
 const imgs = [
-  'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide1.jpg?raw=true',
-  'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide2.jpg?raw=true',
-  'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide3.jpg?raw=true',
-  'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide4.jpg?raw=true'
-]
+  // 'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide1.jpg?raw=true',
+  // 'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide2.jpg?raw=true',
+  // 'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide3.jpg?raw=true',
+  // 'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide4.jpg?raw=true'
+];
 
 
 
@@ -29,7 +28,7 @@ class Login extends React.Component {
     url: '',  //背景图片
     loading:false,
     loading2:false,
-  }
+  };
 
   componentDidMount () {
     const isLogin = this.props.appStore
@@ -37,7 +36,7 @@ class Login extends React.Component {
       this.props.history.go(1)     //当浏览器用后退按钮回到登录页时，判断登录页是否登录，是登录就重定向上个页面
       // this.props.appStore.toggleLogin(false) //也可以设置退出登录
     }
-    this.initPage()
+    this.initPage();
     preloadingImages(imgs)  //预加载下一个页面的图片，预加载了第二次为什么还会去请求图片资源？
   }
 
@@ -48,31 +47,31 @@ class Login extends React.Component {
   //载入页面时的一些处理
   initPage = () => {
     this.setState({
-      loading:true
-    })
+      loading:false
+    });
     this.props.appStore.initUsers()
-    this.loadImageAsync(url).then(url=>{
-      this.setState({
-        loading:false,
-        url
-      })
-    }).then(()=>{
-      //为什么写在then里？id为backgroundBox的DOM元素是在loading为false时才有，而上面的setState可能是异步的，必须等到setState执行完成后才去获取dom
-      this.particle = new BGParticle('backgroundBox')
-      this.particle.init()
-      /*notification.open({
-        message:<ul><li>初始账号：admin</li><li>初始密码：admin</li></ul>,
-        duration:0,
-        className:'login-notification'
-      })*/
-    })
-  }
+    // this.loadImageAsync(url).then(url=>{
+    //   this.setState({
+    //     loading:false,
+    //     url
+    //   })
+    // }).then(()=>{
+    //   //为什么写在then里？id为backgroundBox的DOM元素是在loading为false时才有，而上面的setState可能是异步的，必须等到setState执行完成后才去获取dom
+    //   this.particle = new BGParticle('backgroundBox')
+    //   this.particle.init()
+    //   /*notification.open({
+    //     message:<ul><li>初始账号：admin</li><li>初始密码：admin</li></ul>,
+    //     duration:0,
+    //     className:'login-notification'
+    //   })*/
+    // })
+  };
   //切换showbox
   switchShowBox = (box) => {
     this.setState({
       showBox: box
     })
-  }
+  };
 
   //登录的背景图太大，等载入完后再显示，实际上是图片预加载，
   loadImageAsync (url) {
@@ -89,9 +88,9 @@ class Login extends React.Component {
   }
 
   render () {
-    const {showBox,loading} = this.state
+    const {showBox,loading} = this.state;
     return (
-      <div id='login-page'>
+      <div id='login-page' className={"login"}>
         {
           loading ?
             <div>
@@ -99,7 +98,7 @@ class Login extends React.Component {
               <Loading2/>
             </div>:
             <div>
-              <div id='backgroundBox' style={styles.backgroundBox}/>
+              <div className="login" />
               <div className='container'>
                 <LoginForm
                   className={showBox === 'login' ? 'box showBox' : 'box hiddenBox'}
@@ -122,8 +121,7 @@ const styles = {
     left: '0',
     width: '100vw',
     height: '100vh',
-    // backgroundImage: 'url(https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/bg5.jpg?raw=true)',
-    backgroundImage: 'url(https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/bg1.jpg?raw=true)',
+    backgroundImage: require("../../pic/c1.jpg"),
     backgroundSize: '100% 100%',
     transition:'all .5s'
   },
@@ -144,10 +142,10 @@ const styles = {
     left:'50%',
     marginLeft: -45,
     marginTop: -18,
-    color:'#000',
+    color:'#001',
     fontWeight:500,
     fontSize:24
   },
-}
+};
 
 export default Login

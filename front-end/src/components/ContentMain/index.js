@@ -5,6 +5,7 @@ import PrivateRoute from '../PrivateRoute'
 import CoursePageDemo from "../../routes/Course/coursepage"
 import NotificationPage from "../../routes/Notification/notificationpage"
 import ChooseCourse from "../../routes/Manage";
+import DataPage from "../../routes/Course/DataPage";
 
 const Home = LoadableComponent(()=>import('../../routes/Home/index'))  //参数一定要是函数，否则不会懒加载，只会代码拆分
 
@@ -69,10 +70,11 @@ const RatePage = LoadableComponent(()=>import('../../routes/Homework/RatePage'))
 
 const StudentTable=LoadableComponent(()=>import('../../routes/Manage/studentTable'));
 const Manager=LoadableComponent(()=>import('../../routes/Manage/manager'));
+const ClassStudentManage=LoadableComponent(()=>import('../../routes/Manage/classStudentManage'));
 
 //个人中心
 const PersonalCenter = LoadableComponent(()=>import('../../routes/PersonalCenter/Info'));
-
+const PersonalAvatar = LoadableComponent(()=>import('../../routes/PersonalCenter/Avatar'));
 
 
 @withRouter
@@ -128,18 +130,22 @@ class ContentMain extends React.Component {
           <PrivateRoute exact path='/home/homework/closed' component={HomeworkDemo}/>
           <PrivateRoute exact path='/home/homework/notclosed' component={HomeworkDemo}/>
           <PrivateRoute exact path='/home/homework/Assign' component={HomeworkAssignmentDemo}/>
-          <PrivateRoute exact path='/home/homework/commit' component={HomeworkCommit}/>
-          <PrivateRoute exact path='/home/homework/General' component={HomeworkGeneral}/>
-          <PrivateRoute exact path='/home/homework/rate' component={RatePage}/>
+          <PrivateRoute exact path='/home/homework/commit*' component={HomeworkCommit}/>
+          <PrivateRoute exact path='/home/homework/General/:homeworkId/' component={HomeworkGeneral}/>
+          <PrivateRoute exact path='/home/homework/rate/:handinAlready/:homeworkId/:userId/:index/' component={RatePage}/>
 
-          <PrivateRoute exact path='/home/notification/page' component={NotificationPage}/>
+          <PrivateRoute exact path='/home/notification/page*' component={NotificationPage}/>
           <PrivateRoute exact path='/home/mistakes' component={Mistakes}/>
 
           <PrivateRoute exact path='/home/personalcenter' component={PersonalCenter}/>
+          <PrivateRoute exact path='/home/personalavatar' component={PersonalAvatar}/>
 
           <PrivateRoute exact path='/home/manage/studentTable' component={StudentTable}/>
           <PrivateRoute exact path='/home/manage/manager' component={Manager}/>
-          <Redirect exact from='/' to='/home'/>
+          <PrivateRoute exact path='/home/manage/data/:userId/:courseId/' component={DataPage}/>
+          <PrivateRoute exact path='/home/manage/classStudentManage' component={ClassStudentManage}/>
+
+          <Redirect exact from='/' to='/login'/>
         </Switch>
       </div>
     )

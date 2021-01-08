@@ -1,35 +1,13 @@
 /* eslint-disable */
-import React, { Component, createRef } from 'react';
-import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, Upload} from 'antd';
+import React, { Component, createRef ,useState} from 'react';
+import {Button, Card, Input, Table, Row, Col, Icon, Dropdown, Menu, message,Upload} from 'antd';
 import styles from './index.css';
+import axios from 'axios'
+import * as XLSX from 'xlsx';
+import ExcelImport from "./excelImport";
+
 import {Router} from "react-router-dom";
-
-let index = 0;
-const getMockData = () => {
-    const result = {
-        id: index,
-        username: 'username' + index,
-        sid:'sid'+index,
-        telephone: 'telephone' + index,
-        nickname: 'nickname' + index,
-        type:'type'+index,
-        theGrade:'theGrade'+index,
-        theClass:'theClass'+index,
-        email:"email"+index,
-
-    };
-    index += 1;
-    return result;
-};
-const getMockDatas = (num) => {
-    const data = [];
-    for (let i = 0; i < num; i++) {
-        data.push(getMockData());
-    }
-    return data;
-};
-const data1 = getMockDatas(10);
-const data2 = getMockDatas(100);
+import Search from "antd/es/input/Search";
 
 const columns = [
     { title: '用户名', dataIndex: 'username' },
@@ -43,9 +21,6 @@ const columns = [
 
 ];
 
-
-
-
 columns.map(item => {
     item.sorter = (a, b) => {
         if (!isNaN(a[item.dataIndex]) && !isNaN(b[item.dataIndex])) {
@@ -57,6 +32,8 @@ columns.map(item => {
     };
 });
 
+
+
 class EditText extends Component {
     constructor(props) {
         super(props);
@@ -65,9 +42,10 @@ class EditText extends Component {
             editValue: props.children,
         };
     }
+
     render() {
         const { edit, editValue } = this.state;
-        return (edit ? <Input autoFocus style={{ width: 100 }}
+        return (edit ? <Input autoFocus style={{ width: 120 }}
                               value={editValue}
                               onChange={event => this.setState({ editValue: event.target.value })}
                               onBlur={() => {
@@ -86,15 +64,14 @@ export default class StudentTable extends Component {
         super(props);
         this.state = {
             search: '',
-            search2: '',
-            search3:'',
-            orData: data1,
-            renderData: data1,
-            orData2: data2,
-            renderData2: data2,
-            modifyIds: [],
+            delData:'',
+            orData: '',
+            renderData: '',
+            data:{}
         };
         this.searchInput = createRef();
+
+
 
         columns.forEach(item => {
             const { dataIndex, title } = item;
@@ -107,7 +84,7 @@ export default class StudentTable extends Component {
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={confirm}
-                        style={{ width: 188, marginBottom: 8, display: 'block' }}
+                        style={{ width: 180, marginBottom: 8, display: 'block' }}
                     />
                     <Button
                         type="primary"
@@ -143,36 +120,123 @@ export default class StudentTable extends Component {
             this.setState({ renderData: filterData });
         };
 
-
-        this.handleSearch2 = () => {
-            const { orData2, search2 } = this.state;
-            const filterData = orData2.filter(row => {
-                if (!search2) return true;
-                const keys = columns.map(item => item.dataIndex);
-                for (let i = 0; i < keys.length; i++) {
-                    if (String(row[keys[i]] || '').toLowerCase().includes(search2.toLowerCase())) return true;
+        this.deleteData=()=>{
+            const {delData} =this.state;
+            console.log(delData);
+            axios({
+                url:'http://124.70.201.12:8000/delUser',
+                method:'POST',
+                data:{
+                    name:delData
                 }
-                return false;
-            });
-            this.setState({ renderData2: filterData });
-        };
+            }).then(res=>{
+                console.log(res)
+            }).catch(err=>{
+                console.log(err)
+            })
+            console.log("测试发送");
+        }
 
-        this.handleSearch3 = () => {
-            const { orData2, search3 } = this.state;
-            const filterData = orData2.filter(row => {
-                if (!search3) return true;
-                const keys = columns.map(item => item.dataIndex);
-                for (let i = 0; i < keys.length; i++) {
-                    if (String(row[keys[i]] || '').toLowerCase()===search3.toLowerCase()) return true;
+        this.updateUser=(record)=>{
+            console.log(record);
+            axios({
+                method: 'POST',
+                url: 'http://124.70.201.12:8000/updateUser',
+                data: record,
+            }).then(msg=>{
+                console.log("更新数据库的数据");
+                console.log(msg);
+            }).catch(err=>{
+                console.log(err);
+            })
+        }
+
+        this.getAlLUsers=()=>{
+            axios({
+                method:'POST',
+                url:'http://124.70.201.12:8000/getAllUsers'
+            }).then(msg=>{
+                console.log(msg);
+                this.setState({orData:msg.data});
+                this.setState({renderData:msg.data});
+            }).catch(err=>{
+                console.log(err);
+                console.log("提取数据失败");
+            })
+        }
+    }
+
+    uploadFilesChange(file) {
+        // 通过FileReader对象读取文件
+        const fileReader = new FileReader();
+        fileReader.onload = event => {
+            console.log("01")
+            try {
+                const { result } = event.target;
+                // 以二进制流方式读取得到整份excel表格对象
+                const workbook = XLSX.read(result, { type: 'binary' });
+                // 存储获取到的数据
+                let data = {
+                };
+                // 遍历每张工作表进行读取（这里默认只读取第一张表）
+                for (const sheet in workbook.Sheets) {
+                    let tempData = [];
+                    // esline-disable-next-line
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        // 利用 sheet_to_json 方法将 excel 转成 json 数据
+                        data[sheet] = tempData.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                        console.log(data[sheet]);
+                    }
                 }
-                return false;
-            });
-            this.setState({ renderData2: filterData });
+                //上传成功啦,data为上传后的数据
+                this.setState({
+
+                    data:data.Sheet1
+                });
+                console.log(this.state.data)
+                axios({
+                    method:'POST',
+                    url:'http://124.70.201.12:8000/saveAllUsers',
+                    data:{
+                        users:this.state.data
+                    }
+                }).then(msg=>{
+                    console.log("储存数据成功");
+                }).catch(err=>{
+                    console.log(err);
+                })
+
+                // 最终获取到并且格式化后的 json 数据
+                message.success('上传成功！')
+            } catch (e) {
+                // 这里可以抛出文件类型错误不正确的相关提示
+                message.error('文件类型不正确！');
+            }
+            console.log(this.state.data);
+            let tData=[...this.state.renderData,...this.state.data]
+            console.log(tData);
+            this.setState({renderData:tData});
         };
+        // 以二进制方式打开文件
+        fileReader.readAsBinaryString(file.file);
+    }
+
+    componentWillMount(){
+        axios({
+            method:'POST',
+            url:'http://124.70.201.12:8000/getAllUsers'
+        }).then(msg=>{
+            console.log(msg);
+            this.setState({orData:msg.data});
+            this.setState({renderData:msg.data});
+        }).catch(err=>{
+            console.log(err);
+            console.log("提取数据失败");
+        })
     }
 
     render() {
-        const { orData, search, orData2, search2,search3, renderData, renderData2, modifyIds } = this.state;
+        const { orData, search, renderData,} = this.state;
         return (
             <div className={styles.normal}>
                     <Card title={<div style={{textAlign:"center"}}>管理后台名单</div>} >
@@ -182,19 +246,22 @@ export default class StudentTable extends Component {
                                     <Input style={{ width: 560, marginRight: 16 }}
                                            value={search}
                                            allowClear
-                                           onChange={event => this.setState({ search: event.target.value })}/>
+                                           onChange={event => this.setState({ search: event.target.value })}
+                                           onPressEnter={this.handleSearch}
+                                    />
                                 </Col>
                                 <Col span={1} offset={1}>
                                     <Button type={"primary"}   onClick={this.handleSearch}>搜索</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </Col>
                                 <Col span={1} offset={11}>
-                                    <div>
-                                        <Upload action="https://www.mocky.io/v2/5cc8019d300000980a055e76" directory>
-                                            <Button>
-                                                <Icon type="upload"/> 从excel中添加
+
+                                    <Upload  action='https://www.mocky.io/v2/5cc8019d300000980a055e76' beforeUpload={function () {
+                                        return false;
+                                    }} onChange={this.uploadFilesChange.bind(this)} showUploadList={false}>
+                                            <Button icon={<Upload/>} >
+                                                 从excel中添加
                                             </Button>
-                                        </Upload>
-                                    </div>
+                                    </Upload>
                                 </Col>
                             </Row>
                         </Card>
@@ -204,21 +271,36 @@ export default class StudentTable extends Component {
                                 columns={[...columns.map(item => ({
                                     ...item,
                                     render: (text, record) => <EditText onChange={value => {
-                                        const newData = [...orData];
-                                        newData.find(col => col.id === record.id)[item.dataIndex] = value;
-                                        this.setState({ orData: newData });
+                                        console.log(columns)
+                                        console.log(renderData)
+                                        const newData = [...renderData];
+                                        // newData.find(col => col.id === record.id)[item.dataIndex] = value;
+                                        record[item.dataIndex]=value;
+                                        this.updateUser(record);
+                                        this.setState({ orData: newData,renderData:newData });
                                     }}>{text}</EditText>,
                                 })), {
                                     name: '操作',
                                     key: 'del',
                                     render: record => (
                                         <Button onClick={() => {
+                                            var newOrData=orData.filter(item=>item.username!==record.username);
+                                            console.log(record);
+                                            var newRenderData=renderData.filter(item=>item.username!==record.username);
+
+                                            var newDa=orData.filter(item=>{
+                                                console.log(item);
+                                                return true;
+                                            })
+                                            console.log(newOrData);
+                                            console.log(newRenderData);
                                             this.setState({
-                                                orData: orData.filter(item => item.id !== record.id),
-                                                orData2: [record, ...orData2],
+                                                renderData:newRenderData,
+                                                orData: newOrData,
+                                                delData:record.username,
                                             }, () => {
+                                                this.deleteData();
                                                 this.handleSearch();
-                                                this.handleSearch2();
                                             });
                                         }}>删除</Button>),
                                 }]}
@@ -226,6 +308,7 @@ export default class StudentTable extends Component {
                         </Card>
                     </Card>
             </div>
+
         );
     }
 }

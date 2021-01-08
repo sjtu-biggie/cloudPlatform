@@ -150,8 +150,7 @@ class HomeworkCommit extends React.Component {
             let num = Sharpness.substring(index+1,Sharpness.length-2);
             message.success('清晰度已优化',3);
             if (num < 0.67){
-                message.error('清晰度不足，请重新提交',6);
-                return;
+                message.warning('清晰度不足，请重新提交',6);
             }
         }
         homework.upload = this.state.path.join(',');

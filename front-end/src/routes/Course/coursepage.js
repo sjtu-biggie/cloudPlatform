@@ -866,7 +866,7 @@ class CoursePageDemo extends React.Component {
     };
     rankRender = () => {
         return (
-            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id} seeCourseAverage = {this.state.type==='teacher'?true:this.state.course.seeCourseAverage} seeHomeworkAverage ={this.state.course.seeHomeworkAverage}/>);
+            <RankData userId={localStorage.getItem("username")} courseId={this.state.course.course.id} seeCourseAverage = {this.state.type==='teacher'?true:this.state.course.course.seeCourseAverage} seeHomeworkAverage ={this.state.course.course.seeHomeworkAverage}/>);
     };
     studentTableRender = () => {
         return (

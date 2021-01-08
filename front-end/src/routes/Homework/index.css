@@ -9,10 +9,3 @@
   align-items: center;
   height: 50px;
 }
-
-.login{
-  background-image: url("../../pic/bg1.jpg");
-  height:500px;
-  background-repeat: no-repeat;
-  background-size: 100% 500px;
-}

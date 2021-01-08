@@ -232,7 +232,7 @@ class HomeworkCommit extends React.Component {
             height: h * 900 / w
         });
         console.log(this.state.correct);
-        if(this.state.correct!=="{}") this.saveableCanvas.loadSaveData(this.state.correct);
+        if(this.state.correct!=="{}"&&this.state.correct!==""&&this.state.correct!==null&&this.state.correct!==undefined) this.saveableCanvas.loadSaveData(this.state.correct);
         console.log(this.state.correct);
 
     };

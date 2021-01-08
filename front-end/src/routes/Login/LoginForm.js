@@ -125,6 +125,7 @@ class LoginForm extends React.Component {
     if(message1.password===password){
       let storage = window.localStorage;
       storage.setItem("username",username);
+      storage.setItem("nickname",message1.nickname);
       storage.setItem("type",message1.type);
       storage.setItem("sid",message1.sid);
       this.props.appStore.toggleLogin(true, {username: username})

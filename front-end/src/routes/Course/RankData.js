@@ -111,10 +111,12 @@ class RankData extends React.Component {
             data.meanScore = "";
             data.recentMeanScore = "";
         }else{
-            data.meanScore = data.meanScore.toFixed(2);
-            data.recentMeanScore = data.recentMeanScore.toFixed(2);
+            if(data.meanScore!==""&&data.meanScore!==undefined&&data.meanScore!==null)
+            {
+                data.meanScore = data.meanScore.toFixed(2);
+                data.recentMeanScore = data.recentMeanScore.toFixed(2);
+            }
         }
-
         this.setState({
             stat: data,
             homeworkRankChange: data1,

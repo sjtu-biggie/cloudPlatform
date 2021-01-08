@@ -36,6 +36,7 @@ const gridStyle = {
 
 class RankData extends React.Component {
     state = {
+        nickname:"加载中",
         times: 1,
         type: 0,
         step: 0,
@@ -55,9 +56,11 @@ class RankData extends React.Component {
     };
 
     componentWillMount() {
-
+        let storage = window.localStorage;
+        let nickname = storage.getItem("nickname");
         this.setState({
             loading: true,
+            nickname:nickname
         });
         this.getStudentStat(this.state.times);
         this.getRankStat();
@@ -203,7 +206,7 @@ class RankData extends React.Component {
                 <Row>
                     <Col span={16}>
                         <Card style={{height: '130px'}}>
-                            <Statistic style={{marginTop: '10px', float: "left"}} title="姓名" value={'陈小红'}/>
+                            <Statistic style={{marginTop: '10px', float: "left"}} title="姓名" value={this.state.nickname}/>
                             <Statistic style={{marginTop: '10px', float: "left", marginLeft: '30px'}} title="已完成作业数"
                                        value={this.state.stat.finishHomework}/>
                             <Statistic style={{marginTop: '10px', float: "left", marginLeft: '30px'}} title="进行作业数"

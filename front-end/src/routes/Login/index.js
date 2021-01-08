@@ -10,7 +10,6 @@ import 'animate.css'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
-const url = '../../pic/bg1.jpg';
 const imgs = [
   // 'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide1.jpg?raw=true',
   // 'https://github.com/zhangZhiHao1996/image-store/blob/master/react-admin-master/slide2.jpg?raw=true',

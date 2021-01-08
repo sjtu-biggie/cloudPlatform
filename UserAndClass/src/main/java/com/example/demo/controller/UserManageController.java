@@ -129,7 +129,33 @@ public class UserManageController {
 
     @RequestMapping(value = "/saveAllUsers",method = RequestMethod.POST)
     public String saveAllUsers(@RequestBody JSONObject obj){
-        System.out.println(obj);
+        JSONArray users=obj.getJSONArray("users");
+        System.out.println(users);
+        for (int i=0;i<users.size();i++){
+            JSONObject user=users.getJSONObject(i);
+            System.out.println(user);
+            String username = user.getString("username");
+            String password = user.getString("password");
+            String sid = user.getString("sid");
+            String email = user.getString("email");
+            String telephone = user.getString("telephone");
+            String type = user.getString("type");
+            String nickname = user.getString("nickname");
+            String theGrade = user.getString("theGrade");
+            String theClass = user.getString("theClass");
+
+            User saveUser=new User();
+            saveUser.setUsername(username);
+            saveUser.setPassword(password);
+            saveUser.setEmail(email);
+            saveUser.setSid(sid);
+            saveUser.setTelephone(telephone);
+            saveUser.setType(type);
+            saveUser.setNickname(nickname);
+            saveUser.setTheClass(theClass);
+            saveUser.setTheGrade(theGrade);
+            userMapper.registerByManager(saveUser);
+        }
         return "添加完成";
     }
 

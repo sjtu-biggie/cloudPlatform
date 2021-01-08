@@ -8,7 +8,7 @@ import { View } from '@antv/data-set'
 
 const cols = {
     'value': {min: 0},
-    'date': {range: [0, 1]}
+    'date': {range: [0, 1]},
 }
 
 const IconText = ({ type, text }) => (
@@ -122,6 +122,14 @@ class Mistakes extends React.Component {
         return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s);
     }
 
+    format1=(shijianchuo)=>
+    {
+        let time = new Date(shijianchuo);
+        let m = time.getMonth()+1;
+        let d = time.getDate();
+        return this.add0(m)+'-'+this.add0(d);
+    }
+
     getMistakes=async (username)=>{
         let config = {
             method: 'get',
@@ -150,7 +158,7 @@ class Mistakes extends React.Component {
         console.log(this.state.mistakes)
         let data=[]
         for(let i=0;i<hw.length;i++){
-            data.push({date:i+1,value:100-hw[i].score})
+            data.push({date:this.format1(hw[i].endTime),value:100-hw[i].score})
         }
         console.log(data)
         this.setState({
@@ -171,6 +179,7 @@ class Mistakes extends React.Component {
     }
 
     render() {
+
         const menu1 = (
             <Menu onClick={(e)=>{this.changeSubject(e.item.props.children)}}>
                 <Menu.SubMenu title="所有">

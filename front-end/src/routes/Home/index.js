@@ -93,7 +93,10 @@ class Home extends React.Component {
                 <h3 style={styles.loadingTitle} className='animated bounceInLeft'>载入中...</h3>
                 <Loading2/>
             </div>
-        }else return (
+        }else if(this.state.role === "manager") {return <div style={styles.bg} className='home'>
+            <Carousel arrows effect='fade' className='size'>
+                {imgs.map(item => <div key={item}>                        <div className='size' id='picc'></div></div>)} </Carousel>
+        </div>;} else return (
             <div style={styles.bg} className='home'>
                 <Carousel arrows effect='fade' className='size'>
                     {imgs.map(item => <div key={item}>

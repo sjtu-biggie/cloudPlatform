@@ -202,7 +202,7 @@ export default class StudentTable extends Component {
             }
             console.log(this.state.data);
             let tData=[...this.state.renderData,...this.state.data]
-            console.log(tData)
+            console.log(tData);
             this.setState({renderData:tData});
         };
 

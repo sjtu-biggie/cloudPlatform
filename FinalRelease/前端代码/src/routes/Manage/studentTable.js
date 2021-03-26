@@ -217,7 +217,7 @@ export default class Manager extends Component {
             console.log(students,this.state.courseId);
             axios({
                 method: 'POST',
-                url: 'http://124.70.201.12:8787/course/register',
+                url: 'http://1.15.127.43:8787/course/register',
                 data: {
                     "courseId": this.state.courseId,
                     "student": students,
@@ -229,7 +229,7 @@ export default class Manager extends Component {
                     if (item.username===undefined){
                         axios({
                             method:'POST',
-                            url:'http://124.70.201.12:8000/getUserMessage',
+                            url:'http://1.15.127.43:8000/getUserMessage',
                             data:{
                                 "username":item.userId
                             }
@@ -240,7 +240,7 @@ export default class Manager extends Component {
                             console.log(tos);
                             axios({
                                 method:'POST',
-                                url:'http://124.70.201.12:8000/sendNotice',
+                                url:'http://1.15.127.43:8000/sendNotice',
                                 data:{
                                     "tos":tos,
                                     "context":"已经把你添加到课程"+this.state.courseId
@@ -259,7 +259,7 @@ export default class Manager extends Component {
                         console.log(tos);
                         axios({
                             method:'POST',
-                            url:'http://124.70.201.12:8000/sendNotice',
+                            url:'http://1.15.127.43:8000/sendNotice',
                             data:{
                                 "tos":tos,
                                 "context":"已经把你添加到课程"+this.state.courseId
@@ -291,7 +291,7 @@ export default class Manager extends Component {
             console.log(this.state.courseId);
             axios({
                 method: 'POST',
-                url: 'http://124.70.201.12:8787/course/deleteCourseStudent',
+                url: 'http://1.15.127.43:8787/course/deleteCourseStudent',
                 data: {
                     "courseId": this.state.courseId,
                     "userId": name
@@ -300,7 +300,7 @@ export default class Manager extends Component {
                 console.log(msg)
                 axios({
                     method:'POST',
-                    url:'http://124.70.201.12:8000/getUserMessage',
+                    url:'http://1.15.127.43:8000/getUserMessage',
                     data:{
                         "username":name
                     }
@@ -310,7 +310,7 @@ export default class Manager extends Component {
                     tos.push(res.data.email);
                     axios({
                         method:'POST',
-                        url:'http://124.70.201.12:8000/sendNotice',
+                        url:'http://1.15.127.43:8000/sendNotice',
                         data:{
                             tos:tos,
                             "context":"已经把你从课程"+this.state.courseId+"删除",
@@ -330,7 +330,7 @@ export default class Manager extends Component {
             console.log(record);
             axios({
                 method:'POST',
-                url:'http://124.70.201.12:8787/course/updateCourseStudent',
+                url:'http://1.15.127.43:8787/course/updateCourseStudent',
                 data:{
                     "courseId":this.state.courseId,
                     "userId":record.userId,
@@ -366,14 +366,14 @@ export default class Manager extends Component {
         axios.all([
             axios({
                 method: "POST",
-                url: "http://124.70.201.12:8000/getAllUsersByClassIds",
+                url: "http://1.15.127.43:8000/getAllUsersByClassIds",
                 data: {
                     classIds: myclassIds
                 }
             }),
             axios({
                 method: "GET",
-                url: 'http://124.70.201.12:8787/course/getCourseStudent',
+                url: 'http://1.15.127.43:8787/course/getCourseStudent',
                 params: {
                     courseId: myCourseId
                 }

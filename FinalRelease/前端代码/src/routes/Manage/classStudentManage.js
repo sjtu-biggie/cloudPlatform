@@ -215,7 +215,7 @@ export default class ClassManage extends Component {
             {
                 axios({
                     method:'POST',
-                    url:'http://124.70.201.12:8000/getAllUsers',
+                    url:'http://1.15.127.43:8000/getAllUsers',
                 }).then(msg=>{
                     console.log(msg.data);
                     let filterData=msg.data.filter(item=>
@@ -249,7 +249,7 @@ export default class ClassManage extends Component {
         this.addStudentToClassAxios=(item)=>{
             axios({
                 method: 'POST',
-                url: 'http://124.70.201.12:8000/addStudentToClass',
+                url: 'http://1.15.127.43:8000/addStudentToClass',
                 data: {
                     username: item.username,
                     theClass: item.theClass,
@@ -260,7 +260,7 @@ export default class ClassManage extends Component {
                 tos.push(item.email);
                 axios({
                     method: 'POST',
-                    url: 'http://124.70.201.12:8000/sendNotice',
+                    url: 'http://1.15.127.43:8000/sendNotice',
                     data: {
                         "tos": tos,
                         "context": "已经将你添加至新的班级",
@@ -278,7 +278,7 @@ export default class ClassManage extends Component {
         this.deleteStudent = () => {
             axios({
                 method: 'POST',
-                url: 'http://124.70.201.12:8000/deleteStudentFromClass',
+                url: 'http://1.15.127.43:8000/deleteStudentFromClass',
                 data: {
                     "username": this.state.delData
                 }
@@ -288,7 +288,7 @@ export default class ClassManage extends Component {
                 tos.push(this.state.delEmail);
                 console.log(tos);
                 axios({
-                    url:'http://124.70.201.12:8000/sendNotice',
+                    url:'http://1.15.127.43:8000/sendNotice',
                     method:'POST',
                     data:{
                         tos:tos,
@@ -308,7 +308,7 @@ export default class ClassManage extends Component {
         this.updateUser = (record) => {
             axios({
                 method: 'POST',
-                url: 'http://124.70.201.12:8000/updateUserByTeacher',
+                url: 'http://1.15.127.43:8000/updateUserByTeacher',
                 data: record
             }).then(msg => {
                 console.log(msg)
@@ -321,7 +321,7 @@ export default class ClassManage extends Component {
         this.getClass = (clas) => {
             axios({
                 method: 'POST',
-                url: 'http://124.70.201.12:8000/getAllStudentsByClass',
+                url: 'http://1.15.127.43:8000/getAllStudentsByClass',
                 data: {
                     "range": clas
                 }
@@ -341,7 +341,7 @@ export default class ClassManage extends Component {
             console.log(theclass);
             axios({
                 method: 'POST',
-                url: 'http://124.70.201.12:8000/getAllStudentsByTheClass',
+                url: 'http://1.15.127.43:8000/getAllStudentsByTheClass',
                 data: {
                     "theClass": theclass
                 }
@@ -368,7 +368,7 @@ export default class ClassManage extends Component {
             console.log("建立班级" + this.state.createClass);
             axios({
                 method: 'POST',
-                url: 'http://124.70.201.12:8000/addClass',
+                url: 'http://1.15.127.43:8000/addClass',
                 data: {
                     classNo: this.state.createClass,
                     number: 0,
@@ -444,7 +444,7 @@ export default class ClassManage extends Component {
     componentDidMount() {
         console.log("开始获取老师班级");
         axios({
-            url: 'http://124.70.201.12:8000/getAllClassByManager',
+            url: 'http://1.15.127.43:8000/getAllClassByManager',
             method: 'POST',
             data: {
                 sid: window.localStorage.getItem("sid")
@@ -476,7 +476,7 @@ export default class ClassManage extends Component {
 
         // axios({
         //     method: 'POST',
-        //     url: 'http://124.70.201.12:8000/getAllUsers'
+        //     url: 'http://1.15.127.43:8000/getAllUsers'
         // }).then(msg => {
         //     console.log(msg);
         //     this.setState({orData: msg.data});
@@ -488,7 +488,7 @@ export default class ClassManage extends Component {
 
         // axios({
         //     method: 'POST',
-        //     url: 'http://124.70.201.12:8000/getAllStudentsByTheClass',
+        //     url: 'http://1.15.127.43:8000/getAllStudentsByTheClass',
         //     data: {
         //         "theClass": "F1803702"
         //     }

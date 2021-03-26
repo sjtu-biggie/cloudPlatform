@@ -86,7 +86,7 @@ class UploadDemo extends React.Component {
         let that = this;
         const props = {
             name: 'file',
-            action: 'http://124.70.201.12:8383/upload?userId='+this.state.uid,
+            action: 'http://1.15.127.43:8383/upload?userId='+this.state.uid,
             headers: {
                 authorization: 'authorization-text',
             },

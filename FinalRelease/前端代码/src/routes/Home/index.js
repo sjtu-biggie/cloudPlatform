@@ -34,7 +34,7 @@ class Home extends React.Component {
                 "username": window.localStorage.getItem("username"),
                 "type":type,
             },
-            url:'http://124.70.201.12:8000/setUserType',
+            url:'http://1.15.127.43:8000/setUserType',
             headers: {
                 withCredentials: true,
             }
@@ -59,7 +59,7 @@ class Home extends React.Component {
             data: {
                 'username': username
             },
-            url: 'http://124.70.201.12:8000/getUserMessageAndIcon',
+            url: 'http://1.15.127.43:8000/getUserMessageAndIcon',
             headers: {
                 withCredentials: true,
             }

@@ -39,7 +39,7 @@ class commitPage extends React.Component{
     getTeacherHomeworkOne=async (hid)=>{
         let config = {
             method: 'get',
-            url: 'http://124.70.201.12:8383/getTeacherHomeworkOne?homeworkId='+hid,
+            url: 'http://1.15.127.43:8383/getTeacherHomeworkOne?homeworkId='+hid,
             headers: {
                 withCredentials: true,
             }
@@ -62,7 +62,7 @@ class commitPage extends React.Component{
     getStudentHomeworkOne=async (sid,hid)=>{
         let config = {
             method: 'get',
-            url: 'http://124.70.201.12:8383/getStudentHomeworkOne?studentId='+sid+"&homeworkId="+hid,
+            url: 'http://1.15.127.43:8383/getStudentHomeworkOne?studentId='+sid+"&homeworkId="+hid,
             headers: {
                 withCredentials: true,
             }

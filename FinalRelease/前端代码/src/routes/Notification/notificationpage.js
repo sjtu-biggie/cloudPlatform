@@ -176,7 +176,7 @@ class NotificationPage extends React.Component {
     getNote=async (notificationId)=>{
         let config = {
             method: 'get',
-            url: 'http://124.70.201.12:8787/course/getNoteById?notificationId='+notificationId,
+            url: 'http://1.15.127.43:8787/course/getNoteById?notificationId='+notificationId,
             headers: {
                 withCredentials: true,
             }

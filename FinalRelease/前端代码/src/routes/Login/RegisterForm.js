@@ -55,7 +55,7 @@ class RegisterForm extends React.Component {
       return;
     }
     console.log("开始发送验证码");
-    var url=this.state.isPhone?'http://124.70.201.12:8000/sendMessage':'http://124.70.201.12:8000/sendEmail';
+    var url=this.state.isPhone?'http://1.15.127.43:8000/sendMessage':'http://1.15.127.43:8000/sendEmail';
     axios({
       method:'POST',
       url:url,
@@ -131,7 +131,7 @@ class RegisterForm extends React.Component {
     let config = {
       method: 'post',
       data: obj,
-      url: 'http://124.70.201.12:8000/register',
+      url: 'http://1.15.127.43:8000/register',
       headers: {
         withCredentials: true,
       }

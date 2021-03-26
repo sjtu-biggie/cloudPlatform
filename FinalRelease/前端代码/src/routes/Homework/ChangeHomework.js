@@ -77,7 +77,7 @@ class ChangeHomework extends React.Component {
         console.log(this.props.homeworkId);
         let config = {
             method: 'post',
-            url: 'http://124.70.201.12:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
+            url: 'http://1.15.127.43:8383/getTeacherHomeworkOne?homeworkId=' + homeworkId,
             headers: {
                 withCredentials: true,
             }
@@ -121,7 +121,7 @@ class ChangeHomework extends React.Component {
             data :{
                 'username':username
             },
-            url: 'http://124.70.201.12:8000/getUserMessage',
+            url: 'http://1.15.127.43:8000/getUserMessage',
             headers: {
                 withCredentials: true,
             }
@@ -143,7 +143,7 @@ class ChangeHomework extends React.Component {
         };
         let config = {
             method: 'post',
-            url: 'http://124.70.201.12:8383/UpdateAnspost?homeworkId='+this.state.homeworkId,
+            url: 'http://1.15.127.43:8383/UpdateAnspost?homeworkId='+this.state.homeworkId,
             headers: {
                 withCredentials: true,
             }
@@ -169,7 +169,7 @@ class ChangeHomework extends React.Component {
         let config = {
             method: 'post',
             data : ob,
-            url: 'http://124.70.201.12:8000/getAllUsersByClassIds',
+            url: 'http://1.15.127.43:8000/getAllUsersByClassIds',
             headers: {
                 withCredentials: true,
             }
@@ -231,7 +231,7 @@ class ChangeHomework extends React.Component {
             console.log(homework);
             let config = {
                 method: 'post',
-                url: 'http://124.70.201.12:8383/editStudentHomeworkByTeacher',
+                url: 'http://1.15.127.43:8383/editStudentHomeworkByTeacher',
                 //url: 'http://localhost:8080/editStudentHomeworkByTeacher',
                 data: homework,
                 headers: {
@@ -249,7 +249,7 @@ class ChangeHomework extends React.Component {
             console.log(hw);
         }
         axios({
-            url:'http://124.70.201.12:8000/sendNotice',
+            url:'http://1.15.127.43:8000/sendNotice',
             method:'POST',
             data:{
                 "tos":tos,
@@ -287,7 +287,7 @@ class ChangeHomework extends React.Component {
         console.log(obj);
         let config = {
             method: 'post',
-            url: 'http://124.70.201.12:8383/editTeacherHomework',
+            url: 'http://1.15.127.43:8383/editTeacherHomework',
             //url: 'http://localhost:8080/editTeacherHomework',
             data:obj,
             headers: {

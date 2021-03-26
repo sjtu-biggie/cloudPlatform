@@ -120,7 +120,7 @@ class Assign extends React.Component {
         let config = {
             method: 'post',
             data : ob,
-            url: 'http://124.70.201.12:8000/getAllUsersByClassIds',
+            url: 'http://1.15.127.43:8000/getAllUsersByClassIds',
             headers: {
                 withCredentials: true,
             }
@@ -183,7 +183,7 @@ class Assign extends React.Component {
             data: {
                 'username': username
             },
-            url: 'http://124.70.201.12:8000/getUserMessage',
+            url: 'http://1.15.127.43:8000/getUserMessage',
             headers: {
                 withCredentials: true,
             }
@@ -206,7 +206,7 @@ class Assign extends React.Component {
     getCourse = async (courseId) => {
         let config = {
             method: 'get',
-            url: 'http://124.70.201.12:8787/course/getCourseById?courseId=' + courseId,
+            url: 'http://1.15.127.43:8787/course/getCourseById?courseId=' + courseId,
             headers: {
                 withCredentials: true,
             }
@@ -243,7 +243,7 @@ class Assign extends React.Component {
             console.log(homework);
             let config = {
                 method: 'post',
-                url: 'http://124.70.201.12:8383/addStudentHomework',
+                url: 'http://1.15.127.43:8383/addStudentHomework',
                 data: homework,
                 headers: {
                     withCredentials: true,
@@ -260,7 +260,7 @@ class Assign extends React.Component {
             console.log(hw);
         }
         axios({
-            url:'http://124.70.201.12:8000/sendNotice',
+            url:'http://1.15.127.43:8000/sendNotice',
             method:'POST',
             data:{
                 "tos":tos,
@@ -278,7 +278,7 @@ class Assign extends React.Component {
         console.log(homework);
         let config = {
             method: 'post',
-            url: 'http://124.70.201.12:8383/addTeacherHomework',
+            url: 'http://1.15.127.43:8383/addTeacherHomework',
             //url: 'http://localhost:8080/addTeacherHomework',
             data: homework,
             headers: {
@@ -584,7 +584,7 @@ class Assign extends React.Component {
                                                 <Upload
                                                     flieList={this.state.dfileList}
                                                     accept=".png,.jpg,.jpeg"
-                                                    action={'http://124.70.201.12:8383/uploadNotSave'}
+                                                    action={'http://1.15.127.43:8383/uploadNotSave'}
                                                     onChange={({file, fileList}) => {
                                                         if (file.status !== 'uploading') {
                                                             console.log(file, file.originFileObj, fileList);

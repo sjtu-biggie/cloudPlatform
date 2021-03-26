@@ -56,7 +56,7 @@ class PersonalAvatar extends React.Component {
         console.log("确定上传");
         console.log(this.state.imageUrl);
         axios({
-            url:'http://124.70.201.12:8000/setUserIcon',
+            url:'http://1.15.127.43:8000/setUserIcon',
             method:'POST',
             data:{
                 "icon":this.state.imageUrl,

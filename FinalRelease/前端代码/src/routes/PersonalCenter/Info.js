@@ -55,7 +55,7 @@ class PersonalCenter extends React.Component {
             data :{
                 'username':username
             },
-            url: 'http://124.70.201.12:8000/getUserMessageAndIcon',
+            url: 'http://1.15.127.43:8000/getUserMessageAndIcon',
             headers: {
                 withCredentials: true,
             }
@@ -78,7 +78,7 @@ class PersonalCenter extends React.Component {
         let config = {
             method: 'post',
             data: obj,
-            url: 'http://124.70.201.12:8000/updateUser',
+            url: 'http://1.15.127.43:8000/updateUser',
             headers: {
                 withCredentials: true,
             }

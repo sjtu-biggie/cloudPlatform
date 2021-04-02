@@ -143,7 +143,7 @@ class Assign extends React.Component {
         this.setState({
             handinAmount: list2.length,
             student:list2
-        })
+        });
         values.startTime = this.format(values.startDate);
         values.endTime = this.format(values.endDate);
         values.handinAmount = this.state.handinAmount;
@@ -461,8 +461,9 @@ class Assign extends React.Component {
                                 getFieldDecorator('title', {
                                     rules: [
                                         {
+                                            max:10,
                                             required: true,
-                                            message: '请填写作业名称'
+                                            message: '作业名称必填，且不能超过十个字'
                                         }
                                     ]
                                 })(
@@ -574,8 +575,9 @@ class Assign extends React.Component {
                                         getFieldDecorator('content', {
                                             rules: [
                                                 {
+                                                    max:200,
                                                     required: true,
-                                                    message: ''
+                                                    message: '作业内容不能超过200个字'
                                                 }
                                             ]
                                         })(

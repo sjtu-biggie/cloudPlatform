@@ -35,7 +35,7 @@ public class SendMessage {
      */
     @RequestMapping(value = "/sendMessage",method = RequestMethod.POST)
     public String sendMessage(String to){
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4G4H6Qdjm6tE3PW3bpL9", "e8Y5IUcTAG5wRlXD3OXMssePWug5Au");
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "***secret***", "***secret***");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();

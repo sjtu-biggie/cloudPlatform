@@ -11,7 +11,7 @@ import com.aliyuncs.profile.DefaultProfile;
 
 public class AssessSharpness {
     public static void main(String[] args) {
-        DefaultProfile profile = DefaultProfile.getProfile("cn-shanghai", "LTAI4G6u4Vad9GaYfLjy3ncD", "g96N07QKeFydCSbXsFcgRbdsSex5Rk");
+        DefaultProfile profile = DefaultProfile.getProfile("cn-shanghai", "", "g96N07QKeFydCSbXsFcgRbdsSex5Rk");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -32,7 +32,7 @@ public class AssessSharpness {
         }
     }
     public static String Assess(String ossurl) {
-        DefaultProfile profile = DefaultProfile.getProfile("cn-shanghai", "LTAI4G6u4Vad9GaYfLjy3ncD", "g96N07QKeFydCSbXsFcgRbdsSex5Rk");
+        DefaultProfile profile = DefaultProfile.getProfile("cn-shanghai", "", "g96N07QKeFydCSbXsFcgRbdsSex5Rk");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();

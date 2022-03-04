@@ -35,7 +35,7 @@ public class SendMessage {
      */
     @RequestMapping(value = "/sendMessage",method = RequestMethod.POST)
     public String sendMessage(String to){
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "***secret***", "***secret***");
+        DefaultProfile profile = DefaultProfile.getProfile("cn-***", "***secret***", "***secret***");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -46,7 +46,7 @@ public class SendMessage {
         request.putQueryParameter("RegionId", "cn-hangzhou");
         request.putQueryParameter("PhoneNumbers", to);
         request.putQueryParameter("SignName", "云作业平台");
-        request.putQueryParameter("TemplateCode", "SMS_202823359");
+        request.putQueryParameter("TemplateCode", "******");
         String code=getCode();
         request.putQueryParameter("TemplateParam","{\"code\":"+code+"}" );
         try {

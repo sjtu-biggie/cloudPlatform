@@ -46,7 +46,7 @@ public class SendMessage {
         request.putQueryParameter("RegionId", "cn-hangzhou");
         request.putQueryParameter("PhoneNumbers", to);
         request.putQueryParameter("SignName", "云作业平台");
-        request.putQueryParameter("TemplateCode", "SMS_202823359");
+        request.putQueryParameter("TemplateCode", "***");
         String code=getCode();
         request.putQueryParameter("TemplateParam","{\"code\":"+code+"}" );
         try {
